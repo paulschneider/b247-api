@@ -1,5 +1,8 @@
 <?php
 
+ini_set('display_errors', true);
+ini_set('date.timezone', 'Europe/London');
+
 require_once '../include/DbHandler.php';
 require_once '../include/PassHash.php';
 require '.././libs/Slim/Slim.php';
@@ -44,6 +47,37 @@ function authenticate(\Slim\Route $route) {
     }
 }
 
+$app->get('/', function() use ($app) {
+
+    $request = $app->request;
+
+    if( $request->isGet() )
+    {
+        $headers = $request->headers;
+
+        $app->response->setStatus(200);
+        $app->response->headers->set('Content-Type', 'application/json');
+        $app->response->headers->set('API-Confirm', true);
+
+        if($headers['Accesskey'])
+        {
+            include('../data/auth-home.php');
+        }
+        else
+        {
+            include('../data/home.php');
+        }
+
+        $app->response->setBody(json_encode($data));
+
+        $app->response->finalize();
+    }
+    else
+    {
+        notImplemented();
+    }
+
+});
 
 // Registration
 $app->post('/register', function() use ($app) {
@@ -61,7 +95,7 @@ $app->post('/register', function() use ($app) {
 	$twitter = $app->request->post('twitter');
 	$postcode = $app->request->post('postcode');
 	$age_group = $app->request->post('age_group');
-	
+
             // validating email address
             validateEmail($email);
 
@@ -111,14 +145,14 @@ $app->post('/login', function() use ($app) {
 					$response['USER_GEO_LAT'] = $user['USER_GEO_LAT'];
 					$response['USER_GEO_LON'] = $user['USER_GEO_LON'];
 					$response['USER_GEO_AREA'] = $user['USER_GEO_AREA'];
-					$response['USER_GEO_AGE_GROUP'] = $user['USER_GEO_AGE_GROUP'];				
+					$response['USER_GEO_AGE_GROUP'] = $user['USER_GEO_AGE_GROUP'];
                     $response['USER_SIGNUP_DATE_TIME'] = $user['USER_SIGNUP_DATE_TIME'];
 					$response['USER_SIGNUP_IP'] = $user['USER_SIGNUP_IP'];
 					$response['USER_LAST_LOGIN_DATE_TIME'] = $user['USER_LAST_LOGIN_DATE_TIME'];
 					$response['USER_LAST_LOGIN_IP'] = $user['USER_LAST_LOGIN_IP'];
 					$response['IS_ACTIVE'] = $user['IS_ACTIVE'];
 					$response['IS_DELETED'] = $user['IS_DELETED'];
-					
+
                 } else {
                     // unknown error occurred
                     $response['error'] = true;
@@ -128,10 +162,10 @@ $app->post('/login', function() use ($app) {
                 // user credentials are wrong
                 $response['error'] = true;
                 $response['message'] = 'Login failed. Incorrect credentials';
-				
+
             }
 echoRespnse(200, $response);
-            
+
         });
 
 /*
@@ -141,7 +175,7 @@ echoRespnse(200, $response);
 /**
  * GET ALL ARTICLES
  * method GET
- * url /article        
+ * url /article
  */
 $app->get('/article', 'authenticate', function() {
             global $user_id;
@@ -183,7 +217,7 @@ $app->get('/article', 'authenticate', function() {
 				$tmp["IS_DELETED"] = $article["IS_DELETED"];
 				$tmp["IS_COMMENTS"] = $article["IS_COMMENTS"];
 				$tmp["IS_APPROVED"] = $article["IS_APPROVED"];
-								
+
                 array_push($response["articles"], $tmp);
             }
 
@@ -228,8 +262,8 @@ $app->get('/article/:id', 'authenticate', function($article_gen_number) {
 				$response["IS_PICKED"] = $result["IS_PICKED"];
 				$response["IS_DELETED"] = $result["IS_DELETED"];
 				$response["IS_COMMENTS"] = $result["IS_COMMENTS"];
-				$response["IS_APPROVED"] = $result["IS_APPROVED"];			
-				
+				$response["IS_APPROVED"] = $result["IS_APPROVED"];
+
                 echoRespnse(200, $response);
             } else {
                 $response["error"] = true;
@@ -297,6 +331,19 @@ function echoRespnse($status_code, $response) {
     $app->contentType('application/json');
 
     echo json_encode($response);
+}
+
+function notImplemented()
+{
+    exit('not implemented');
+}
+
+function showData($data)
+{
+    echo "<pre>";
+        print_r($data);
+    echo "</pre>";
+    exit;
 }
 
 $app->run();
