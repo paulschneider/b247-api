@@ -322,7 +322,7 @@ ENGINE = InnoDB;
 CREATE  TABLE IF NOT EXISTS `mydb`.`user` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `age_group_id` INT NOT NULL ,
-  `access_key` VARCHAR(45) NOT NULL DEFAULT 'This is the unique identifier for making API requests. It is also used as the salt for verifying the user\'s password' ,
+  `access_key` VARCHAR(45) NOT NULL COMMENT '\'This is the unique identifier for making API requests. It is also used as the salt for verifying the user\\\'s password\'' ,
   `first_name` VARCHAR(75) NOT NULL ,
   `last_name` VARCHAR(75) NOT NULL ,
   `nickname` VARCHAR(45) NOT NULL ,
