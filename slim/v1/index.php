@@ -71,6 +71,13 @@ $app->get('/', function() use ($app) {
         $app->response->setBody(json_encode($data));
 
         $app->response->finalize();
+
+        header('Cache-Control: no-cache, must-revalidate');
+        header('Content-Type: application/json');
+
+        echo json_encode($data);
+
+        exit;
     }
     else
     {
