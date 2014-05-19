@@ -2,13 +2,11 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
-USE `mydb` ;
 
 -- -----------------------------------------------------
--- Table `mydb`.`content_type`
+-- Table `b247-com`.`content_type`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `mydb`.`content_type` (
+CREATE  TABLE IF NOT EXISTS `b247-com`.`content_type` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `type` VARCHAR(45) NOT NULL ,
   `created_at` DATETIME NOT NULL ,
@@ -18,9 +16,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`asset`
+-- Table `b247-com`.`asset`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `mydb`.`asset` (
+CREATE  TABLE IF NOT EXISTS `b247-com`.`asset` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `filepath` VARCHAR(150) NOT NULL ,
   `alt` VARCHAR(100) NULL ,
@@ -35,9 +33,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`sponsor`
+-- Table `b247-com`.`sponsor`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `mydb`.`sponsor` (
+CREATE  TABLE IF NOT EXISTS `b247-com`.`sponsor` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `image_id` INT NOT NULL ,
   `title` VARCHAR(100) NOT NULL ,
@@ -56,16 +54,16 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`sponsor` (
   INDEX `sponsor -> image_idx` (`image_id` ASC) ,
   CONSTRAINT `sponsor -> image`
     FOREIGN KEY (`image_id` )
-    REFERENCES `mydb`.`asset` (`id` )
+    REFERENCES `b247-com`.`asset` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`venue`
+-- Table `b247-com`.`venue`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `mydb`.`venue` (
+CREATE  TABLE IF NOT EXISTS `b247-com`.`venue` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `name` VARCHAR(100) NOT NULL ,
   `sef_name` VARCHAR(100) NULL ,
@@ -87,9 +85,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`event`
+-- Table `b247-com`.`event`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `mydb`.`event` (
+CREATE  TABLE IF NOT EXISTS `b247-com`.`event` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `venue_id` INT NOT NULL ,
   `title` VARCHAR(150) NOT NULL ,
@@ -104,16 +102,16 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`event` (
   INDEX `event -> venue_idx` (`venue_id` ASC) ,
   CONSTRAINT `event -> venue`
     FOREIGN KEY (`venue_id` )
-    REFERENCES `mydb`.`venue` (`id` )
+    REFERENCES `b247-com`.`venue` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`article`
+-- Table `b247-com`.`article`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `mydb`.`article` (
+CREATE  TABLE IF NOT EXISTS `b247-com`.`article` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `content_type` INT NOT NULL ,
   `sponsor_id` INT NULL ,
@@ -143,26 +141,26 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`article` (
   INDEX `article -> event_idx` (`event_id` ASC) ,
   CONSTRAINT `channel -> content_type`
     FOREIGN KEY (`content_type` )
-    REFERENCES `mydb`.`content_type` (`id` )
+    REFERENCES `b247-com`.`content_type` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `article -> sponsor`
     FOREIGN KEY (`sponsor_id` )
-    REFERENCES `mydb`.`sponsor` (`id` )
+    REFERENCES `b247-com`.`sponsor` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `article -> event`
     FOREIGN KEY (`event_id` )
-    REFERENCES `mydb`.`event` (`id` )
+    REFERENCES `b247-com`.`event` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`keyword`
+-- Table `b247-com`.`keyword`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `mydb`.`keyword` (
+CREATE  TABLE IF NOT EXISTS `b247-com`.`keyword` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `keyword` VARCHAR(45) NOT NULL ,
   `created_at` DATETIME NULL ,
@@ -172,9 +170,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`category`
+-- Table `b247-com`.`category`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `mydb`.`category` (
+CREATE  TABLE IF NOT EXISTS `b247-com`.`category` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `content_type` INT NOT NULL ,
   `icon_img_id` INT NULL ,
@@ -190,21 +188,21 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`category` (
   INDEX `icon -> asset_idx` (`icon_img_id` ASC) ,
   CONSTRAINT `cat -> content_type`
     FOREIGN KEY (`content_type` )
-    REFERENCES `mydb`.`content_type` (`id` )
+    REFERENCES `b247-com`.`content_type` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `icon -> asset`
     FOREIGN KEY (`icon_img_id` )
-    REFERENCES `mydb`.`asset` (`id` )
+    REFERENCES `b247-com`.`asset` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`article_category`
+-- Table `b247-com`.`article_category`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `mydb`.`article_category` (
+CREATE  TABLE IF NOT EXISTS `b247-com`.`article_category` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `article_id` INT NOT NULL ,
   `cat_id` INT NOT NULL ,
@@ -213,21 +211,21 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`article_category` (
   INDEX `article_cat -> cat_idx` (`cat_id` ASC) ,
   CONSTRAINT `article -> cat`
     FOREIGN KEY (`article_id` )
-    REFERENCES `mydb`.`article` (`id` )
+    REFERENCES `b247-com`.`article` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `article_cat -> cat`
     FOREIGN KEY (`cat_id` )
-    REFERENCES `mydb`.`category` (`id` )
+    REFERENCES `b247-com`.`category` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`channel`
+-- Table `b247-com`.`channel`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `mydb`.`channel` (
+CREATE  TABLE IF NOT EXISTS `b247-com`.`channel` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `content_type` INT NOT NULL ,
   `parent_channel` INT NULL ,
@@ -245,26 +243,26 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`channel` (
   INDEX `icon_img -> asset_idx` (`icon_img_d` ASC) ,
   CONSTRAINT `channel -> cont_type`
     FOREIGN KEY (`content_type` )
-    REFERENCES `mydb`.`content_type` (`id` )
+    REFERENCES `b247-com`.`content_type` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `parent_channel -> channel`
     FOREIGN KEY (`parent_channel` )
-    REFERENCES `mydb`.`channel` (`id` )
+    REFERENCES `b247-com`.`channel` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `icon_img -> asset`
     FOREIGN KEY (`icon_img_d` )
-    REFERENCES `mydb`.`asset` (`id` )
+    REFERENCES `b247-com`.`asset` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`channel_category`
+-- Table `b247-com`.`channel_category`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `mydb`.`channel_category` (
+CREATE  TABLE IF NOT EXISTS `b247-com`.`channel_category` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `channel_id` INT NOT NULL ,
   `category_id` INT NOT NULL ,
@@ -272,21 +270,21 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`channel_category` (
   INDEX `cat -> channel_idx` (`category_id` ASC) ,
   CONSTRAINT `cat -> channel`
     FOREIGN KEY (`category_id` )
-    REFERENCES `mydb`.`category` (`id` )
+    REFERENCES `b247-com`.`category` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `channel ->cat`
     FOREIGN KEY (`channel_id` )
-    REFERENCES `mydb`.`channel` (`id` )
+    REFERENCES `b247-com`.`channel` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`article_image`
+-- Table `b247-com`.`article_image`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `mydb`.`article_image` (
+CREATE  TABLE IF NOT EXISTS `b247-com`.`article_image` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `article_id` INT NOT NULL ,
   `image_id` INT NOT NULL ,
@@ -295,21 +293,21 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`article_image` (
   INDEX `article -> img_idx` (`image_id` ASC) ,
   CONSTRAINT `img -> article`
     FOREIGN KEY (`article_id` )
-    REFERENCES `mydb`.`article` (`id` )
+    REFERENCES `b247-com`.`article` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `article -> img`
     FOREIGN KEY (`image_id` )
-    REFERENCES `mydb`.`asset` (`id` )
+    REFERENCES `b247-com`.`asset` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`age_group`
+-- Table `b247-com`.`age_group`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `mydb`.`age_group` (
+CREATE  TABLE IF NOT EXISTS `b247-com`.`age_group` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `range` VARCHAR(45) NOT NULL ,
   PRIMARY KEY (`id`) )
@@ -317,9 +315,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`user`
+-- Table `b247-com`.`user`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `mydb`.`user` (
+CREATE  TABLE IF NOT EXISTS `b247-com`.`user` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `age_group_id` INT NOT NULL ,
   `access_key` VARCHAR(45) NOT NULL COMMENT '\'This is the unique identifier for making API requests. It is also used as the salt for verifying the user\\\'s password\'' ,
@@ -345,16 +343,16 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`user` (
   INDEX `user -> age_group_idx` (`age_group_id` ASC) ,
   CONSTRAINT `user -> age_group`
     FOREIGN KEY (`age_group_id` )
-    REFERENCES `mydb`.`age_group` (`id` )
+    REFERENCES `b247-com`.`age_group` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`user_channel`
+-- Table `b247-com`.`user_channel`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `mydb`.`user_channel` (
+CREATE  TABLE IF NOT EXISTS `b247-com`.`user_channel` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `channel_id` INT NOT NULL ,
   `user_id` INT NOT NULL ,
@@ -364,21 +362,21 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`user_channel` (
   INDEX `user -> channel _idx` (`channel_id` ASC) ,
   CONSTRAINT `channel -> user`
     FOREIGN KEY (`user_id` )
-    REFERENCES `mydb`.`user` (`id` )
+    REFERENCES `b247-com`.`user` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `user -> channel `
     FOREIGN KEY (`channel_id` )
-    REFERENCES `mydb`.`channel` (`id` )
+    REFERENCES `b247-com`.`channel` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`user_category`
+-- Table `b247-com`.`user_category`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `mydb`.`user_category` (
+CREATE  TABLE IF NOT EXISTS `b247-com`.`user_category` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `user_id` INT NOT NULL ,
   `category_id` INT NOT NULL ,
@@ -387,21 +385,21 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`user_category` (
   INDEX `cat -> user_idx` (`user_id` ASC) ,
   CONSTRAINT `user_cat -> cat`
     FOREIGN KEY (`category_id` )
-    REFERENCES `mydb`.`category` (`id` )
+    REFERENCES `b247-com`.`category` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `cat -> user`
     FOREIGN KEY (`user_id` )
-    REFERENCES `mydb`.`user` (`id` )
+    REFERENCES `b247-com`.`user` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`search`
+-- Table `b247-com`.`search`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `mydb`.`search` (
+CREATE  TABLE IF NOT EXISTS `b247-com`.`search` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `term` VARCHAR(30) NOT NULL ,
   `device` VARCHAR(45) NOT NULL ,
@@ -412,9 +410,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`user_article`
+-- Table `b247-com`.`user_article`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `mydb`.`user_article` (
+CREATE  TABLE IF NOT EXISTS `b247-com`.`user_article` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `user_id` INT NOT NULL ,
   `article_id` INT NOT NULL ,
@@ -423,21 +421,21 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`user_article` (
   INDEX `article -> user_idx` (`user_id` ASC) ,
   CONSTRAINT `user -> article`
     FOREIGN KEY (`article_id` )
-    REFERENCES `mydb`.`article` (`id` )
+    REFERENCES `b247-com`.`article` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `article -> user`
     FOREIGN KEY (`user_id` )
-    REFERENCES `mydb`.`user` (`id` )
+    REFERENCES `b247-com`.`user` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`keyword_applied`
+-- Table `b247-com`.`keyword_applied`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `mydb`.`keyword_applied` (
+CREATE  TABLE IF NOT EXISTS `b247-com`.`keyword_applied` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `keyword_id` INT NOT NULL ,
   `content_type` INT NOT NULL ,
@@ -449,17 +447,16 @@ CREATE  TABLE IF NOT EXISTS `mydb`.`keyword_applied` (
   INDEX `applied_keyword -> keyword_idx` (`keyword_id` ASC) ,
   CONSTRAINT `keyword_content_type -> content_type`
     FOREIGN KEY (`content_type` )
-    REFERENCES `mydb`.`content_type` (`id` )
+    REFERENCES `b247-com`.`content_type` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `applied_keyword -> keyword`
     FOREIGN KEY (`keyword_id` )
-    REFERENCES `mydb`.`keyword` (`id` )
+    REFERENCES `b247-com`.`keyword` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-USE `mydb` ;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
