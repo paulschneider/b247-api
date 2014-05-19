@@ -12,18 +12,18 @@ class CreateArticleTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::table('article', function(Blueprint $table)
+		Schema::create('article', function(Blueprint $table)
 		{
 			// set the storage engine for the table
 			$table->engine = 'InnoDB';
 
 			// define the columns
 
-			$table->increments('id');
-			$table->integer('content_type');
-			$table->integer('sponsor_id')->nullable();
-			$table->integer('event_id')->nullable();
-			$table->integer('author_id')->nullable();
+			$table->increments('id')->unsigned();
+			$table->integer('content_type')->unsigned();
+			$table->integer('sponsor_id')->unsigned()->nullable();
+			$table->integer('event_id')->unsigned()->nullable();
+			$table->integer('author_id')->unsigned()->nullable();
 			$table->string('title', 255);
 			$table->string('sef_name', 255);
 			$table->string('sub_heading', 150);
@@ -42,11 +42,6 @@ class CreateArticleTable extends Migration {
 			$table->dateTime('published');
 			$table->timestamps();
 
-			// define foreign key constraints
-
-			$table->foreign('content_type')->references('id')->on('content_type');
-			$table->foreign('sponsor_id')->references('id')->on('sponsor');
-			$table->foreign('event_id')->references('id')->on('event');
 		});
 	}
 
@@ -57,10 +52,6 @@ class CreateArticleTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::table('article', function(Blueprint $table)
-		{
-			// Do nothing - this is the start
-		});
+		Schema::drop('article');
 	}
-
 }

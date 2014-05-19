@@ -57,7 +57,7 @@ return array(
 			'host'      => 'localhost',
 			'database'  => 'b247-com',
 			'username'  => 'root',
-			'password'  => 'test',
+			'password'  => '',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',
