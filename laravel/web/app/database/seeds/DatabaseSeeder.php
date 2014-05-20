@@ -12,19 +12,25 @@ class DatabaseSeeder extends Seeder {
 		Eloquent::unguard();
 
 		// remove any foreign key constraints that prevent us re-adding the test content
-		$this->call('removeConstraints');
+		// $this->call('removeConstraints');
+		//
+		// // add in the content types table ( almost all content requires this pre-exist )
+		//$this->call('addContentTypes');
+		//
+		// // add in a load of test channels
+		//$this->call('addChannels');
+		//
+		// // add in some categories and relate them to their parent channels and sub-channels
+		//$this->call('addCategories');
+		//
+		// // add some categories to a sub-channel
+		// $this->call('setSubChannelCategory');
 
-		// add in the content types table ( almost all content requires this pre-exist )
-		$this->call('addContentTypes');
+		// populate the age groups table
+		//$this->call('createAgeGroups');
 
-		// add in a load of test channels
-		$this->call('addChannels');
-
-		// add in some categories and relate them to their parent channels and sub-channels
-		$this->call('addCategories');
-
-		// add some categories to a sub-channel
-		$this->call('setSubChannelCategory');
+		// add some users to the user table
+		//$this->call('createUsers');
 	}
 
 }

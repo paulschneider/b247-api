@@ -15,4 +15,6 @@
 //      var_dump($query);
 // });
 
-Route::controller('/', 'HomeController');
+define('VERSION', Config::get('app.version'));
+
+Route::controller('/', VERSION.'\Controllers\HomeController');

@@ -4,22 +4,22 @@ class setSubChannelCategory extends seeder
 {
     public function run()
     {
-        ChannelCategory::create([
+        \Version1\Models\ChannelCategory::create([
             'channel_id' => 18
             ,'category_id' => 1
         ]);
 
-        ChannelCategory::create([
+        \Version1\Models\ChannelCategory::create([
             'channel_id' => 18
             ,'category_id' => 2
         ]);
 
-        ChannelCategory::create([
+        \Version1\Models\ChannelCategory::create([
             'channel_id' => 18
             ,'category_id' => 3
         ]);
 
-        ChannelCategory::create([
+        \Version1\Models\ChannelCategory::create([
             'channel_id' => 18
             ,'category_id' => 4
         ]);

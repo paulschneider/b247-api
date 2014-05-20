@@ -188,4 +188,18 @@ return array(
 
 	),
 
+	/*
+	|--------------------------------------------------------------------------
+	| Application Version
+	|--------------------------------------------------------------------------
+	|
+	| This is the current version of the API. This value directly maps to the namespace
+	| of the controllers, models and methods of this version. The implementation of this version
+	| can be found under the same directory name and is PSR-4 autoloaded within composer.json
+	|
+	|
+	*/
+
+	'version' => 'Version1',
+
 );

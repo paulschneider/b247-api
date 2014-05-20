@@ -10,22 +10,22 @@ class addContentTypes extends Seeder
 
         DB::unprepared($statement);
 
-        ContentType::create([
+        \Version1\Models\ContentType::create([
             'type' => 'Channel'
             ,'created_at' => new DateTime
         ]);
 
-        ContentType::create([
+        \Version1\Models\ContentType::create([
             'type' => 'Sub-Channel'
             ,'created_at' => new DateTime
         ]);
 
-        ContentType::create([
+        \Version1\Models\ContentType::create([
             'type' => 'Category'
             ,'created_at' => new DateTime
         ]);
 
-        ContentType::create([
+        \Version1\Models\ContentType::create([
             'type' => 'Article'
             ,'created_at' => new DateTime
         ]);

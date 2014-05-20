@@ -36,5 +36,13 @@ class removeConstraints extends seeder
         $statement = "ALTER TABLE category AUTO_INCREMENT = 1;";
 
         DB::unprepared($statement);
+
+        ##################################################################################### Users
+
+        DB::table('user')->delete();
+
+        $statement = "ALTER TABLE user AUTO_INCREMENT = 1;";
+
+        DB::unprepared($statement);
     }
 }

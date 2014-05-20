@@ -1,6 +1,10 @@
 <?php
 
-Class BaseModel extends Eloquent
+namespace Version1\Models;
+
+use Eloquent;
+
+Class BaseModel extends \Eloquent
 {
     protected $guarded = ['id'];
 

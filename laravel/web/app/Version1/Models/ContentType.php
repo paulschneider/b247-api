@@ -1,6 +1,8 @@
 <?php
 
-Class ContentType extends Eloquent
+namespace Version1\Models;
+
+Class ContentType extends \Eloquent
 {
     protected $table = 'content_type';
 

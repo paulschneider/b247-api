@@ -1,6 +1,8 @@
 <?php
 
-Class ChannelCategory extends Eloquent
+namespace Version1\Models;
+
+Class ChannelCategory extends \Eloquent
 {
     protected $table = "channel_category";
 
@@ -12,11 +14,11 @@ Class ChannelCategory extends Eloquent
 
     public function categoryChannel()
     {
-        return $this->belongsToMany('Channel', 'channel_id');
+        return $this->belongsToMany('\Version1\Models\Channel', 'channel_id');
     }
 
     public function category()
     {
-        return $this->belongsTo('Category', 'category_id', 'id');
+        return $this->belongsTo('\Version1\Models\Category', 'category_id', 'id');
     }
 }

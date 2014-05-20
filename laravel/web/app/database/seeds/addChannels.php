@@ -5,7 +5,7 @@ class addChannels extends Seeder
     public function run()
     {
         // id = 1
-        Channel::create([
+        \Version1\Models\Channel::create([
             'content_type' => 1
             ,'icon_img_id' => null
             ,'name' => 'News'
@@ -15,7 +15,7 @@ class addChannels extends Seeder
         ]);
 
         // id = 2
-        Channel::create([
+        \Version1\Models\Channel::create([
             'content_type' => 1
             ,'icon_img_id' => null
             ,'name' => 'What\'s On'
@@ -25,7 +25,7 @@ class addChannels extends Seeder
         ]);
 
         // id = 3
-        Channel::create([
+        \Version1\Models\Channel::create([
             'content_type' => 1
             ,'icon_img_id' => null
             ,'name' => 'Comments'
@@ -35,7 +35,7 @@ class addChannels extends Seeder
         ]);
 
         // id = 4
-        Channel::create([
+        \Version1\Models\Channel::create([
             'content_type' => 1
             ,'icon_img_id' => null
             ,'name' => 'Food and Drink'
@@ -45,7 +45,7 @@ class addChannels extends Seeder
         ]);
 
         // id = 5
-        Channel::create([
+        \Version1\Models\Channel::create([
             'content_type' => 1
             ,'icon_img_id' => null
             ,'name' => 'Motoring'
@@ -57,7 +57,7 @@ class addChannels extends Seeder
         ############################################## Sub-Channels of News
 
         // id = 6
-        Channel::create([
+        \Version1\Models\Channel::create([
             'content_type' => 2
             ,'parent_channel' => 1
             ,'icon_img_id' => null
@@ -68,7 +68,7 @@ class addChannels extends Seeder
         ]);
 
         // id = 7
-        Channel::create([
+        \Version1\Models\Channel::create([
             'content_type' => 2
             ,'parent_channel' => 1
             ,'icon_img_id' => null
@@ -79,7 +79,7 @@ class addChannels extends Seeder
         ]);
 
         // id = 8
-        Channel::create([
+        \Version1\Models\Channel::create([
             'content_type' => 2
             ,'parent_channel' => 1
             ,'icon_img_id' => null
@@ -90,7 +90,7 @@ class addChannels extends Seeder
         ]);
 
         // id = 9
-        Channel::create([
+        \Version1\Models\Channel::create([
             'content_type' => 2
             ,'parent_channel' => 1
             ,'icon_img_id' => null
@@ -101,7 +101,7 @@ class addChannels extends Seeder
         ]);
 
         // id = 10
-        Channel::create([
+        \Version1\Models\Channel::create([
             'content_type' => 2
             ,'parent_channel' => 1
             ,'icon_img_id' => null
@@ -112,7 +112,7 @@ class addChannels extends Seeder
         ]);
 
         // id = 11
-        Channel::create([
+        \Version1\Models\Channel::create([
             'content_type' => 2
             ,'parent_channel' => 1
             ,'icon_img_id' => null
@@ -123,7 +123,7 @@ class addChannels extends Seeder
         ]);
 
         // id = 12
-        Channel::create([
+        \Version1\Models\Channel::create([
             'content_type' => 2
             ,'parent_channel' => 1
             ,'icon_img_id' => null
@@ -134,7 +134,7 @@ class addChannels extends Seeder
         ]);
 
         // id = 13
-        Channel::create([
+        \Version1\Models\Channel::create([
             'content_type' => 2
             ,'parent_channel' => 1
             ,'icon_img_id' => null
@@ -145,7 +145,7 @@ class addChannels extends Seeder
         ]);
 
         // id = 14
-        Channel::create([
+        \Version1\Models\Channel::create([
             'content_type' => 2
             ,'parent_channel' => 1
             ,'icon_img_id' => null
@@ -156,7 +156,7 @@ class addChannels extends Seeder
         ]);
 
         // id = 15
-        Channel::create([
+        \Version1\Models\Channel::create([
             'content_type' => 2
             ,'parent_channel' => 1
             ,'icon_img_id' => null
@@ -167,7 +167,7 @@ class addChannels extends Seeder
         ]);
 
         // id = 16
-        Channel::create([
+        \Version1\Models\Channel::create([
             'content_type' => 2
             ,'parent_channel' => 1
             ,'icon_img_id' => null
@@ -180,7 +180,7 @@ class addChannels extends Seeder
         ############################################## Sub-Channels of What's On
 
         // id = 17
-        Channel::create([
+        \Version1\Models\Channel::create([
             'content_type' => 2
             ,'parent_channel' => 2
             ,'icon_img_id' => null
@@ -191,7 +191,7 @@ class addChannels extends Seeder
         ]);
 
         // id = 18
-        Channel::create([
+        \Version1\Models\Channel::create([
             'content_type' => 2
             ,'parent_channel' => 2
             ,'icon_img_id' => null
@@ -202,7 +202,7 @@ class addChannels extends Seeder
         ]);
 
         // id = 19
-        Channel::create([
+        \Version1\Models\Channel::create([
             'content_type' => 2
             ,'parent_channel' => 2
             ,'icon_img_id' => null
@@ -213,7 +213,7 @@ class addChannels extends Seeder
         ]);
 
         // id = 20
-        Channel::create([
+        \Version1\Models\Channel::create([
             'content_type' => 2
             ,'parent_channel' => 2
             ,'icon_img_id' => null
@@ -224,7 +224,7 @@ class addChannels extends Seeder
         ]);
 
         // id = 21
-        Channel::create([
+        \Version1\Models\Channel::create([
             'content_type' => 2
             ,'parent_channel' => 2
             ,'icon_img_id' => null
@@ -235,7 +235,7 @@ class addChannels extends Seeder
         ]);
 
         // id = 22
-        Channel::create([
+        \Version1\Models\Channel::create([
             'content_type' => 2
             ,'parent_channel' => 2
             ,'icon_img_id' => null
@@ -246,7 +246,7 @@ class addChannels extends Seeder
         ]);
 
         // id = 23
-        Channel::create([
+        \Version1\Models\Channel::create([
             'content_type' => 2
             ,'parent_channel' => 2
             ,'icon_img_id' => null
@@ -257,7 +257,7 @@ class addChannels extends Seeder
         ]);
 
         // id = 24
-        Channel::create([
+        \Version1\Models\Channel::create([
             'content_type' => 2
             ,'parent_channel' => 2
             ,'icon_img_id' => null
@@ -268,7 +268,7 @@ class addChannels extends Seeder
         ]);
 
         // id = 25
-        Channel::create([
+        \Version1\Models\Channel::create([
             'content_type' => 2
             ,'parent_channel' => 2
             ,'icon_img_id' => null

@@ -1,6 +1,7 @@
 <?php
 
 ini_set('display_errors', true);
+ini_set('date.timezone', 'Europe/London');
 
 /**
  * Laravel - A PHP Framework For Web Artisans

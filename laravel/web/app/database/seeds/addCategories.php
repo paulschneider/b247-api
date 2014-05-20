@@ -5,7 +5,7 @@ class addCategories extends Seeder
     public function run()
     {
         // id = 1
-        Category::create([
+        \Version1\Models\Category::create([
             'content_type' => 3
             ,'icon_img_id' => null
             ,'name' => 'Reviews'
@@ -15,7 +15,7 @@ class addCategories extends Seeder
         ]);
 
         // id = 2
-        Category::create([
+        \Version1\Models\Category::create([
             'content_type' => 3
             ,'icon_img_id' => null
             ,'name' => 'Interviews'
@@ -25,7 +25,7 @@ class addCategories extends Seeder
         ]);
 
         // id = 3
-        Category::create([
+        \Version1\Models\Category::create([
             'content_type' => 3
             ,'icon_img_id' => null
             ,'name' => 'Features'
@@ -35,7 +35,7 @@ class addCategories extends Seeder
         ]);
 
         // id = 4
-        Category::create([
+        \Version1\Models\Category::create([
             'content_type' => 3
             ,'icon_img_id' => null
             ,'name' => 'Big Jeff'

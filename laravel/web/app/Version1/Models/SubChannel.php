@@ -1,5 +1,7 @@
 <?php
 
+namespace Version1\Models;
+
 Class SubChannel extends BaseModel
 {
     /**
@@ -28,13 +30,13 @@ Class SubChannel extends BaseModel
      *
      * @return ???
      */
-    public function channelCategory()
+    public function category()
     {
-        return $this->hasMany('ChannelCategory', 'channel_id', 'id');
+        return $this->belongsToMany('\Version1\Models\Channel', 'channel_category', 'channel_id', 'category_id');
     }
 
     public function channel()
     {
-        return $this->belongsToMany('Channel', 'parent_id', 'id');
+        return $this->belongsToMany('\Version1\Models\Channel', 'parent_id', 'id');
     }
 }

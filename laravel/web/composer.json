@@ -5,6 +5,7 @@
 	"license": "MIT",
 	"require": {
 		"laravel/framework": "4.1.*"
+		,"nesbot/Carbon": "*"
 	},
 	"autoload": {
 		"classmap": [
@@ -18,6 +19,9 @@
 		,"files" : [
 			"app/helpers.php"
 		]
+		,"psr-4": {
+			"Version1\\": "app/Version1"
+		}
 	},
 	"scripts": {
 		"post-install-cmd": [
