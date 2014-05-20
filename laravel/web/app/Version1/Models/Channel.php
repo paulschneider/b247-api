@@ -21,9 +21,8 @@ Class Channel extends \Eloquent
 
         $result = new \stdClass();
 
-        $result->channels = clean($channels);
+        $result->channels = clean($data);
 
-
-
+        return $result;        
     }
 }
