@@ -9,7 +9,7 @@ use Carbon\Carbon;
 
 Class HomeController extends BaseController
 {
-    public function getIndex()
+    public function index()
     {
         if( Request::header('accessKey') )
         {

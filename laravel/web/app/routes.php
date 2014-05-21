@@ -17,4 +17,9 @@
 
 define('VERSION', Config::get('app.version'));
 
-Route::controller('/', VERSION.'\Controllers\HomeController');
+# Registration
+Route::get('register', VERSION.'\Controllers\RegisterController@create');
+Route::post('register', VERSION.'\Controllers\RegisterController@store');
+
+# Homepage
+Route::get('/', VERSION.'\Controllers\HomeController@index');

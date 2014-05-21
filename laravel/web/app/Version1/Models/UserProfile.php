@@ -16,7 +16,11 @@ class UserProfile extends BaseModel
     *
     * @var string
     */
-    protected $fillable = [ 'facebook', 'twitter', 'lat', 'lon', 'area', 'updated_at' ];
+    protected $fillable = [
+
+        'age_group_id', 'nickname', 'facebook', 'twitter', 'lat', 'lon', 'area', 'updated_at' 
+
+    ];
 
     /**
     * Array of items not to be returned

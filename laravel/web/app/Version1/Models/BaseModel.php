@@ -10,18 +10,54 @@ Class BaseModel extends \Eloquent
 
     protected $fillable = array('content_type', 'icon_img_id', 'name', 'sef_name', 'colour', 'created_at', 'updated_at');
 
-    public function __construct($attributes = array())
+    $protected $errors;
+
+    public static function boot()
     {
-        parent::__construct($attributes);
+        parent::boot();
+
+
+        static::saving(function($model)
+        {
+
+            return $model->validate();
+
+        });
+
     }
+
 
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
     }
 
+
     public function scopeAlive($query)
     {
         return $query->where('is_deleted', null);
+    }
+
+
+    public function validate()
+    {
+
+        $validation = Validator::make($this->getAttributes(), static::$rules);
+
+        if($validation->fails())
+        {
+            $this->errors = $validation->messages();
+
+            return false;
+        }
+
+        return true;
+
+    }
+
+
+    public function getErrors()
+    {
+        return $this->errors;
     }
 }

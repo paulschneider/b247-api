@@ -20,7 +20,35 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
 	 *
 	 * @var array
 	 */
-	protected $hidden = array('password', 'age_group_id', 'originating_ip', 'last_login', 'last_login_ip', 'is_active', 'is_deleted', 'created_at', 'updated_at');
+	protected $hidden = [
+
+		'password', 'originating_ip', 'last_login', 'last_login_ip', 'is_active', 'is_deleted', 'created_at', 'updated_at'
+
+	];
+
+	/**
+	* The attributes of a user that can be manually set
+	*
+	* @var array
+	*/
+	protected $fillable = [
+
+		'first_name', 'last_name', 'email'
+
+	];
+
+	/**
+	* Form validation rules for a new user
+	*
+	* @var array
+	*/
+	protected static $rules = [
+
+		'first_name' => 'required'
+		,'last_name' => 'required'
+		,'email' => 'required'
+
+	];
 
 	/**
 	 * Get the unique identifier for the user.
