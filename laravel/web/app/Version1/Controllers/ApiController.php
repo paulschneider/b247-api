@@ -53,6 +53,16 @@ class ApiController Extends BaseController {
     }
 
     /**
+     * respond that the HTTP call being made is not supported
+     *
+     * @return Response
+     */
+    public function respondNotSupported($message = "Not supported")
+    {
+        return $this->setStatusCode(501)->respondWithError($message);
+    }
+
+    /**
      * send the response back to the API client
      *
      * @return Response

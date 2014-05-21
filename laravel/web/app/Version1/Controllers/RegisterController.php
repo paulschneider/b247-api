@@ -48,4 +48,14 @@ class RegisterController extends ApiController {
 			]);
 		}
 	}
+
+	/**
+	* Coverall for any HTTP requests that are not covered by implemented methods
+	*
+	* @return Response
+	*/
+	public function missingMethod($parameters=array())
+	{
+		$this->respondNotSupported('Endpoint does not support method.');
+	}
 }

@@ -44,8 +44,14 @@ Class HomeController extends ApiController {
             'data' => $response
         ]);
     }
+
+    /**
+    * Coverall for any HTTP requests that are not covered by implemented methods
+    *
+    * @return Response
+    */
     public function missingMethod($parameters=array())
     {
-        $this->setStatusCode(501)->respondWithError('Endpoint does not support method.');
+        $this->respondNotSupported('Endpoint does not support method.');
     }
 }
