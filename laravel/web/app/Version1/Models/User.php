@@ -4,6 +4,7 @@ namespace Version1\Models;
 
 use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableInterface;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class User extends \Eloquent implements UserInterface, RemindableInterface {
 
@@ -19,7 +20,7 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
 	 *
 	 * @var array
 	 */
-	protected $hidden = array('password', 'originating_ip', 'last_login', 'last_login_ip', 'is_active', 'is_deleted', 'created_at', 'updated_at');
+	protected $hidden = array('password', 'age_group_id', 'originating_ip', 'last_login', 'last_login_ip', 'is_active', 'is_deleted', 'created_at', 'updated_at');
 
 	/**
 	 * Get the unique identifier for the user.
@@ -82,6 +83,16 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
 		return $this->email;
 	}
 
+	/**
+	* Relate the user to a profile record
+	*
+	* @return ???
+	*/
+	public function profile()
+	{
+		return $this->hasOne('\Version1\Models\UserProfile');
+	}
+
 	public function Channels()
 	{
 		return $this->belongsToMany('\Version1\Models\Channel', 'user_channel');
@@ -94,19 +105,27 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
 
 	public static function getUserChannels($accessKey)
 	{
-		$data = static::with('channels.subChannel.category')->whereAccessKey($accessKey)->get()->toArray();
+		try
+		{
+			$data = static::with('profile', 'channels.subChannel.category')->whereAccessKey($accessKey)->firstOrFail()->toArray();
 
-		$channels = $data[0]['channels'];
+			$channels = $data['channels'];
 
-		unset($data[0]['channels']);
+			unset($data['channels']);
 
-		$user = new \stdClass();
+			$user = new \stdClass();
 
-		$user->user = $data[0];
+			$user->details = $data;
 
-		$user->channels = clean($channels);
+			$user->channels = clean($channels);
 
-		return $user;
+			return $user;
+		}
+		catch(ModelNotFoundException $e)
+		{
+			return false;
+		}
+
 	}
 
 }

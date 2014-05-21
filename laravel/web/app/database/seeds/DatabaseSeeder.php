@@ -21,16 +21,16 @@ class DatabaseSeeder extends Seeder {
 		//$this->call('addChannels');
 		//
 		// // add in some categories and relate them to their parent channels and sub-channels
-		//$this->call('addCategories');
+		$this->call('addCategories');
 		//
 		// // add some categories to a sub-channel
-		// $this->call('setSubChannelCategory');
+		$this->call('setSubChannelCategory');
 
 		// populate the age groups table
-		//$this->call('createAgeGroups');
+		$this->call('createAgeGroups');
 
 		// add some users to the user table
-		//$this->call('createUsers');
+		$this->call('createUsers');
 	}
 
 }

@@ -13,7 +13,12 @@ Class HomeController extends BaseController
     {
         if( Request::header('accessKey') )
         {
-            $response = \Version1\Models\User::getUserChannels( Request::header('accessKey') );
+            $accessKey = Request::header('accessKey');
+
+            if( ! $response = \Version1\Models\User::getUserChannels( $accessKey ) )
+            {
+                return HomeController::userNotFound( $accessKey );
+            }
         }
         else
         {
@@ -25,10 +30,30 @@ Class HomeController extends BaseController
             }
         }
 
-        $response = Response::make(json_encode($response), 200);
+        return BaseController::respond($response, 200);
+    }
 
-        $response->header('Content-Type', 'application/json');
+    protected function userNotFound($accesskey)
+    {
+        $response = new \stdClass();
 
-        return $response;
+        $response->endpoint = Request::path();
+        $response->message = "No channels were found for user with supplied accessKey.";
+        $response->accessKey = $accesskey;
+        $response->time = time();
+
+        return BaseController::respond($response, 404);
+    }
+
+    public function missingMethod($parameters=array())
+    {
+        $response = new \stdClass();
+
+        $response->endpoint = Request::path();
+        $response->message = "Endpoint does not support method.";
+        $response->unSupportedMethod = Request::method();
+        $response->time = time();
+
+        return BaseController::respond($response, 501);
     }
 }

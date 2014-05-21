@@ -35,6 +35,11 @@ Class SubChannel extends BaseModel
         return $this->belongsToMany('\Version1\Models\Channel', 'channel_category', 'channel_id', 'category_id');
     }
 
+    /**
+     * Relate sub-channel to parent channel
+     *
+     * @return ???
+     */
     public function channel()
     {
         return $this->belongsToMany('\Version1\Models\Channel', 'parent_id', 'id');
