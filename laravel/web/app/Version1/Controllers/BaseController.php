@@ -3,8 +3,6 @@
 namespace Version1\Controllers;
 
 use Controller;
-use Request;
-use Response;
 
 class BaseController extends Controller
 {
@@ -20,14 +18,4 @@ class BaseController extends Controller
             $this->layout = View::make($this->layout);
         }
     }
-
-    public static function respond($data, $responseCode)
-    {
-        $response = Response::make(json_encode($data), $responseCode);
-
-        $response->header('Content-Type', 'application/json');
-
-        return $response;
-    }
-
 }

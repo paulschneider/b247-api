@@ -7,53 +7,45 @@ use Response;
 use Cache;
 use Carbon\Carbon;
 
-Class HomeController extends BaseController
-{
+Class HomeController extends ApiController {
+
+    /**
+     *
+     * @var Api\Transformers\ChannelTransformer
+     */
+     protected $channelTransformer;
+
+    public function __construct(\Api\Transformers\ChannelTransformer $channelTransformer)
+    {
+        $this->channelTransformer = $channelTransformer;
+    }
+
     public function index()
     {
         if( Request::header('accessKey') )
         {
             $accessKey = Request::header('accessKey');
 
-            if( ! $response = \Version1\Models\User::getUserChannels( $accessKey ) )
+            if( ! $response = $this->channelTransformer->transform(\Version1\Models\User::getUserChannels( $accessKey )) )
             {
-                return HomeController::userNotFound( $accessKey );
+                return $this->respondNotFound('No channels were found for user with supplied accessKey.');
             }
         }
         else
         {
             if( ! $response = cached("homepage") )
             {
-                $response = \Version1\Models\Channel::getChannels();
+                $response = $this->channelTransformer->transform(\Version1\Models\Channel::getChannels());
 
                 cacheIt("homepage", $response, "1 hour");
             }
         }
-
-        return BaseController::respond($response, 200);
+        return $this->respond([
+            'data' => $response
+        ]);
     }
-
-    protected function userNotFound($accesskey)
-    {
-        $response = new \stdClass();
-
-        $response->endpoint = Request::path();
-        $response->message = "No channels were found for user with supplied accessKey.";
-        $response->accessKey = $accesskey;
-        $response->time = time();
-
-        return BaseController::respond($response, 404);
-    }
-
     public function missingMethod($parameters=array())
     {
-        $response = new \stdClass();
-
-        $response->endpoint = Request::path();
-        $response->message = "Endpoint does not support method.";
-        $response->unSupportedMethod = Request::method();
-        $response->time = time();
-
-        return BaseController::respond($response, 501);
+        $this->setStatusCode(501)->respondWithError('Endpoint does not support method.');
     }
 }

@@ -1,8 +1,7 @@
-<?php
-
-namespace Version1\Models;
+<?php namespace Version1\Models;
 
 use Eloquent;
+use Validator;
 
 Class BaseModel extends \Eloquent
 {
@@ -10,7 +9,7 @@ Class BaseModel extends \Eloquent
 
     protected $fillable = array('content_type', 'icon_img_id', 'name', 'sef_name', 'colour', 'created_at', 'updated_at');
 
-    $protected $errors;
+    public $errors;
 
     public static function boot()
     {
@@ -26,19 +25,6 @@ Class BaseModel extends \Eloquent
 
     }
 
-
-    public function scopeActive($query)
-    {
-        return $query->where('is_active', true);
-    }
-
-
-    public function scopeAlive($query)
-    {
-        return $query->where('is_deleted', null);
-    }
-
-
     public function validate()
     {
 
@@ -46,15 +32,26 @@ Class BaseModel extends \Eloquent
 
         if($validation->fails())
         {
-            $this->errors = $validation->messages();
+
+            $this->errors = $validation->messages()->toArray();
 
             return false;
+
         }
 
         return true;
 
     }
 
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    public function scopeAlive($query)
+    {
+        return $query->where('is_deleted', null);
+    }
 
     public function getErrors()
     {

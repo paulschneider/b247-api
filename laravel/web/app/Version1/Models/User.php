@@ -6,7 +6,7 @@ use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class User extends \Eloquent implements UserInterface, RemindableInterface {
+class User extends BaseModel implements UserInterface, RemindableInterface {
 
 	/**
 	 * The database table used by the model.
@@ -33,7 +33,7 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
 	*/
 	protected $fillable = [
 
-		'first_name', 'last_name', 'email'
+		'access_key', 'first_name', 'last_name', 'email', 'password'
 
 	];
 
@@ -128,32 +128,42 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
 
 	public static function generateAccessKey()
 	{
-		return str_random(25);
+		return strtoupper(substr(sha1(time().str_random(25)), 0, 15));
+	}
+
+	// access key also acts as a salt
+
+	public static function generatePassword($accessKey)
+	{
+		$plain = str_random(8);
+
+		$encrypted = \Hash::make($accessKey.$plain);
+
+		return [ 'plain' => $plain, 'encrypted' => $encrypted ];
 	}
 
 	public static function getUserChannels($accessKey)
 	{
 		try
 		{
-			$data = static::with('profile', 'channels.subChannel.category')->whereAccessKey($accessKey)->firstOrFail()->toArray();
-
-			$channels = $data['channels'];
-
-			unset($data['channels']);
-
-			$user = new \stdClass();
-
-			$user->details = $data;
-
-			$user->channels = clean($channels);
-
-			return $user;
+			return static::with('profile', 'channels.subChannel.category')->whereAccessKey($accessKey)->firstOrFail()->toArray();
 		}
 		catch(ModelNotFoundException $e)
 		{
 			return false;
 		}
-
 	}
 
+	public static function addUser(array $input)
+	{
+		$input['access_key'] = static::generateAccessKey();
+
+		$password = static::generatePassword($input['access_key']);
+
+		$input['password'] = $password['encrypted'];
+
+		$user = new User($input);
+
+		return $user;
+	}
 }

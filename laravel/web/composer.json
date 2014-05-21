@@ -21,6 +21,7 @@
 		]
 		,"psr-4": {
 			"Version1\\": "app/Version1"
+			,"Api\\" : "app/Api"
 		}
 	},
 	"scripts": {

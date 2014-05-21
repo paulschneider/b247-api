@@ -17,12 +17,6 @@ Class Channel extends \Eloquent
 
     public static function getChannels()
     {
-        $data = static::with('subChannel.category')->get()->toArray();
-
-        $result = new \stdClass();
-
-        $result->channels = clean($data);
-
-        return $result;        
+        return static::with('subChannel.category')->get()->toArray();
     }
 }

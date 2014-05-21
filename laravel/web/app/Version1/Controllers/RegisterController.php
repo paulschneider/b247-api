@@ -1,13 +1,22 @@
-<?php
-
-namespace Version1\Controllers;
+<?php namespace Version1\Controllers;
 
 use Request;
 use Response;
 use View;
 use Input;
 
-class RegisterController extends BaseController {
+class RegisterController extends ApiController {
+
+	/**
+	*
+	* @var Api\Transformers\UserTransformer
+	*/
+	protected $userTransformer;
+
+	public function __construct(\Api\Transformers\UserTransformer $userTransformer)
+	{
+		$this->userTransformer = $userTransformer;
+	}
 
 	/**
 	 * Show the form for creating a new resource.
@@ -16,11 +25,8 @@ class RegisterController extends BaseController {
 	 */
 	public function create()
 	{
-
 		return View::make('register.show');
-
 	}
-
 
 	/**
 	 * Store a newly created resource in storage.
@@ -29,19 +35,17 @@ class RegisterController extends BaseController {
 	 */
 	public function store()
 	{
-		$user = new \Version1\Models\User(Input::all());
+		$user = \Version1\Models\User::addUser(Input::all());
 
 		if( ! $user->save() )
 		{
-
-			dd($user->errors);
-
+			return $this->respondNotValid("Registration error. Submitted fields do not meet validation requirements.");
 		}
 		else
 		{
-
-			exit('saved');
-
+			return $this->respond([
+				'data' => $this->userTransformer->transform($user->toArray())
+			]);
 		}
 	}
 }

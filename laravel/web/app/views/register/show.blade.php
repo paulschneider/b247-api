@@ -8,17 +8,17 @@
 
     <div class="form-group">
         {{ Form::label('first_name', 'Firstname:') }}
-        {{ Form::text('Firstname', null, [ 'class' => 'form-control' ]) }}
+        {{ Form::text('first_name', null, [ 'class' => 'form-control' ]) }}
     </div>
 
     <div class="form-group">
         {{ Form::label('last_name', 'Lastname:') }}
-        {{ Form::text('Lastname', null, [ 'class' => 'form-control' ]) }}
+        {{ Form::text('last_name', null, [ 'class' => 'form-control' ]) }}
     </div>
 
     <div class="form-group">
         {{ Form::label('email', 'Email:') }}
-        {{ Form::text('Email', null, [ 'class' => 'form-control' ]) }}
+        {{ Form::text('email', null, [ 'class' => 'form-control' ]) }}
     </div>
 
     <div class="form-group">
