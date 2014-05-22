@@ -49,7 +49,7 @@ class ApiController Extends BaseController {
      */
     public function respondNotValid($message = "Invalid")
     {
-        return $this->setStatusCode(406)->respondWithError($message);
+        return $this->setStatusCode(422)->respondWithError($message);
     }
 
     /**
@@ -60,6 +60,26 @@ class ApiController Extends BaseController {
     public function respondNotSupported($message = "Not supported")
     {
         return $this->setStatusCode(501)->respondWithError($message);
+    }
+
+    /**
+     * respond that a record wa successfully created
+     *
+     * @return Response
+     */
+    public function respondCreated($message = "Created", $data = null)
+    {
+        return $this->setStatusCode(201)->respondWithSuccess($message, $data);
+    }
+
+    /**
+     * respond that the call was successful and return the data to the client
+     *
+     * @return Response
+     */
+    public function respondFound($message = "Found", $data = null)
+    {
+        return $this->respondWithSuccess($message, $data);
     }
 
     /**
@@ -85,6 +105,24 @@ class ApiController Extends BaseController {
                 ,'statusCode' => $this->getStatusCode()
                 ,'endpoint' => Request::path()
                 ,'time' => time()
+            ]
+        ]);
+    }
+
+    /**
+     * return an error to the API client
+     *
+     * @return Response
+     */
+    public function respondWithSuccess($message, $data = null)
+    {
+        return $this->respond([
+            'success' => [
+                'message' => $message
+                ,'statusCode' => $this->getStatusCode()
+                ,'endpoint' => Request::path()
+                ,'time' => time()
+                ,'data' => $data
             ]
         ]);
     }

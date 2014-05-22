@@ -39,13 +39,11 @@ class RegisterController extends ApiController {
 
 		if( ! $user->save() )
 		{
-			return $this->respondNotValid("Registration error. Submitted fields do not meet validation requirements.");
+			return $this->respondNotValid($user->errors);
 		}
 		else
 		{
-			return $this->respond([
-				'data' => $this->userTransformer->transform($user->toArray())
-			]);
+			return $this->respondCreated('User successfully registered', $this->userTransformer->transform($user->toArray()));
 		}
 	}
 

@@ -8,6 +8,8 @@ Class UserChannel extends \Eloquent
 
     protected $guarded = [ 'id' ];
 
+    public $timestamps = false;
+
     public function User()
     {
         $this->belongsTo('\Version1\Models\User');

@@ -22,6 +22,8 @@ Class HomeController extends ApiController {
 
     public function index()
     {
+        return \Version1\Models\Channel::getChannels();
+
         if( Request::header('accessKey') )
         {
             $accessKey = Request::header('accessKey');
@@ -40,9 +42,7 @@ Class HomeController extends ApiController {
                 cacheIt("homepage", $response, "1 hour");
             }
         }
-        return $this->respond([
-            'data' => $response
-        ]);
+        return $this->respondFound('Channels found', $response);
     }
 
     /**

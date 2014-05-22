@@ -4,25 +4,23 @@ class createUsers extends Seeder
 {
     public function run()
     {
-        $key = str_random(25);
-
-        $salt = $key;
-
         \Version1\Models\User::create([
-            "access_key" => $key
+            "access_key" => 'OGuzm6pDHsFwrXW6Zb0ICc1iR'
             ,"first_name" => "Paul"
             ,"last_name" => "Schneider"
             ,"email" => "paul.schneider@yepyep.co.uk"
-            ,"password" => Hash::make($salt."password")
+            ,"password" => Hash::make("password")
         ]);
 
         \Version1\Models\User::create([
-            "access_key" => $key
+            "access_key" => 'OGuzm6pDHsFwrXW6Zb0ICc1iR1'
             ,"first_name" => "David"
             ,"last_name" => "Woodall"
             ,"email" => "david.woodall@wildfirecomms.co.uk"
-            ,"password" => Hash::make($salt."password")
+            ,"password" => Hash::make("password")
         ]);
+
+        $this->command->info('Users created');
     }
 
 }
