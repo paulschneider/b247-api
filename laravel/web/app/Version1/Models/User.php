@@ -1,6 +1,4 @@
-<?php
-
-namespace Version1\Models;
+<?php namespace Version1\Models;
 
 use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableInterface;

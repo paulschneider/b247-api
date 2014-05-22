@@ -34,28 +34,36 @@ class DatabaseSeeder extends Seeder {
 	{
 		Eloquent::unguard();
 
-		$this->cleanDatabase();
+		#$this->cleanDatabase();
 
 		// add in the content types table ( almost all content requires this pre-exist )
-		$this->call('addContentTypes');
+		#$this->call('AddContentTypesSeeder');
 
 		// add in a load of test channels
-		$this->call('addChannels');
+		#$this->call('AddChannelsSeeder');
 
 		// add in some categories and relate them to their parent channels and sub-channels
-		$this->call('addCategories');
+		#$this->call('AddCategoriesSeeder');
 
 		// add some categories to a sub-channel
-		$this->call('setSubChannelCategory');
+		#$this->call('AddSubChannelCategorySeeder');
 
 		// populate the age groups table
-		$this->call('createAgeGroups');
+		#$this->call('CreateAgeGroupsSeeder');
 
 		// add some users to the user table
-		$this->call('createUsers');
+		#$this->call('CreateUsersSeeder');
 
 		// add some channels to the users
-		$this->call('addUserChannels');
+		#$this->call('AddUserChannelsSeeder');
+
+		// add some random articles to the database
+		#$this->call('AddArticlesSeeder');
+
+		// attach the new articles to some categories
+		#$this->call('AddCategoryArticleSeeder');
+
+		$this->call('AddSponsorsSeeder');
 	}
 
 	private function cleanDatabase()

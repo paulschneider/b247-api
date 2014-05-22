@@ -1,6 +1,6 @@
 <?php
 
-class addCategories extends Seeder
+class AddCategoriesSeeder extends Seeder
 {
     public function run()
     {

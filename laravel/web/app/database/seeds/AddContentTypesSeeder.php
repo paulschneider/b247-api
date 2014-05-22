@@ -1,6 +1,6 @@
 <?php
 
-class addContentTypes extends Seeder
+class AddContentTypesSeeder extends Seeder
 {
     public function run()
     {

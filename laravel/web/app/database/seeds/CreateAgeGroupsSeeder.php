@@ -1,6 +1,6 @@
 <?php
 
-class createAgeGroups extends Seeder
+class CreateAgeGroupsSeeder extends Seeder
 {
     public function run()
     {

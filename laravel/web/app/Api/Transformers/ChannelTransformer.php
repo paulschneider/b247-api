@@ -33,12 +33,18 @@ class ChannelTransformer extends Transformer {
 
                     $chan = array(
                         "id" => (int) $channel['id']
-                        ,"icon" => $channel['icon_img_id']
                         ,"name" => $channel['name']
-                        ,"sefName" => $channel['sef_name']
-                        ,"path" => $path
                         ,"colour" => $channel['colour']
+                        ,"icon" => $channel['icon_img_id']
                     );
+
+                    // only add the following attrs if the request came from a desktop client
+
+                    if( isDesktop() )
+                    {
+                        $chan['sefName'] = $channel['sef_name'];
+                        $chan['path'] = $path;
+                    }
 
                     $parentPath = $path;
 
@@ -56,33 +62,41 @@ class ChannelTransformer extends Transformer {
 
                             $sub = array(
                                 "id" => (int) $subChannel['id']
-                                ,"icon" => $subChannel['icon_img_id']
                                 ,"name" => $subChannel['name']
-                                ,"sefName" => $subChannel['sef_name']
-                                ,"path" => $path
                             );
+
+                            // only add the following attrs if the request came from a desktop client
+
+                            if( isDesktop() )
+                            {
+                                $sub['sefName'] = $subChannel['sef_name'];
+                                $sub['path'] = $path;
+                            }
 
                             $channelPath = $path;
 
                             // if there are categories related to the sub channel then go them and create records
 
-                            if( isset($subChannel['channel_category']) and count($subChannel['channel_category']) > 0)
+                            if( isset($subChannel['category']) )
                             {
                                 $sub["categories"] = array();
 
-                                foreach( $subChannel['channel_category'] AS $category )
+                                foreach( $subChannel['category'] AS $category )
                                 {
-                                    $category = $category['category'];
-
                                     $path = $channelPath.$category['sef_name'].'/';
 
                                     $cat = array(
                                         "id" => (int) $category['id']
-                                        ,"icon" => $category['icon_img_id']
                                         ,"name" => $category['name']
-                                        ,"sefName" => $category['sef_name']
-                                        ,"path" => $path
                                     );
+
+                                    // only add the following attrs if the request came from a desktop client
+
+                                    if( isDesktop() )
+                                    {
+                                        $cat['sefName'] = $category['sef_name'];
+                                        $cat['path'] = $path;
+                                    }
 
                                     // add the new category record into the array for the sub-channel
 
@@ -102,10 +116,7 @@ class ChannelTransformer extends Transformer {
             }
 
             // return the cleaned item to the caller
-
-            $response->channels = $items;
-
-            return $response;
+            return $items;
         }
         else
         {

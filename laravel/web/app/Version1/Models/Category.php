@@ -14,4 +14,9 @@ Class Category extends \Eloquent
         return $this->belongsToMany('\Version1\Models\ChannelCategory', 'channel_category', 'channel_id', 'id', 'categories');
     }
 
+    public function article()
+    {
+        return $this->hasMany('\Version1\Models\Article');
+    }
+
 }

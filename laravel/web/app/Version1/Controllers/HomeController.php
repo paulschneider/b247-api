@@ -15,14 +15,28 @@ Class HomeController extends ApiController {
      */
      protected $channelTransformer;
 
-    public function __construct(\Api\Transformers\ChannelTransformer $channelTransformer)
+     /**
+      *
+      * @var Api\Transformers\ArticleTransformer
+      */
+      protected $articleTransformer;
+
+      /**
+      *
+      * @var Api\Transformers\SponsorTransformer
+      */
+      protected $sponsorTransformer;
+
+    public function __construct(\Api\Transformers\ChannelTransformer $channelTransformer, \Api\Transformers\ArticleTransformer $articleTransformer, \Api\Transformers\SponsorTransformer $sponsorTransformer)
     {
         $this->channelTransformer = $channelTransformer;
+        $this->articleTransformer = $articleTransformer;
+        $this->sponsorTransformer = $sponsorTransformer;
     }
 
     public function index()
     {
-        return \Version1\Models\Channel::getChannels();
+        //return \Version1\Models\Sponsor::getHomeSponsors();
 
         if( Request::header('accessKey') )
         {
@@ -35,14 +49,19 @@ Class HomeController extends ApiController {
         }
         else
         {
-            if( ! $response = cached("homepage") )
-            {
-                $response = $this->channelTransformer->transform(\Version1\Models\Channel::getChannels());
+        //    if( ! $response = cached("homepage") )
+        //    {
+                $data = [
+                    'channels' => $channels = $this->channelTransformer->transform(\Version1\Models\Channel::getChannels())
+                    ,'sponsors' => $this->sponsorTransformer->transform(\Version1\Models\Sponsor::getHomeSponsors())
+                    ,'featured' => $this->articleTransformer->transform(\Version1\Models\Article::getFeatured())
+                    ,'picks' => $this->articleTransformer->transform(\Version1\Models\Article::getPicks())
+                ];
 
-                cacheIt("homepage", $response, "1 hour");
-            }
+                //cacheIt("homepage", $response, "1 hour");
+        //    }
         }
-        return $this->respondFound('Channels found', $response);
+        return $this->respondFound('Homepage found', $data);
     }
 
     /**

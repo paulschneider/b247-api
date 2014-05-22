@@ -1,6 +1,6 @@
 <?php
 
-class addUserChannels extends Seeder
+class AddUserChannelsSeeder extends Seeder
 {
     public function run()
     {

@@ -4,6 +4,20 @@ return array(
 
 	/*
 	|--------------------------------------------------------------------------
+	| Application Version
+	|--------------------------------------------------------------------------
+	|
+	| This is the current version of the API. This value directly maps to the namespace
+	| of the controllers, models and methods of this version. The implementation of this version
+	| can be found under the same directory name and is PSR-4 autoloaded within composer.json
+	|
+	|
+	*/
+
+	'version' => 'Version1',
+
+	/*
+	|--------------------------------------------------------------------------
 	| Application Debug Mode
 	|--------------------------------------------------------------------------
 	|
@@ -119,7 +133,7 @@ return array(
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
-
+		'Jenssegers\Agent\AgentServiceProvider', // https://github.com/jenssegers/Laravel-Agent
 	),
 
 	/*
@@ -148,6 +162,7 @@ return array(
 
 	'aliases' => array(
 
+		'Agent'           => 'Jenssegers\Agent\Facades\Agent', // https://github.com/jenssegers/Laravel-Agent
 		'App'             => 'Illuminate\Support\Facades\App',
 		'Artisan'         => 'Illuminate\Support\Facades\Artisan',
 		'Auth'            => 'Illuminate\Support\Facades\Auth',
@@ -187,19 +202,5 @@ return array(
 		'View'            => 'Illuminate\Support\Facades\View',
 
 	),
-
-	/*
-	|--------------------------------------------------------------------------
-	| Application Version
-	|--------------------------------------------------------------------------
-	|
-	| This is the current version of the API. This value directly maps to the namespace
-	| of the controllers, models and methods of this version. The implementation of this version
-	| can be found under the same directory name and is PSR-4 autoloaded within composer.json
-	|
-	|
-	*/
-
-	'version' => 'Version1',
 
 );

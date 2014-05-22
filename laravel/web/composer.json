@@ -6,6 +6,8 @@
 	"require": {
 		"laravel/framework": "4.1.*"
 		,"nesbot/Carbon": "*"
+		,"fzaninotto/faker": "1.4.*@dev"
+		,"jenssegers/agent": "*"
 	},
 	"autoload": {
 		"classmap": [
