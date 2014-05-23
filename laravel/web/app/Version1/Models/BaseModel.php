@@ -57,4 +57,16 @@ Class BaseModel extends \Eloquent
     {
         return $this->errors;
     }
+
+    public static function dataCheck($data)
+    {
+        if( $data->count() > 0 )
+        {
+            return $data->toArray();
+        }
+        else
+        {
+            throw new \Illuminate\Database\Eloquent\ModelNotFoundException;
+        }
+    }
 }

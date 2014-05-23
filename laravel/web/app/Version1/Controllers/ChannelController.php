@@ -13,9 +13,16 @@ class ChannelController extends ApiController {
 		$this->channelTransformer = $channelTransformer;
 	}
 
-	public function index($id)
+	public function index($identifier)
 	{
-		return $this->channelTransformer->transform(\Version1\Models\Channel::getChannel($id));
+		if(  is_numeric($identifier) )
+		{
+			return $this->channelTransformer->transform(\Version1\Models\Channel::getChannelById($identifier));
+		}
+		else
+		{
+			return $this->channelTransformer->transform(\Version1\Models\Channel::getChannelByName($identifier));
+		}
 	}
 
 	/**

@@ -18,17 +18,13 @@ Class Channel extends BaseModel {
         return static::with('subChannel.category')->get()->toArray();
     }
 
-    public static function getChannel($id)
+    public static function getChannelById($id)
     {
-        $channels = static::with('subChannel.category')->whereId($id)->get();
+        return parent::dataCheck(static::with('subChannel.category')->whereId($id)->get());
+    }
 
-        if( $channels->count() > 0 )
-        {
-            return $channels->toArray();
-        }
-        else
-        {
-            throw new \Illuminate\Database\Eloquent\ModelNotFoundException;
-        }
+    public static function getChannelByName($name)
+    {
+        return parent::dataCheck(static::with('subChannel.category')->whereSefName($name)->get());
     }
 }
