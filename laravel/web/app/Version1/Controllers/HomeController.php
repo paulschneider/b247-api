@@ -32,29 +32,18 @@ Class HomeController extends ApiController {
 
     public function index()
     {
-        if( Request::header('accessKey') )
-        {
-            $accessKey = Request::header('accessKey');
+       if( ! $response = cached("homepage") )
+       {
+            $data = [
+                'channels' => $channels = $this->channelTransformer->transform(\Version1\Models\Channel::getChannels())
+                ,'sponsors' => $this->sponsorTransformer->transform(\Version1\Models\Sponsor::getHomeSponsors())
+                ,'featured' => $this->articleTransformer->transform(\Version1\Models\Article::getFeatured())
+                ,'picks' => $this->articleTransformer->transform(\Version1\Models\Article::getPicks())
+            ];
 
-            if( ! $response = $this->channelTransformer->transform(\Version1\Models\User::getUserChannels( $accessKey )) )
-            {
-                return $this->respondNotFound('No channels were found for user with supplied accessKey.');
-            }
-        }
-        else
-        {
-           if( ! $response = cached("homepage") )
-           {
-                $data = [
-                    'channels' => $channels = $this->channelTransformer->transform(\Version1\Models\Channel::getChannels())
-                    ,'sponsors' => $this->sponsorTransformer->transform(\Version1\Models\Sponsor::getHomeSponsors())
-                    ,'featured' => $this->articleTransformer->transform(\Version1\Models\Article::getFeatured())
-                    ,'picks' => $this->articleTransformer->transform(\Version1\Models\Article::getPicks())
-                ];
+            cacheIt("homepage", $response, "1 hour");
+       }
 
-                cacheIt("homepage", $response, "1 hour");
-           }
-        }
         return $this->respondFound('Homepage found', $data);
     }
 
