@@ -1,6 +1,4 @@
-<?php
-
-namespace Version1\Controllers;
+<?php namespace Version1\Controllers;
 
 use Request;
 use Response;

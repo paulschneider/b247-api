@@ -50,7 +50,7 @@ class Article extends BaseModel {
 
     public static function getPicks()
     {
-        return static::with('category.channel')->isPicked()->notFeatured()->orderBy('title')->take(10)->get()->toArray();
+        return static::isPicked()->notFeatured()->orderBy('title')->take(10)->get()->toArray();
     }
 
     public static function getFeatured()

@@ -21,5 +21,9 @@ define('VERSION', Config::get('app.version'));
 Route::get('register', VERSION.'\Controllers\RegisterController@create');
 Route::post('register', VERSION.'\Controllers\RegisterController@store');
 
+# Channels
+Route::get('channel/{id}', VERSION.'\Controllers\ChannelController@index');
+Route::controller('channel', VERSION.'\Controllers\ChannelController');
+
 # Homepage
 Route::get('/', VERSION.'\Controllers\HomeController@index');

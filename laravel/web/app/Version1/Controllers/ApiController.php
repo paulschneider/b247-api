@@ -34,6 +34,31 @@ class ApiController Extends BaseController {
         return $this;
     }
 
+    public function respondNotAllowed()
+    {
+        return $this->respondNotSupported('Endpoint does not support method.');
+    }
+
+    /**
+     * respond that a record was successfully created
+     *
+     * @return Response
+     */
+    public function respondCreated($message = "Created", $data = null)
+    {
+        return $this->setStatusCode(201)->respondWithSuccess($message, $data);
+    }
+
+    /**
+     * respond with a generic bad request message - this is a coverall for the unexpected
+     *
+     * @return Response
+     */
+    public function respondBadRequest($message = "Bad request. Please check the documention for the usage of this API endpoint.", $data = null)
+    {
+        return $this->setStatusCode(400)->respondWithError($message, $data);
+    }
+
     /**
      * request a 404 message be returned to the API client
      *
@@ -42,6 +67,16 @@ class ApiController Extends BaseController {
     public function respondNotFound($message = "Not found")
     {
         return $this->setStatusCode(404)->respondWithError($message);
+    }
+
+    /**
+     * respond that the that not enough parameters were provided
+     *
+     * @return Response
+     */
+    public function respondWithInsufficientParameters($message = "Not enough arguments")
+    {
+        return $this->setStatusCode(412)->respondWithError($message);
     }
 
     /**
@@ -64,15 +99,7 @@ class ApiController Extends BaseController {
         return $this->setStatusCode(501)->respondWithError($message);
     }
 
-    /**
-     * respond that a record wa successfully created
-     *
-     * @return Response
-     */
-    public function respondCreated($message = "Created", $data = null)
-    {
-        return $this->setStatusCode(201)->respondWithSuccess($message, $data);
-    }
+    ############################################################################ Responders
 
     /**
      * respond that the call was successful and return the data to the client
@@ -105,6 +132,7 @@ class ApiController Extends BaseController {
             'error' => [
                 'message' => $message
                 ,'statusCode' => $this->getStatusCode()
+                ,'method' => Request::getMethod()
                 ,'endpoint' => Request::path()
                 ,'time' => time()
             ],
@@ -125,6 +153,7 @@ class ApiController Extends BaseController {
             'success' => [
                 'message' => $message
                 ,'statusCode' => $this->getStatusCode()
+                ,'method' => Request::getMethod()
                 ,'endpoint' => Request::path()
                 ,'time' => time()
                 ,'data' => $data
@@ -133,5 +162,26 @@ class ApiController Extends BaseController {
                 sourceClient()
             ]
         ]);
+    }
+
+    /**
+     * respond that the request was successful but no results were found
+     *
+     * @return Response
+     */
+    public static function respondNoDataFound($message = "Call successful. Nothing to return.", $statusCode = 400)
+    {
+        return Response::json([
+            'error' => [
+                'message' => $message
+                ,'statusCode' => $statusCode
+                ,'method' => Request::getMethod()
+                ,'endpoint' => Request::path()
+                ,'time' => time()
+            ],
+            'source' => [
+                sourceClient()
+            ]
+        ], $statusCode);
     }
 }

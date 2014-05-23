@@ -51,6 +51,16 @@ App::error(function(Exception $exception, $code)
 	Log::error($exception);
 });
 
+App::error(function(Symfony\Component\HttpKernel\Exception\NotFoundHttpException $exception)
+{
+	return Api::respondBadRequest();
+});
+
+App::error(function(Illuminate\Database\Eloquent\ModelNotFoundException $exception)
+{
+	return Api::respondNoDataFound();
+});
+
 /*
 |--------------------------------------------------------------------------
 | Maintenance Mode Handler
