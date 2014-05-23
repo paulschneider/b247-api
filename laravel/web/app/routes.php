@@ -27,3 +27,4 @@ Route::controller('channel', VERSION.'\Controllers\ChannelController');
 
 # Homepage
 Route::get('/', VERSION.'\Controllers\HomeController@index');
+Route::controller('/', VERSION.'\Controllers\HomeController');

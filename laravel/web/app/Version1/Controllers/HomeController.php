@@ -45,15 +45,45 @@ Class HomeController extends ApiController {
        }
 
         return $this->respondFound('Homepage found', $data);
-    }
+    }    
 
     /**
-    * Coverall for any HTTP requests that are not covered by implemented methods
+    * if a POST request is made
     *
     * @return Response
     */
-    public function missingMethod($parameters=array())
+    public function postIndex()
     {
-        $this->respondNotSupported('Endpoint does not support method.');
+        return $this->respondNotAllowed();
+    }
+
+    /**
+    * if a PUT request is made
+    *
+    * @return Response
+    */
+    public function putIndex()
+    {
+        return $this->respondNotAllowed();
+    }
+
+    /**
+    * if a PATCH request is made
+    *
+    * @return Response
+    */
+    public function patchIndex()
+    {
+        return $this->respondNotAllowed();
+    }
+
+    /**
+    * if a DELETE request is made
+    *
+    * @return Response
+    */
+    public function deleteIndex()
+    {
+        return $this->respondNotAllowed();
     }
 }
