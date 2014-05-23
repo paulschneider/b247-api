@@ -2,8 +2,6 @@
 
 use Request;
 use Response;
-use Cache;
-use Carbon\Carbon;
 
 Class HomeController extends ApiController {
 
@@ -34,8 +32,6 @@ Class HomeController extends ApiController {
 
     public function index()
     {
-        //return \Version1\Models\Sponsor::getHomeSponsors();
-
         if( Request::header('accessKey') )
         {
             $accessKey = Request::header('accessKey');
@@ -47,8 +43,8 @@ Class HomeController extends ApiController {
         }
         else
         {
-        //    if( ! $response = cached("homepage") )
-        //    {
+           if( ! $response = cached("homepage") )
+           {
                 $data = [
                     'channels' => $channels = $this->channelTransformer->transform(\Version1\Models\Channel::getChannels())
                     ,'sponsors' => $this->sponsorTransformer->transform(\Version1\Models\Sponsor::getHomeSponsors())
@@ -56,8 +52,8 @@ Class HomeController extends ApiController {
                     ,'picks' => $this->articleTransformer->transform(\Version1\Models\Article::getPicks())
                 ];
 
-                //cacheIt("homepage", $response, "1 hour");
-        //    }
+                cacheIt("homepage", $response, "1 hour");
+           }
         }
         return $this->respondFound('Homepage found', $data);
     }
