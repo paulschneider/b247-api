@@ -43,9 +43,24 @@ class Article extends BaseModel {
 
     ];
 
-    public function category()
+    public function location()
     {
-        return $this->belongsToMany('\Version1\Models\Category', 'article_category', 'id', 'cat_id');
+        return $this->hasOne('\Version1\Models\ArticleLocation', 'article_id')->select( ['article_id', 'channel_id', 'sub_channel_id', 'cat_id'] );
+    }
+
+    public static function getArticle($id)
+    {
+        return parent::dataCheck(\DB::table('article')
+                    ->select('article.title'
+                            , 'article.sef_name AS articleSefName'
+                            , 'channel.sef_name AS channelSefName'
+                            , 'subChannel.sef_name AS subChannelSefName'
+                    )
+                    ->join('article_location AS location', 'location.article_id', '=', 'article.id')
+                    ->join('channel', 'channel.id', '=', 'location.channel_id')
+                    ->join('channel AS subChannel', 'subChannel.id', '=', 'location.sub_channel_id')
+                    ->where('article.id', $id)
+                    ->get());
     }
 
     public static function getPicks()

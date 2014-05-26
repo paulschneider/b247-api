@@ -1,5 +1,7 @@
 <?php
 
+define('VERSION', Config::get('app.version'));
+
 /*
 |--------------------------------------------------------------------------
 | Register The Laravel Class Loader

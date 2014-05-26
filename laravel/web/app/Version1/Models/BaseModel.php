@@ -60,13 +60,21 @@ Class BaseModel extends \Eloquent
 
     public static function dataCheck($data)
     {
-        if( $data->count() > 0 )
+        if( is_array($data) )
         {
-            return $data->toArray();
+                if( count($data) > 0)
+                {
+                    return $data;
+                }
         }
         else
         {
-            throw new \Illuminate\Database\Eloquent\ModelNotFoundException;
+            if( $data->count() > 0 )
+            {
+                return $data->toArray();
+            }
         }
+
+        throw new \Illuminate\Database\Eloquent\ModelNotFoundException;
     }
 }

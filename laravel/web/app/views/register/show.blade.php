@@ -4,7 +4,7 @@
 
     <h1>Register</h1>
 
-    {{ Form::open([ 'url' => '/register', 'class' => 'form' ]) }}
+    {{ Form::open([ 'url' => 'register', 'class' => 'form' ]) }}
 
     <div class="form-group">
         {{ Form::label('first_name', 'Firstname:') }}

@@ -18,6 +18,16 @@ Class Channel extends BaseModel {
         return static::with('subChannel.category')->get()->toArray();
     }
 
+    public static function getSimpleChannels()
+    {
+        return static::whereNull('parent_channel')->alive()->active()->lists('name', 'id');
+    }
+
+    public static function getSimpleSubChannels()
+    {
+        return static::whereNotNull('parent_channel')->alive()->active()->lists('name', 'id');
+    }
+
     public static function getChannelById($id)
     {
         return parent::dataCheck(static::with('subChannel.category')->whereId($id)->get());

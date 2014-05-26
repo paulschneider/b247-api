@@ -1,24 +1,20 @@
 <?php namespace Version1\Models;
 
-class ArticleCategory extends BaseModel {
+class ArticleLocation extends BaseModel {
 
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'article_category';
+    protected $table = 'article_location';
 
     /**
      * The attributes excluded from the model's JSON form.
      *
      * @var array
      */
-    protected $hidden = [
-
-        'article_id', 'cat_id'
-
-    ];
+    protected $hidden = [ 'id' ];
 
     /**
     * The attributes that can be manually set
@@ -27,7 +23,7 @@ class ArticleCategory extends BaseModel {
     */
     protected $fillable = [
 
-        'article_id', 'cat_id'
+        'article_id', 'cat_id', 'channel_id', 'sub_channel_id'
 
     ];
 
@@ -44,4 +40,9 @@ class ArticleCategory extends BaseModel {
     * @var boolean
     */
     public $timestamps = false;
+
+    public function article()
+    {
+        return $this->belongsTo('article', 'article_location', 'article_id');
+    }
 }

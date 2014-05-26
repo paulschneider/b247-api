@@ -15,16 +15,25 @@
 //      var_dump($query);
 // });
 
-define('VERSION', Config::get('app.version'));
-
 # Registration
-Route::get('register', VERSION.'\Controllers\RegisterController@create');
+
+Route::get('register', VERSION.'\Controllers\RegisterController@index');
 Route::post('register', VERSION.'\Controllers\RegisterController@store');
+Route::controller('register', VERSION.'\Controllers\RegisterController');
 
 # Channels
+
 Route::get('channel/{id}', VERSION.'\Controllers\ChannelController@index');
 Route::controller('channel', VERSION.'\Controllers\ChannelController');
 
+# Article
+
+Route::get('article/{id}', VERSION.'\Controllers\ArticleController@index');
+Route::get('article', VERSION.'\Controllers\ArticleController@create');
+Route::post('article', VERSION.'\Controllers\ArticleController@store');
+Route::controller('article', VERSION.'\Controllers\ArticleController');
+
 # Homepage
+
 Route::get('/', VERSION.'\Controllers\HomeController@index');
 Route::controller('/', VERSION.'\Controllers\HomeController');

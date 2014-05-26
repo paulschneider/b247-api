@@ -2,7 +2,7 @@
 
 namespace Version1\Models;
 
-Class Category extends \Eloquent
+Class Category extends BaseModel
 {
     protected $table = 'category';
 
@@ -17,6 +17,11 @@ Class Category extends \Eloquent
     public function article()
     {
         return $this->hasMany('\Version1\Models\Article');
+    }
+
+    public static function getSimpleCategories()
+    {
+        return static::active()->alive()->lists('name', 'id');
     }
 
 }

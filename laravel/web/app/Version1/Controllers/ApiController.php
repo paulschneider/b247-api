@@ -50,16 +50,6 @@ class ApiController Extends BaseController {
     }
 
     /**
-     * respond with a generic bad request message - this is a coverall for the unexpected
-     *
-     * @return Response
-     */
-    public function respondBadRequest($message = "Bad request. Please check the documention for the usage of this API endpoint.", $data = null)
-    {
-        return $this->setStatusCode(400)->respondWithError($message, $data);
-    }
-
-    /**
      * request a 404 message be returned to the API client
      *
      * @return Response
@@ -170,6 +160,27 @@ class ApiController Extends BaseController {
      * @return Response
      */
     public static function respondNoDataFound($message = "Call successful. Nothing to return.", $statusCode = 400)
+    {
+        return Response::json([
+            'error' => [
+                'message' => $message
+                ,'statusCode' => $statusCode
+                ,'method' => Request::getMethod()
+                ,'endpoint' => Request::path()
+                ,'time' => time()
+            ],
+            'source' => [
+                sourceClient()
+            ]
+        ], $statusCode);
+    }
+
+    /**
+     * respond with a generic bad request message - this is a coverall for the unexpected
+     *
+     * @return Response
+     */
+    public static function respondBadRequest($message = "Bad request. Please check the documention for the usage of this API endpoint.", $statusCode=400)
     {
         return Response::json([
             'error' => [
