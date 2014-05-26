@@ -2,7 +2,13 @@
 
 class ChannelTransformer extends Transformer {
 
-    public function transform($data)
+    /**
+     * Transform a result set into the API required format
+     *
+     * @param sponsors
+     * @return array
+     */
+    public function transformCollection($data)
     {
         if( $data )
         {
@@ -122,5 +128,16 @@ class ChannelTransformer extends Transformer {
         {
             return false;
         }
+    }
+
+    /**
+     * Transform a single result into the API required format
+     *
+     * @param sponsors
+     * @return array
+     */
+    public function transform($channel)
+    {
+        // do some thing eventually
     }
 }

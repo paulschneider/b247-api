@@ -7,18 +7,45 @@ use Input;
 
 class ArticleController extends ApiController {
 
-    public function index($id)
+    /**
+    *
+    * @var Api\Transformers\ArticleTransformer
+    */
+    protected $articleTransformer;
+
+    public function __construct(\Api\Transformers\ArticleTransformer $articleTransformer)
     {
-        return \Version1\Models\Article::getArticle($id);
+        $this->articleTransformer = $articleTransformer;
     }
 
-    public function create()
+    public function index($id)
     {
+        return $this->articleTransformer->transform(\Version1\Models\Article::getArticle($id));
+    }
+
+    public function create($id = null)
+    {
+        if( ! is_null($id) )
+        {
+            $article = \Version1\Models\Article::getArticle($id);
+        }
+        else
+        {
+            $article = new \Version1\Models\Article();
+        }
+
         $channels = \Version1\Models\Channel::getSimpleChannels();
         $subChannels = \Version1\Models\Channel::getSimpleSubChannels();
         $categories = \Version1\Models\Category::getSimpleCategories();
 
-        return View::make('article.create', [ 'channels' => $channels, 'subChannels' => $subChannels, 'categories' => $categories ]);
+        return View::make('article.create', [ 'channels' => $channels, 'subChannels' => $subChannels, 'categories' => $categories, 'article' => $article ]);
+    }
+
+    public function show()
+    {
+        $articles = \Version1\Models\Article::getArticles();
+
+        return View::make('article.show', compact('articles', $articles));
     }
 
     /**
@@ -28,7 +55,14 @@ class ArticleController extends ApiController {
      */
     public function store()
     {
-        return Input::all();
+        if( ! $article = \Version1\Models\Article::storeArticle(Input::all()) )
+        {
+            return $this->respondNotValid($article->errors);
+        }
+        else
+        {
+            return $this->respondCreated('Article successfully stored');
+        }
     }
 
     /**

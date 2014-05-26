@@ -11,10 +11,10 @@
 |
 */
 
-// Event::listen('illuminate.query', function($query){
-//      var_dump($query);
-// });
-
+Event::listen('illuminate.query', function($query, $params, $time, $conn)
+{
+    //dd(array($query, $params, $time, $conn));
+});
 # Registration
 
 Route::get('register', VERSION.'\Controllers\RegisterController@index');
@@ -28,6 +28,8 @@ Route::controller('channel', VERSION.'\Controllers\ChannelController');
 
 # Article
 
+Route::get('article/list', VERSION.'\Controllers\ArticleController@show');
+Route::get('article/edit/{id}', VERSION.'\Controllers\ArticleController@create');
 Route::get('article/{id}', VERSION.'\Controllers\ArticleController@index');
 Route::get('article', VERSION.'\Controllers\ArticleController@create');
 Route::post('article', VERSION.'\Controllers\ArticleController@store');

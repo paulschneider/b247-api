@@ -23,7 +23,7 @@ class ArticleLocation extends BaseModel {
     */
     protected $fillable = [
 
-        'article_id', 'cat_id', 'channel_id', 'sub_channel_id'
+        'article_id', 'category_id', 'channel_id', 'sub_channel_id'
 
     ];
 
@@ -43,6 +43,6 @@ class ArticleLocation extends BaseModel {
 
     public function article()
     {
-        return $this->belongsTo('article', 'article_location', 'article_id');
+        return $this->belongsToMany('article', 'article_location', 'article_id');
     }
 }

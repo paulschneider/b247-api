@@ -43,14 +43,14 @@ Class BaseModel extends \Eloquent
 
     }
 
-    public function scopeActive($query)
+    public function scopeActive($query, $field = '')
     {
-        return $query->where('is_active', true);
+        return $query->where($field . 'is_active', true);
     }
 
-    public function scopeAlive($query)
+    public function scopeAlive($query, $field = '')
     {
-        return $query->where('is_deleted', null);
+        return $query->where($field . 'is_deleted', null);
     }
 
     public function getErrors()
@@ -67,7 +67,11 @@ Class BaseModel extends \Eloquent
                     return $data;
                 }
         }
-        else
+        else if( $data instanceOf \stdClass )
+        {
+            return $data;
+        }
+        else if( method_exists($data, 'count') )
         {
             if( $data->count() > 0 )
             {

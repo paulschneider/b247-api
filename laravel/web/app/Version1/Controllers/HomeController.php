@@ -32,20 +32,20 @@ Class HomeController extends ApiController {
 
     public function index()
     {
-       if( ! $response = cached("homepage") )
-       {
+    //    if( ! $response = cached("homepage") )
+    //    {
             $data = [
-                'channels' => $channels = $this->channelTransformer->transform(\Version1\Models\Channel::getChannels())
+                'channels' => $channels = $this->channelTransformer->transformCollection(\Version1\Models\Channel::getChannels())
                 ,'sponsors' => $this->sponsorTransformer->transform(\Version1\Models\Sponsor::getHomeSponsors())
-                ,'featured' => $this->articleTransformer->transform(\Version1\Models\Article::getFeatured())
-                ,'picks' => $this->articleTransformer->transform(\Version1\Models\Article::getPicks())
+                ,'featured' => $this->articleTransformer->transformCollection(\Version1\Models\Article::getArticles( 'featured', 10 ))
+                ,'picks' => $this->articleTransformer->transformCollection(\Version1\Models\Article::getArticles( 'picks', 10 ))
             ];
-
-            cacheIt("homepage", $response, "1 hour");
-       }
+       //
+    //         cacheIt("homepage", $response, "1 hour");
+    //    }
 
         return $this->respondFound('Homepage found', $data);
-    }    
+    }
 
     /**
     * if a POST request is made
