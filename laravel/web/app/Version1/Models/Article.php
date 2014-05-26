@@ -55,10 +55,12 @@ class Article extends BaseModel {
                             , 'article.sef_name AS articleSefName'
                             , 'channel.sef_name AS channelSefName'
                             , 'subChannel.sef_name AS subChannelSefName'
+                            , 'category.sef_name AS categorySefName'
                     )
                     ->join('article_location AS location', 'location.article_id', '=', 'article.id')
                     ->join('channel', 'channel.id', '=', 'location.channel_id')
                     ->join('channel AS subChannel', 'subChannel.id', '=', 'location.sub_channel_id')
+                    ->join('category', 'category.id', '=', 'location.category_id')
                     ->where('article.id', $id)
                     ->get());
     }
