@@ -2,6 +2,9 @@
 
 use Request;
 use Response;
+use \Api\Transformers\ChannelTransformer;
+use \Api\Transformers\ArticleTransformer;
+use \Api\Transformers\SponsorTransformer;
 
 Class HomeController extends ApiController {
 
@@ -23,7 +26,7 @@ Class HomeController extends ApiController {
       */
       protected $sponsorTransformer;
 
-    public function __construct(\Api\Transformers\ChannelTransformer $channelTransformer, \Api\Transformers\ArticleTransformer $articleTransformer, \Api\Transformers\SponsorTransformer $sponsorTransformer)
+    public function __construct(ChannelTransformer $channelTransformer, ArticleTransformer $articleTransformer, SponsorTransformer $sponsorTransformer)
     {
         $this->channelTransformer = $channelTransformer;
         $this->articleTransformer = $articleTransformer;

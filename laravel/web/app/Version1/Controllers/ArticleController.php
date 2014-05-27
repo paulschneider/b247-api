@@ -4,6 +4,7 @@ use Request;
 use Response;
 use View;
 use Input;
+use \Api\Transformers\ArticleTransformer;
 
 class ArticleController extends ApiController {
 
@@ -13,7 +14,7 @@ class ArticleController extends ApiController {
     */
     protected $articleTransformer;
 
-    public function __construct(\Api\Transformers\ArticleTransformer $articleTransformer)
+    public function __construct(ArticleTransformer $articleTransformer)
     {
         $this->articleTransformer = $articleTransformer;
     }

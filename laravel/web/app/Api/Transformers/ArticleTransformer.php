@@ -39,7 +39,7 @@ class ArticleTransformer extends Transformer {
                 ,'media' => [
                     'filepath' => $article->filepath
                     ,'alt' => $article->alt
-                    ,'title' => $article->title
+                    ,'title' => $article->assetTitle
                     ,'width' => $article->width
                     ,'height' => $article->height
                 ]

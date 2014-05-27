@@ -1,6 +1,6 @@
 @extends('layouts.default');
 
-<div class="col-md-6 col-md-offset-3" style="float : left">
+@section('content')
 
     <h1>Create New Article</h1>
 
@@ -81,4 +81,4 @@
         {{ link_to('article/list', 'Back to List') }}
     </div>
 
-</div>
+@stop

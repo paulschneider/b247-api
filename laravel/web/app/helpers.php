@@ -1,5 +1,30 @@
 <?php
 
+// return a formatted array showing a sub-channel path via its parent
+function makePathList($channels)
+{
+    $response = []; // temporary channel list
+
+    foreach($channels AS $channel)
+    {
+        $path = $channel->name . ' / ';
+
+        foreach($channel->sub_channel AS $sub)
+        {
+            $response[$sub->id] = $path.$sub->name;
+        }
+    }
+
+    asort($response);
+
+    return $response;
+}
+
+function getParentChannel($channels, $channel)
+{
+    return $channel->parent_channel != null ? $channels->find($channel->parent_channel)->name : '-';
+}
+
 function isMobile()
 {
     // return true if client is mobile (obvs)
@@ -13,6 +38,12 @@ function isDesktop()
     {
         return true;
     }
+}
+
+function oracle($isFetaured)
+{
+    // the oracle always has the answer
+    return $isFetaured ? 'Yes' : 'No';
 }
 
 function sourceClient()
@@ -68,4 +99,13 @@ function safeName($title, $separator = '-', $ascii_only = FALSE)
 	}
 
 	return trim($title, $separator);
+}
+
+// shortcut for show_data function
+function sd($data)
+{
+    echo "<pre>";
+        print_r($data);
+    echo "</pre>";
+    exit;
 }

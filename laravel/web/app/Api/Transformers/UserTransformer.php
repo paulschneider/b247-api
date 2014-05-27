@@ -18,4 +18,15 @@ class UserTransformer extends Transformer {
             ,'email' => $user['email']
         ];
     }
+
+    /**
+     * Transform a result set into the API required format
+     *
+     * @param users
+     * @return array
+     */
+    public function transformCollection($users)
+    {
+        // Tranform a list of users
+    }
 }

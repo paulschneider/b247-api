@@ -56,7 +56,7 @@ class ChannelTransformer extends Transformer {
 
                     // if there are sub-channels related to the parent channel then create records for each of those
 
-                    if( isset($channel['sub_channel']) and count($channel['sub_channel']) > 0)
+                    if( isset($channel['sub_channel']) and count($channel['sub_channel']) > 0 )
                     {
                         $chan["subChannels"] = array();
 

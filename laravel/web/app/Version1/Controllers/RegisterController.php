@@ -4,6 +4,7 @@ use Request;
 use Response;
 use View;
 use Input;
+use \Api\Transformers\UserTransformer;
 
 class RegisterController extends ApiController {
 
@@ -13,7 +14,7 @@ class RegisterController extends ApiController {
 	*/
 	protected $userTransformer;
 
-	public function __construct(\Api\Transformers\UserTransformer $userTransformer)
+	public function __construct(UserTransformer $userTransformer)
 	{
 		$this->userTransformer = $userTransformer;
 	}

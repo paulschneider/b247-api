@@ -119,6 +119,7 @@ class Article extends BaseModel {
                     ->leftJoin('article_asset', 'article_asset.article_id', '=', 'article.id')
                     ->leftJoin('asset', 'asset.id', '=', 'article_asset.asset_id')
                     ->orderBy('article.title')
+                    ->where('article.is_active', true)
                     ->take($limit);
 
         switch($type)
@@ -150,17 +151,9 @@ class Article extends BaseModel {
         $article->sub_heading = $form['sub_heading'];
         $article->body = $form['body'];
         $article->postcode = $form['postcode'];
-        $article->is_active = $form['is_active'];
-
-        if( isset($form['is_featured']) )
-        {
-            $article->is_featured = $form['is_featured'];
-        }
-
-        if( isset($form['is_picked']) )
-        {
-            $article->is_picked = $form['is_picked'];
-        }
+        $article->is_active = isset($form['is_active']) ? true : false;
+        $article->is_featured = isset($form['is_featured']) ? $form['is_featured'] : false;
+        $article->is_picked = isset($form['is_picked']) ? $form['is_picked'] : false;
 
         if( $article->is_featured )
         {

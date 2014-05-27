@@ -1,5 +1,10 @@
 <?php namespace Version1\Controllers;
 
+use View;
+use Input;
+use Redirect;
+use \Api\Transformers\ChannelTransformer;
+
 class ChannelController extends ApiController {
 
 	/**
@@ -8,7 +13,7 @@ class ChannelController extends ApiController {
 	*/
 	protected $channelTransformer;
 
-	public function __construct(\Api\Transformers\ChannelTransformer $channelTransformer)
+	public function __construct(ChannelTransformer $channelTransformer)
 	{
 		$this->channelTransformer = $channelTransformer;
 	}
@@ -26,6 +31,41 @@ class ChannelController extends ApiController {
 	}
 
 	/**
+	* display a form to create a new channel
+	*
+	* @return View
+	*/
+	public function create($channelId = null)
+	{
+		if( ! is_null($channelId) )
+		{
+			$channel = \Version1\Models\Channel::with('category')->find($channelId);
+		}
+		else
+		{
+			$channel = new \Version1\Models\Channel();
+		}
+
+		$channels = \Version1\Models\Channel::getSimpleChannels($channel->id);
+		$categories = \Version1\Models\Category::all();
+		$channelCategory = array_flatten($channel->category->toArray());
+
+		return View::make('channel.create', [ 'channel' => $channel, 'channels' => $channels, 'categories' => $categories, 'channelCategory' => $channelCategory ]);
+	}
+
+	/**
+	* display a list of existing channels
+	*
+	* @return View
+	*/
+	public function show()
+	{
+		$channels = \Version1\Models\Channel::getChannelList();
+
+		return View::make('channel.show', [ 'channels' => $channels ]);
+	}
+
+	/**
 	* if a GET request is made without the required identifier
 	*
 	* @return Response
@@ -40,9 +80,26 @@ class ChannelController extends ApiController {
 	*
 	* @return Response
 	*/
-	public function postIndex()
+	// public function postIndex()
+	// {
+	// 	return $this->respondNotAllowed();
+	// }
+
+	/**
+	* store the details of a new channel
+	*
+	* @return Redirect
+	*/
+	public function store()
 	{
-		return $this->respondNotAllowed();
+		if( ! $article = \Version1\Models\Channel::storeChannel(Input::all()) )
+		{
+			return $this->respondNotValid($channel->errors);
+		}
+		else
+		{
+			return Redirect::to('channel/list');
+		}
 	}
 
 	/**
