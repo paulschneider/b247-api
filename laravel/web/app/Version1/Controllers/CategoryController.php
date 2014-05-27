@@ -55,4 +55,34 @@ class CategoryController extends ApiController {
             return Redirect::to('category/list');
         }
     }
+
+    /**
+    * if a PUT request is made
+    *
+    * @return Response
+    */
+    public function putIndex()
+    {
+        return $this->respondNotAllowed();
+    }
+
+    /**
+    * if a PATCH request is made
+    *
+    * @return Response
+    */
+    public function patchIndex()
+    {
+        return $this->respondNotAllowed();
+    }
+
+    /**
+    * if a DELETE request is made
+    *
+    * @return Response
+    */
+    public function deleteIndex()
+    {
+        return $this->respondNotAllowed();
+    }
 }

@@ -159,7 +159,7 @@ class ApiController Extends BaseController {
      *
      * @return Response
      */
-    public static function respondNoDataFound($message = "Call successful. Nothing to return.", $statusCode = 400)
+    public static function respondNoDataFound($message = "Call successful. Nothing to return.", $statusCode = 204)
     {
         return Response::json([
             'error' => [

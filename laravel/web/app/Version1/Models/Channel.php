@@ -19,6 +19,11 @@ Class Channel extends BaseModel {
 
     ];
 
+    public function category()
+    {
+        return $this->hasMany('\Version1\Models\ChannelCategory');
+    }
+
     public function subChannel()
     {
         return $this->hasMany('\Version1\Models\SubChannel', 'parent_channel');
