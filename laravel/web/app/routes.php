@@ -20,8 +20,8 @@ Event::listen('illuminate.query', function($query, $params, $time, $conn)
 
 Route::get('article/list', VERSION.'\Controllers\ArticleController@show');
 Route::get('article/edit/{id}', VERSION.'\Controllers\ArticleController@create');
+Route::get('article/create', VERSION.'\Controllers\ArticleController@create');
 Route::get('article/{id}', VERSION.'\Controllers\ArticleController@index');
-Route::get('article', VERSION.'\Controllers\ArticleController@create');
 Route::post('article', VERSION.'\Controllers\ArticleController@store');
 Route::controller('article', VERSION.'\Controllers\ArticleController');
 
@@ -40,13 +40,13 @@ Route::get('channel/{id}', VERSION.'\Controllers\ChannelController@index');
 Route::post('channel', VERSION.'\Controllers\ChannelController@store');
 Route::controller('channel', VERSION.'\Controllers\ChannelController');
 
-# Homepage
-
-Route::get('/', VERSION.'\Controllers\HomeController@index');
-Route::controller('/', VERSION.'\Controllers\HomeController');
-
 # Registration
 
 Route::get('register', VERSION.'\Controllers\RegisterController@index');
 Route::post('register', VERSION.'\Controllers\RegisterController@store');
 Route::controller('register', VERSION.'\Controllers\RegisterController');
+
+# Homepage
+
+Route::get('/', VERSION.'\Controllers\HomeController@index');
+Route::controller('/', VERSION.'\Controllers\HomeController');

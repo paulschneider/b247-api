@@ -5,7 +5,7 @@
 <h2>Article List</h2>
 
 <div class="form-group">
-    {{ link_to('article', 'Create New Article') }}
+    {{ link_to('article/create', 'Create New Article') }}
 </div>
 
 <table class="table table-bordered">

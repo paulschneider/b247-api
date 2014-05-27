@@ -20,7 +20,7 @@ class RegisterController extends ApiController {
 	}
 
 	/**
-	 * Show the form for creating a new resource.
+	 * Show the form for creating a new user.
 	 *
 	 * @return Response
 	 */
