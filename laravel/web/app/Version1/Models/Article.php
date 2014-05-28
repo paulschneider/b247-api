@@ -48,9 +48,9 @@ class Article extends BaseModel {
         return $this->hasMany('\Version1\Models\ArticleLocation', 'article_id')->select('article_id', 'channel_id', 'sub_channel_id', 'category_id');
     }
 
-    public static function getArticle($id)
+    public static function getArticle($identifier)
     {
-        return parent::dataCheck(\DB::table('article')
+        $query = \DB::table('article')
                     ->select(
                             'article.id'
                             , 'article.title'
@@ -83,9 +83,18 @@ class Article extends BaseModel {
                     ->join('channel AS subChannel', 'subChannel.id', '=', 'location.sub_channel_id')
                     ->join('category', 'category.id', '=', 'location.category_id')
                     ->leftJoin('article_asset', 'article_asset.article_id', '=', 'article.id')
-                    ->leftJoin('asset', 'asset.id', '=', 'article_asset.asset_id')
-                    ->where('article.id', $id)
-                    ->first());
+                    ->leftJoin('asset', 'asset.id', '=', 'article_asset.asset_id');
+
+        if( is_numeric($identifier) )
+        {
+            $query->where('article.id', '=', $identifier);
+        }
+        else
+        {
+            $query->where('article.sef_name', '=', $identifier);
+        }
+
+        return parent::dataCheck($query->first());
     }
 
     public static function getArticles($type = null, $limit = 20)

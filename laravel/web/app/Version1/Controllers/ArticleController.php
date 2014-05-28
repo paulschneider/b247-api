@@ -37,9 +37,9 @@ class ArticleController extends ApiController {
         return View::make('article.create', [ 'channels' => $channels, 'subChannels' => $subChannels, 'categories' => $categories, 'article' => $article ]);
     }
 
-    public function show($id = null)
+    public function show($identifier = null)
     {
-        return $this->articleTransformer->transform(\Version1\Models\Article::getArticle($id));
+        return $this->articleTransformer->transform(\Version1\Models\Article::getArticle($identifier));
     }
 
     public function edit($id = null)
