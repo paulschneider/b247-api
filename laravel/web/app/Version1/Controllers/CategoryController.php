@@ -11,11 +11,16 @@ class CategoryController extends ApiController {
     *
     * @return View
     */
-    public function show()
+    public function index()
     {
         $categories = \Version1\Models\Category::all();
 
         return View::make('category.show', [ 'categories' => $categories ]);
+    }
+
+    public function show()
+    {
+
     }
 
     /**
@@ -23,19 +28,26 @@ class CategoryController extends ApiController {
     *
     * @return View
     */
-    public function create($categoryId = null)
+    public function create()
     {
-        if( ! is_null($categoryId) )
+        $category = new \Version1\Models\Category();
+        $channels = makePathList(\Version1\Models\Channel::getChannelList());
+
+        return View::make('category.create', [ 'category' => $category, 'channels' => $channels ]);
+    }
+
+    public function edit($categoryId = null)
+    {
+        if( ! is_null($categoryId) and is_numeric($categoryId) )
         {
             $category = \Version1\Models\Category::find($categoryId);
         }
         else
         {
-            $category = new \Version1\Models\Category();
+            return $this->respondNotValid('Invalid or missing category identifier.');
         }
 
         $channels = makePathList(\Version1\Models\Channel::getChannelList());
-
         return View::make('category.create', [ 'category' => $category, 'channels' => $channels ]);
     }
 
@@ -52,37 +64,7 @@ class CategoryController extends ApiController {
         }
         else
         {
-            return Redirect::to('category/list');
+            return Redirect::to('category');
         }
-    }
-
-    /**
-    * if a PUT request is made
-    *
-    * @return Response
-    */
-    public function putIndex()
-    {
-        return $this->respondNotAllowed();
-    }
-
-    /**
-    * if a PATCH request is made
-    *
-    * @return Response
-    */
-    public function patchIndex()
-    {
-        return $this->respondNotAllowed();
-    }
-
-    /**
-    * if a DELETE request is made
-    *
-    * @return Response
-    */
-    public function deleteIndex()
-    {
-        return $this->respondNotAllowed();
     }
 }

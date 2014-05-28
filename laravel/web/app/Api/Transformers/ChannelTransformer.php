@@ -138,6 +138,51 @@ class ChannelTransformer extends Transformer {
      */
     public function transform($channel)
     {
-        // do some thing eventually
+        $channel = $channel[0];
+
+        $response = [
+            'id' => $channel['id']
+            ,'name' => $channel['name']
+            ,'sefName' => $channel['sef_name']
+            ,'colour' => $channel['colour']
+        ];
+
+        if( isset($channel['sub_channel']) and count($channel['sub_channel']) > 0 )
+        {
+            $subChannels = [];
+
+            foreach( $channel['sub_channel'] AS $subChannel )
+            {
+                $sub = [
+                    'id' => $subChannel['id']
+                    ,'name' => $subChannel['name']
+                    ,'sefName' => $subChannel['sef_name']
+                ];
+
+                if( isset($subChannel['category']) and count($subChannel['category']) > 0 )
+                {
+                    $categories = [];
+
+                    foreach( $subChannel['category'] AS $category )
+                    {
+                        $cat = [
+                            'id' => $subChannel['id']
+                            ,'name' => $subChannel['name']
+                            ,'sefName' => $subChannel['sef_name']
+                        ];
+
+                        $categories[] = $cat;
+                    }
+
+                    $sub['categories'] = $categories;
+                }
+
+                $subChannels[] = $sub;
+            }
+
+            $response['subChannels'] = $subChannels;
+        }
+
+        return $response;
     }
 }

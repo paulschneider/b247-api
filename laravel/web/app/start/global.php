@@ -63,6 +63,12 @@ App::error(function(Illuminate\Database\Eloquent\ModelNotFoundException $excepti
 	return Api::respondNoDataFound();
 });
 
+App::error(function(\Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException $exception)
+{
+	return Api::respondNotAllowed();
+});
+
+
 /*
 |--------------------------------------------------------------------------
 | Maintenance Mode Handler

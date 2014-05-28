@@ -49,32 +49,12 @@ class RegisterController extends ApiController {
 	}
 
 	/**
-	* if a PUT request is made
+	* return a not supported error if an edit is called
 	*
-	* @return Response
+	* @return ApiResponse
 	*/
-	public function putIndex()
+	public function edit()
 	{
-		return $this->respondNotAllowed();
-	}
-
-	/**
-	* if a PATCH request is made
-	*
-	* @return Response
-	*/
-	public function patchIndex()
-	{
-		return $this->respondNotAllowed();
-	}
-
-	/**
-	* if a DELETE request is made
-	*
-	* @return Response
-	*/
-	public function deleteIndex()
-	{
-		return $this->respondNotAllowed();
+		return ApiController::respondNotAllowed();
 	}
 }

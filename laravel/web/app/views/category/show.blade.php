@@ -24,7 +24,7 @@
             <td>{{ $category->name }}</td>
             <td>{{ oracle($category->is_active) }}</td>
             <td>{{ $category->created_at }}</td>
-            <td>{{ link_to('category/edit/'.$category->id, 'Click to Edit') }}</td>
+            <td>{{ link_to('category/'.$category->id.'/edit', 'Click to Edit') }}</td>
       </tr>
       <?php $i++ ?>
       @endforeach

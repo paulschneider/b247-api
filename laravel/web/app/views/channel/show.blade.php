@@ -26,7 +26,7 @@
             <td>{{ getParentChannel($channels, $channel) }}</td>
             <td>{{ oracle($channel->is_active) }}</td>
             <td>{{ $channel->created_at }}</td>
-            <td>{{ link_to('channel/edit/'.$channel->id, 'Click to Edit') }}</td>
+            <td>{{ link_to('channel/'.$channel->id . '/edit', 'Click to Edit') }}</td>
       </tr>
       <?php $i++ ?>
       @endforeach

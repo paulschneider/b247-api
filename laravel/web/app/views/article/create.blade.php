@@ -78,7 +78,7 @@
     {{ Form::close() }}
 
     <div class="form-group">
-        {{ link_to('article/list', 'Back to List') }}
+        {{ link_to('article', 'Back to List') }}
     </div>
 
 @stop

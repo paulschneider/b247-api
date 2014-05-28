@@ -79,9 +79,9 @@ Class Channel extends BaseModel {
         $channel->sef_name = safename($form['name']);
         $channel->parent_channel = $form['parent_channel'] != 0 ? $form['parent_channel'] : null;
         $channel->colour = $form['colour'];
-        $channel->is_active = $form['is_active'];
+        $channel->is_active = isset($form['is_active']) ? $form['is_active'] : false;
 
-        if( $form['category'] and $form['id'] )
+        if( isset($form['category']) and $form['id'] )
         {
             $data = [];
 

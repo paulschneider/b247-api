@@ -18,35 +18,20 @@ Event::listen('illuminate.query', function($query, $params, $time, $conn)
 
 # Article
 
-Route::get('article/list', VERSION.'\Controllers\ArticleController@show');
-Route::get('article/edit/{id}', VERSION.'\Controllers\ArticleController@create');
-Route::get('article/create', VERSION.'\Controllers\ArticleController@create');
-Route::get('article/{id}', VERSION.'\Controllers\ArticleController@index');
-Route::post('article', VERSION.'\Controllers\ArticleController@store');
-Route::controller('article', VERSION.'\Controllers\ArticleController');
+Route::resource('article', VERSION.'\Controllers\ArticleController');
 
 # Category
-Route::get('category/list', VERSION.'\Controllers\CategoryController@show');
-Route::get('category/edit/{id}', VERSION.'\Controllers\CategoryController@create');
-Route::get('category/create', VERSION.'\Controllers\CategoryController@create');
-Route::post('category', VERSION.'\Controllers\CategoryController@store');
+
+Route::resource('category', VERSION.'\Controllers\CategoryController');
 
 # Channels
 
-Route::get('channel/list', VERSION.'\Controllers\ChannelController@show');
-Route::get('channel/create', VERSION.'\Controllers\ChannelController@create');
-Route::get('channel/edit/{id}', VERSION.'\Controllers\ChannelController@create');
-Route::get('channel/{id}', VERSION.'\Controllers\ChannelController@index');
-Route::post('channel', VERSION.'\Controllers\ChannelController@store');
-Route::controller('channel', VERSION.'\Controllers\ChannelController');
+Route::resource('channel', VERSION.'\Controllers\ChannelController');
 
 # Registration
 
-Route::get('register', VERSION.'\Controllers\RegisterController@index');
-Route::post('register', VERSION.'\Controllers\RegisterController@store');
-Route::controller('register', VERSION.'\Controllers\RegisterController');
+Route::resource('register', VERSION.'\Controllers\RegisterController');
 
 # Homepage
 
-Route::get('/', VERSION.'\Controllers\HomeController@index');
-Route::controller('/', VERSION.'\Controllers\HomeController');
+Route::resource('/', VERSION.'\Controllers\HomeController');

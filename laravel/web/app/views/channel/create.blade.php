@@ -5,7 +5,7 @@
 <h1>Create a new channel</h1>
 
 <div class="form-group">
-    {{ link_to('channel/list', 'Back to List') }}
+    {{ link_to('channel', 'Back to List') }}
 </div>
 
 {{ Form::open([ 'url' => 'channel', 'class' => 'form' ]) }}
@@ -68,7 +68,7 @@
 {{ Form::close() }}
 
 <div class="form-group">
-    {{ link_to('channel/list', 'Back to List') }}
+    {{ link_to('channel', 'Back to List') }}
 </div>
 
 @stop

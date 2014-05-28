@@ -5,7 +5,7 @@
 <h1>Create/Edit a Category</h1>
 
 <div class="form-group">
-    {{ link_to('category/list', 'Back to List') }}
+    {{ link_to('category', 'Back to List') }}
 </div>
 
 {{ Form::open([ 'url' => 'category', 'class' => 'form' ]) }}
@@ -28,7 +28,7 @@
 {{ Form::close() }}
 
 <div class="form-group">
-    {{ link_to('category/list', 'Back to List') }}
+    {{ link_to('category', 'Back to List') }}
 </div>
 
 @stop

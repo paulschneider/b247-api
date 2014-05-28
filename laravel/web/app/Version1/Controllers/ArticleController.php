@@ -2,6 +2,7 @@
 
 use Request;
 use Response;
+use Redirect;
 use View;
 use Input;
 use \Api\Transformers\ArticleTransformer;
@@ -19,20 +20,37 @@ class ArticleController extends ApiController {
         $this->articleTransformer = $articleTransformer;
     }
 
-    public function index($id)
+    public function index()
+    {
+        $articles = \Version1\Models\Article::getArticles();
+        return View::make('article.show', compact('articles', $articles));
+    }
+
+    public function create()
+    {
+        $article = new \Version1\Models\Article();
+
+        $channels = \Version1\Models\Channel::getSimpleChannels();
+        $subChannels = \Version1\Models\Channel::getSimpleSubChannels();
+        $categories = \Version1\Models\Category::getSimpleCategories();
+
+        return View::make('article.create', [ 'channels' => $channels, 'subChannels' => $subChannels, 'categories' => $categories, 'article' => $article ]);
+    }
+
+    public function show($id = null)
     {
         return $this->articleTransformer->transform(\Version1\Models\Article::getArticle($id));
     }
 
-    public function create($id = null)
+    public function edit($id = null)
     {
-        if( ! is_null($id) )
+        if( ! is_null($id) and is_numeric($id) )
         {
             $article = \Version1\Models\Article::getArticle($id);
         }
         else
         {
-            $article = new \Version1\Models\Article();
+            return $this->respondNotValid('Invalid articled identifier supplied.');
         }
 
         $channels = \Version1\Models\Channel::getSimpleChannels();
@@ -42,15 +60,8 @@ class ArticleController extends ApiController {
         return View::make('article.create', [ 'channels' => $channels, 'subChannels' => $subChannels, 'categories' => $categories, 'article' => $article ]);
     }
 
-    public function show()
-    {
-        $articles = \Version1\Models\Article::getArticles();
-
-        return View::make('article.show', compact('articles', $articles));
-    }
-
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created / recently updated resource
      *
      * @return Response
      */
@@ -62,37 +73,27 @@ class ArticleController extends ApiController {
         }
         else
         {
-            return $this->respondCreated('Article successfully stored');
+            return Redirect::to('article');
         }
     }
 
     /**
-    * if a PUT request is made
+    * action on an UPDATE call to the resource
     *
-    * @return Response
+    * @return ApiController Response
     */
-    public function putIndex()
+    public function update()
     {
-        return $this->respondNotAllowed();
+        return ApiController::respondNotAllowed();
     }
 
     /**
-    * if a PATCH request is made
+    * action on an UPDATE call to the resource
     *
-    * @return Response
+    * @return ApiController Response
     */
-    public function patchIndex()
+    public function destroy()
     {
-        return $this->respondNotAllowed();
-    }
-
-    /**
-    * if a DELETE request is made
-    *
-    * @return Response
-    */
-    public function deleteIndex()
-    {
-        return $this->respondNotAllowed();
+        return ApiController::respondNotAllowed();
     }
 }

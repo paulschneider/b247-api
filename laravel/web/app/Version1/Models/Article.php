@@ -147,7 +147,7 @@ class Article extends BaseModel {
         }
 
         $article->title = $form['title'];
-        $article->sef_name = safename($form['title']);
+        $article->sef_name = safename($article->title);
         $article->sub_heading = $form['sub_heading'];
         $article->body = $form['body'];
         $article->postcode = $form['postcode'];

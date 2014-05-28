@@ -34,11 +34,6 @@ class ApiController Extends BaseController {
         return $this;
     }
 
-    public function respondNotAllowed()
-    {
-        return $this->respondNotSupported('Endpoint does not support method.');
-    }
-
     /**
      * respond that a record was successfully created
      *
@@ -181,6 +176,27 @@ class ApiController Extends BaseController {
      * @return Response
      */
     public static function respondBadRequest($message = "Bad request. Please check the documention for the usage of this API endpoint.", $statusCode=400)
+    {
+        return Response::json([
+            'error' => [
+                'message' => $message
+                ,'statusCode' => $statusCode
+                ,'method' => Request::getMethod()
+                ,'endpoint' => Request::path()
+                ,'time' => time()
+            ],
+            'source' => [
+                sourceClient()
+            ]
+        ], $statusCode);
+    }
+
+    /**
+     * respond with a generic not allowed message for all non-supported HTTP requests
+     *
+     * @return Response
+     */
+    public static function respondNotAllowed($message = 'Endpoint does not support method.', $statusCode = 501)
     {
         return Response::json([
             'error' => [

@@ -18,16 +18,11 @@ class ChannelController extends ApiController {
 		$this->channelTransformer = $channelTransformer;
 	}
 
-	public function index($identifier)
+	public function index()
 	{
-		if(  is_numeric($identifier) )
-		{
-			return $this->channelTransformer->transform(\Version1\Models\Channel::getChannelById($identifier));
-		}
-		else
-		{
-			return $this->channelTransformer->transform(\Version1\Models\Channel::getChannelByName($identifier));
-		}
+		$channels = \Version1\Models\Channel::getChannelList();
+
+		return View::make('channel.show', [ 'channels' => $channels ]);
 	}
 
 	/**
@@ -35,15 +30,27 @@ class ChannelController extends ApiController {
 	*
 	* @return View
 	*/
-	public function create($channelId = null)
+	public function create()
 	{
-		if( ! is_null($channelId) )
+		$channels = \Version1\Models\Channel::getSimpleChannels();
+		$channel = new \Version1\Models\Channel();
+		return View::make('channel.create', [ 'channel' => $channel, 'channels' => $channels ]);
+	}
+
+	/**
+	* display a form to edit an existing channel
+	*
+	* @return View
+	*/
+	public function edit($channelId = null)
+	{
+		if( is_numeric($channelId) )
 		{
 			$channel = \Version1\Models\Channel::with('category')->find($channelId);
 		}
 		else
 		{
-			$channel = new \Version1\Models\Channel();
+			return $this->respondNotValid('Invalid channel identifier supplied.');
 		}
 
 		$channels = \Version1\Models\Channel::getSimpleChannels($channel->id);
@@ -58,32 +65,22 @@ class ChannelController extends ApiController {
 	*
 	* @return View
 	*/
-	public function show()
+	public function show($identifier = null)
 	{
-		$channels = \Version1\Models\Channel::getChannelList();
+		if( is_null($identifier) )
+		{
+			return $this->respondWithInsufficientParameters();
+		}
 
-		return View::make('channel.show', [ 'channels' => $channels ]);
+		if(  is_numeric($identifier) )
+		{
+			return $this->channelTransformer->transform(\Version1\Models\Channel::getChannelById($identifier));
+		}
+		else
+		{
+			return $this->channelTransformer->transform(\Version1\Models\Channel::getChannelByName($identifier));
+		}
 	}
-
-	/**
-	* if a GET request is made without the required identifier
-	*
-	* @return Response
-	*/
-	public function getIndex()
-	{
-		return $this->respondWithInsufficientParameters('Not enough arguements to complete request.');
-	}
-
-	/**
-	* if a POST request is made
-	*
-	* @return Response
-	*/
-	// public function postIndex()
-	// {
-	// 	return $this->respondNotAllowed();
-	// }
 
 	/**
 	* store the details of a new channel
@@ -92,43 +89,33 @@ class ChannelController extends ApiController {
 	*/
 	public function store()
 	{
-		if( ! $article = \Version1\Models\Channel::storeChannel(Input::all()) )
+		if( ! $channel = \Version1\Models\Channel::storeChannel(Input::all()) )
 		{
 			return $this->respondNotValid($channel->errors);
 		}
 		else
 		{
-			return Redirect::to('channel/list');
+			return Redirect::to('channel');
 		}
 	}
 
 	/**
-	* if a PUT request is made
+	* action on an UPDATE call to the resource
 	*
-	* @return Response
+	* @return ApiController Response
 	*/
-	public function putIndex()
+	public function update()
 	{
-		return $this->respondNotAllowed();
+		return ApiController::respondNotAllowed();
 	}
 
 	/**
-	* if a PATCH request is made
+	* action on an UPDATE call to the resource
 	*
-	* @return Response
+	* @return ApiController Response
 	*/
-	public function patchIndex()
+	public function destroy()
 	{
-		return $this->respondNotAllowed();
-	}
-
-	/**
-	* if a DELETE request is made
-	*
-	* @return Response
-	*/
-	public function deleteIndex()
-	{
-		return $this->respondNotAllowed();
+		return ApiController::respondNotAllowed();
 	}
 }
