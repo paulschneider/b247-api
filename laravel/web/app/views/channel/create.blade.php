@@ -26,9 +26,25 @@
     {{ Form::text('colour', $channel->colour, [ 'class' => 'form-control' ]) }}
 </div>
 
-@if ( !empty($channel->parent_channel) )
+<hr />
 
-    <hr />
+<h2 style="font-size:16px">Sponsorship</h2>
+
+<div class="form-group">
+    {{ Form::select('sponsor[]', array("None") + $sponsors, isset($channelSponsors[0]) ? $channelSponsors[0] : null, [ 'class' => 'form-control' ]) }}
+</div>
+
+<div class="form-group">
+    {{ Form::select('sponsor[]', array("None") + $sponsors, isset($channelSponsors[1]) ? $channelSponsors[1] : null, [ 'class' => 'form-control' ]) }}
+</div>
+
+<div class="form-group">
+    {{ Form::select('sponsor[]', array("None") + $sponsors, isset($channelSponsors[2]) ? $channelSponsors[2] : null, [ 'class' => 'form-control' ]) }}
+</div>
+
+<hr />
+
+@if ( !empty($channel->parent_channel) )
 
     <h2 style="font-size:16px">Select the categories to display for this channel</h2>
 

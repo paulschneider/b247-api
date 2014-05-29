@@ -4,6 +4,8 @@ use View;
 use Input;
 use Redirect;
 use \Api\Transformers\ChannelTransformer;
+use \Api\Transformers\ArticleTransformer;
+use \Api\Transformers\SponsorTransformer;
 
 class ChannelController extends ApiController {
 
@@ -13,9 +15,23 @@ class ChannelController extends ApiController {
 	*/
 	protected $channelTransformer;
 
-	public function __construct(ChannelTransformer $channelTransformer)
+	/**
+	*
+	* @var Api\Transformers\ArticleTransformer
+	*/
+	protected $articleTransformer;
+
+	/**
+	*
+	* @var Api\Transformers\SponsorTransformer
+	*/
+	protected $sponsorTransformer;
+
+	public function __construct(ChannelTransformer $channelTransformer, ArticleTransformer $articleTransformer, SponsorTransformer $sponsorTransformer)
 	{
 		$this->channelTransformer = $channelTransformer;
+		$this->articleTransformer = $articleTransformer;
+		$this->sponsorTransformer = $sponsorTransformer;
 	}
 
 	public function index()
@@ -33,8 +49,10 @@ class ChannelController extends ApiController {
 	public function create()
 	{
 		$channels = \Version1\Models\Channel::getSimpleChannels();
+		$sponsors = \Version1\Models\Sponsor::getSimpleSponsors();
 		$channel = new \Version1\Models\Channel();
-		return View::make('channel.create', [ 'channel' => $channel, 'channels' => $channels ]);
+
+		return View::make('channel.create', [ 'channel' => $channel, 'channels' => $channels, 'sponsors' => $sponsors ]);
 	}
 
 	/**
@@ -46,7 +64,7 @@ class ChannelController extends ApiController {
 	{
 		if( is_numeric($channelId) )
 		{
-			$channel = \Version1\Models\Channel::with('category')->find($channelId);
+			$channel = \Version1\Models\Channel::getChannel($channelId);
 		}
 		else
 		{
@@ -55,9 +73,11 @@ class ChannelController extends ApiController {
 
 		$channels = \Version1\Models\Channel::getSimpleChannels($channel->id);
 		$categories = \Version1\Models\Category::all();
+		$sponsors = \Version1\Models\Sponsor::getSimpleSponsors();
 		$channelCategory = array_flatten($channel->category->toArray());
+		$channelSponsors = $channel->sponsors->lists('id');
 
-		return View::make('channel.create', [ 'channel' => $channel, 'channels' => $channels, 'categories' => $categories, 'channelCategory' => $channelCategory ]);
+		return View::make('channel.create', [ 'channel' => $channel, 'channels' => $channels, 'categories' => $categories, 'channelCategory' => $channelCategory, 'sponsors' => $sponsors, 'channelSponsors' => $channelSponsors ]);
 	}
 
 	/**
@@ -72,14 +92,16 @@ class ChannelController extends ApiController {
 			return $this->respondWithInsufficientParameters();
 		}
 
-		if(  is_numeric($identifier) )
-		{
-			return $this->channelTransformer->transform(\Version1\Models\Channel::getChannelById($identifier));
-		}
-		else
-		{
-			return $this->channelTransformer->transform(\Version1\Models\Channel::getChannelByName($identifier));
-		}
+		$channel = \Version1\Models\Channel::getChannelByIdentifier($identifier);
+
+		$data = [
+			'channel' => $this->channelTransformer->transform($channel)
+			,'sponsors' => $this->sponsorTransformer->transformCollection($channel['sponsors'])
+			,'featured' => $this->articleTransformer->transformCollection(\Version1\Models\Article::getArticles('featured', 8, $channel['id']))
+			,'picked' => $this->articleTransformer->transformCollection(\Version1\Models\Article::getArticles('picks', 8, $channel['id']))
+		];
+
+		return $this->respondFound('Channel found', $data);
 	}
 
 	/**

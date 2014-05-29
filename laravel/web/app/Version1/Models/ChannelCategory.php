@@ -2,7 +2,7 @@
 
 namespace Version1\Models;
 
-Class ChannelCategory extends \Eloquent
+Class ChannelCategory extends BaseModel
 {
     protected $table = "channel_category";
 

@@ -32,6 +32,10 @@ Route::resource('channel', VERSION.'\Controllers\ChannelController');
 
 Route::resource('register', VERSION.'\Controllers\RegisterController');
 
+# Sponsor
+
+Route::resource('sponsor', VERSION.'\Controllers\SponsorController');
+
 # Homepage
 
 Route::resource('/', VERSION.'\Controllers\HomeController');

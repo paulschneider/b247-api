@@ -138,8 +138,6 @@ class ChannelTransformer extends Transformer {
      */
     public function transform($channel)
     {
-        $channel = $channel[0];
-
         $response = [
             'id' => $channel['id']
             ,'name' => $channel['name']

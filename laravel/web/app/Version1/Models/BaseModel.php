@@ -15,37 +15,34 @@ Class BaseModel extends \Eloquent
     {
         parent::boot();
 
-
         static::saving(function($model)
         {
-
             return $model->validate();
-
         });
-
     }
 
     public function validate()
     {
-
         $validation = Validator::make($this->getAttributes(), static::$rules);
 
         if($validation->fails())
         {
-
             $this->errors = $validation->messages()->toArray();
 
             return false;
-
         }
 
         return true;
-
     }
 
     public function scopeActive($query, $field = '')
     {
         return $query->where($field . 'is_active', true);
+    }
+
+    public function scopeCreatedDescending($query, $field = '')
+    {
+        return $query->orderBy($field . 'created_at', 'desc');
     }
 
     public function scopeAlive($query, $field = '')
@@ -62,10 +59,15 @@ Class BaseModel extends \Eloquent
     {
         if( is_array($data) )
         {
-                if( count($data) > 0)
+            if( count($data) > 0)
+            {
+                if(count($data) == 1)
                 {
-                    return $data;
+                    return $data[0];
                 }
+
+                return $data;
+            }
         }
         else if( $data instanceOf \stdClass )
         {

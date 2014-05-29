@@ -97,7 +97,7 @@ class Article extends BaseModel {
         return parent::dataCheck($query->first());
     }
 
-    public static function getArticles($type = null, $limit = 20)
+    public static function getArticles($type = null, $limit = 20, $channel = null)
     {
         $query = \DB::table('article')
                     ->select( 'article.id'
@@ -139,6 +139,11 @@ class Article extends BaseModel {
             case 'featured' :
                 $query->where('is_featured', '=', true);
             break;
+        }
+
+        if( ! is_null($channel) )
+        {
+            $query->where('location.channel_id', '=', $channel);
         }
 
         return $query->get();

@@ -7,7 +7,7 @@
 
     <body>
         <div class="col-lg-12 row">
-            <div class="col-md-6 col-md-offset-3" style="float : left">
+            <div class="col-md-8 col-md-offset-2" style="float : left">
                 @yield('content')
             </div>
         </div>

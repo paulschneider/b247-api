@@ -19,26 +19,61 @@ Class Channel extends BaseModel {
 
     ];
 
+    /**
+    * create the relationship with channel_category
+    *
+    * @var ???
+    */
     public function category()
     {
         return $this->hasMany('\Version1\Models\ChannelCategory');
     }
 
+    public function sponsors()
+    {
+        return $this->belongsToMany('\Version1\Models\Sponsor', 'sponsor_placement', 'content_id')->where('sponsor_placement.content_type', 1);
+    }
+
+    /**
+    * create the relationship with sub_channels
+    *
+    * @var array
+    */
     public function subChannel()
     {
         return $this->hasMany('\Version1\Models\SubChannel', 'parent_channel');
     }
 
+    /**
+    * return a list of channels with any sub_channels and sub_channels with any categories
+    *
+    * @var array
+    */
     public static function getChannels()
     {
         return static::with('subChannel.category')->whereNull('parent_channel')->get()->toArray();
     }
 
+    /**
+    * get a list of channels with any associated sub-channels
+    *
+    * @var array
+    */
     public static function getChannelList()
     {
         return static::with('subChannel')->get();
     }
 
+    public static function getChannel($id)
+    {
+        return static::with('category', 'sponsors')->where('id', $id)->first();
+    }
+
+    /**
+    * get an array of channels with ID's
+    *
+    * @var array
+    */
     public static function getSimpleChannels($channelId = null)
     {
         $channels = static::whereNull('parent_channel')->alive()->active()->lists('name', 'id');
@@ -49,21 +84,44 @@ Class Channel extends BaseModel {
         return $channels;
     }
 
+    /**
+    * get a list channels that have parent channels
+    *
+    * @var array
+    */
     public static function getSimpleSubChannels()
     {
         return static::whereNotNull('parent_channel')->alive()->active()->lists('name', 'id');
     }
 
-    public static function getChannelById($id)
+    /**
+    * get channels by an identifier
+    *
+    * @var array
+    */
+    public static function getChannelByIdentifier($identifier)
     {
-        return parent::dataCheck(static::with('subChannel.category')->whereId($id)->get());
+        $query = static::with('subChannel.category', 'sponsors');
+
+        if( is_numeric($identifier) )
+        {
+            $query->where('id', $identifier);
+        }
+        else
+        {
+            $query->where('sef_name', $identifier);
+        }
+
+        $result = $query->get()->toArray();
+
+        return parent::dataCheck($result);
     }
 
-    public static function getChannelByName($name)
-    {
-        return parent::dataCheck(static::with('subChannel.category')->whereSefName($name)->get());
-    }
-
+    /**
+    * store or update an existing channel
+    *
+    * @var array
+    */
     public static function storeChannel($form)
     {
         if( !empty($form['id']) )
@@ -98,7 +156,12 @@ Class Channel extends BaseModel {
             \Version1\Models\ChannelCategory::insert($data);
         }
 
+        // save the channel to the database
+
         $channel->save();
+
+        // associate any sponsors to the channel
+        \Version1\Models\Sponsor::assignChannelSponsors($channel, $form['sponsor']);
 
         return $channel;
     }
