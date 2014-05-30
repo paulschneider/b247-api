@@ -135,7 +135,7 @@ class Article extends BaseModel {
         $article->sub_heading = $form['sub_heading'];
         $article->body = $form['body'];
         $article->postcode = $form['postcode'];
-        $article->is_active = isset($form['is_active']) ? true : false;
+        $article->is_active = isset($form['is_active']) ? $form['is_active'] : false;
         $article->is_featured = isset($form['is_featured']) ? $form['is_featured'] : false;
         $article->is_picked = isset($form['is_picked']) ? $form['is_picked'] : false;
 
@@ -143,6 +143,8 @@ class Article extends BaseModel {
         {
             $article->is_picked = false;
         }
+
+        $article->is_active = 1;
 
         $article->save();
 
