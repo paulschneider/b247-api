@@ -1,6 +1,19 @@
 <?php namespace Api\Transformers;
 
+use \Api\Transformers\ArticleTransformer;
+
 class ChannelTransformer extends Transformer {
+
+    /**
+    *
+    * @var Api\Transformers\ArticleTransformer
+    */
+    protected $articleTransformer;
+
+    public function __construct(ArticleTransformer $articleTransformer)
+    {
+        $this->articleTransformer = $articleTransformer;
+    }
 
     /**
      * Transform a result set into the API required format
@@ -50,6 +63,11 @@ class ChannelTransformer extends Transformer {
                     {
                         $chan['sefName'] = $channel['sef_name'];
                         $chan['path'] = $path;
+                    }
+
+                    if( isset($channel['articles']) )
+                    {
+                        $chan['articles'] = $this->getArticles($channel['articles']);
                     }
 
                     $parentPath = $path;
@@ -143,6 +161,7 @@ class ChannelTransformer extends Transformer {
             ,'name' => $channel['name']
             ,'sefName' => $channel['sef_name']
             ,'colour' => $channel['colour']
+            ,'path' => $channel['sef_name'].'/'
         ];
 
         if( isset($channel['sub_channel']) and count($channel['sub_channel']) > 0 )
@@ -151,10 +170,13 @@ class ChannelTransformer extends Transformer {
 
             foreach( $channel['sub_channel'] AS $subChannel )
             {
+                $pathToChannel = $response['path'].$subChannel['sef_name'].'/';
+
                 $sub = [
                     'id' => $subChannel['id']
                     ,'name' => $subChannel['name']
                     ,'sefName' => $subChannel['sef_name']
+                    ,'path' => $pathToChannel
                 ];
 
                 if( isset($subChannel['category']) and count($subChannel['category']) > 0 )
@@ -163,10 +185,13 @@ class ChannelTransformer extends Transformer {
 
                     foreach( $subChannel['category'] AS $category )
                     {
+                        $pathToCategory = $pathToChannel.$category['sef_name'];
+
                         $cat = [
-                            'id' => $subChannel['id']
-                            ,'name' => $subChannel['name']
-                            ,'sefName' => $subChannel['sef_name']
+                            'id' => $category['id']
+                            ,'name' => $category['name']
+                            ,'sefName' => $category['sef_name']
+                            ,'path' => $pathToCategory
                         ];
 
                         $categories[] = $cat;
@@ -182,5 +207,10 @@ class ChannelTransformer extends Transformer {
         }
 
         return $response;
+    }
+
+    public function getArticles($articles)
+    {
+        return $this->articleTransformer->transformCollection($articles);
     }
 }

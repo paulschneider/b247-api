@@ -23,7 +23,8 @@ class ArticleController extends ApiController {
     public function index()
     {
         $articles = \Version1\Models\Article::getArticles();
-        return View::make('article.show', compact('articles', $articles));
+
+        return View::make('article.show', ['articles' => $articles]);
     }
 
     public function create()

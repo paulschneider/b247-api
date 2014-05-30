@@ -92,13 +92,17 @@ class ChannelController extends ApiController {
 			return $this->respondWithInsufficientParameters();
 		}
 
-		$channel = \Version1\Models\Channel::getChannelByIdentifier($identifier);
+		if( ! $channel = \Version1\Models\Channel::getChannelByIdentifier($identifier))
+		{
+			return $this->respondNoDataFound();
+		}
 
 		$data = [
 			'channel' => $this->channelTransformer->transform($channel)
 			,'sponsors' => $this->sponsorTransformer->transformCollection($channel['sponsors'])
 			,'featured' => $this->articleTransformer->transformCollection(\Version1\Models\Article::getArticles('featured', 8, $channel['id']))
 			,'picked' => $this->articleTransformer->transformCollection(\Version1\Models\Article::getArticles('picks', 8, $channel['id']))
+			,'highlights' => $this->channelTransformer->transformCollection(\Version1\Models\SubChannel::getWithArticles($channel['id']))
 		];
 
 		return $this->respondFound('Channel found', $data);

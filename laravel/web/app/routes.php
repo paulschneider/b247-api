@@ -13,7 +13,7 @@
 
 Event::listen('illuminate.query', function($query, $params, $time, $conn)
 {
-    //dd(array($query, $params, $time, $conn));
+    //sd(array($query, $params, $time, $conn));
 });
 
 # Article

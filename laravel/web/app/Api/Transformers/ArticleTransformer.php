@@ -14,36 +14,7 @@ class ArticleTransformer extends Transformer {
 
         foreach($articles AS $article)
         {
-            $tmp = [
-                'id' => $article->id
-                ,'title' => $article->title
-                ,'sefName' => $article->articleSefName
-                ,'path' => $article->channelSefName . '/' . $article->subChannelSefName . '/' . $article->categorySefName . '/' . $article->articleSefName
-                ,'assignment' => [
-                    'channel' => [
-                        'id' => $article->channelSefName
-                        ,'name' => $article->channelName
-                        ,'sefName' => $article->channelSefName
-                    ]
-                    ,'subChannel' => [
-                        'id' => $article->subChannelSefName
-                        ,'name' => $article->subChannelName
-                        ,'sefName' => $article->subChannelSefName
-                    ]
-                    ,'category' => [
-                        'id' => $article->categoryId
-                        ,'name' => $article->categoryName
-                        ,'sefName' => $article->categorySefName
-                    ]
-                ]
-                ,'media' => [
-                    'filepath' => $article->filepath
-                    ,'alt' => $article->alt
-                    ,'title' => $article->assetTitle
-                    ,'width' => $article->width
-                    ,'height' => $article->height
-                ]
-            ];
+            $tmp = $this->transform($article);
 
             $response[] = $tmp;
         }
@@ -58,35 +29,41 @@ class ArticleTransformer extends Transformer {
      */
     public function transform($article)
     {
-        return $response = [
-            'id' => $article->id
-            ,'title' => $article->title
-            ,'sefName' => $article->articleSefName
-            ,'path' => $article->channelSefName . '/' . $article->subChannelSefName . '/' . $article->categorySefName . '/' . $article->articleSefName
-            ,'assignment' => [
-                'channel' => [
-                    'id' => $article->channelSefName
-                    ,'name' => $article->channelName
-                    ,'sefName' => $article->channelSefName
+        if( isset($article['location'][0]) and isset($article['asset'][0]) )
+        {
+            $articleLocation = $article['location'][0];
+            $articleAsset = $article['asset'][0];
+
+            return $response = [
+                'id' => $article['id']
+                ,'title' => $article['title']
+                ,'sefName' => $article['sef_name']
+                ,'path' => $articleLocation['channelSefName'] . '/' . $articleLocation['subChannelSefName'] . '/' . $articleLocation['categorySefName'] . '/' . $article['sef_name']
+                ,'assignment' => [
+                    'channel' => [
+                        'id' => $articleLocation['channelId']
+                        ,'name' => $articleLocation['channelName']
+                        ,'sefName' => $articleLocation['channelSefName']
+                    ]
+                    ,'subChannel' => [
+                        'id' => $articleLocation['subChannelId']
+                        ,'name' => $articleLocation['subChannelName']
+                        ,'sefName' => $articleLocation['subChannelSefName']
+                    ]
+                    ,'category' => [
+                        'id' => $articleLocation['categoryId']
+                        ,'name' => $articleLocation['categoryName']
+                        ,'sefName' => $articleLocation['categorySefName']
+                    ]
                 ]
-                ,'subChannel' => [
-                    'id' => $article->subChannelSefName
-                    ,'name' => $article->subChannelName
-                    ,'sefName' => $article->subChannelSefName
+                ,'media' => [
+                    'filepath' => $articleAsset['filepath']
+                    ,'alt' => $articleAsset['alt']
+                    ,'title' => $articleAsset['title']
+                    ,'width' => $articleAsset['width']
+                    ,'height' => $articleAsset['height']
                 ]
-                ,'category' => [
-                    'id' => $article->categoryId
-                    ,'name' => $article->categoryName
-                    ,'sefName' => $article->categorySefName
-                ]
-            ]
-            ,'media' => [
-                'filepath' => $article->filepath
-                ,'alt' => $article->alt
-                ,'title' => $article->title
-                ,'width' => $article->width
-                ,'height' => $article->height
-            ]
-        ];
+            ];
+        }
     }
 }

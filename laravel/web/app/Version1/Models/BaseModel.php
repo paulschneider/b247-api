@@ -50,6 +50,16 @@ Class BaseModel extends \Eloquent
         return $query->where($field . 'is_deleted', null);
     }
 
+    public function scopeNotFeatured($query, $field = '')
+    {
+        return $query->where($field . 'is_featured', false);
+    }
+
+    public function scopeNotPicked($query, $field = '')
+    {
+        return $query->where($field . 'is_picked', null);
+    }
+
     public function getErrors()
     {
         return $this->errors;

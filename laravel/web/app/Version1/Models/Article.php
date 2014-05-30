@@ -16,7 +16,7 @@ class Article extends BaseModel {
      */
     protected $hidden = [
 
-        'content_type', 'sponsor_id', 'event_id', 'author_id','is_deleted', 'is_comments', 'created_at', 'updated_at', 'impressions', 'is_approved'
+        'content_type', 'sponsor_id', 'event_id', 'author_id','is_deleted', 'is_comments', 'updated_at', 'impressions', 'is_approved'
 
     ];
 
@@ -43,47 +43,47 @@ class Article extends BaseModel {
 
     ];
 
+    /**
+    * default status for new articles
+    *
+    * @var int
+    */
+    public $is_active = true;
+
     public function location()
     {
-        return $this->hasMany('\Version1\Models\ArticleLocation', 'article_id')->select('article_id', 'channel_id', 'sub_channel_id', 'category_id');
+        return $this->hasMany('\Version1\Models\ArticleLocation', 'article_id')
+                    ->select(
+                        'article_location.id AS locationId'
+                        , 'channel_id AS channelId'
+                        , 'channel.name AS channelName'
+                        , 'channel.sef_name AS channelSefName'
+                        , 'sub_channel_id AS subChannelId'
+                        , 'subChannel.name AS subChannelName'
+                        , 'subChannel.sef_name AS subChannelSefName'
+                        , 'category_id AS categoryId'
+                        , 'category.name AS categoryName'
+                        , 'category.sef_name AS categorySefName'
+                        , 'article_id'
+                        , 'article.is_active'
+                        , 'article.is_deleted'
+                        , 'article.is_featured'
+                        , 'article.is_picked'
+                    )
+                    ->join('channel', 'channel.id', '=', 'article_location.channel_id')
+                    ->join('channel AS subChannel', 'subChannel.id', '=', 'article_location.sub_channel_id')
+                    ->join('category', 'category.id', '=', 'article_location.category_id')
+                    ->join('article', 'article.id', '=', 'article_location.article_id');
+    }
+
+    public function asset()
+    {
+        return $this->belongsToMany('\Version1\Models\Asset', 'article_asset', 'article_id');
     }
 
     public static function getArticle($identifier)
     {
-        $query = \DB::table('article')
-                    ->select(
-                            'article.id'
-                            , 'article.title'
-                            , 'article.sub_heading'
-                            , 'article.body'
-                            , 'article.postcode'
-                            , 'article.sef_name AS articleSefName'
-                            , 'article.is_active'
-                            , 'article.is_picked'
-                            , 'article.is_featured'
-                            , 'article.created_at'
-                            , 'location.id AS locationId'
-                            , 'channel.id AS channelId'
-                            , 'channel.name AS channelName'
-                            , 'channel.sef_name AS channelSefName'
-                            , 'subChannel.id AS subChannelId'
-                            , 'subChannel.name AS subChannelName'
-                            , 'subChannel.sef_name AS subChannelSefName'
-                            , 'category.id AS categoryId'
-                            , 'category.name AS categoryName'
-                            , 'category.sef_name AS categorySefName'
-                            , 'asset.filepath'
-                            , 'asset.alt'
-                            , 'asset.title AS assetTitle'
-                            , 'asset.width'
-                            , 'asset.height'
-                    )
-                    ->join('article_location AS location', 'location.article_id', '=', 'article.id')
-                    ->join('channel', 'channel.id', '=', 'location.channel_id')
-                    ->join('channel AS subChannel', 'subChannel.id', '=', 'location.sub_channel_id')
-                    ->join('category', 'category.id', '=', 'location.category_id')
-                    ->leftJoin('article_asset', 'article_asset.article_id', '=', 'article.id')
-                    ->leftJoin('asset', 'asset.id', '=', 'article_asset.asset_id');
+        $query = static::with('location')->with('asset');
 
         if( is_numeric($identifier) )
         {
@@ -94,42 +94,17 @@ class Article extends BaseModel {
             $query->where('article.sef_name', '=', $identifier);
         }
 
-        return parent::dataCheck($query->first());
+        return parent::dataCheck($query->first()->toArray());
     }
 
     public static function getArticles($type = null, $limit = 20, $channel = null)
     {
-        $query = \DB::table('article')
-                    ->select( 'article.id'
-                            , 'article.title'
-                            , 'article.sef_name AS articleSefName'
-                            , 'article.is_picked'
-                            , 'article.is_featured'
-                            , 'article.created_at'
-                            , 'channel.id AS channelId'
-                            , 'channel.name AS channelName'
-                            , 'channel.sef_name AS channelSefName'
-                            , 'subChannel.id AS subChannelId'
-                            , 'subChannel.name AS subChannelName'
-                            , 'subChannel.sef_name AS subChannelSefName'
-                            , 'category.id AS categoryId'
-                            , 'category.name AS categoryName'
-                            , 'category.sef_name AS categorySefName'
-                            , 'asset.filepath'
-                            , 'asset.alt'
-                            , 'asset.title AS assetTitle'
-                            , 'asset.width'
-                            , 'asset.height'
-                            )
-                    ->join('article_location AS location', 'location.article_id', '=', 'article.id')
-                    ->join('channel', 'channel.id', '=', 'location.channel_id')
-                    ->join('channel AS subChannel', 'subChannel.id', '=', 'location.sub_channel_id')
-                    ->join('category', 'category.id', '=', 'location.category_id')
-                    ->leftJoin('article_asset', 'article_asset.article_id', '=', 'article.id')
-                    ->leftJoin('asset', 'asset.id', '=', 'article_asset.asset_id')
-                    ->orderBy('article.title')
-                    ->where('article.is_active', true)
-                    ->take($limit);
+        $query = static::with(['location' => function($query) use ($channel) {
+            if( ! is_null($channel) )
+            {
+                $query->where('article_location.channel_id', $channel);
+            }
+        }])->with('asset');
 
         switch($type)
         {
@@ -141,12 +116,7 @@ class Article extends BaseModel {
             break;
         }
 
-        if( ! is_null($channel) )
-        {
-            $query->where('location.channel_id', '=', $channel);
-        }
-
-        return $query->get();
+        return $query->take($limit)->get()->toArray();
     }
 
     public static function storeArticle($form)
@@ -199,6 +169,11 @@ class Article extends BaseModel {
 
             $articleLocation->save();
         }
+
+        // temporary insert of a test asset
+
+        \DB::table('article_asset')->where('article_id', $article->id)->delete();
+        \DB::table('article_asset')->insert(['article_id' => $article->id, 'asset_id' => 1]);
 
         return $article;
     }

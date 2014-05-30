@@ -114,6 +114,11 @@ Class Channel extends BaseModel {
 
         $result = $query->get()->toArray();
 
+        if( count($result) == 0)
+        {
+            return false;
+        }
+
         return parent::dataCheck($result);
     }
 
@@ -160,7 +165,7 @@ Class Channel extends BaseModel {
 
         $channel->save();
 
-        // associate any sponsors to the channel
+        // associate any sponsors with the channel
         \Version1\Models\Sponsor::assignChannelSponsors($channel, $form['sponsor']);
 
         return $channel;
