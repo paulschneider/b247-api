@@ -116,7 +116,7 @@ class Article extends BaseModel {
             break;
         }
 
-        return $query->take($limit)->get()->toArray();
+        return $query->take($limit)->orderBy('article.created_at', 'desc')->get()->toArray();
     }
 
     public static function storeArticle($form)
