@@ -7,7 +7,7 @@ use Version1\Articles\ArticleRepository;
 use Version1\Channels\ChannelRepository;
 use Version1\Channels\Channel;
 use Version1\Sponsors\SponsorRepository;
-use Version1\Categories\categoryRepository;
+use Version1\Categories\CategoryRepository;
 
 class ChannelController extends ApiController {
 
