@@ -1,10 +1,20 @@
-<?php namespace Version1\Controllers;
+<?php
 
-use View;
-use Input;
-use Redirect;
+use Version1\Sponsors\SponsorRepository;
+use Version1\Sponsors\Sponsor;
 
-class SponsorController extends ApiController {
+Class SponsorController extends ApiController {
+
+    /**
+    *
+    * @var Version1\Sponsor\SponsorRepository
+    */
+    protected $sponsorRepository;
+
+    public function __construct(SponsorRepository $sponsorRepository)
+    {
+        $this->sponsorRepository = $sponsorRepository;
+    }
 
 	/**
 	 * Display a listing of sponsors.
@@ -13,9 +23,9 @@ class SponsorController extends ApiController {
 	 */
 	public function index()
 	{
-		$sponsors = \Version1\Models\Sponsor::getAscendingList();
+		$sponsors = $this->sponsorRepository->getAscendingList();
 
-		return View::make('sponsor.show', [ 'sponsors' => $sponsors ]);
+		return View::make('sponsor.show', compact('sponsors'));
 	}
 
 	/**
@@ -25,9 +35,9 @@ class SponsorController extends ApiController {
 	 */
 	public function create()
 	{
-		$sponsor = new \Version1\Models\Sponsor();
+		$sponsor = new Sponsor();
 
-		return View::make('sponsor.create', [ 'sponsor' => $sponsor ]);
+		return View::make('sponsor.create', compact('sponsor'));
 	}
 
 	/**
@@ -37,7 +47,7 @@ class SponsorController extends ApiController {
 	 */
 	public function store()
 	{
-		if( ! $sponsor = \Version1\Models\Sponsor::storeSponsor(Input::all()) )
+		if( ! $sponsor = $this->sponsorRepository->storeSponsor(Input::all()) )
 		{
 			return $this->respondNotValid($sponsor->errors);
 		}
@@ -66,9 +76,9 @@ class SponsorController extends ApiController {
 	 */
 	public function edit($id)
 	{
-		$sponsor = \Version1\Models\Sponsor::findOrFail($id);
+		$sponsor = $this->sponsorRepository->getSponsorById($id);
 
-		return View::make('sponsor.create', [ 'sponsor' => $sponsor ]);
+		return View::make('sponsor.create', compact('sponsor'));
 	}
 
 	/**

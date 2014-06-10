@@ -14,6 +14,7 @@
       <th>Title</th>
       <th>Featured</th>
       <th>Picked</th>
+      <th>Active</th>
       <th>Created</th>
       <th>Edit</th>
   </thead>
@@ -25,6 +26,7 @@
             <td>{{ $article['title'] }}</td>
             <td>{{ oracle($article['is_featured']) }}</td>
             <td>{{ oracle($article['is_picked']) }}</td>
+            <td>{{ oracle($article['is_active']) }}</td>
             <td>{{ $article['created_at'] }}</td>
             <td>{{ link_to('article/'. $article['id'] .'/edit', 'Click to Edit') }}</td>
       </tr>

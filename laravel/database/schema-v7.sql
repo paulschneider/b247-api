@@ -71,6 +71,8 @@ CREATE TABLE IF NOT EXISTS `b247-com`.`venue` (
   `phone` VARCHAR(30) NULL,
   `created_at` DATETIME NOT NULL,
   `updated_at` DATETIME NULL,
+  `is_active` TINYINT NOT NULL DEFAULT '1',
+  `is_deleted` TINYINT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -87,6 +89,8 @@ CREATE TABLE IF NOT EXISTS `b247-com`.`event` (
   `show_time` TIME NULL,
   `price` FLOAT(8,2) NULL,
   `url` VARCHAR(150) NULL,
+  `is_active` TINYINT NOT NULL DEFAULT 1,
+  `is_deleted` TINYINT NULL,
   `created_at` DATETIME NOT NULL,
   `updated_at` DATETIME NULL,
   PRIMARY KEY (`id`),

@@ -1,6 +1,8 @@
-<?php
+<?php namespace Version1\Channels;
 
-namespace Version1\Models;
+use Version1\Channels\Channel;
+use Version1\Channels\Category;
+use Version1\Models\BaseModel;
 
 Class ChannelCategory extends BaseModel
 {
@@ -14,11 +16,11 @@ Class ChannelCategory extends BaseModel
 
     public function categoryChannel()
     {
-        return $this->belongsToMany('\Version1\Models\Channel', 'channel_id', 'parent_channel');
+        return $this->belongsToMany('Channel', 'channel_id', 'parent_channel');
     }
 
     public function category()
     {
-        return $this->belongsTo('\Version1\Models\Category', 'category_id', 'id');
+        return $this->belongsTo('Category', 'category_id', 'id');
     }
 }

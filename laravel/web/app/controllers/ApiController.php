@@ -1,11 +1,6 @@
-<?php namespace Version1\Controllers;
+<?php
 
-use Controller;
-use Request;
-use Response;
-use Agent;
-
-class ApiController Extends BaseController {
+class ApiController Extends Controller {
 
     /**
      * @var int

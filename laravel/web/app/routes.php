@@ -18,24 +18,32 @@ Event::listen('illuminate.query', function($query, $params, $time, $conn)
 
 # Article
 
-Route::resource('article', VERSION.'\Controllers\ArticleController');
+Route::resource('article', 'ArticleController');
 
 # Category
 
-Route::resource('category', VERSION.'\Controllers\CategoryController');
+Route::resource('category', 'CategoryController');
 
 # Channels
 
-Route::resource('channel', VERSION.'\Controllers\ChannelController');
+Route::resource('channel', 'ChannelController');
+
+# Events
+
+Route::resource('event', 'EventController');
 
 # Registration
 
-Route::resource('register', VERSION.'\Controllers\RegisterController');
+Route::resource('register', 'RegisterController');
 
 # Sponsor
 
-Route::resource('sponsor', VERSION.'\Controllers\SponsorController');
+Route::resource('sponsor', 'SponsorController');
+
+# Venue
+
+Route::resource('venue', 'VenueController');
 
 # Homepage
 
-Route::resource('/', VERSION.'\Controllers\HomeController');
+Route::resource('/', 'HomeController');

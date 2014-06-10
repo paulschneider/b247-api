@@ -8,12 +8,12 @@
 		,"nesbot/Carbon": "*"
 		,"fzaninotto/faker": "1.4.*@dev"
 		,"jenssegers/agent": "*"
+		,"codeception/codeception": "*"
 	},
 	"autoload": {
 		"classmap": [
 			"app/commands",
 			"app/controllers",
-			"app/models",
 			"app/database/migrations",
 			"app/database/seeds",
 			"app/tests/TestCase.php"
@@ -22,7 +22,7 @@
 			"app/helpers.php"
 		]
 		,"psr-4": {
-			"Version1\\": "app/Version1"
+			"Version1\\" : "app/Version1"
 			,"Api\\" : "app/Api"
 		}
 	},

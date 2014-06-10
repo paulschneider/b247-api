@@ -1,4 +1,7 @@
-<?php namespace Version1\Models;
+<?php namespace Version1\Articles;
+
+use \Version1\Models\BaseModel;
+use \Version1\Articles\Article;
 
 class ArticleLocation extends BaseModel {
 

@@ -13,7 +13,7 @@
         {{ Form::hidden('id', $article['id']) }}
         {{ Form::hidden('locationId', isset($article['location']) ? $article['location'][0]['locationId'] : '') }}
 
-    <h2 style="font-size:16px">Where will it appear?</h2>
+    <h3>Where will it appear?</h3>
 
     <hr />
 
@@ -32,7 +32,7 @@
         {{ Form::select('category', $categories, isset($article['location']) ? $article['location'][0]['categoryId'] : '', [ 'class' => 'form-control' ]) }}
     </div>
 
-    <h2 style="font-size:16px">What will it say?</h2>
+    <h3>What will it say?</h3>
 
     <hr />
 
@@ -55,6 +55,17 @@
         {{ Form::label('postcode', 'Postcode:') }}
         {{ Form::text('postcode', $article['postcode'], [ 'class' => 'form-control' ]) }}
     </div>
+
+    <hr />
+
+    <h3>Does this article promote an event ?</h3>
+
+    <div class="form-group">
+        {{ Form::label('event', 'Select an Event:') }}
+        {{ Form::select('event', ['Select an Event'] + $events, isset($article['event_id']) ? $article['event_id'] : '', [ 'class' => 'form-control' ]) }}
+    </div>
+
+    <hr />
 
     <div class="form-group">
         {{ Form::label('is_active', 'Active:') }}

@@ -1,5 +1,10 @@
 <?php
 
+function short_time($time)
+{
+    return date('H:i', strtotime($time));
+}
+
 // return a formatted array showing a sub-channel path via its parent
 function makePathList($channels)
 {

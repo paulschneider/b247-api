@@ -1,10 +1,7 @@
-<?php namespace Version1\Controllers;
+<?php
 
-use Request;
-use Response;
-use View;
-use Input;
-use \Api\Transformers\UserTransformer;
+use Version1\Users\UserRepository;
+use Api\Transformers\UserTransformer;
 
 class RegisterController extends ApiController {
 
@@ -14,9 +11,16 @@ class RegisterController extends ApiController {
 	*/
 	protected $userTransformer;
 
-	public function __construct(UserTransformer $userTransformer)
+	/**
+	*
+	* @var Version1\Users\UserRepository
+	*/
+	protected $userRepository;
+
+	public function __construct(UserTransformer $userTransformer, UserRepository $userRepository)
 	{
 		$this->userTransformer = $userTransformer;
+		$this->userRepository = $userRepository;
 	}
 
 	/**
@@ -36,7 +40,7 @@ class RegisterController extends ApiController {
 	 */
 	public function store()
 	{
-		$user = \Version1\Models\User::addUser(Input::all());
+		$user = $this->userRepository->addUser(Input::all());
 
 		if( ! $user->save() )
 		{

@@ -18,6 +18,19 @@ return array(
 
 	/*
 	|--------------------------------------------------------------------------
+	| Fake It
+	|--------------------------------------------------------------------------
+	|
+	| Whether we want to override the form inputs with faked data user Faker
+	| https://github.com/fzaninotto/Faker
+	|
+	|
+	*/
+
+	'fakeIt' => true,
+
+	/*
+	|--------------------------------------------------------------------------
 	| Application Debug Mode
 	|--------------------------------------------------------------------------
 	|
@@ -163,7 +176,7 @@ return array(
 	'aliases' => array(
 
 		'Agent'           => 'Jenssegers\Agent\Facades\Agent', // https://github.com/jenssegers/Laravel-Agent
-		'Api'			 => 'Version1\Controllers\ApiController',		
+		'Api'			 => 'Version1\Controllers\ApiController',
 		'App'             => 'Illuminate\Support\Facades\App',
 		'Artisan'         => 'Illuminate\Support\Facades\Artisan',
 		'Auth'            => 'Illuminate\Support\Facades\Auth',

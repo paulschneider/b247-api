@@ -1,6 +1,9 @@
-<?php
+<?php namespace Version1\Channels;
 
-namespace Version1\Models;
+use Version1\Channels\Category;
+use Version1\Channels\Channel;
+use Version1\Articles\Article;
+use Version1\Models\BaseModel;
 
 Class SubChannel extends BaseModel
 {
@@ -32,7 +35,7 @@ Class SubChannel extends BaseModel
      */
     public function category()
     {
-        return $this->belongsToMany('\Version1\Models\Category', 'channel_category', 'channel_id');
+        return $this->belongsToMany('Version1\Categories\Category', 'channel_category', 'channel_id');
     }
 
     /**
@@ -42,12 +45,12 @@ Class SubChannel extends BaseModel
      */
     public function channel()
     {
-        return $this->belongsToMany('\Version1\Models\Channel', 'parent_id', 'id');
+        return $this->belongsToMany('Channel', 'parent_id', 'id');
     }
 
     public function articles()
     {
-        return $this->belongsToMany('\Version1\Models\Article', 'article_location', 'sub_channel_id')->alive()->active();
+        return $this->belongsToMany('Article', 'article_location', 'sub_channel_id')->alive()->active();
     }
 
     public static function getWithArticles($channel)

@@ -34,7 +34,7 @@ class ArticleTransformer extends Transformer {
             $articleLocation = $article['location'][0];
             $articleAsset = $article['asset'][0];
 
-            return $response = [
+            $response = [
                 'id' => $article['id']
                 ,'title' => $article['title']
                 ,'sefName' => $article['sef_name']
@@ -64,6 +64,31 @@ class ArticleTransformer extends Transformer {
                     ,'height' => $articleAsset['height']
                 ]
             ];
+
+            if( isset($article['event']) )
+            {
+                $venue = $article['event']['venue'];
+                $event = $article['event']['details'];
+
+                $response['event'] = [
+                    'venue' => [
+                        'name' => $venue['name']
+                        ,'sefName' => $venue['sef_name']
+                        ,'facebook' => $venue['facebook']
+                        ,'twitter' => $venue['twitter']
+                    ]
+                    ,'detail' => [
+                        'title' => $event['title']
+                        ,'sefName' => $event['sef_name']
+                        ,'date' => $event['show_date']
+                        ,'time' => $event['show_time']
+                        ,'price' => $event['price']
+                        ,'url' => $event['url']
+                    ]
+                ];
+            }
+
+            return $response;
         }
     }
 }

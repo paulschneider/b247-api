@@ -1,4 +1,7 @@
-<?php namespace Version1\Models;
+<?php namespace Version1\Sponsors;
+
+use \Version1\Models\BaseModel;
+use \Version1\Sponsors\Sponsor;
 
 class SponsorPlacement extends BaseModel {
     /**
@@ -21,7 +24,7 @@ class SponsorPlacement extends BaseModel {
 
     public function sponsor()
     {
-        return $this->belongsToMany('\Version1\Models\Sponsor', 'sponsor_id', 'id');
+        return $this->belongsToMany('Sponsor', 'sponsor_id', 'id');
     }
 
     public static function place($contentType, $contentId, $sponsors)
