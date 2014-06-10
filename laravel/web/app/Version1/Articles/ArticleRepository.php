@@ -3,7 +3,7 @@
 use \Version1\Articles\ArticleInterface;
 use \Version1\Articles\ArticleLocation;
 use \Version1\Articles\Article;
-use \Version1\models\BaseModel;
+use \Version1\Models\BaseModel;
 
 Class ArticleRepository extends BaseModel implements ArticleInterface {
 

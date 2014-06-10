@@ -4,7 +4,7 @@ use \Version1\Sponsors\SponsorInterface;
 use \Version1\Sponsors\SponsorPlacement;
 use \Version1\Sponsors\Sponsor;
 use \Version1\Channels\Channel;
-use \Version1\models\BaseModel;
+use \Version1\Models\BaseModel;
 
 Class SponsorRepository extends BaseModel implements SponsorInterface {
 

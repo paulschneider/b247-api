@@ -4,7 +4,7 @@ use \Version1\Channels\ChannelInterface;
 use \Version1\Channels\ChannelCategory;
 use \Version1\Channels\Channel;
 use \Version1\Sponsors\Sponsor;
-use \Version1\models\BaseModel;
+use \Version1\Models\BaseModel;
 
 Class ChannelRepository extends BaseModel implements ChannelInterface {
 
