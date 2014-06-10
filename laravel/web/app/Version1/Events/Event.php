@@ -32,6 +32,6 @@ Class Event extends BaseModel {
 
     public function article()
     {
-        return $this->hasMany('\Version1\Articles\Article', 'event_id');
+        return $this->hasMany('\Version1\Articles\Article', 'event_id')->active()->notFeatured()->notPicked()->alive();
     }
 }

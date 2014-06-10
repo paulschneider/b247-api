@@ -1,9 +1,9 @@
 <?php namespace Version1\Models;
 
-use Eloquent;
-use Validator;
+use \Eloquent;
+use \Validator;
 
-Class BaseModel extends \Eloquent
+Class BaseModel extends Eloquent
 {
     protected $guarded = ['id'];
 
@@ -52,12 +52,12 @@ Class BaseModel extends \Eloquent
 
     public function scopeNotFeatured($query, $field = '')
     {
-        return $query->where($field . 'is_featured', false);
+        return $query->where($field . 'is_featured', 0);
     }
 
     public function scopeNotPicked($query, $field = '')
     {
-        return $query->where($field . 'is_picked', null);
+        return $query->where($field . 'is_picked', 0);
     }
 
     public function getErrors()

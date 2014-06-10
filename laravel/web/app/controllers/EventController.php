@@ -60,9 +60,7 @@ Class EventController extends ApiController {
      */
     public function show($identifier = null)
     {
-        // get all sub channels that are a child of What's On
-        // all articles that are attached to each of these sub-channels
-        // One article that has an event attached to it from this list of articles, ordered by event date and time
+        //
     }
 
     /**

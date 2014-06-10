@@ -3,6 +3,7 @@
 use Version1\Events\EventInterface;
 use Version1\Events\Event;
 use Version1\Models\BaseModel;
+use \Carbon\Carbon;
 
 Class EventRepository extends BaseModel implements EventInterface {
 
@@ -15,25 +16,28 @@ Class EventRepository extends BaseModel implements EventInterface {
     {
         $result = Event::with('venue')->with(['article.location' => function($query) use ($channelId) {
             $query->where('article_location.channel_id', $channelId)->groupBy('article_location.sub_channel_id');
-        }])->with('article.asset')->orderBy('event.show_date', 'asc')->get()->toArray();
+        }])->with('article.asset')->where('event.show_date', '>=', Carbon::today())->where('event.show_date', '<=', Carbon::today()->addWeeks(1))->orderBy('event.show_date', 'asc')->get()->toArray();
 
         $articles = [];
 
         foreach($result AS $event)
         {
-            $article = $event['article'][0];
+            if( isset($event['article'][0]) )
+            {
+                $article = $event['article'][0];
 
-            unset($event['article']);
+                unset($event['article']);
 
-            $article['event'] = [
-                'venue' => $event['venue']
-            ];
+                $article['event'] = [
+                    'venue' => $event['venue']
+                ];
 
-            unset($event['venue']);
+                unset($event['venue']);
 
-            $article['event']['details'] = $event;
+                $article['event']['details'] = $event;
 
-            $articles[] = $article;
+                $articles[] = $article;
+            }
         }
 
         return $articles;
