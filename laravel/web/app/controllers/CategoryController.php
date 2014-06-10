@@ -61,7 +61,7 @@ Class CategoryController extends ApiController {
     {
         if( ! is_null($categoryId) and is_numeric($categoryId) )
         {
-            $category = $this->channelRepository->getCategory($categoryId);
+            $category = $this->categoryRepository->getCategory($categoryId);
         }
         else
         {
