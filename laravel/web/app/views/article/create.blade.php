@@ -61,26 +61,36 @@
     <h3>Does this article promote an event ?</h3>
 
     <div class="form-group">
-        {{ Form::label('event', 'Select an Event:') }}
         {{ Form::select('event', ['Select an Event'] + $events, isset($article['event_id']) ? $article['event_id'] : '', [ 'class' => 'form-control' ]) }}
     </div>
 
     <hr />
 
-    <div class="form-group">
-        {{ Form::label('is_active', 'Active:') }}
-        {{ Form::checkbox('is_active', 1, $article['is_active']) }}
-    </div>
+    <h3>Anything Special ?</h3>
 
     <div class="form-group">
-        {{ Form::label('is_featured', 'Featured:') }}
         {{ Form::checkbox('is_featured', 1, $article['is_featured']) }}
+        {{ Form::label('is_featured', 'Its a featured article') }}
     </div>
 
     <div class="form-group">
-        {{ Form::label('is_picked', 'Picked:') }}
         {{ Form::checkbox('is_picked', 1, $article['is_picked']) }}
+        {{ Form::label('is_picked', 'Its a picked article') }}
     </div>
+
+    <div class="form-group">
+        {{ Form::checkbox('is_promo', 1, $article['is_promo']) }}
+        {{ Form::label('is_promo', 'Its a promotion article') }}
+    </div>
+
+    <h3>Status ?</h3>
+
+    <div class="form-group">
+        {{ Form::checkbox('is_active', 1, $article['is_active']) }}
+        {{ Form::label('is_active', 'Show the article') }}
+    </div>
+
+    <hr />
 
     <div class="form-group">
         {{ Form::submit('Save Article', [ 'class' => 'btn btn-primary' ]) }}

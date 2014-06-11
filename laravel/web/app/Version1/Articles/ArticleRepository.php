@@ -39,6 +39,9 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
             case 'picks' :
                 $query->where('is_picked', '=', true)->where('is_featured', '=', false);
             break;
+            case 'promos' :
+                $query->where('is_promo', '=', true)->where('is_featured', '=', false);
+            break;
             case 'featured' :
                 $query->where('is_featured', '=', true);
             break;
@@ -91,6 +94,7 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
         $article->sef_name = safename($article->title);
         $article->is_featured = isset($form['is_featured']) ? $form['is_featured'] : false;
         $article->is_picked = isset($form['is_picked']) ? $form['is_picked'] : false;
+        $article->is_promo = isset($form['is_promo']) ? $form['is_promo'] : false;
 
         if( $article->is_featured )
         {

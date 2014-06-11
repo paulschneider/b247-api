@@ -45,6 +45,7 @@ class Article extends BaseModel {
         , 'is_active'
         , 'is_featured'
         , 'is_picked'
+        , 'is_promo'
         , 'is_approved'
 
     ];

@@ -38,6 +38,7 @@ class ArticleTransformer extends Transformer {
                 'id' => $article['id']
                 ,'title' => $article['title']
                 ,'sefName' => $article['sef_name']
+                ,'isPromo' => $article['is_promo'] ? true : false
                 ,'path' => $articleLocation['channelSefName'] . '/' . $articleLocation['subChannelSefName'] . '/' . $articleLocation['categorySefName'] . '/' . $article['sef_name']
                 ,'assignment' => [
                     'channel' => [

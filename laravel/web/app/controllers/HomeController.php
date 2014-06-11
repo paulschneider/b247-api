@@ -79,9 +79,10 @@ Class HomeController extends ApiController {
             $data = [
                 'channels' => $channels = $this->channelTransformer->transformCollection($this->channelRepository->getChannels())
                 ,'sponsors' => $this->sponsorTransformer->transform($this->sponsorRepository->getHomeSponsors())
-                ,'featured' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'featured', 10 ))
-                ,'picks' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'picks', 10 ))
-                ,'whatsOn' => $this->articleTransformer->transformCollection($this->eventRepository->getEventsWithArticles('whats-on', 50))
+                ,'features' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'featured', 25 ))
+                ,'picks' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'picks', 25 ))
+                ,'whatsOn' => $this->articleTransformer->transformCollection($this->eventRepository->getEventsWithArticles(50, 20))
+                ,'promos' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'promos', 20 ))
             ];
 
             cacheIt("homepage", $response, "1 hour");
