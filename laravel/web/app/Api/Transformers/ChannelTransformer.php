@@ -54,6 +54,7 @@ class ChannelTransformer extends Transformer {
                         "id" => (int) $channel['id']
                         ,"name" => $channel['name']
                         ,"colour" => $channel['colour']
+                        ,"secondaryColour" => $channel['secondary_colour']
                         ,"icon" => $channel['icon_img_id']
                     );
 

@@ -16,9 +16,11 @@ Class EventRepository extends BaseModel implements EventInterface {
     {
         $result = Event::with('venue')->with(['article.location' => function($query) use ($channel) {
             $query->where('article_location.channel_id', $channel)->groupBy('article_location.sub_channel_id');
-        }])->with('article.asset')->where('event.show_date', '>=', Carbon::today())->where('event.show_date', '<=', Carbon::today()->addWeeks(1))
+        }])->with('article.asset')
+            ->where('event.show_date', '>=', Carbon::today())
+            ->where('event.show_date', '<=', Carbon::today()->addWeeks(1))
             ->orderBy('event.show_date', 'asc')
-            //->take($limit)
+            ->take($limit)
             ->get()
             ->toArray();
 

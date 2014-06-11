@@ -106,6 +106,7 @@ Class ChannelRepository extends BaseModel implements ChannelInterface {
         $channel->sef_name = safename($form['name']);
         $channel->parent_channel = $form['parent_channel'] != 0 ? $form['parent_channel'] : null;
         $channel->colour = $form['colour'];
+        $channel->secondary_colour = $form['sec_colour'];
         $channel->is_active = isset($form['is_active']) ? $form['is_active'] : false;
 
         \DB::table('channel_category')->where('channel_id', $channel->id)->delete();

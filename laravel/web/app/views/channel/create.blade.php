@@ -26,6 +26,11 @@
     {{ Form::text('colour', $channel->colour, [ 'class' => 'form-control' ]) }}
 </div>
 
+<div class="form-group">
+    {{ Form::label('sec_colour', 'Secondary Colour:') }}
+    {{ Form::text('sec_colour', $channel->secondary_colour, [ 'class' => 'form-control' ]) }}
+</div>
+
 <hr />
 
 <h2 style="font-size:16px">Sponsorship</h2>

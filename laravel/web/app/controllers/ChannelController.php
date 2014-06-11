@@ -130,7 +130,7 @@ class ChannelController extends ApiController {
             return $this->respondWithInsufficientParameters();
         }
 
-        if( ! $channel = Channel::getChannelByIdentifier($identifier))
+        if( ! $channel = $this->channelRepository->getChannelByIdentifier($identifier))
         {
             return $this->respondNoDataFound();
         }
