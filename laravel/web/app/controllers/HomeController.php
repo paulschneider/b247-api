@@ -78,7 +78,7 @@ Class HomeController extends ApiController {
         {
             $data = [
                 'channels' => $channels = $this->channelTransformer->transformCollection($this->channelRepository->getChannels())
-                ,'sponsors' => $this->sponsorTransformer->transform($this->sponsorRepository->getHomeSponsors())
+                ,'adverts' => $this->sponsorTransformer->transformCollection($this->sponsorRepository->getHomeSponsors())
                 ,'features' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'featured', 25 ))
                 ,'picks' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'picks', 25 ))
                 ,'whatsOn' => $this->articleTransformer->transformCollection($this->eventRepository->getEventsWithArticles(50, 20))

@@ -137,10 +137,11 @@ class ChannelController extends ApiController {
 
         $data = [
             'channel' => $this->channelTransformer->transform($channel)
-            ,'sponsors' => $this->sponsorTransformer->transformCollection($channel['sponsors'])
-            ,'featured' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles('featured', 8, $channel['id']))
-            ,'picked' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles('picks', 8, $channel['id']))
-            ,'highlights' => $this->channelTransformer->transformCollection($this->articleRepository->getWithArticles($channel['id']))
+            ,'adverts' => $this->sponsorTransformer->transformCollection($channel['sponsors'])
+            ,'featured' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles('featured', 5, $channel['id']))
+            ,'picked' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles('picks', 20, $channel['id']))
+            ,'subChannels' => $this->articleRepository->getArticlesBySubChannels(20, $channel['id'], $this->articleTransformer)
+            ,'promos' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'promos', 20, $channel['id'] ))
         ];
 
         return $this->respondFound('Channel found', $data);

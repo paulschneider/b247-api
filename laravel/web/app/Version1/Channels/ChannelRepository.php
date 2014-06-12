@@ -65,7 +65,7 @@ Class ChannelRepository extends BaseModel implements ChannelInterface {
     */
     public function getChannelByIdentifier($identifier)
     {
-        $query = Channel::with('subChannel.category', 'sponsors');
+        $query = Channel::with('subChannel.category', 'sponsors.asset');
 
         if( is_numeric($identifier) )
         {

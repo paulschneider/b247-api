@@ -1,9 +1,9 @@
 <?php namespace Version1\Articles;
 
-use \Version1\Articles\ArticleInterface;
-use \Version1\Articles\ArticleLocation;
-use \Version1\Articles\Article;
-use \Version1\Models\BaseModel;
+use Version1\Articles\ArticleInterface;
+use Version1\Articles\ArticleLocation;
+use Version1\Articles\Article;
+use Version1\Models\BaseModel;
 
 Class ArticleRepository extends BaseModel implements ArticleInterface {
 
@@ -21,6 +21,30 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
         }
 
         return parent::dataCheck($query->first()->toArray());
+    }
+
+    public function getArticlesBySubChannels($limit = 20, $channel = null, $articleTransformer)
+    {
+        $articles = static::getArticles(null, 1000, $channel);
+
+        $response = [];
+
+        foreach( $articles AS $article )
+        {
+            if( ! $article['is_featured'] and ! $article['is_picked'] and ! $article['is_promo'] and empty($article['event_id']) )
+            {
+                $subChannel = $article['location'][0];
+
+                $response[$subChannel['subChannelSefName']]['details'] = [
+                    'id' => $subChannel['subChannelId']
+                    ,'name' => $subChannel['subChannelName']
+                ];
+
+                $response[$subChannel['subChannelSefName']]['articles'][] = $articleTransformer->transform($article);
+            }
+        }
+
+        return $response;
     }
 
     public function getArticles($type = null, $limit = 20, $channel = null)
@@ -47,7 +71,21 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
             break;
         }
 
-        return $query->take($limit)->orderBy('article.created_at', 'desc')->get()->toArray();
+        $result = $query->take($limit)->orderBy('article.created_at', 'desc')->get()->toArray();
+
+        $articles = [];
+
+        // check to see if the article location information was returned. If not then don't return the article
+
+        foreach( $result AS $article )
+        {
+            if( isset($article['location'][0]['locationId']) )
+            {
+                $articles[] = $article;
+            }
+        }
+
+        return $articles;
     }
 
     public function getArticlesWithEvents($type, $channel = 50)
