@@ -2,14 +2,16 @@
 
 use Version1\Articles\ArticleInterface;
 use Version1\Articles\ArticleLocation;
+use Version1\Articles\ArticleType;
 use Version1\Articles\Article;
 use Version1\Models\BaseModel;
+use \Carbon\Carbon;
 
 Class ArticleRepository extends BaseModel implements ArticleInterface {
 
     public function getArticle($identifier)
     {
-        $query = Article::with('location')->with('asset');
+        $query = Article::with('location', 'asset', 'type');
 
         if( is_numeric($identifier) )
         {
@@ -23,7 +25,59 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
         return parent::dataCheck($query->first()->toArray());
     }
 
-    public function getArticlesBySubChannels($limit = 20, $channel = null, $articleTransformer)
+    public function getArticleTypes()
+    {
+        return ArticleType::lists('type', 'id');
+    }
+
+    public function getChannelArticlesbyDate($channelId, $limit = 20, $listingTransformer, $articleTransformer)
+    {
+        $query = Article::with(['location' => function($query) use ($channelId) {
+                $query->where('article_location.sub_channel_id', $channelId);
+        }])->with('asset', 'type');
+
+        $query->where('article.published', '>=', Carbon::today());
+        $query->where('article.published', '<=', Carbon::today()->addWeeks(1));
+
+        $result = $query->take($limit)
+                        ->orderBy('article.published', 'asc')
+                        ->get()
+                        ->toArray();
+
+        $articles = [];
+
+        foreach( $result AS $article )
+        {
+            // check to see if the article location information was returned. If not then don't return the article
+
+            if( isset($article['location'][0]['locationId']) )
+            {
+                $location = $article['location'][0];
+
+                $key = date('d-m-Y', strtotime($article['published']));
+
+                $articles[ $key ]['publication'] = [
+                    'date' => $article['published']
+                    ,'day' => date('D', strtotime($article['published']))
+                    ,'fullDay' => date('l', strtotime($article['published']))
+                    ,'iso8601Date' => date('c', strtotime($article['published']))
+                ];
+
+                $articles[ $key ]['categories'][$location['categoryId']] = [
+                    'categoryId' => $location['categoryId']
+                    ,'categoryName' => $location['categoryName']
+                    ,'categorySefName' => $location['categorySefName']
+                    ,'path' => $location['channelSefName'] . '/' . $location['subChannelSefName'] . '/' . $location['categorySefName']
+                ];
+
+                $articles[ $key ]['articles'][] = $articleTransformer->transform($article);
+            }
+        }
+
+        return $articles;
+    }
+
+    public function getArticlesBySubChannel($limit = 20, $channel = null, $articleTransformer)
     {
         $articles = static::getArticles(null, 1000, $channel);
 
@@ -40,23 +94,38 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
                     ,'name' => $subChannel['subChannelName']
                 ];
 
-                $response[$subChannel['subChannelSefName']]['articles'][] = $articleTransformer->transform($article);
+                if( !isset($response[$subChannel['subChannelSefName']]['articles']) )
+                {
+                    $response[$subChannel['subChannelSefName']]['articles'] = [];
+                }
+
+                if( count($response[$subChannel['subChannelSefName']]['articles']) < $limit)
+                {
+                    $response[$subChannel['subChannelSefName']]['articles'][] = $articleTransformer->transform($article);
+                }
             }
         }
 
         return $response;
     }
 
-    public function getArticles($type = null, $limit = 20, $channel = null)
+    public function getArticles($type = null, $limit = 20, $channel = null, $subChannel = false)
     {
-        $query = Article::with(['location' => function($query) use ($channel) {
+        $query = Article::with(['location' => function($query) use ($channel, $subChannel) {
 
             if( ! is_null($channel) )
             {
-                $query->where('article_location.channel_id', $channel);
+                if( ! $subChannel )
+                {
+                    $query->where('article_location.channel_id', $channel);
+                }
+                else
+                {
+                    $query->where('article_location.sub_channel_id', $channel);
+                }
             }
 
-        }])->with('asset');
+        }])->with('asset', 'type');
 
         switch($type)
         {
@@ -128,6 +197,7 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
             $article->postcode = ! empty($form['postcode']) ? $form['postcode'] : null;
         }
 
+        $article->article_type_id = ! empty($form['type']) ? $form['type'] : null;
         $article->event_id = ! empty($form['event']) ? $form['event'] : null;
         $article->sef_name = safename($article->title);
         $article->is_featured = isset($form['is_featured']) ? $form['is_featured'] : false;

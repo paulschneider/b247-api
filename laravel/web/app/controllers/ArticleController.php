@@ -67,10 +67,11 @@ Class ArticleController extends ApiController {
 
         $channels = $this->channelRepository->getSimpleChannels();
         $subChannels = $this->channelRepository->getSimpleSubChannels();
-        $categories =$this->categoryRepository->getSimpleCategories();
+        $categories = $this->categoryRepository->getSimpleCategories();
         $events = $this->eventRepository->getSimpleEvents();
+        $types = $this->articleRepository->getArticleTypes();
 
-        return View::make('article.create', compact('channels', 'subChannels', 'categories', 'article', 'events'));
+        return View::make('article.create', compact('channels', 'subChannels', 'categories', 'article', 'events', 'types'));
     }
 
     public function show($identifier = null)
@@ -91,8 +92,9 @@ Class ArticleController extends ApiController {
         $subChannels = $this->channelRepository->getSimpleSubChannels();
         $categories = $this->categoryRepository->getSimpleCategories();
         $events = $this->eventRepository->getSimpleEvents();
+        $types = $this->articleRepository->getArticleTypes();
 
-        return View::make('article.create', compact('channels', 'subChannels', 'categories', 'article', 'events'));
+        return View::make('article.create', compact('channels', 'subChannels', 'categories', 'article', 'events', 'types'));
     }
 
     /**

@@ -1,5 +1,10 @@
 <?php
 
+function isSuBChannel($channel)
+{
+    return empty($channel['parent_channel']) ? false : true;
+}
+
 function short_time($time)
 {
     return date('H:i', strtotime($time));

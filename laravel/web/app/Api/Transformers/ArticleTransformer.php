@@ -31,8 +31,12 @@ class ArticleTransformer extends Transformer {
     {
         if( isset($article['location'][0]) and isset($article['asset'][0]) )
         {
+            if( !isset($article['type']['type']) )
+                sd($article);
+
             $articleLocation = $article['location'][0];
             $articleAsset = $article['asset'][0];
+            $articleType = $article['type'];
 
             $response = [
                 'id' => $article['id']
@@ -42,6 +46,10 @@ class ArticleTransformer extends Transformer {
                 ,'body' => $article['body']
                 ,'path' => $articleLocation['channelSefName'] . '/' . $articleLocation['subChannelSefName'] . '/' . $articleLocation['categorySefName'] . '/' . $article['sef_name']
                 ,'isPromo' => $article['is_promo'] ? true : false
+                ,'type' => [
+                    'id' => $articleType['id']
+                    ,'name' => $articleType['type']
+                ]
                 ,'assignment' => [
                     'channel' => [
                         'id' => $articleLocation['channelId']

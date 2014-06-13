@@ -10,8 +10,8 @@
 
     {{ Form::open([ 'url' => 'article', 'class' => 'form' ]) }}
 
-        {{ Form::hidden('id', $article['id']) }}
-        {{ Form::hidden('locationId', isset($article['location']) ? $article['location'][0]['locationId'] : '') }}
+    {{ Form::hidden('id', $article['id']) }}
+    {{ Form::hidden('locationId', isset($article['location']) ? $article['location'][0]['locationId'] : '') }}
 
     <h3>Where will it appear?</h3>
 
@@ -39,6 +39,11 @@
     <div class="form-group">
         {{ Form::label('title', 'Title:') }}
         {{ Form::text('title', $article['title'], [ 'class' => 'form-control' ]) }}
+    </div>
+
+    <div class="form-group">
+        {{ Form::label('type', 'Article Type:') }}
+        {{ Form::select('type', $types, $article['article_type_id'], [ 'class' => 'form-control' ]) }}
     </div>
 
     <div class="form-group">

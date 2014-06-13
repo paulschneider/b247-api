@@ -3,6 +3,7 @@
 use Api\Transformers\ChannelTransformer;
 use Api\Transformers\ArticleTransformer;
 use Api\Transformers\SponsorTransformer;
+use Api\Transformers\ListingTransformer;
 use Version1\Articles\ArticleRepository;
 use Version1\Channels\ChannelRepository;
 use Version1\Channels\Channel;
@@ -28,6 +29,12 @@ class ChannelController extends ApiController {
     * @var Api\Transformers\SponsorTransformer
     */
     protected $sponsorTransformer;
+
+    /**
+    *
+    * @var Api\Transformers\ListingTransformer
+    */
+    protected $listingTransformer;
 
     /**
     *
@@ -57,6 +64,7 @@ class ChannelController extends ApiController {
         ChannelTransformer $channelTransformer
         , ArticleTransformer $articleTransformer
         , SponsorTransformer $sponsorTransformer
+        , ListingTransformer $listingTransformer
         , ChannelRepository $channelRepository
         , CategoryRepository $categoryRepository
         , SponsorRepository $sponsorRepository
@@ -66,6 +74,7 @@ class ChannelController extends ApiController {
         $this->channelTransformer = $channelTransformer;
         $this->articleTransformer = $articleTransformer;
         $this->sponsorTransformer = $sponsorTransformer;
+        $this->listingTransformer = $listingTransformer;
         $this->channelRepository = $channelRepository;
         $this->categoryRepository = $categoryRepository;
         $this->sponsorRepository = $sponsorRepository;
@@ -135,16 +144,66 @@ class ChannelController extends ApiController {
             return $this->respondNoDataFound();
         }
 
-        $data = [
+        if( isSuBChannel($channel) )
+        {
+            $data = $this->getSubChannel($channel);
+        }
+        else
+        {
+            $data = $this->getChannel($channel);
+        }
+
+        return $this->respondFound('Channel found', $data);
+    }
+
+    /**
+    * get the details of a channel
+    *
+    * @return Response
+    */
+    private function getChannel($channel)
+    {
+        return [
             'channel' => $this->channelTransformer->transform($channel)
             ,'adverts' => $this->sponsorTransformer->transformCollection($channel['sponsors'])
             ,'featured' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles('featured', 5, $channel['id']))
             ,'picked' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles('picks', 20, $channel['id']))
-            ,'subChannels' => $this->articleRepository->getArticlesBySubChannels(20, $channel['id'], $this->articleTransformer)
+            ,'subChannels' => $this->articleRepository->getArticlesBySubChannel(20, $channel['id'], $this->articleTransformer)
             ,'promos' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'promos', 20, $channel['id'] ))
         ];
+    }
 
-        return $this->respondFound('Channel found', $data);
+    /**
+    * get the details of a sub-channel
+    *
+    * @return *
+    */
+    private function getSubChannel($channel)
+    {
+        return [
+            'articles' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles(null, 20, $channel['id'], true)) // ( type, limit, channelId, subChannel = true )
+            ,'adverts' => $this->sponsorTransformer->transformCollection($channel['sponsors'])
+        ];
+    }
+
+    public function listing($identifier)
+    {
+        if( ! $channel = $this->channelRepository->getChannelByIdentifier($identifier))
+        {
+            return $this->respondNoDataFound();
+        }
+
+        if( ! isSuBChannel($channel) )
+        {
+            return $this->respondWithError("Supplied channel identifier is not a sub-channel");
+        }
+
+        $data = [
+            'days' => $this->articleRepository->getChannelArticlesbyDate($channel['id'], 20, $this->listingTransformer, $this->articleTransformer)
+            ,'adverts' => $this->sponsorTransformer->transformCollection($channel['sponsors'])
+        ];
+
+        return $data;
     }
 
     /**

@@ -104,10 +104,23 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `b247-com`.`article_type`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `b247-com`.`article_type` (
+  `id` INT NOT NULL,
+  `type` VARCHAR(45) NULL,
+  `updated_at` DATETIME NULL,
+  `created_at` DATETIME NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `b247-com`.`article`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `b247-com`.`article` (
   `id` INT NOT NULL AUTO_INCREMENT,
+  `article_type_id` INT NOT NULL,
   `sponsor_id` INT NULL,
   `event_id` INT NULL,
   `author_id` INT NULL,
@@ -133,6 +146,7 @@ CREATE TABLE IF NOT EXISTS `b247-com`.`article` (
   PRIMARY KEY (`id`),
   INDEX `article -> sponsor_idx` (`sponsor_id` ASC),
   INDEX `article -> event_idx` (`event_id` ASC),
+  INDEX `article -> article_type_idx` (`article_type_id` ASC),
   CONSTRAINT `article -> sponsor`
     FOREIGN KEY (`sponsor_id`)
     REFERENCES `b247-com`.`sponsor` (`id`)
@@ -141,6 +155,11 @@ CREATE TABLE IF NOT EXISTS `b247-com`.`article` (
   CONSTRAINT `article -> event`
     FOREIGN KEY (`event_id`)
     REFERENCES `b247-com`.`event` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `article -> article_type`
+    FOREIGN KEY (`article_type_id`)
+    REFERENCES `b247-com`.`article_type` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -191,6 +210,7 @@ CREATE TABLE IF NOT EXISTS `b247-com`.`channel` (
   `name` VARCHAR(100) NOT NULL,
   `sef_name` VARCHAR(100) NOT NULL,
   `colour` VARCHAR(45) NULL,
+  `secondary_colour` VARCHAR(45) NULL,
   `is_active` TINYINT NOT NULL DEFAULT 1,
   `is_deleted` TINYINT NULL,
   `created_at` DATETIME NOT NULL,
