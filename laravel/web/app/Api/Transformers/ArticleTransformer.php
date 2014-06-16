@@ -43,9 +43,9 @@ class ArticleTransformer extends Transformer {
                 ,'body' => $article['body']
                 ,'path' => $articleLocation['channelSefName'] . '/' . $articleLocation['subChannelSefName'] . '/' . $articleLocation['categorySefName'] . '/' . $article['sef_name']
                 ,'isPromo' => $article['is_promo'] ? true : false
-                ,'type' => [
+                ,'articleType' => [
                     'id' => $articleType['id']
-                    ,'name' => $articleType['type']
+                    ,'type' => $articleType['type']
                 ]
                 ,'displayStyle' => [
                     'id' => $article['display_style']['id']
