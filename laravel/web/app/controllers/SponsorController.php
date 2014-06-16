@@ -2,6 +2,7 @@
 
 use Version1\Sponsors\SponsorRepository;
 use Version1\Sponsors\Sponsor;
+use Version1\Models\DisplayStyle;
 
 Class SponsorController extends ApiController {
 
@@ -36,8 +37,9 @@ Class SponsorController extends ApiController {
 	public function create()
 	{
 		$sponsor = new Sponsor();
+        $displayStyles = DisplayStyle::getSimpleDisplayTypes();
 
-		return View::make('sponsor.create', compact('sponsor'));
+		return View::make('sponsor.create', compact('sponsor', 'displayTypes'));
 	}
 
 	/**
@@ -77,8 +79,9 @@ Class SponsorController extends ApiController {
 	public function edit($id)
 	{
 		$sponsor = $this->sponsorRepository->getSponsorById($id);
+        $displayStyles = DisplayStyle::getSimpleDisplayStyles();
 
-		return View::make('sponsor.create', compact('sponsor'));
+		return View::make('sponsor.create', compact('sponsor', 'displayStyles'));
 	}
 
 	/**

@@ -6,6 +6,7 @@ use Version1\Articles\Article;
 use Version1\Channels\ChannelRepository;
 use Version1\Categories\CategoryRepository;
 use Version1\Events\EventRepository;
+use Version1\Models\DisplayStyle;
 
 Class ArticleController extends ApiController {
 
@@ -70,8 +71,9 @@ Class ArticleController extends ApiController {
         $categories = $this->categoryRepository->getSimpleCategories();
         $events = $this->eventRepository->getSimpleEvents();
         $types = $this->articleRepository->getArticleTypes();
+        $displayStyles = DisplayStyle::getSimpleDisplayStyles();
 
-        return View::make('article.create', compact('channels', 'subChannels', 'categories', 'article', 'events', 'types'));
+        return View::make('article.create', compact('channels', 'subChannels', 'categories', 'article', 'events', 'types', 'displayStyles'));
     }
 
     public function show($identifier = null)
@@ -93,8 +95,9 @@ Class ArticleController extends ApiController {
         $categories = $this->categoryRepository->getSimpleCategories();
         $events = $this->eventRepository->getSimpleEvents();
         $types = $this->articleRepository->getArticleTypes();
+        $displayStyles = DisplayStyle::getSimpleDisplayStyles();
 
-        return View::make('article.create', compact('channels', 'subChannels', 'categories', 'article', 'events', 'types'));
+        return View::make('article.create', compact('channels', 'subChannels', 'categories', 'article', 'events', 'types', 'displayStyles'));
     }
 
     /**

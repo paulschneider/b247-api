@@ -11,7 +11,7 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
 
     public function getArticle($identifier)
     {
-        $query = Article::with('location', 'asset', 'type');
+        $query = Article::with('location', 'asset', 'type', 'displayStyle');
 
         if( is_numeric($identifier) )
         {
@@ -34,7 +34,7 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
     {
         $query = Article::with(['location' => function($query) use ($channelId) {
                 $query->where('article_location.sub_channel_id', $channelId);
-        }])->with('asset', 'type');
+        }])->with('asset', 'type', 'displayStyle');
 
         $query->where('article.published', '>=', Carbon::today());
         $query->where('article.published', '<=', Carbon::today()->addWeeks(1));
@@ -125,7 +125,7 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
                 }
             }
 
-        }])->with('asset', 'type');
+        }])->with('asset', 'type', 'displayStyle');
 
         switch($type)
         {
@@ -159,7 +159,7 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
 
     public function getArticlesWithEvents($type, $channel = 50)
     {
-        $query = Article::with('asset')->with(['location' => function($query) use($channel) {
+        $query = Article::with('asset', 'displayStyle')->with(['location' => function($query) use($channel) {
                 $query->where('article_location.channel_id', $channel);
         }])->with(['event' => function($query) {
                 $query->orderBy('event.show_date', 'asc')->alive()->active();
@@ -198,6 +198,7 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
         }
 
         $article->article_type_id = ! empty($form['type']) ? $form['type'] : null;
+        $article->display_type = ! empty($form['display_style']) ? $form['display_style'] : $article->display_style;
         $article->event_id = ! empty($form['event']) ? $form['event'] : null;
         $article->sef_name = safename($article->title);
         $article->is_featured = isset($form['is_featured']) ? $form['is_featured'] : false;

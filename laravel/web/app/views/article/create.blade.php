@@ -63,6 +63,15 @@
 
     <hr />
 
+    <h3>How will it appear?</h3>
+
+    <div class="form-group">
+        {{ Form::label('display_type', 'Display Type:') }}
+        {{ Form::select('display_type', $displayTypes, $article['display_type'], [ 'class' => 'form-control' ]) }}
+    </div>
+
+    <hr />
+
     <h3>Does this article promote an event ?</h3>
 
     <div class="form-group">

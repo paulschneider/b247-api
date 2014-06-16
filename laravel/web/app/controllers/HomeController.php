@@ -74,11 +74,16 @@ Class HomeController extends ApiController {
 
     public function index()
     {
+        $sponsors = $this->sponsorRepository->getSponsors();
+
         if( ! $response = cached("homepage") )
         {
             $data = [
                 'channels' => $channels = $this->channelTransformer->transformCollection($this->channelRepository->getChannels())
-                ,'adverts' => $this->sponsorTransformer->transformCollection($this->sponsorRepository->getHomeSponsors())
+                ,'adverts' => [
+                    'home' => $this->sponsorTransformer->transformCollection($sponsors->toArray())
+                    ,'picks' => $this->sponsorTransformer->transformCollection($this->sponsorRepository->getWhereNotInCollection( $sponsors ))
+                ]
                 ,'features' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'featured', 25 ))
                 ,'picks' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'picks', 25 ))
                 ,'whatsOn' => $this->articleTransformer->transformCollection($this->eventRepository->getEventsWithArticles(50, 20))

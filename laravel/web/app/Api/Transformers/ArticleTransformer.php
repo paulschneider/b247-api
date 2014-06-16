@@ -31,9 +31,6 @@ class ArticleTransformer extends Transformer {
     {
         if( isset($article['location'][0]) and isset($article['asset'][0]) )
         {
-            if( !isset($article['type']['type']) )
-                sd($article);
-
             $articleLocation = $article['location'][0];
             $articleAsset = $article['asset'][0];
             $articleType = $article['type'];
@@ -49,6 +46,10 @@ class ArticleTransformer extends Transformer {
                 ,'type' => [
                     'id' => $articleType['id']
                     ,'name' => $articleType['type']
+                ]
+                ,'displayStyle' => [
+                    'id' => $article['display_style']['id']
+                    ,'style' => $article['display_style']['style']
                 ]
                 ,'assignment' => [
                     'channel' => [
@@ -97,6 +98,24 @@ class ArticleTransformer extends Transformer {
                         ,'url' => $event['url']
                     ]
                 ];
+            }
+
+            // remove anything that only the desktop version needs
+
+            if( ! isDesktop() )
+            {
+                unset($response['sefName']);
+                unset($response['path']);
+                unset($response['assignment']['channel']['sefName']);
+                unset($response['assignment']['subChannel']['sefName']);
+                unset($response['assignment']['category']['sefName']);
+                unset($response['media']['alt']);
+                unset($response['media']['title']);
+                unset($response['media']['width']);
+                unset($response['media']['height']);
+                unset($response['event']['venue']['sefName']);
+                unset($response['event']['detail']['sefName']);
+                unset($response['event']['detail']['url']);
             }
 
             return $response;

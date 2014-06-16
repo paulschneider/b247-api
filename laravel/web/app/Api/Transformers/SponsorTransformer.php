@@ -18,9 +18,13 @@ class SponsorTransformer extends Transformer {
                 'id' => $sponsor['id']
                 ,'title' => $sponsor['title']
                 ,'url' => $sponsor['url']
+                ,'displayStyle' => [
+                    'id' => $sponsor['display_style']['id']
+                    ,'style' => $sponsor['display_style']['style']
+                ]
             ];
 
-            if( isset($sponsor['asset']) && isDesktop() )
+            if( isset($sponsor['asset']) )
             {
                 $tmp['media'] = [
                     'filepath' => $sponsor['asset']['filepath']
@@ -29,6 +33,14 @@ class SponsorTransformer extends Transformer {
                     ,'width' => $sponsor['asset']['width']
                     ,'height' => $sponsor['asset']['height']
                 ];
+            }
+
+            if( ! isDesktop() )
+            {
+                unset($tmp['media']['alt']);
+                unset($tmp['media']['title']);
+                unset($tmp['media']['width']);
+                unset($tmp['media']['height']);
             }
 
             $response[] = $tmp;

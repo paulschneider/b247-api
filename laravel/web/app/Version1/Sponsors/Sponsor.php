@@ -60,4 +60,9 @@ class Sponsor extends BaseModel {
     {
         return $this->belongsToMany('Version1\Channels\Channel', 'sponsor_placement', 'sponsor_id', 'id');
     }
+
+    public function displayStyle()
+    {
+        return $this->belongsTo('\Version1\Models\DisplayStyle', 'display_style');
+    }
 }

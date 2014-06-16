@@ -2,7 +2,7 @@
 
 Interface SponsorInterface {
 
-    public function getHomeSponsors();
+    public function getSponsors($list, $limit);
 
     public function getSponsorById($id);
 
