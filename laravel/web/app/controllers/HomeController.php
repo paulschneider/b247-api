@@ -72,7 +72,7 @@ Class HomeController extends ApiController {
         $this->articleRepository = $articleRepository;
     }
 
-    public function index()
+    public function index( $homePageChannelToShow = 48 )
     {
         $sponsors = $this->sponsorRepository->getSponsors();
 
@@ -86,8 +86,13 @@ Class HomeController extends ApiController {
                 ]
                 ,'features' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'featured', 25 ))
                 ,'picks' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'picks', 25 ))
-                ,'whatsOn' => $this->articleTransformer->transformCollection($this->eventRepository->getEventsWithArticles(50, 20))
-                ,'promos' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'promos', 20 ))
+                ,'channelFeed' => [
+                    'channel' => $this->channelTransformer->transform($this->channelRepository->getSimpleChannel($homePageChannelToShow))
+                    ,'whatsOn' => $this->articleTransformer->transformCollection($this->eventRepository->getEventsWithArticles($homePageChannelToShow, 20)) // get 20 articles from the whats on channel
+                    ,'promos' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'promos', 20, $homePageChannelToShow ))
+                    ,'directory' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'directory', 20, $homePageChannelToShow ))
+                    ,'listing' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'listing', 20, $homePageChannelToShow ))
+                ]
             ];
 
             cacheIt("homepage", $response, "1 hour");

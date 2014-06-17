@@ -59,6 +59,16 @@ Class ChannelRepository extends BaseModel implements ChannelInterface {
     }
 
     /**
+    * get the basic details of a channel
+    *
+    * @var mixed
+    */
+    public function getSimpleChannel($channelId)
+    {
+        return Channel::whereId($channelId)->get()->first();
+    }
+
+    /**
     * get channels by an identifier
     *
     * @var array

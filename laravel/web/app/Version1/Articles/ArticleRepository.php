@@ -138,6 +138,12 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
             case 'featured' :
                 $query->where('is_featured', '=', true);
             break;
+            case 'directory' :
+                $query->where('article_type_id', '=', 3);
+            break;
+            case 'listing' :
+                $query->where('article_type_id', '=', 2);
+            break;
         }
 
         $result = $query->take($limit)->orderBy('article.created_at', 'desc')->get()->toArray();
@@ -198,7 +204,7 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
         }
 
         $article->article_type_id = ! empty($form['type']) ? $form['type'] : null;
-        $article->display_type = ! empty($form['display_style']) ? $form['display_style'] : $article->display_style;
+        $article->display_style = ! empty($form['display_style']) ? $form['display_style'] : 1;
         $article->event_id = ! empty($form['event']) ? $form['event'] : null;
         $article->sef_name = safename($article->title);
         $article->is_featured = isset($form['is_featured']) ? $form['is_featured'] : false;

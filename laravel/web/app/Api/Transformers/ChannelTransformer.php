@@ -207,8 +207,16 @@ class ChannelTransformer extends Transformer {
             $response['subChannels'] = $subChannels;
         }
 
+        if( isMobile() )
+        {
+            unset($response['sefName']);
+            unset($response['path']);
+        }
+
         return $response;
     }
+
+
 
     public function getArticles($articles)
     {

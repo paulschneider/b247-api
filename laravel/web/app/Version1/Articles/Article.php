@@ -38,7 +38,7 @@ class Article extends BaseModel {
     protected $fillable = [
 
         'content_type'
-        ,'display_type'
+        , 'display_style'
         , 'title'
         , 'sub_heading'
         , 'body'
@@ -113,6 +113,6 @@ class Article extends BaseModel {
 
     public function displayStyle()
     {
-        return $this->belongsTo('\Version1\Models\DisplayStyle', 'display_style');
+        return $this->belongsTo('\Version1\Models\DisplayStyle');
     }
 }
