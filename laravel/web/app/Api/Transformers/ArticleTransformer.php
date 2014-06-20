@@ -47,7 +47,7 @@ class ArticleTransformer extends Transformer {
                     'id' => $articleType['id']
                     ,'type' => $articleType['type']
                 ]
-                ,'displayStyle' => $article['display_style']
+                ,'displayStyle' => ! isset( $article['display_style'] ) ? 1 : $article['display_style'] 
                 ,'assignment' => [
                     'channel' => [
                         'id' => $articleLocation['channelId']
