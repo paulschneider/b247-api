@@ -24,10 +24,12 @@ $app = new Illuminate\Foundation\Application;
 |
 */
 
-$env = $app->detectEnvironment(function()
-{
-		return getenv('APP_ENV') ? : 'local';
-});
+$env = $app->detectEnvironment(array(
+
+    'local'   => array('http://local.b247-laravel.com/')
+    ,'staging' => array('staging.example.com')
+
+));
 
 /*
 |--------------------------------------------------------------------------

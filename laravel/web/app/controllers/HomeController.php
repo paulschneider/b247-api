@@ -82,8 +82,6 @@ Class HomeController extends ApiController {
 
     public function index( $homePageChannelToShow = 48 )
     {
-        start('query', "get picks");
-
         $sponsors = $this->sponsorRepository->getSponsors();
 
         $articles = $this->articleRepository->getArticles( 'picks', 25 );
@@ -108,7 +106,7 @@ Class HomeController extends ApiController {
                     ,'directory' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'directory', 20, $homePageChannelToShow ))
                     ,'listing' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'listing', 20, $homePageChannelToShow ))
                 ]
-            ]; 
+            ];
         //
         //     cacheIt("homepage", $response, "1 hour");
         // }
