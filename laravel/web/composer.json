@@ -9,6 +9,7 @@
 		,"fzaninotto/faker": "1.4.*@dev"
 		,"jenssegers/agent": "*"
 		,"codeception/codeception": "*"
+		,"itsgoingd/clockwork": "1.*"
 	},
 	"autoload": {
 		"classmap": [

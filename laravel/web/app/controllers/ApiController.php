@@ -1,6 +1,6 @@
 <?php
 
-class ApiController Extends Controller {
+class ApiController Extends BaseController {
 
     /**
      * @var int

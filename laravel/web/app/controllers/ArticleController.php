@@ -57,7 +57,7 @@ Class ArticleController extends ApiController {
 
     public function index()
     {
-        $articles = $this->articleRepository->getArticles();
+        $articles = $this->articleRepository->getArticles(null, 1000);
 
         return View::make('article.show', compact('articles'));
     }

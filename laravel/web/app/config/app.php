@@ -147,6 +147,7 @@ return array(
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Jenssegers\Agent\AgentServiceProvider', // https://github.com/jenssegers/Laravel-Agent
+		'Clockwork\Support\Laravel\ClockworkServiceProvider', // https://github.com/itsgoingd/clockwork
 	),
 
 	/*
@@ -183,6 +184,7 @@ return array(
 		'Blade'           => 'Illuminate\Support\Facades\Blade',
 		'Cache'           => 'Illuminate\Support\Facades\Cache',
 		'ClassLoader'     => 'Illuminate\Support\ClassLoader',
+		'Clockwork' 	  => 'Clockwork\Support\Laravel\Facade',
 		'Config'          => 'Illuminate\Support\Facades\Config',
 		'Controller'      => 'Illuminate\Routing\Controller',
 		'Cookie'          => 'Illuminate\Support\Facades\Cookie',
