@@ -103,7 +103,7 @@ class Article extends BaseModel {
 
     public function event()
     {
-        return $this->belongsTo('\Version1\Events\event', 'event_id')->orderBy('event.show_date', 'asc');
+        return $this->belongsTo('\Version1\Events\Event', 'event_id')->orderBy('event.show_date', 'asc');
     }
 
     public function display()
