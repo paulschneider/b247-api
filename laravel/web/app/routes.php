@@ -11,11 +11,6 @@
 |
 */
 
-Event::listen('illuminate.query', function($query, $params, $time, $conn)
-{
-    //sd(array($query, $params, $time, $conn));
-});
-
 # Article
 
 Route::resource('article', 'ArticleController');
@@ -25,8 +20,9 @@ Route::resource('article', 'ArticleController');
 Route::resource('category', 'CategoryController');
 
 # Channels
-Route::get('channel/article/{channelId}', 'ChannelController@getChannelArticles');
 Route::get('channel/listing/{channelId}', 'ChannelController@listing');
+Route::get('channel/{article}/{channelId}', 'ChannelController@getChannelArticles');
+Route::get('channel/{promotion}/{channelId}', 'ChannelController@getChannelArticles');
 Route::resource('channel', 'ChannelController');
 
 # Events

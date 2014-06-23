@@ -27,7 +27,7 @@ Class Event extends BaseModel {
 
     public function venue()
     {
-        return $this->belongsTo('\Version1\Venues\Venue');
+        return $this->belongsTo('\Version1\Venues\Venue', 'venue_id');
     }
 
     public function article()

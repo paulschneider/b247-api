@@ -90,8 +90,8 @@ Class HomeController extends ApiController {
         // create a new instance of the pattern maker
         $this->patternMaker = new PatternMaker(1);
 
-        // if( ! $response = cached("homepage") )
-        // {
+        if( ! $response = cached("homepage") )
+        {
             $data = [
                 'channels' => $channels = $this->channelTransformer->transformCollection( $this->channelRepository->getChannels() )
                 ,'adverts' => $this->sponsorTransformer->transformCollection( $sponsors->toArray() )
@@ -100,14 +100,14 @@ Class HomeController extends ApiController {
                 ,'channelFeed' => [
                     'channel' => $this->channelTransformer->transform($this->channelRepository->getSimpleChannel($homePageChannelToShow))
                     ,'whatsOn' => $this->articleTransformer->transformCollection($this->eventRepository->getEventsWithArticles($homePageChannelToShow, 20), [ 'showBody' => false] ) // get 20 articles from the whats on channel
-                    ,'promos' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'promos', 20, $homePageChannelToShow ), [ 'showBody' => false] )
+                    ,'promos' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'promotion', 20, $homePageChannelToShow ), [ 'showBody' => false] )
                     ,'directory' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'directory', 20, $homePageChannelToShow ), [ 'showBody' => false] )
                     ,'listing' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'listing', 20, $homePageChannelToShow ), [ 'showBody' => false] )
                 ]
             ];
-        //
-        //     cacheIt("homepage", $response, "1 hour");
-        // }
+        
+            cacheIt("homepage", $response, "1 hour");
+        }
 
         return $this->respondFound('Homepage found', $data);
     }

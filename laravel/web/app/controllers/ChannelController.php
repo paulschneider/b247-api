@@ -4,6 +4,7 @@ use Api\Transformers\ChannelTransformer;
 use Api\Transformers\ArticleTransformer;
 use Api\Transformers\SponsorTransformer;
 use Api\Transformers\ListingTransformer;
+use Api\Transformers\EventTransformer;
 
 use Api\Factory\PatternMaker;
 
@@ -42,6 +43,12 @@ class ChannelController extends ApiController {
     * @var Api\Transformers\ListingTransformer
     */
     protected $listingTransformer;
+
+    /**
+    *
+    * @var Api\Transformers\EventTransformer
+    */
+    protected $eventTransformer;
 
     /**
     *
@@ -84,6 +91,7 @@ class ChannelController extends ApiController {
         , ArticleTransformer $articleTransformer
         , SponsorTransformer $sponsorTransformer
         , ListingTransformer $listingTransformer
+        , EventTransformer $eventTransformer
         , PatternMaker $patternMaker
 
         , EventRepository $eventRepository
@@ -97,6 +105,7 @@ class ChannelController extends ApiController {
         $this->articleTransformer = $articleTransformer;
         $this->sponsorTransformer = $sponsorTransformer;
         $this->listingTransformer = $listingTransformer;
+        $this->eventTransformer = $eventTransformer;
         $this->eventRepository = $eventRepository;
         $this->channelRepository = $channelRepository;
         $this->categoryRepository = $categoryRepository;
@@ -191,7 +200,7 @@ class ChannelController extends ApiController {
     *
     * @return View
     */
-    public function getChannelArticles($identifier = null)
+    public function getChannelArticles($type = null, $identifier = null)
     {
         // make sure we have an ID to work with
 
@@ -215,7 +224,7 @@ class ChannelController extends ApiController {
         $sponsors = $this->sponsorRepository->getSponsors();
 
         // grab some articles regardless of type
-        $articles = $this->articleRepository->getArticles( null, 25, $channel['id'], true ); // ignore type, limit, channelId, isSubChannel
+        $articles = $this->articleRepository->getArticles( $type, 25, $channel['id'], true ); // ignore type, limit, channelId, isSubChannel
 
         // get some more adverts that aren't any of the ones retrieved above
         $ads = $this->sponsorRepository->getWhereNotInCollection( $sponsors, 30 );
@@ -228,7 +237,7 @@ class ChannelController extends ApiController {
         $data = [
             'channel' => $this->channelTransformer->transform( $channel )
             ,'adverts' => $this->sponsorTransformer->transformCollection( $sponsors )
-            ,'articles' => $this->patternMaker->make( [ 'sponsor' => $this->sponsorTransformer, 'article' => $this->articleTransformer ] , [ 'articles' => $articles, 'sponsors' => $ads ] )
+            ,$type.'s' => $this->patternMaker->make( [ 'sponsor' => $this->sponsorTransformer, 'article' => $this->articleTransformer ] , [ 'articles' => $articles, 'sponsors' => $ads ] )
         ];
 
         // and return it
@@ -260,7 +269,7 @@ class ChannelController extends ApiController {
             ,'channelFeed' => [
                 'channel' => $this->channelTransformer->transform($this->channelRepository->getSimpleChannel($channelId))
                 ,'whatsOn' => $this->articleTransformer->transformCollection($this->eventRepository->getEventsWithArticles($channelId, 20), [ 'showBody' => false] ) // get 20 articles from the whats on channel
-                ,'promos' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'promos', 20, $channelId ), [ 'showBody' => false] )
+                ,'promos' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'promotion', 20, $channelId ), [ 'showBody' => false] )
                 ,'directory' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'directory', 20, $channelId ), [ 'showBody' => false] )
                 ,'listing' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'listing', 20, $channelId ), [ 'showBody' => false] )
             ]
@@ -288,17 +297,19 @@ class ChannelController extends ApiController {
             return $this->respondNoDataFound();
         }
 
-        if( ! isSuBChannel($channel) )
+        if( ! isSubChannel($channel) )
         {
-            return $this->respondWithError("Supplied channel identifier is not a sub-channel");
+            return $this->respondWithError("Channel is not a sub-channel. Nothing to do");
         }
 
+        $articles = $this->articleRepository->getChannelListing( $channel['id'], 20 );
+
         $data = [
-            'days' => $this->articleRepository->getChannelArticlesbyDate($channel['id'], 20, $this->listingTransformer, $this->articleTransformer)
-            ,'adverts' => $this->sponsorTransformer->transformCollection($channel['sponsors'])
+            'adverts' => $this->sponsorTransformer->transformCollection($channel['sponsors'])
+            ,'days' => $this->listingTransformer->transformCollection( $articles, [ 'articleTransformer' => $this->articleTransformer, 'eventTransformer' => $this->eventTransformer ] )
         ];
 
-        return $data;
+        return $this->respondFound('Listings found', $data);
     }
 
     /**

@@ -56,10 +56,6 @@ class ChannelTransformer extends Transformer {
                         ,"colour" => $channel['colour']
                         ,"secondaryColour" => $channel['secondary_colour']
                         ,"icon" => $channel['icon_img_id']
-                        ,'displayType' => [
-                            'id' => $channel['display']['id']
-                            ,'type' => $channel['display']['type']
-                        ]
                     );
 
                     // only add the following attrs if the request came from a desktop client
@@ -92,6 +88,10 @@ class ChannelTransformer extends Transformer {
                             $sub = array(
                                 "id" => (int) $subChannel['id']
                                 ,"name" => $subChannel['name']
+                                ,'displayType' => [
+                                    'id' => $channel['display']['id']
+                                    ,'type' => $channel['display']['type']
+                                ]
                             );
 
                             // only add the following attrs if the request came from a desktop client

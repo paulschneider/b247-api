@@ -1,6 +1,6 @@
 <?php
 
-function isSuBChannel($channel)
+function isSubChannel($channel)
 {
     return empty($channel['parent_channel']) ? false : true;
 }

@@ -74,28 +74,28 @@ class ArticleTransformer extends Transformer {
                 ]
             ];
 
-            if( isset($article['event']) )
-            {
-                $venue = $article['event']['venue'];
-                $event = $article['event']['details'];
-
-                $response['event'] = [
-                    'venue' => [
-                        'name' => $venue['name']
-                        ,'sefName' => $venue['sef_name']
-                        ,'facebook' => $venue['facebook']
-                        ,'twitter' => $venue['twitter']
-                    ]
-                    ,'detail' => [
-                        'title' => $event['title']
-                        ,'sefName' => $event['sef_name']
-                        ,'date' => $event['show_date']
-                        ,'time' => $event['show_time']
-                        ,'price' => $event['price']
-                        ,'url' => $event['url']
-                    ]
-                ];
-            }
+            // if( isset($article['event']) )
+            // {
+            //     $venue = $article['event']['venue'];
+            //     $event = $article['event']['details'];
+            //
+            //     $response['event'] = [
+            //         'venue' => [
+            //             'name' => $venue['name']
+            //             ,'sefName' => $venue['sef_name']
+            //             ,'facebook' => $venue['facebook']
+            //             ,'twitter' => $venue['twitter']
+            //         ]
+            //         ,'detail' => [
+            //             'title' => $event['title']
+            //             ,'sefName' => $event['sef_name']
+            //             ,'date' => $event['show_date']
+            //             ,'time' => $event['show_time']
+            //             ,'price' => $event['price']
+            //             ,'url' => $event['url']
+            //         ]
+            //     ];
+            // }
 
             // remove anything that only the desktop version needs
 

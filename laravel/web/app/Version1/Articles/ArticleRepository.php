@@ -25,51 +25,21 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
         return parent::dataCheck($query->first()->toArray());
     }
 
-    public function getChannelArticlesbyDate($channelId, $limit = 20, $listingTransformer, $articleTransformer)
+    public function getChannelListing( $channelId, $limit = 1000 )
     {
         $query = Article::with(['location' => function($query) use ($channelId) {
                 $query->where('article_location.sub_channel_id', $channelId);
-        }])->with('asset', 'display');
+        }])->with('asset', 'display')->with(['event' => function($query) {
+                $query->orderBy('event.show_date', 'asc')->alive()->active();
+        }])->with('event.venue');
 
-        $query->where('article.published', '>=', Carbon::today());
+        $query->where('article.published', '>=', Carbon::today()->subWeek());
         $query->where('article.published', '<=', Carbon::today()->addWeeks(1));
 
-        $result = $query->take($limit)
-                        ->orderBy('article.published', 'asc')
-                        ->get()
-                        ->toArray();
+        $result = $query->orderBy('article.published', 'asc')
+                        ->get();
 
-        $articles = [];
-
-        foreach( $result AS $article )
-        {
-            // check to see if the article location information was returned. If not then don't return the article
-
-            if( isset($article['location'][0]['locationId']) )
-            {
-                $location = $article['location'][0];
-
-                $key = date('d-m-Y', strtotime($article['published']));
-
-                $articles[ $key ]['publication'] = [
-                    'date' => $article['published']
-                    ,'day' => date('D', strtotime($article['published']))
-                    ,'fullDay' => date('l', strtotime($article['published']))
-                    ,'iso8601Date' => date('c', strtotime($article['published']))
-                ];
-
-                $articles[ $key ]['categories'][$location['categoryId']] = [
-                    'categoryId' => $location['categoryId']
-                    ,'categoryName' => $location['categoryName']
-                    ,'categorySefName' => $location['categorySefName']
-                    ,'path' => $location['channelSefName'] . '/' . $location['subChannelSefName'] . '/' . $location['categorySefName']
-                ];
-
-                $articles[ $key ]['articles'][] = $articleTransformer->transform($article, [ 'showBody' => false] );
-            }
-        }
-
-        return $articles;
+        return $result;
     }
 
     public function getArticlesBySubChannel($limit = 20, $channel = null, $articleTransformer)
@@ -139,7 +109,7 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
             case 'directory' :
                 $query->where('display_type', '=', \Config::get('constants.displayType_directory'));
             break;
-            case 'promos' :
+            case 'promotion' :
                 $query->where('display_type', '=', \Config::get('constants.displayType_promotion'))->where('is_featured', '=', false);
             break;
         }
@@ -175,7 +145,7 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
 
     public function getArticlesWithEvents($type, $channel = 50)
     {
-        $query = Article::with('asset', 'displayStyle')->with(['location' => function($query) use($channel) {
+        $query = Article::with('asset', 'display')->with(['location' => function($query) use($channel) {
                 $query->where('article_location.channel_id', $channel);
         }])->with(['event' => function($query) {
                 $query->orderBy('event.show_date', 'asc')->alive()->active();
