@@ -34,7 +34,7 @@ Class HomeController extends ApiController {
     *
     * @var Api\Factory\PatternMaker
     */
-    protected $PatternMaker;
+    protected $patternMaker;
 
     /**
     *
@@ -93,18 +93,16 @@ Class HomeController extends ApiController {
         // if( ! $response = cached("homepage") )
         // {
             $data = [
-                'channels' => $channels = $this->channelTransformer->transformCollection($this->channelRepository->getChannels())
-                ,'adverts' => [
-                    'home' => $this->sponsorTransformer->transformCollection($sponsors->toArray())
-                ]
-                ,'features' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'featured', 25 ))
+                'channels' => $channels = $this->channelTransformer->transformCollection( $this->channelRepository->getChannels() )
+                ,'adverts' => $this->sponsorTransformer->transformCollection( $sponsors->toArray() )
+                ,'features' => $this->articleTransformer->transformCollection( $this->articleRepository->getArticles( 'featured', 25 ), [ 'showBody' => false] )
                 ,'picks' => $this->patternMaker->make( [ 'sponsor' => $this->sponsorTransformer, 'article' => $this->articleTransformer ] , [ 'articles' => $articles, 'sponsors' => $ads ] )
                 ,'channelFeed' => [
                     'channel' => $this->channelTransformer->transform($this->channelRepository->getSimpleChannel($homePageChannelToShow))
-                    ,'whatsOn' => $this->articleTransformer->transformCollection($this->eventRepository->getEventsWithArticles($homePageChannelToShow, 20)) // get 20 articles from the whats on channel
-                    ,'promos' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'promos', 20, $homePageChannelToShow ))
-                    ,'directory' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'directory', 20, $homePageChannelToShow ))
-                    ,'listing' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'listing', 20, $homePageChannelToShow ))
+                    ,'whatsOn' => $this->articleTransformer->transformCollection($this->eventRepository->getEventsWithArticles($homePageChannelToShow, 20), [ 'showBody' => false] ) // get 20 articles from the whats on channel
+                    ,'promos' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'promos', 20, $homePageChannelToShow ), [ 'showBody' => false] )
+                    ,'directory' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'directory', 20, $homePageChannelToShow ), [ 'showBody' => false] )
+                    ,'listing' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'listing', 20, $homePageChannelToShow ), [ 'showBody' => false] )
                 ]
             ];
         //

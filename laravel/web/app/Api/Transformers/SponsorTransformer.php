@@ -8,7 +8,7 @@ class SponsorTransformer extends Transformer {
      * @param sponsors
      * @return array
      */
-    public function transformCollection($sponsors)
+    public function transformCollection( $sponsors, $options = [] )
     {
         $response = [];
 
@@ -26,7 +26,7 @@ class SponsorTransformer extends Transformer {
      * @param sponsor
      * @return array
      */
-    public function transform($sponsor)
+    public function transform( $sponsor, $options = [] )
     {
         $tmp = [
             'id' => $sponsor['id']

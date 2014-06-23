@@ -8,7 +8,7 @@ abstract class Transformer {
      * @param $items
      * @return array
      */
-    public abstract function transformCollection($items);
+    public abstract function transformCollection($items, $options);
 
     /**
      * Transform a single result into the API required format
@@ -16,5 +16,5 @@ abstract class Transformer {
      * @param $item
      * @return array
      */
-    public abstract function transform($item);
+    public abstract function transform($item, $options);
 }

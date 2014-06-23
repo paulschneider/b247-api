@@ -70,7 +70,7 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
                     ,'path' => $location['channelSefName'] . '/' . $location['subChannelSefName'] . '/' . $location['categorySefName']
                 ];
 
-                $articles[ $key ]['articles'][] = $articleTransformer->transform($article);
+                $articles[ $key ]['articles'][] = $articleTransformer->transform($article, [ 'showBody' => false] );
             }
         }
 
@@ -106,7 +106,7 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
             }
         }
 
-        return $response;
+        return array_values($response); // reset the associative array key values to integer valeus and return
     }
 
     public function getArticles($type = null, $limit = 20, $channel = null, $subChannel = false)

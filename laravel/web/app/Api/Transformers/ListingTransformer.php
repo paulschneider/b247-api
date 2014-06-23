@@ -8,11 +8,10 @@ class ListingTransformer extends Transformer {
      * @param sponsors
      * @return array
      */
-    public function transformCollection($listing)
+    public function transformCollection( $listing, $options = [] )
     {
         $response = [];
 
-        
         return $response;
     }
 
@@ -22,7 +21,7 @@ class ListingTransformer extends Transformer {
      * @param sponsor
      * @return array
      */
-    public function transform($sponsor)
+    public function transform( $sponsor, $options = [] )
     {
         // do some thing eventually
     }

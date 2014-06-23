@@ -21,7 +21,7 @@ class ChannelTransformer extends Transformer {
      * @param sponsors
      * @return array
      */
-    public function transformCollection($data)
+    public function transformCollection( $data, $options = [] )
     {
         if( $data )
         {
@@ -155,7 +155,7 @@ class ChannelTransformer extends Transformer {
      * @param sponsors
      * @return array
      */
-    public function transform($channel)
+    public function transform( $channel, $options = [] )
     {
         $response = [
             'id' => $channel['id']
@@ -218,7 +218,7 @@ class ChannelTransformer extends Transformer {
 
 
 
-    public function getArticles($articles)
+    public function getArticles( $articles , $options = [] )
     {
         return $this->articleTransformer->transformCollection($articles);
     }

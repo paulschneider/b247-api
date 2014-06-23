@@ -5,7 +5,7 @@ var notify = require('gulp-notify');
 var browserify = require('gulp-browserify');
 var rename = require('gulp-rename');
 
-var jsDir = 'app/assets/js';
+var jsDir = 'app/assets/js/lib';
 var targetJsDir = '/public/js';
 var cssDir = 'app/assets/css';
 var targetCssDir = 'public/css/min';

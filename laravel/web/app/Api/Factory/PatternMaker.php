@@ -67,7 +67,7 @@ Class PatternMaker
 
                  $thisAd['display_style'] = 1;
 
-                 $sorted[] = $sponsorTransformer->transform( $thisAd );
+                 $sorted[] = $sponsorTransformer->transform( $thisAd, [ 'showBody' => false] );
              }
              else if($thisPattern == "doubleAd")
              {
@@ -77,7 +77,7 @@ Class PatternMaker
 
                  $thisAd['display_style'] = 2;
 
-                 $sorted[] = $sponsorTransformer->transform( $thisAd );
+                 $sorted[] = $sponsorTransformer->transform( $thisAd, [ 'showBody' => false] );
              }
              else
              {
@@ -85,7 +85,7 @@ Class PatternMaker
 
                     $thisArticle['display_style'] = $thisPattern;
 
-                    $sorted[] = $articleTransformer->transform( $thisArticle );
+                    $sorted[] = $articleTransformer->transform( $thisArticle, [ 'showBody' => false] );
 
                     unset($articles[$counter]);
 

@@ -8,7 +8,7 @@ class UserTransformer extends Transformer {
      * @param user
      * @return array
      */
-    public function transform($user)
+    public function transform( $user, $options = [] )
     {
         return [
             'id' => $user['id']
@@ -25,7 +25,7 @@ class UserTransformer extends Transformer {
      * @param users
      * @return array
      */
-    public function transformCollection($users)
+    public function transformCollection( $users, $options = [] )
     {
         // Tranform a list of users
     }

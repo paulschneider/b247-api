@@ -4,6 +4,9 @@ use Api\Transformers\ChannelTransformer;
 use Api\Transformers\ArticleTransformer;
 use Api\Transformers\SponsorTransformer;
 use Api\Transformers\ListingTransformer;
+use Api\Factory\PatternMaker;
+
+use Version1\Events\EventRepository;
 use Version1\Articles\ArticleRepository;
 use Version1\Channels\ChannelRepository;
 use Version1\Channels\Channel;
@@ -38,6 +41,18 @@ class ChannelController extends ApiController {
 
     /**
     *
+    * @var Api\Factory\PatternMaker
+    */
+    protected $patternMaker;
+
+    /**
+    *
+    * @var Api\Events\EventRepository
+    */
+    protected $eventRepository;
+
+    /**
+    *
     * @var Version1\Channels\ChannelRepository
     */
     protected $channelRepository;
@@ -65,6 +80,9 @@ class ChannelController extends ApiController {
         , ArticleTransformer $articleTransformer
         , SponsorTransformer $sponsorTransformer
         , ListingTransformer $listingTransformer
+        , PatternMaker $patternMaker
+
+        , EventRepository $eventRepository
         , ChannelRepository $channelRepository
         , CategoryRepository $categoryRepository
         , SponsorRepository $sponsorRepository
@@ -75,6 +93,7 @@ class ChannelController extends ApiController {
         $this->articleTransformer = $articleTransformer;
         $this->sponsorTransformer = $sponsorTransformer;
         $this->listingTransformer = $listingTransformer;
+        $this->eventRepository = $eventRepository;
         $this->channelRepository = $channelRepository;
         $this->categoryRepository = $categoryRepository;
         $this->sponsorRepository = $sponsorRepository;
@@ -163,13 +182,35 @@ class ChannelController extends ApiController {
     */
     private function getChannel($channel)
     {
+        $channelId = $channel['id'];
+
+        $sponsors = $this->sponsorRepository->getSponsors();
+        $articles = $this->articleRepository->getArticles( 'picks', 25, $channelId );
+        $ads = $this->sponsorRepository->getWhereNotInCollection( $sponsors, 30 );
+
+        // create a new instance of the pattern maker
+        $this->patternMaker = new PatternMaker(1);
+
         return [
-            'channel' => $this->channelTransformer->transform($channel)
-            ,'adverts' => $this->sponsorTransformer->transformCollection($channel['sponsors'])
-            ,'featured' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles('featured', 5, $channel['id']))
-            ,'picked' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles('picks', 20, $channel['id']))
+            'channels' => $channels = $this->channelTransformer->transformCollection( $this->channelRepository->getChannels() )
+            ,'adverts' => $this->sponsorTransformer->transformCollection( $sponsors->toArray() )
+            ,'features' => $this->articleTransformer->transformCollection( $this->articleRepository->getArticles( 'featured', 25, $channelId ), [ 'showBody' => false] )
+            ,'picks' => $this->patternMaker->make( [ 'sponsor' => $this->sponsorTransformer, 'article' => $this->articleTransformer ] , [ 'articles' => $articles, 'sponsors' => $ads ] )
+            ,'channelFeed' => [
+                'channel' => $this->channelTransformer->transform($this->channelRepository->getSimpleChannel($channelId))
+                ,'whatsOn' => $this->articleTransformer->transformCollection($this->eventRepository->getEventsWithArticles($channelId, 20), [ 'showBody' => false] ) // get 20 articles from the whats on channel
+                ,'promos' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'promos', 20, $channelId ), [ 'showBody' => false] )
+                ,'directory' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'directory', 20, $channelId ), [ 'showBody' => false] )
+                ,'listing' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'listing', 20, $channelId ), [ 'showBody' => false] )
+            ]
             ,'subChannels' => $this->articleRepository->getArticlesBySubChannel(20, $channel['id'], $this->articleTransformer)
-            ,'promos' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'promos', 20, $channel['id'] ))
+            
+            // 'channel' => $this->channelTransformer->transform($channel)
+            // ,'adverts' => $this->sponsorTransformer->transformCollection($channel['sponsors'])
+            // ,'featured' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles('featured', 5, $channel['id']), [ 'showBody' => false] )
+            // ,'picks' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles('picks', 20, $channel['id']), [ 'showBody' => false] )
+            // ,'subChannels' => $this->articleRepository->getArticlesBySubChannel(20, $channel['id'], $this->articleTransformer)
+            // ,'promos' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'promos', 20, $channel['id'] ), [ 'showBody' => false] )
         ];
     }
 

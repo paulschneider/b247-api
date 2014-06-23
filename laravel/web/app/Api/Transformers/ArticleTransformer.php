@@ -8,13 +8,13 @@ class ArticleTransformer extends Transformer {
      * @param user
      * @return array
      */
-    public function transformCollection($articles)
+    public function transformCollection( $articles, $options = [] )
     {
         $response = [];
 
         foreach($articles AS $article)
         {
-            $tmp = $this->transform($article);
+            $tmp = $this->transform($article, $options);
 
             $response[] = $tmp;
         }
@@ -27,7 +27,7 @@ class ArticleTransformer extends Transformer {
      * @param user
      * @return array
      */
-    public function transform($article)
+    public function transform( $article, $options = [] )
     {
         if( isset($article['location'][0]) and isset($article['asset'][0]) )
         {
@@ -42,12 +42,12 @@ class ArticleTransformer extends Transformer {
                 ,'subHeading' => $article['sub_heading']
                 ,'body' => $article['body']
                 ,'path' => $articleLocation['channelSefName'] . '/' . $articleLocation['subChannelSefName'] . '/' . $articleLocation['categorySefName'] . '/' . $article['sef_name']
-                ,'isPromo' => $article['is_promo'] ? true : false
+                ,'isAdvert' => false
                 ,'articleType' => [
                     'id' => $articleType['id']
                     ,'type' => $articleType['type']
                 ]
-                ,'displayStyle' => ! isset( $article['display_style'] ) ? 1 : $article['display_style'] 
+                ,'displayStyle' => ! isset( $article['display_style'] ) ? 1 : $article['display_style']
                 ,'assignment' => [
                     'channel' => [
                         'id' => $articleLocation['channelId']
@@ -113,6 +113,11 @@ class ArticleTransformer extends Transformer {
                 unset($response['event']['venue']['sefName']);
                 unset($response['event']['detail']['sefName']);
                 unset($response['event']['detail']['url']);
+            }
+
+            if ( isset($options['showBody']) && ! $options['showBody'] )
+            {
+                unset($response['body']);
             }
 
             return $response;
