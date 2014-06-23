@@ -1,6 +1,7 @@
 /node_modules/*
 /bootstrap/compiled.php
 /vendor
+/app/storage/clockwork/*
 composer.phar
 composer.lock
 .env.*.php
