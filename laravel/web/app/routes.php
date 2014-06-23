@@ -25,6 +25,7 @@ Route::resource('article', 'ArticleController');
 Route::resource('category', 'CategoryController');
 
 # Channels
+Route::get('channel/article/{channelId}', 'ChannelController@getChannelArticles');
 Route::get('channel/listing/{channelId}', 'ChannelController@listing');
 Route::resource('channel', 'ChannelController');
 

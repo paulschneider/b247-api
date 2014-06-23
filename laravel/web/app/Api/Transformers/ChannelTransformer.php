@@ -56,6 +56,10 @@ class ChannelTransformer extends Transformer {
                         ,"colour" => $channel['colour']
                         ,"secondaryColour" => $channel['secondary_colour']
                         ,"icon" => $channel['icon_img_id']
+                        ,'displayType' => [
+                            'id' => $channel['display']['id']
+                            ,'type' => $channel['display']['type']
+                        ]
                     );
 
                     // only add the following attrs if the request came from a desktop client

@@ -4,14 +4,18 @@ use Api\Transformers\ChannelTransformer;
 use Api\Transformers\ArticleTransformer;
 use Api\Transformers\SponsorTransformer;
 use Api\Transformers\ListingTransformer;
+
 use Api\Factory\PatternMaker;
 
 use Version1\Events\EventRepository;
 use Version1\Articles\ArticleRepository;
 use Version1\Channels\ChannelRepository;
-use Version1\Channels\Channel;
+
 use Version1\Sponsors\SponsorRepository;
 use Version1\Categories\CategoryRepository;
+
+use Version1\Models\DisplayType;
+use Version1\Channels\Channel;
 
 class ChannelController extends ApiController {
 
@@ -100,6 +104,11 @@ class ChannelController extends ApiController {
         $this->articleRepository = $articleRepository;
     }
 
+    /**
+    * display a html list of channels
+    *
+    * @return View
+    */
     public function index()
     {
         $channels = $this->channelRepository->getChannelList();
@@ -116,9 +125,10 @@ class ChannelController extends ApiController {
     {
         $channels = $this->channelRepository->getSimpleChannels();
         $sponsors = $this->sponsorRepository->getSimpleSponsors();
+        $types = DisplayType::getSimpleDisplayTypes();
         $channel = new Channel();
 
-        return View::make('channel.create', compact('channel', 'channels', 'sponsors'));
+        return View::make('channel.create', compact('channel', 'channels', 'sponsors', 'types'));
     }
 
     /**
@@ -142,8 +152,9 @@ class ChannelController extends ApiController {
         $sponsors = $this->sponsorRepository->getSimpleSponsors();
         $channelCategory = array_flatten($channel->category->toArray());
         $channelSponsors = $channel->sponsors->lists('id');
+        $types = DisplayType::getSimpleDisplayTypes();
 
-        return View::make('channel.create', compact('channel', 'channels', 'sponsors', 'channelCategory', 'channelSponsors', 'categories'));
+        return View::make('channel.create', compact('channel', 'channels', 'sponsors', 'channelCategory', 'channelSponsors', 'categories', 'types'));
     }
 
     /**
@@ -176,6 +187,56 @@ class ChannelController extends ApiController {
     }
 
     /**
+    * return a list of articles for a given channel ( sub-channel )
+    *
+    * @return View
+    */
+    public function getChannelArticles($identifier = null)
+    {
+        // make sure we have an ID to work with
+
+        if( is_null( $identifier ) )
+        {
+            return $this->respondWithInsufficientParameters();
+        }
+
+        // grab the channel
+
+        $channel = $this->channelRepository->getChannel($identifier);
+
+        // check to make sure the channel Id provided is a sub-channel
+
+        if( is_null( $channel['parent_channel'] ) )
+        {
+            return $this->respondWithError("Channel is not a sub-channel. Nothing to do.");
+        }
+
+        // get some adverts from the database
+        $sponsors = $this->sponsorRepository->getSponsors();
+
+        // grab some articles regardless of type
+        $articles = $this->articleRepository->getArticles( null, 25, $channel['id'], true ); // ignore type, limit, channelId, isSubChannel
+
+        // get some more adverts that aren't any of the ones retrieved above
+        $ads = $this->sponsorRepository->getWhereNotInCollection( $sponsors, 30 );
+
+        // create a new instance of the pattern maker
+        $this->patternMaker = new PatternMaker(1);
+
+        // create out response array
+
+        $data = [
+            'channel' => $this->channelTransformer->transform( $channel )
+            ,'adverts' => $this->sponsorTransformer->transformCollection( $sponsors )
+            ,'articles' => $this->patternMaker->make( [ 'sponsor' => $this->sponsorTransformer, 'article' => $this->articleTransformer ] , [ 'articles' => $articles, 'sponsors' => $ads ] )
+        ];
+
+        // and return it
+
+        return $this->respondFound('Channel found', $data);
+    }
+
+    /**
     * get the details of a channel
     *
     * @return Response
@@ -192,7 +253,7 @@ class ChannelController extends ApiController {
         $this->patternMaker = new PatternMaker(1);
 
         return [
-            'channels' => $channels = $this->channelTransformer->transformCollection( $this->channelRepository->getChannels() )
+            'channels' => $this->channelTransformer->transformCollection( $this->channelRepository->getChannels() )
             ,'adverts' => $this->sponsorTransformer->transformCollection( $sponsors->toArray() )
             ,'features' => $this->articleTransformer->transformCollection( $this->articleRepository->getArticles( 'featured', 25, $channelId ), [ 'showBody' => false] )
             ,'picks' => $this->patternMaker->make( [ 'sponsor' => $this->sponsorTransformer, 'article' => $this->articleTransformer ] , [ 'articles' => $articles, 'sponsors' => $ads ] )
@@ -204,13 +265,6 @@ class ChannelController extends ApiController {
                 ,'listing' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'listing', 20, $channelId ), [ 'showBody' => false] )
             ]
             ,'subChannels' => $this->articleRepository->getArticlesBySubChannel(20, $channel['id'], $this->articleTransformer)
-            
-            // 'channel' => $this->channelTransformer->transform($channel)
-            // ,'adverts' => $this->sponsorTransformer->transformCollection($channel['sponsors'])
-            // ,'featured' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles('featured', 5, $channel['id']), [ 'showBody' => false] )
-            // ,'picks' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles('picks', 20, $channel['id']), [ 'showBody' => false] )
-            // ,'subChannels' => $this->articleRepository->getArticlesBySubChannel(20, $channel['id'], $this->articleTransformer)
-            // ,'promos' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'promos', 20, $channel['id'] ), [ 'showBody' => false] )
         ];
     }
 

@@ -13,6 +13,7 @@
       <th></th>
       <th>Name</th>
       <th>Channel</th>
+      <th>Type</th>
       <th>Status</th>
       <th>Active</th>
       <th>Edit</th>
@@ -24,6 +25,7 @@
             <td>{{ $i }}</td>
             <td>{{ $channel->name }}</td>
             <td>{{ getParentChannel($channels, $channel) }}</td>
+            <td>{{ $channel->display->type }}</td>
             <td>{{ oracle($channel->is_active) }}</td>
             <td>{{ $channel->created_at }}</td>
             <td>{{ link_to('channel/'.$channel->id . '/edit', 'Click to Edit') }}</td>

@@ -15,9 +15,14 @@ Class SponsorRepository extends BaseModel implements SponsorInterface {
     */
     public function getSponsors($list = [''], $limit = 3)
     {
-        return Sponsor::with('asset', 'displayStyle')->alive()->take($limit)->whereNotIn('id', $list)->orderBy(\DB::raw('RAND()'))->get();
+        return Sponsor::with('asset')->alive()->take($limit)->whereNotIn('id', $list)->orderBy(\DB::raw('RAND()'))->get();
     }
 
+    /**
+    * get a list of sponsors that aren't in a provided collection
+    *
+    * @return array
+    */
     public function getWhereNotInCollection($collection, $limit = 3)
     {
         $list = [];
@@ -29,7 +34,6 @@ Class SponsorRepository extends BaseModel implements SponsorInterface {
 
         return static::getSponsors($list, $limit);
     }
-
 
     /**
     * get a specified sponsors by their ID
@@ -51,6 +55,11 @@ Class SponsorRepository extends BaseModel implements SponsorInterface {
         return Sponsor::createdDescending()->get();
     }
 
+    /**
+    * get a key value list of sponsors
+    *
+    * @return array
+    */
     public function getSimpleSponsors()
     {
         return Sponsor::active()->alive()->createdDescending()->lists('title', 'id');
@@ -74,7 +83,6 @@ Class SponsorRepository extends BaseModel implements SponsorInterface {
 
         $sponsor->title = $form['title'];
         $sponsor->url = $form['url'];
-        $sponsor->display_style = ! empty($form['display_style']) ? $form['display_style'] : $sponsor->display_type;
         $sponsor->is_active = isset($form['is_active']) ? $form['is_active'] : false;
 
         $sponsor->save();

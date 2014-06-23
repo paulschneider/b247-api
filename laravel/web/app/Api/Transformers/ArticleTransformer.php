@@ -33,7 +33,7 @@ class ArticleTransformer extends Transformer {
         {
             $articleLocation = $article['location'][0];
             $articleAsset = $article['asset'][0];
-            $articleType = $article['type'];
+            $displayType = $article['display'];
 
             $response = [
                 'id' => $article['id']
@@ -43,9 +43,9 @@ class ArticleTransformer extends Transformer {
                 ,'body' => $article['body']
                 ,'path' => $articleLocation['channelSefName'] . '/' . $articleLocation['subChannelSefName'] . '/' . $articleLocation['categorySefName'] . '/' . $article['sef_name']
                 ,'isAdvert' => false
-                ,'articleType' => [
-                    'id' => $articleType['id']
-                    ,'type' => $articleType['type']
+                ,'displayType' => [
+                    'id' => $displayType['id']
+                    ,'type' => $displayType['type']
                 ]
                 ,'displayStyle' => ! isset( $article['display_style'] ) ? 1 : $article['display_style']
                 ,'assignment' => [

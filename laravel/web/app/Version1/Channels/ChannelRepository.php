@@ -15,7 +15,7 @@ Class ChannelRepository extends BaseModel implements ChannelInterface {
     */
     public function getChannels()
     {
-        return Channel::with('subChannel.category')->whereNull('parent_channel')->get()->toArray();
+        return Channel::with('subChannel.category', 'display')->whereNull('parent_channel')->get()->toArray();
     }
 
     /**
@@ -25,12 +25,28 @@ Class ChannelRepository extends BaseModel implements ChannelInterface {
     */
     public function getChannelList()
     {
-        return Channel::with('subChannel')->get();
+        return Channel::with('subChannel', 'display')->get();
     }
 
-    public function getChannel($id)
+    /**
+    * get a specified channel and its relationships
+    *
+    * @var array
+    */
+    public function getChannel($identifier)
     {
-        return Channel::with('category', 'sponsors')->where('id', $id)->first();
+        $query = Channel::with('category', 'sponsors', 'display');
+
+        if( is_numeric( $identifier ) )
+        {
+            $query->where('id', $identifier);
+        }
+        else
+        {
+            $query->where('sef_name', $identifier);
+        }
+
+        return $query->first();
     }
 
     /**
@@ -75,7 +91,7 @@ Class ChannelRepository extends BaseModel implements ChannelInterface {
     */
     public function getChannelByIdentifier($identifier)
     {
-        $query = Channel::with('subChannel.category', 'sponsors.asset');
+        $query = Channel::with('subChannel.category', 'sponsors.asset', 'type');
 
         if( is_numeric($identifier) )
         {
@@ -114,6 +130,7 @@ Class ChannelRepository extends BaseModel implements ChannelInterface {
 
         $channel->name = $form['name'];
         $channel->sef_name = safename($form['name']);
+        $channel->display_type = $form['type'];
         $channel->parent_channel = $form['parent_channel'] != 0 ? $form['parent_channel'] : null;
         $channel->colour = $form['colour'];
         $channel->secondary_colour = $form['sec_colour'];

@@ -11,7 +11,7 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
 
     public function getArticle($identifier)
     {
-        $query = Article::with('location', 'asset', 'type', 'displayStyle');
+        $query = Article::with('location', 'asset', 'display');
 
         if( is_numeric($identifier) )
         {
@@ -25,16 +25,11 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
         return parent::dataCheck($query->first()->toArray());
     }
 
-    public function getArticleTypes()
-    {
-        return ArticleType::lists('type', 'id');
-    }
-
     public function getChannelArticlesbyDate($channelId, $limit = 20, $listingTransformer, $articleTransformer)
     {
         $query = Article::with(['location' => function($query) use ($channelId) {
                 $query->where('article_location.sub_channel_id', $channelId);
-        }])->with('asset', 'type', 'displayStyle');
+        }])->with('asset', 'display');
 
         $query->where('article.published', '>=', Carbon::today());
         $query->where('article.published', '<=', Carbon::today()->addWeeks(1));
@@ -125,24 +120,24 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
                 }
             }
 
-        }])->with('asset', 'type', 'displayStyle');
+        }])->with('asset', 'display');
 
         switch($type)
         {
             case 'picks' :
                 $query->where('is_picked', '=', true)->where('is_featured', '=', false);
             break;
-            case 'promos' :
-                $query->where('is_promo', '=', true)->where('is_featured', '=', false);
-            break;
             case 'featured' :
                 $query->where('is_featured', '=', true);
             break;
-            case 'directory' :
-                $query->where('article_type_id', '=', 3);
-            break;
             case 'listing' :
-                $query->where('article_type_id', '=', 2);
+                $query->where('display_type', '=', \Config::get('constants.displayType_listing'));
+            break;
+            case 'directory' :
+                $query->where('display_type', '=', \Config::get('constants.displayType_directory'));
+            break;
+            case 'promos' :
+                $query->where('display_type', '=', \Config::get('constants.displayType_promotion'))->where('is_featured', '=', false);
             break;
         }
 
@@ -172,7 +167,6 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
         }]);
 
         return $query->whereNotNull('article.event_id')->get()->toArray();
-
     }
 
     public function storeArticle($form)
@@ -203,13 +197,11 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
             $article->postcode = ! empty($form['postcode']) ? $form['postcode'] : null;
         }
 
-        $article->article_type_id = ! empty($form['type']) ? $form['type'] : null;
-        $article->display_style = ! empty($form['display_style']) ? $form['display_style'] : 1;
+        $article->display_type = ! empty($form['type']) ? $form['type'] : 1;
         $article->event_id = ! empty($form['event']) ? $form['event'] : null;
         $article->sef_name = safename($article->title);
         $article->is_featured = isset($form['is_featured']) ? $form['is_featured'] : false;
         $article->is_picked = isset($form['is_picked']) ? $form['is_picked'] : false;
-        $article->is_promo = isset($form['is_promo']) ? $form['is_promo'] : false;
 
         if( $article->is_featured )
         {

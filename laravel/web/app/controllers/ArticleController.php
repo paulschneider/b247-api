@@ -6,7 +6,7 @@ use Version1\Articles\Article;
 use Version1\Channels\ChannelRepository;
 use Version1\Categories\CategoryRepository;
 use Version1\Events\EventRepository;
-use Version1\Models\DisplayStyle;
+use Version1\Models\DisplayType;
 
 Class ArticleController extends ApiController {
 
@@ -70,10 +70,9 @@ Class ArticleController extends ApiController {
         $subChannels = $this->channelRepository->getSimpleSubChannels();
         $categories = $this->categoryRepository->getSimpleCategories();
         $events = $this->eventRepository->getSimpleEvents();
-        $types = $this->articleRepository->getArticleTypes();
-        $displayStyles = DisplayStyle::getSimpleDisplayStyles();
+        $types = DisplayType::getSimpleDisplayTypes();
 
-        return View::make('article.create', compact('channels', 'subChannels', 'categories', 'article', 'events', 'types', 'displayStyles'));
+        return View::make('article.create', compact('channels', 'subChannels', 'categories', 'article', 'events', 'types'));
     }
 
     public function show($identifier = null)
@@ -94,10 +93,9 @@ Class ArticleController extends ApiController {
         $subChannels = $this->channelRepository->getSimpleSubChannels();
         $categories = $this->categoryRepository->getSimpleCategories();
         $events = $this->eventRepository->getSimpleEvents();
-        $types = $this->articleRepository->getArticleTypes();
-        $displayStyles = DisplayStyle::getSimpleDisplayStyles();
+        $types = DisplayType::getSimpleDisplayTypes();
 
-        return View::make('article.create', compact('channels', 'subChannels', 'categories', 'article', 'events', 'types', 'displayStyles'));
+        return View::make('article.create', compact('channels', 'subChannels', 'categories', 'article', 'events', 'types'));
     }
 
     /**

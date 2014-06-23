@@ -33,7 +33,6 @@ class SponsorTransformer extends Transformer {
             ,'title' => $sponsor['title']
             ,'url' => $sponsor['url']
             ,'isAdvert' => true
-            ,'displayStyle' => $sponsor['display_style']
         ];
 
         if( isset($sponsor['asset']) )

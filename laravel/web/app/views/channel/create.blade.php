@@ -22,6 +22,11 @@
 </div>
 
 <div class="form-group">
+    {{ Form::label('type', 'Channel Type:') }}
+    {{ Form::select('type', $types, $channel['display']['id'], [ 'class' => 'form-control' ]) }}
+</div>
+
+<div class="form-group">
     {{ Form::label('colour', 'Colour:') }}
     {{ Form::text('colour', $channel->colour, [ 'class' => 'form-control' ]) }}
 </div>

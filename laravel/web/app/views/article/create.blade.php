@@ -43,7 +43,7 @@
 
     <div class="form-group">
         {{ Form::label('type', 'Article Type:') }}
-        {{ Form::select('type', $types, $article['article_type_id'], [ 'class' => 'form-control' ]) }}
+        {{ Form::select('type', $types, $article['display']['id'], [ 'class' => 'form-control' ]) }}
     </div>
 
     <div class="form-group">
@@ -59,15 +59,6 @@
     <div class="form-group">
         {{ Form::label('postcode', 'Postcode:') }}
         {{ Form::text('postcode', $article['postcode'], [ 'class' => 'form-control' ]) }}
-    </div>
-
-    <hr />
-
-    <h3>How will it appear?</h3>
-
-    <div class="form-group">
-        {{ Form::label('display_style', 'Display Style:') }}
-        {{ Form::select('display_style', $displayStyles, $article['display_style'], [ 'class' => 'form-control' ]) }}
     </div>
 
     <hr />
@@ -90,11 +81,6 @@
     <div class="form-group">
         {{ Form::checkbox('is_picked', 1, $article['is_picked']) }}
         {{ Form::label('is_picked', 'Its a picked article') }}
-    </div>
-
-    <div class="form-group">
-        {{ Form::checkbox('is_promo', 1, $article['is_promo']) }}
-        {{ Form::label('is_promo', 'Its a promotion article') }}
     </div>
 
     <h3>Status ?</h3>
