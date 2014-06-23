@@ -101,7 +101,7 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
 
                 if( count($response[$subChannel['subChannelSefName']]['articles']) < $limit)
                 {
-                    $response[$subChannel['subChannelSefName']]['articles'][] = $articleTransformer->transform($article);
+                    $response[$subChannel['subChannelSefName']]['articles'][] = $articleTransformer->transform($article, [ 'showBody' => false] );
                 }
             }
         }
