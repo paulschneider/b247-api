@@ -24,12 +24,15 @@ $app = new Illuminate\Foundation\Application;
 |
 */
 
-$env = $app->detectEnvironment(array(
+$env = $app->detectEnvironment(function()
+{
+    return 'local';
 
-    'local'   => array('http://local.b247-laravel.com/')
-    ,'staging' => array('staging.example.com')
-
-));
+    $response = [
+        'local'   => array('http://local.b247-laravel.com/')
+        ,'staging' => array('staging.example.com')
+    ];
+});
 
 /*
 |--------------------------------------------------------------------------

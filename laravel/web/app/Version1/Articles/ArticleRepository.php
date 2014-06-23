@@ -80,7 +80,7 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
 
         foreach( $articles AS $article )
         {
-            if( ! $article['is_featured'] and ! $article['is_picked'] and ! $article['is_promo'] and empty($article['event_id']) )
+            if( ! $article['is_featured'] and ! $article['is_picked'] and empty($article['event_id']) )
             {
                 $subChannel = $article['location'][0];
 
@@ -104,7 +104,7 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
         return array_values($response); // reset the associative array key values to integer valeus and return
     }
 
-    public function getArticles($type = null, $limit = 20, $channel = null, $subChannel = false)
+    public function getArticles($type = 'article', $limit = 20, $channel = null, $subChannel = false)
     {
         $query = Article::with(['location' => function($query) use ($channel, $subChannel) {
 
@@ -130,6 +130,9 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
             case 'featured' :
                 $query->where('is_featured', '=', true);
             break;
+            case 'article' :
+                $query->where('display_type', '=', \Config::get('constants.displayType_article'));
+            break;
             case 'listing' :
                 $query->where('display_type', '=', \Config::get('constants.displayType_listing'));
             break;
@@ -141,17 +144,29 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
             break;
         }
 
-        $result = $query->take($limit)->orderBy('article.created_at', 'desc')->get()->toArray();
+        $result = $query->orderBy('article.created_at', 'desc')->get()->toArray();
 
         $articles = [];
 
         // check to see if the article location information was returned. If not then don't return the article
 
+        $counter = 1;
+
         foreach( $result AS $article )
         {
             if( isset($article['location'][0]['locationId']) )
             {
-                $articles[] = $article;
+                if( $counter <= $limit )
+                {
+                    $articles[] = $article;
+
+                    $counter++;
+                }
+                else
+                {
+                    break;
+                }
+
             }
         }
 
