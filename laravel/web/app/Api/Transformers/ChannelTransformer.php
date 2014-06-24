@@ -63,7 +63,7 @@ class ChannelTransformer extends Transformer {
                     {
                         $chan['sefName'] = $channel['sef_name'];
                         $chan['path'] = $path;
-                        $chan['"icon"'] = $channel['icon_img_id'];
+                        $chan['icon'] = $channel['icon_img_id'];
                     }
 
                     if( isset($channel['articles']) )
