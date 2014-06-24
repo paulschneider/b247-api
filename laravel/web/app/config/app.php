@@ -177,7 +177,7 @@ return array(
 	'aliases' => array(
 
 		'Agent'           => 'Jenssegers\Agent\Facades\Agent', // https://github.com/jenssegers/Laravel-Agent
-		'Api'			 => 'Version1\Controllers\ApiController',
+		'Api'			 => 'ApiController',
 		'App'             => 'Illuminate\Support\Facades\App',
 		'Artisan'         => 'Illuminate\Support\Facades\Artisan',
 		'Auth'            => 'Illuminate\Support\Facades\Auth',

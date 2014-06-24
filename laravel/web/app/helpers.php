@@ -1,5 +1,11 @@
 <?php
 
+// convert an epoch timestamp to a specified format
+function convertTimestamp($format, $timestamp)
+{
+    return date($format, $timestamp);
+}
+
 function isSubChannel($channel)
 {
     return empty($channel['parent_channel']) ? false : true;

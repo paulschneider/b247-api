@@ -290,7 +290,7 @@ class ChannelController extends ApiController {
         ];
     }
 
-    public function listing($identifier)
+    public function listing($identifier, $timestamp = null)
     {
         if( ! $channel = $this->channelRepository->getChannelByIdentifier($identifier))
         {
@@ -302,14 +302,22 @@ class ChannelController extends ApiController {
             return $this->respondWithError("Channel is not a sub-channel. Nothing to do");
         }
 
-        $articles = $this->articleRepository->getChannelListing( $channel['id'], 20 );
+        $articles = $this->articleRepository->getChannelListing( $channel['id'], 20, $timestamp );
 
-        $data = [
-            'adverts' => $this->sponsorTransformer->transformCollection($channel['sponsors'])
-            ,'days' => $this->listingTransformer->transformCollection( $articles, [ 'articleTransformer' => $this->articleTransformer, 'eventTransformer' => $this->eventTransformer ] )
-        ];
+        if( $articles->count() > 0 )
+        {
+            $data = [
+                'adverts' => $this->sponsorTransformer->transformCollection($channel['sponsors'])
+                ,'days' => $this->listingTransformer->transformCollection( $articles, [ 'articleTransformer' => $this->articleTransformer, 'eventTransformer' => $this->eventTransformer ] )
+            ];
 
-        return $this->respondFound('Listings found', $data);
+            return $this->respondFound('Listings found', $data);
+        }
+        else
+        {
+            return $this->respondWithError('There are no articles to return');
+        }
+
     }
 
     /**

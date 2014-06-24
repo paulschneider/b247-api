@@ -25,7 +25,7 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
         return parent::dataCheck($query->first()->toArray());
     }
 
-    public function getChannelListing( $channelId, $limit = 1000 )
+    public function getChannelListing( $channelId, $limit = 1000, $timestamp )
     {
         $query = Article::with(['location' => function($query) use ($channelId) {
                 $query->where('article_location.sub_channel_id', $channelId);
@@ -33,8 +33,17 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
                 $query->orderBy('event.show_date', 'asc')->alive()->active();
         }])->with('event.venue');
 
-        $query->where('article.published', '>=', Carbon::today()->subWeek());
-        $query->where('article.published', '<=', Carbon::today()->addWeeks(1));
+        if( is_null( $timestamp ) )
+        {
+            $query->where('article.published', '>=', Carbon::today()->subWeek());
+            $query->where('article.published', '<=', Carbon::today()->addWeeks(1));
+        }
+        else
+        {
+            $dateStamp = convertTimestamp( 'Y-m-d', $timestamp );
+
+            $query->where('article.published', '=', $dateStamp);
+        }
 
         $result = $query->orderBy('article.published', 'asc')
                         ->get();
