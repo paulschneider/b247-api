@@ -20,8 +20,7 @@ Route::resource('article', 'ArticleController');
 Route::resource('category', 'CategoryController');
 
 # Channels
-Route::get('channel/listing/{channelId}/day/{timestamp}', 'ChannelController@listing');
-Route::get('channel/listing/{channelId}', 'ChannelController@listing');
+Route::get('channel/listing/{channelId}/{duration}/{timestamp}', 'ChannelController@listing');
 Route::get('channel/{article}/{channelId}', 'ChannelController@getChannelArticles');
 Route::get('channel/{promotion}/{channelId}', 'ChannelController@getChannelArticles');
 Route::resource('channel', 'ChannelController');

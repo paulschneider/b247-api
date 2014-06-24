@@ -25,23 +25,23 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
         return parent::dataCheck($query->first()->toArray());
     }
 
-    public function getChannelListing( $channelId, $limit = 1000, $timestamp )
+    public function getChannelListing( $channelId, $limit = 1000, $duration, $timestamp )
     {
+        $dateStamp = convertTimestamp( 'Y-m-d', $timestamp );
+
         $query = Article::with(['location' => function($query) use ($channelId) {
                 $query->where('article_location.sub_channel_id', $channelId);
         }])->with('asset', 'display')->with(['event' => function($query) {
                 $query->orderBy('event.show_date', 'asc')->alive()->active();
         }])->with('event.venue');
 
-        if( is_null( $timestamp ) )
+        if( $duration == "week" )
         {
-            $query->where('article.published', '>=', Carbon::today()->subWeek());
+            $query->where('article.published', '>=', $dateStamp);
             $query->where('article.published', '<=', Carbon::today()->addWeeks(1));
         }
-        else
+        elseif ( $duration == "day" )
         {
-            $dateStamp = convertTimestamp( 'Y-m-d', $timestamp );
-
             $query->where('article.published', '=', $dateStamp);
         }
 
@@ -145,7 +145,6 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
                 {
                     break;
                 }
-
             }
         }
 
@@ -158,7 +157,7 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
                 $query->where('article_location.channel_id', $channel);
         }])->with(['event' => function($query) {
                 $query->orderBy('event.show_date', 'asc')->alive()->active();
-        }]);
+        }])->with('event.venue');
 
         return $query->whereNotNull('article.event_id')->get()->toArray();
     }

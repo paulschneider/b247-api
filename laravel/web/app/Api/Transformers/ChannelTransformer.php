@@ -55,7 +55,6 @@ class ChannelTransformer extends Transformer {
                         ,"name" => $channel['name']
                         ,"colour" => $channel['colour']
                         ,"secondaryColour" => $channel['secondary_colour']
-                        ,"icon" => $channel['icon_img_id']
                     );
 
                     // only add the following attrs if the request came from a desktop client
@@ -64,6 +63,7 @@ class ChannelTransformer extends Transformer {
                     {
                         $chan['sefName'] = $channel['sef_name'];
                         $chan['path'] = $path;
+                        $chan['"icon"'] = $channel['icon_img_id'];
                     }
 
                     if( isset($channel['articles']) )

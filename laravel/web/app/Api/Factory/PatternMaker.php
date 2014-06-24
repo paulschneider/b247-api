@@ -1,5 +1,8 @@
 <?php namespace Api\Factory;
 
+use Api\Transformers\ArticleTransformer;
+use Api\Transformers\SponsorTransformer;
+
 Class PatternMaker
 {
     private $patterns = [
@@ -37,12 +40,17 @@ Class PatternMaker
         $this->pattern = $this->patterns[ $this->activePattern ];
     }
 
+    public function setPattern($pattern)
+    {
+        $this->activePattern = $pattern;
+    }
+
     public function getPattern()
     {
         return $this->activePattern;
     }
 
-    public function make(array $transformers, array $content)
+    public function make( array $content )
     {
         $counter = 0;
         $patternCounter = 0;
@@ -52,8 +60,8 @@ Class PatternMaker
         $articles = $content['articles'];
         $sponsors = $content['sponsors'];
 
-        $sponsorTransformer = $transformers['sponsor'];
-        $articleTransformer = $transformers['article'];
+        $sponsorTransformer = new SponsorTransformer();
+        $articleTransformer = new ArticleTransformer();
 
         while (count($articles) > 0)
         {
@@ -100,6 +108,10 @@ Class PatternMaker
              }
         }
 
-        return $sorted;
+        $response = new \stdClass();
+        $response->articles = $sorted;
+        $response->sponsors = $sponsors;
+
+        return $response;
     }
 }

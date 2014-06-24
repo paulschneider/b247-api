@@ -290,8 +290,13 @@ class ChannelController extends ApiController {
         ];
     }
 
-    public function listing($identifier, $timestamp = null)
+    public function listing($identifier, $duration = null, $timestamp = null)
     {
+        if( is_null($duration) or is_null($timestamp) )
+        {
+            return $this->respondWithInsufficientParameters();
+        }
+
         if( ! $channel = $this->channelRepository->getChannelByIdentifier($identifier))
         {
             return $this->respondNoDataFound();
@@ -302,7 +307,7 @@ class ChannelController extends ApiController {
             return $this->respondWithError("Channel is not a sub-channel. Nothing to do");
         }
 
-        $articles = $this->articleRepository->getChannelListing( $channel['id'], 20, $timestamp );
+        $articles = $this->articleRepository->getChannelListing( $channel['id'], 20, $duration, $timestamp );
 
         if( $articles->count() > 0 )
         {

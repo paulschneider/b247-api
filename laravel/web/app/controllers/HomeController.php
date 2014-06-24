@@ -3,6 +3,7 @@
 use Api\Transformers\ChannelTransformer;
 use Api\Transformers\ArticleTransformer;
 use Api\Transformers\SponsorTransformer;
+use Api\Transformers\EventTransformer;
 use Api\Factory\PatternMaker;
 
 use Version1\Events\EventRepository;
@@ -29,6 +30,12 @@ Class HomeController extends ApiController {
     * @var Api\Transformers\SponsorTransformer
     */
     protected $sponsorTransformer;
+
+    /**
+    *
+    * @var Api\Transformers\EventTransformer
+    */
+    protected $eventTransformer;
 
     /**
     *
@@ -64,6 +71,7 @@ Class HomeController extends ApiController {
         ChannelTransformer $channelTransformer
         , ArticleTransformer $articleTransformer
         , SponsorTransformer $sponsorTransformer
+        , EventTransformer $eventTransformer
         , PatternMaker $patternMaker
         , EventRepository $eventRepository
         , ChannelRepository $channelRepository
@@ -74,6 +82,7 @@ Class HomeController extends ApiController {
         $this->channelTransformer = $channelTransformer;
         $this->articleTransformer = $articleTransformer;
         $this->sponsorTransformer = $sponsorTransformer;
+        $this->eventTransformer = $eventTransformer;
         $this->eventRepository = $eventRepository;
         $this->channelRepository = $channelRepository;
         $this->sponsorRepository = $sponsorRepository;
@@ -84,11 +93,46 @@ Class HomeController extends ApiController {
     {
         $sponsors = $this->sponsorRepository->getSponsors();
 
-        $articles = $this->articleRepository->getArticles( 'picks', 25 );
-        $ads = $this->sponsorRepository->getWhereNotInCollection( $sponsors, 30 );
-
         // create a new instance of the pattern maker
         $this->patternMaker = new PatternMaker(1);
+
+        $channelFeed = [];
+
+        // Picks
+        $picks = $this->articleRepository->getArticles( 'picks', 25 );
+        $ads = $this->sponsorRepository->getWhereNotInCollection( $sponsors, 30 );
+        $response = $this->patternMaker->make( [ 'articles' => $picks, 'sponsors' => $ads ] );
+        $picks = $response->articles;
+        $ads = $response->sponsors;
+
+        // Whats on
+        $channel = 50;
+
+        $whatsOn = $this->articleRepository->getArticlesWithEvents(null); // get 20 articles from the whats on channel
+        $response = $this->patternMaker->make( [ 'articles' => $whatsOn, 'sponsors' => $ads ] );
+        $whatsOn = $response->articles;
+        $ads = $response->sponsors;
+
+        $channel = $this->channelTransformer->transform($this->channelRepository->getSimpleChannel( $channel ));
+        $channel['articles'] = $whatsOn;
+
+        $channelFeed[] = $channel;
+
+        // remaining channels
+        $channels = [ 48, 49, 51, 52 ];
+
+        foreach( $channels AS $channel )
+        {
+            $articles = $this->articleRepository->getArticles( null, 20, $channel );
+            $response = $this->patternMaker->make( [ 'articles' => $articles, 'sponsors' => $ads ] );
+            $articles = $response->articles;
+            $ads = $response->sponsors;
+
+            $channel = $this->channelTransformer->transform($this->channelRepository->getSimpleChannel( $channel ));
+            $channel['articles'] = $articles;
+
+            $channelFeed[] = $channel;
+        }
 
         if( ! $response = cached("homepage") )
         {
@@ -96,16 +140,10 @@ Class HomeController extends ApiController {
                 'channels' => $channels = $this->channelTransformer->transformCollection( $this->channelRepository->getChannels() )
                 ,'adverts' => $this->sponsorTransformer->transformCollection( $sponsors->toArray() )
                 ,'features' => $this->articleTransformer->transformCollection( $this->articleRepository->getArticles( 'featured', 25 ), [ 'showBody' => false] )
-                ,'picks' => $this->patternMaker->make( [ 'sponsor' => $this->sponsorTransformer, 'article' => $this->articleTransformer ] , [ 'articles' => $articles, 'sponsors' => $ads ] )
-                ,'channelFeed' => [
-                    'channel' => $this->channelTransformer->transform($this->channelRepository->getSimpleChannel($homePageChannelToShow))
-                    ,'whatsOn' => $this->articleTransformer->transformCollection($this->eventRepository->getEventsWithArticles($homePageChannelToShow, 20), [ 'showBody' => false] ) // get 20 articles from the whats on channel
-                    ,'promos' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'promotion', 20, $homePageChannelToShow ), [ 'showBody' => false] )
-                    ,'directory' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'directory', 20, $homePageChannelToShow ), [ 'showBody' => false] )
-                    ,'listing' => $this->articleTransformer->transformCollection($this->articleRepository->getArticles( 'listing', 20, $homePageChannelToShow ), [ 'showBody' => false] )
-                ]
+                ,'picks' => $picks
+                ,'channelFeed' => $channelFeed
             ];
-        
+
             cacheIt("homepage", $response, "1 hour");
         }
 

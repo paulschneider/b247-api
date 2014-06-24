@@ -31,7 +31,9 @@ class EventTransformer extends Transformer {
         if( ! is_array($event))
         {
             $event = $event->toArray();
-        }        
+        }
+
+
 
         $venue = $event['venue'];
         unset($event['venue']);

@@ -1,5 +1,7 @@
 <?php namespace Api\Transformers;
 
+use Api\Transformers\EventTransformer;
+
 class ArticleTransformer extends Transformer {
 
     /**
@@ -74,28 +76,14 @@ class ArticleTransformer extends Transformer {
                 ]
             ];
 
-            // if( isset($article['event']) )
-            // {
-            //     $venue = $article['event']['venue'];
-            //     $event = $article['event']['details'];
-            //
-            //     $response['event'] = [
-            //         'venue' => [
-            //             'name' => $venue['name']
-            //             ,'sefName' => $venue['sef_name']
-            //             ,'facebook' => $venue['facebook']
-            //             ,'twitter' => $venue['twitter']
-            //         ]
-            //         ,'detail' => [
-            //             'title' => $event['title']
-            //             ,'sefName' => $event['sef_name']
-            //             ,'date' => $event['show_date']
-            //             ,'time' => $event['show_time']
-            //             ,'price' => $event['price']
-            //             ,'url' => $event['url']
-            //         ]
-            //     ];
-            // }
+            // If there is an event then transform that as well
+
+            if( isset($article['event']) )
+            {
+                $eventTransformer = new EventTransformer();
+
+                $response['event'] = $eventTransformer->transform( $article['event'] );
+            }
 
             // remove anything that only the desktop version needs
 
