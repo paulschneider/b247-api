@@ -38,7 +38,6 @@ class Article extends BaseModel {
     protected $fillable = [
 
         'content_type'
-        , 'display_style'
         , 'title'
         , 'sub_heading'
         , 'body'
@@ -89,11 +88,14 @@ class Article extends BaseModel {
                         , 'article.is_deleted'
                         , 'article.is_featured'
                         , 'article.is_picked'
+                        , 'display_type.id AS displayTypeId'
+                        , 'display_type.type AS displayType'
                     )
                     ->join('channel', 'channel.id', '=', 'article_location.channel_id')
                     ->join('channel AS subChannel', 'subChannel.id', '=', 'article_location.sub_channel_id')
                     ->join('category', 'category.id', '=', 'article_location.category_id')
-                    ->join('article', 'article.id', '=', 'article_location.article_id');
+                    ->join('article', 'article.id', '=', 'article_location.article_id')
+                    ->join('display_type', 'subChannel.display_type', '=', 'display_type.id');
     }
 
     public function asset()
@@ -104,10 +106,5 @@ class Article extends BaseModel {
     public function event()
     {
         return $this->belongsTo('\Version1\Events\Event', 'event_id')->orderBy('event.show_date', 'asc');
-    }
-
-    public function display()
-    {
-        return $this->belongsTo('\Version1\Models\DisplayType', 'display_type');
     }
 }

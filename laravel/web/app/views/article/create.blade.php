@@ -42,11 +42,6 @@
     </div>
 
     <div class="form-group">
-        {{ Form::label('type', 'Article Type:') }}
-        {{ Form::select('type', $types, $article['display']['id'], [ 'class' => 'form-control' ]) }}
-    </div>
-
-    <div class="form-group">
         {{ Form::label('sub_heading', 'Sub Heading:') }}
         {{ Form::text('sub_heading', $article['sub_heading'], [ 'class' => 'form-control' ]) }}
     </div>

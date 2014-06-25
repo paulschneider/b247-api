@@ -89,8 +89,9 @@ Class HomeController extends ApiController {
         $this->articleRepository = $articleRepository;
     }
 
-    public function index( $homePageChannelToShow = 48 )
+    public function index()
     {
+        $channels = $this->channelRepository->getChannels();
         $sponsors = $this->sponsorRepository->getSponsors();
 
         // create a new instance of the pattern maker
@@ -113,22 +114,22 @@ Class HomeController extends ApiController {
         $whatsOn = $response->articles;
         $ads = $response->sponsors;
 
-        $channel = $this->channelTransformer->transform($this->channelRepository->getSimpleChannel( $channel ));
+        $channel = $this->channelTransformer->transform( getChannel($channels, $channel) );
         $channel['articles'] = $whatsOn;
 
         $channelFeed[] = $channel;
 
         // remaining channels
-        $channels = [ 48, 49, 51, 52 ];
+        $channelsToReturn = [ 48, 49, 51, 52 ];
 
-        foreach( $channels AS $channel )
+        foreach( $channelsToReturn AS $channel )
         {
             $articles = $this->articleRepository->getArticles( null, 20, $channel );
             $response = $this->patternMaker->make( [ 'articles' => $articles, 'sponsors' => $ads ] );
             $articles = $response->articles;
             $ads = $response->sponsors;
 
-            $channel = $this->channelTransformer->transform($this->channelRepository->getSimpleChannel( $channel ));
+            $channel = $this->channelTransformer->transform( getChannel($channels, $channel) );
             $channel['articles'] = $articles;
 
             $channelFeed[] = $channel;
@@ -137,7 +138,7 @@ Class HomeController extends ApiController {
         if( ! $response = cached("homepage") )
         {
             $data = [
-                'channels' => $channels = $this->channelTransformer->transformCollection( $this->channelRepository->getChannels() )
+                'channels' => $this->channelTransformer->transformCollection( $channels )
                 ,'adverts' => $this->sponsorTransformer->transformCollection( $sponsors->toArray() )
                 ,'features' => $this->articleTransformer->transformCollection( $this->articleRepository->getArticles( 'featured', 25 ), [ 'showBody' => false] )
                 ,'picks' => $picks

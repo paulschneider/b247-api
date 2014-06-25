@@ -1,5 +1,8 @@
 <?php namespace Api\Transformers;
 
+use Api\Transformers\ArticleTransformer;
+use Api\Transformers\EventTransformer;
+
 class ListingTransformer extends Transformer {
 
     /**
@@ -12,8 +15,8 @@ class ListingTransformer extends Transformer {
     {
         $response = [];
 
-        $articleTransformer = $options['articleTransformer'];
-        $eventTransformer = $options['eventTransformer'];
+        $articleTransformer = new ArticleTransformer;
+        $eventTransformer = new EventTransformer;
 
         $articles = $articles->toArray();
 

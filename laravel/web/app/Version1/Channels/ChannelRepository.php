@@ -9,6 +9,16 @@ use \Version1\Models\BaseModel;
 Class ChannelRepository extends BaseModel implements ChannelInterface {
 
     /**
+    * return a list of all channels
+    *
+    * @var array
+    */
+    public function getAllChannels()
+    {
+        return Channel::with('subChannel', 'display')->active()->alive()->get()->toArray();
+    }
+
+    /**
     * return a list of channels with any sub_channels and sub_channels with any categories
     *
     * @var array
@@ -35,7 +45,7 @@ Class ChannelRepository extends BaseModel implements ChannelInterface {
     */
     public function getChannel($identifier)
     {
-        $query = Channel::with('category', 'sponsors', 'display');
+        $query = Channel::with('category', 'display');
 
         if( is_numeric( $identifier ) )
         {
@@ -75,6 +85,24 @@ Class ChannelRepository extends BaseModel implements ChannelInterface {
     }
 
     /**
+    * get a list of sub-channels associated with a specified channel
+    *
+    * @var array
+    */
+    public function getChildren( $channelId )
+    {
+        $result = Channel::select('id')->where('parent_channel', $channelId)->get();
+
+        $keys = [];
+
+         $keys[] = $result->map(function($item) {
+            return (int) $item->id;
+        });
+
+        return $keys[0]->toArray();
+    }
+
+    /**
     * get the basic details of a channel
     *
     * @var mixed
@@ -91,7 +119,7 @@ Class ChannelRepository extends BaseModel implements ChannelInterface {
     */
     public function getChannelByIdentifier($identifier)
     {
-        $query = Channel::with('subChannel.category', 'sponsors.asset', 'display');
+        $query = Channel::with('subChannel.category', 'display');
 
         if( is_numeric($identifier) )
         {
@@ -102,14 +130,14 @@ Class ChannelRepository extends BaseModel implements ChannelInterface {
             $query->where('sef_name', $identifier);
         }
 
-        $result = $query->get()->toArray();
+        $result = $query->get();
 
-        if( count($result) == 0)
+        if( $result->count() == 0)
         {
             return false;
         }
 
-        return parent::dataCheck($result);
+        return parent::dataCheck($result->toArray());
     }
 
     /**

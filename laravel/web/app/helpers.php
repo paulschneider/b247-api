@@ -1,5 +1,26 @@
 <?php
 
+function getChannel( $channels, $channelId )
+{
+    if ( is_array($channels) )
+    {
+        foreach( $channels AS $channel )
+        {
+            if ( $channel['id'] == $channelId )
+            {
+                unset($channel['sub_channel']);
+                unset($channel['display']);
+
+                return $channel;
+            }
+        }
+    }
+    else
+    {
+        exit('no channels to sort. helpers.php :: getChannel()');
+    }
+}
+
 // convert an epoch timestamp to a specified format
 function convertTimestamp($format, $timestamp)
 {

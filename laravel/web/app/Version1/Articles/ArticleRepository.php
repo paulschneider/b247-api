@@ -11,7 +11,7 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
 
     public function getArticle($identifier)
     {
-        $query = Article::with('location', 'asset', 'display');
+        $query = Article::with('location', 'asset');
 
         if( is_numeric($identifier) )
         {
@@ -25,13 +25,18 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
         return parent::dataCheck($query->first()->toArray());
     }
 
-    public function getChannelListing( $channelId, $limit = 1000, $duration, $timestamp )
+    public function getChannelListing( $channelId, $limit = 1000, $duration = 'week', $timestamp = null )
     {
+        if ( is_null( $timestamp ) )
+        {
+            $timestamp = \time();
+        }
+
         $dateStamp = convertTimestamp( 'Y-m-d', $timestamp );
 
         $query = Article::with(['location' => function($query) use ($channelId) {
                 $query->where('article_location.sub_channel_id', $channelId);
-        }])->with('asset', 'display')->with(['event' => function($query) {
+        }])->with('asset')->with(['event' => function($query) {
                 $query->orderBy('event.show_date', 'asc')->alive()->active();
         }])->with('event.venue');
 
@@ -99,7 +104,7 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
                 }
             }
 
-        }])->with('asset', 'display');
+        }])->with('asset');
 
         switch($type)
         {
@@ -108,18 +113,6 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
             break;
             case 'featured' :
                 $query->where('is_featured', '=', true);
-            break;
-            case 'article' :
-                $query->where('display_type', '=', \Config::get('constants.displayType_article'));
-            break;
-            case 'listing' :
-                $query->where('display_type', '=', \Config::get('constants.displayType_listing'));
-            break;
-            case 'directory' :
-                $query->where('display_type', '=', \Config::get('constants.displayType_directory'));
-            break;
-            case 'promotion' :
-                $query->where('display_type', '=', \Config::get('constants.displayType_promotion'))->where('is_featured', '=', false);
             break;
         }
 
@@ -153,7 +146,7 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
 
     public function getArticlesWithEvents($type, $channel = 50)
     {
-        $query = Article::with('asset', 'display')->with(['location' => function($query) use($channel) {
+        $query = Article::with('asset')->with(['location' => function($query) use($channel) {
                 $query->where('article_location.channel_id', $channel);
         }])->with(['event' => function($query) {
                 $query->orderBy('event.show_date', 'asc')->alive()->active();
@@ -190,7 +183,6 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
             $article->postcode = ! empty($form['postcode']) ? $form['postcode'] : null;
         }
 
-        $article->display_type = ! empty($form['type']) ? $form['type'] : 1;
         $article->event_id = ! empty($form['event']) ? $form['event'] : null;
         $article->sef_name = safename($article->title);
         $article->is_featured = isset($form['is_featured']) ? $form['is_featured'] : false;

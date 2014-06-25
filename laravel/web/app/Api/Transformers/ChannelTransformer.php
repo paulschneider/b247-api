@@ -1,6 +1,6 @@
 <?php namespace Api\Transformers;
 
-use \Api\Transformers\ArticleTransformer;
+use Api\Transformers\ArticleTransformer;
 
 class ChannelTransformer extends Transformer {
 
@@ -10,9 +10,9 @@ class ChannelTransformer extends Transformer {
     */
     protected $articleTransformer;
 
-    public function __construct(ArticleTransformer $articleTransformer)
+    public function __construct()
     {
-        $this->articleTransformer = $articleTransformer;
+        $this->articleTransformer = new ArticleTransformer;
     }
 
     /**
@@ -219,8 +219,6 @@ class ChannelTransformer extends Transformer {
 
         return $response;
     }
-
-
 
     public function getArticles( $articles , $options = [] )
     {

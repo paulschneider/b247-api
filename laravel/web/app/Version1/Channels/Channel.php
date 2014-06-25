@@ -63,4 +63,9 @@ Class Channel extends BaseModel {
     {
         return $this->belongsTo('\Version1\Models\DisplayType', 'display_type');
     }
+
+    public function parent()
+    {
+        return $this->belongsTo('\Version1\Channels\Channel', 'parent_channel');
+    }
 }
