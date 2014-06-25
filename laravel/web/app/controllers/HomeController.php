@@ -101,6 +101,7 @@ Class HomeController extends ApiController {
 
         // Picks
         $picks = $this->articleRepository->getArticles( 'picks', 25 );
+
         $ads = $this->sponsorRepository->getWhereNotInCollection( $sponsors, 30 );
         $response = $this->patternMaker->make( [ 'articles' => $picks, 'sponsors' => $ads ] );
         $picks = $response->articles;
@@ -110,8 +111,9 @@ Class HomeController extends ApiController {
         $channel = 50;
 
         $whatsOn = $this->articleRepository->getArticlesWithEvents(null); // get 20 articles from the whats on channel
-        $response = $this->patternMaker->make( [ 'articles' => $whatsOn, 'sponsors' => $ads ] );
+        $response = $this->patternMaker->make( [ 'articles' => $whatsOn, 'sponsors' => $ads ], "whats-on" );
         $whatsOn = $response->articles;
+
         $ads = $response->sponsors;
 
         $channel = $this->channelTransformer->transform( getChannel($channels, $channel) );

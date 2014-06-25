@@ -22,8 +22,8 @@ Route::resource('category', 'CategoryController');
 # Channels
 
 Route::get('channel/listing/{channelId}/{duration}/{timestamp}', 'ChannelController@getChannelListing');
-Route::get('channel/{article}/{channelId}', 'ChannelController@getChannelArticles');
-Route::get('channel/{promotion}/{channelId}', 'ChannelController@getChannelArticles');
+Route::get('channel/{channelId}/{type}', 'ChannelController@show');
+Route::get('channel/{channelId}', 'ChannelController@show');
 Route::resource('channel', 'ChannelController');
 
 # Events

@@ -7,6 +7,14 @@ class ApiController Extends BaseController {
      */
     protected $statusCode = 200;
 
+    public function __construct()
+    {
+        App::singleton('Api', function($app)
+        {
+            return new ApiController;
+        });
+    }
+
     /**
      * get the Api response code for this request
      *
@@ -44,7 +52,7 @@ class ApiController Extends BaseController {
      *
      * @return Response
      */
-    public function respondNotFound($message = "Not found")
+    public function respondNotFound($message = "Unrecognised endpoint.")
     {
         return $this->setStatusCode(404)->respondWithError($message);
     }
@@ -149,9 +157,9 @@ class ApiController Extends BaseController {
      *
      * @return Response
      */
-    public static function respondNoDataFound($message = "Call successful. Nothing to return.", $statusCode = 204)
+    public function respondNoDataFound($message = "Call successful. Nothing to return.", $statusCode = 404)
     {
-        return Response::json([
+        return $this->respond([
             'error' => [
                 'message' => $message
                 ,'statusCode' => $statusCode
@@ -162,7 +170,7 @@ class ApiController Extends BaseController {
             'source' => [
                 sourceClient()
             ]
-        ], $statusCode);
+        ]);
     }
 
     /**
@@ -170,9 +178,9 @@ class ApiController Extends BaseController {
      *
      * @return Response
      */
-    public static function respondBadRequest($message = "Bad request. Please check the documention for the usage of this API endpoint.", $statusCode=400)
+    public function respondBadRequest($message = "Bad request. Please check the documention for the usage of this API endpoint.", $statusCode=400)
     {
-        return Response::json([
+        return $this->respond([
             'error' => [
                 'message' => $message
                 ,'statusCode' => $statusCode
@@ -183,7 +191,7 @@ class ApiController Extends BaseController {
             'source' => [
                 sourceClient()
             ]
-        ], $statusCode);
+        ]);
     }
 
     /**
@@ -191,9 +199,9 @@ class ApiController Extends BaseController {
      *
      * @return Response
      */
-    public static function respondNotAllowed($message = 'Endpoint does not support method.', $statusCode = 501)
+    public function respondNotAllowed($message = 'Endpoint does not support method.', $statusCode = 501)
     {
-        return Response::json([
+        return $this->respond([
             'error' => [
                 'message' => $message
                 ,'statusCode' => $statusCode

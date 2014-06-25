@@ -54,6 +54,11 @@ Class Channel extends BaseModel {
         return $this->hasMany('Version1\Channels\SubChannel', 'parent_channel');
     }
 
+    public function parent()
+    {
+        return $this->belongsTo('\Version1\Channels\Channel', 'parent_channel');
+    }
+
     /**
     * create the relationship with display_type
     *
@@ -62,10 +67,5 @@ Class Channel extends BaseModel {
     public function display()
     {
         return $this->belongsTo('\Version1\Models\DisplayType', 'display_type');
-    }
-
-    public function parent()
-    {
-        return $this->belongsTo('\Version1\Channels\Channel', 'parent_channel');
     }
 }

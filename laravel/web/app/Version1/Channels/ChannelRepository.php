@@ -15,7 +15,7 @@ Class ChannelRepository extends BaseModel implements ChannelInterface {
     */
     public function getAllChannels()
     {
-        return Channel::with('subChannel', 'display')->active()->alive()->get()->toArray();
+        return Channel::with('subChannel.display')->active()->alive()->get()->toArray();
     }
 
     /**
@@ -25,7 +25,7 @@ Class ChannelRepository extends BaseModel implements ChannelInterface {
     */
     public function getChannels()
     {
-        return Channel::with('subChannel.category', 'display')->whereNull('parent_channel')->get()->toArray();
+        return Channel::with('subChannel.category', 'subChannel.display')->whereNull('parent_channel')->get()->toArray();
     }
 
     /**
@@ -35,7 +35,7 @@ Class ChannelRepository extends BaseModel implements ChannelInterface {
     */
     public function getChannelList()
     {
-        return Channel::with('subChannel', 'display')->get();
+        return Channel::with('subChannel.display')->get();
     }
 
     /**

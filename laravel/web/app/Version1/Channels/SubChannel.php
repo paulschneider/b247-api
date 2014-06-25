@@ -52,6 +52,16 @@ Class SubChannel extends BaseModel
     {
         return $this->belongsToMany('Article', 'article_location', 'sub_channel_id')->alive()->active();
     }
+        
+    /**
+    * create the relationship with display_type
+    *
+    * @var array
+    */
+    public function display()
+    {
+        return $this->belongsTo('\Version1\Models\DisplayType', 'display_type');
+    }
 
     public static function getWithArticles($channel)
     {

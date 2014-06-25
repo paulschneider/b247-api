@@ -7,24 +7,24 @@ Class PatternMaker
 {
     private $patterns = [
         1 => [
-        //  [2 , 1]
+                        //  [2 , 1]
             0 => "doubleAd"
             , 1 => 1
-        //  [2 , 1]
+                        //  [2 , 1]
             , 2 => 1
-            , 3 => 2
-        //  [1, 1, 1]
+            , 3 => "doubleAd"
+                        //  [1, 2]
             ,4 => 1
-            , 5 => "doubleAd"
+            , 5 => 2
         ]
         ,2 => [
-        //  [1 , 2]
+                        //  [1 , 2]
             0 => "singleAd"
             , 1 => 2
-        //  [2 , 1]
+                        //  [2 , 1]
             , 2 => 1
             , 3 => 2
-        //  [1, 1, 1]
+                        //  [1, 1, 1]
             ,4 => "doubleAd"
             , 5 => 1
         ]
@@ -50,7 +50,7 @@ Class PatternMaker
         return $this->activePattern;
     }
 
-    public function make( array $content )
+    public function make( array $content, $type = "" )
     {
         $counter = 0;
         $patternCounter = 0;
@@ -63,11 +63,13 @@ Class PatternMaker
         $sponsorTransformer = new SponsorTransformer();
         $articleTransformer = new ArticleTransformer();
 
+
+
         while (count($articles) > 0)
         {
-             $thisPattern = $this->pattern[$patternCounter];
+            $thisPattern = $this->pattern[$patternCounter];
 
-             if( $thisPattern == "singleAd" )
+             if( $thisPattern == "singleAd" and count($sponsors) > 0  )
              {
                  $thisAd = $sponsors->shift();
 
@@ -77,7 +79,7 @@ Class PatternMaker
 
                  $sorted[] = $sponsorTransformer->transform( $thisAd, [ 'showBody' => false] );
              }
-             else if($thisPattern == "doubleAd")
+             else if($thisPattern == "doubleAd" and count($sponsors) > 0 )
              {
                  $thisAd =  $sponsors->shift();
 
@@ -89,18 +91,24 @@ Class PatternMaker
              }
              else
              {
-                    $thisArticle = $articles[$counter];
+                $thisArticle = $articles[$counter];
 
-                    $thisArticle['display_style'] = $thisPattern;
+                $thisArticle['display_style'] = $thisPattern;
 
-                    $sorted[] = $articleTransformer->transform( $thisArticle, [ 'showBody' => false] );
+                $article = $articleTransformer->transform( $thisArticle, [ 'showBody' => false] );
 
-                    unset($articles[$counter]);
+                // make sure the transformer returned something
+                if( ! is_null($article) )
+                {
+                    $sorted[] = $article;
+                }
 
-                    $counter++;
+                unset($articles[$counter]);
+
+                $counter++;
              }
 
-            $patternCounter++;
+             $patternCounter++;
 
              if( $totalPatterns == $patternCounter )
              {

@@ -179,7 +179,7 @@ class ChannelController extends ApiController {
     *
     * @return View
     */
-    public function show($identifier = null)
+    public function show($identifier = null, $type = null)
     {
         if( is_null($identifier) )
         {
@@ -188,25 +188,19 @@ class ChannelController extends ApiController {
 
         if( ! $channel = $this->channelRepository->getChannelByIdentifier( $identifier ))
         {
-            return Api::respondWithError("Channel does not exist.");
+            return $this->respondNoDataFound("Channel does not exist.");
         }
 
         if( isSubChannel($channel) )
         {
-            if ( ! $data = $this->getSubChannel( $channel ) )
-            {
-                return Api::respondWithError("There are not articles assigned to this sub-channel.");
-            }
+            $data = $this->getSubChannel( $channel );
         }
         else
         {
-            if( ! $data = $this->getChannel( $channel ) )
-            {
-                return Api::respondWithError("There are not articles assigned to this channel.");
-            }
+            $data = $this->getChannel( $channel );
         }
 
-        return Api::respondFound( 'Channel found', $data );
+        return $this->respondFound( 'Channel found', $data );
     }
 
     /**
@@ -219,7 +213,8 @@ class ChannelController extends ApiController {
         $channelId = $channel['id'];
         $channelName = $channel['sef_name'];
 
-        $channels = $this->channelRepository->getAllChannels();
+        $allChannels = $this->channelRepository->getAllChannels();
+        $structure = $this->channelRepository->getChannels();
         $subChannels = $this->channelRepository->getChildren( $channelId );
         $sponsors = $this->sponsorRepository->getSponsors();
 
@@ -235,13 +230,13 @@ class ChannelController extends ApiController {
 
         // create a new instance of the channel feed class and pass the required params to it
 
-        $this->channelFeed = new ChannelFeed($channels, $subChannels, $ads);
+        $this->channelFeed = new ChannelFeed($allChannels, $subChannels, $ads);
 
         if( ! $response = cached( $channelName ) )
         {
             $data = [
-                //'channels' => $this->channelTransformer->transformCollection( $channels )
-                'adverts' => $this->sponsorTransformer->transformCollection( $sponsors->toArray() )
+                'channels' => $this->channelTransformer->transformCollection( $structure )
+                ,'adverts' => $this->sponsorTransformer->transformCollection( $sponsors->toArray() )
                 ,'features' => $this->articleTransformer->transformCollection( $this->articleRepository->getArticles( 'featured', 25 ), [ 'showBody' => false] )
                 ,'picks' => $picks
                 ,'channelFeed' => $this->channelFeed->make()
@@ -260,8 +255,11 @@ class ChannelController extends ApiController {
     */
     private function getSubChannel($channel)
     {
+        $structure = $this->channelRepository->getChannels();
+
         $response = [
-            'adverts' => $this->sponsorTransformer->transformCollection( $this->sponsorRepository->getSponsors() )
+            'channels' => $this->channelTransformer->transformCollection( $structure )
+            ,'adverts' => $this->sponsorTransformer->transformCollection( $this->sponsorRepository->getSponsors() )
         ];
 
         $type = $channel['display']['id'];
@@ -272,7 +270,7 @@ class ChannelController extends ApiController {
                 $response['articles'] = $this->getChannelArticles( Config::get('constants.displayType_article'), $channel );
             break;
             case Config::get('constants.displayType_listing') :
-                $response['listing'] = $this->getChannelListing( $channel['id'], 'week' );
+                $response['listing'] = $this->getChannelListing( $channel['id'], 'week', null, true );
             break;
             default;
                 $response['articles'] = $this->getChannelArticles( Config::get('constants.displayType_article'), $channel );
@@ -285,7 +283,7 @@ class ChannelController extends ApiController {
     /**
     * return a list of articles for a given channel ( sub-channel )
     *
-    * @return View
+    * @return array
     */
     public function getChannelArticles($type = null, $channel )
     {
@@ -309,24 +307,39 @@ class ChannelController extends ApiController {
         }
         else
         {
-            return false;
+            return $this->respondWithError("There are no articles assigned to this sub-channel.");
         }
     }
 
-    public function getChannelListing($identifier, $duration, $timestamp = null)
+    /**
+    * return a listing for a given sub-channel
+    *
+    * @return array
+    */
+    public function getChannelListing($identifier, $duration, $timestamp = null, $dataReturn = false)
     {
-        $response = [];
-
         $articles = $this->articleRepository->getChannelListing( $identifier, 20, $duration, $timestamp );
 
         if( $articles->count() > 0 )
         {
-            return $response['days'] = $this->listingTransformer->transformCollection( $articles );
+            $articles = $this->listingTransformer->transformCollection( $articles );
         }
         else
         {
-            return false;
+            return $this->respondWithError("There are no articles assigned to this sub-channel for the specified " . $duration);
         }
+
+        // this was an internal call so just return the result set to the calling function
+        if( $dataReturn )
+        {
+            return $articles;
+        }
+        // it was an external call so we need to send a full API response
+        else
+        {
+            return $this->respondFound( 'Channel found', [ 'days' => $articles ] );
+        }
+
     }
 
     /**

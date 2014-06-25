@@ -89,8 +89,8 @@ class ChannelTransformer extends Transformer {
                                 "id" => (int) $subChannel['id']
                                 ,"name" => $subChannel['name']
                                 ,'displayType' => [
-                                    'id' => $channel['display']['id']
-                                    ,'type' => $channel['display']['type']
+                                    'id' => $subChannel['display']['id']
+                                    ,'type' => $subChannel['display']['type']
                                 ]
                             );
 

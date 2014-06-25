@@ -68,7 +68,7 @@ class ListingTransformer extends Transformer {
             }
         }
 
-        return $response;
+        return array_values($response);
     }
 
     /**
