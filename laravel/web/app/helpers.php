@@ -1,5 +1,10 @@
 <?php
 
+function isChannelUserEnabled($channelId, $inactiveUserChannels)
+{
+    return in_array($channelId, $inactiveUserChannels) ? false : true;
+}
+
 function getChannel( $channels, $channelId )
 {
     if ( is_array($channels) )
@@ -64,14 +69,18 @@ function getParentChannel($channels, $channel)
 
 function isMobile()
 {
-    // return true if client is mobile (obvs)
-    return Agent::isMobile();
+    // check for the existence of the header param
+    if( Request::header('BristolAPIClient') )
+    {
+        return true;
+    }
 }
 
 function isDesktop()
 {
     // if its not mobile then its desktop
-    if( ! Agent::isMobile() )
+    // check for the existence of the header param
+    if( ! Request::header('BristolAPIClient') )
     {
         return true;
     }

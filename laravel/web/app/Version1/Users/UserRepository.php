@@ -42,4 +42,17 @@ Class UserRepository
 
         return $user;
     }
+
+    public function getUserInactiveChannels( $userId )
+    {
+        $result = UserInactiveChannel::select('channel_id AS id')->where('user_id', $userId)->get();
+
+        $hidden = [];
+
+        $hidden[] = $result->map(function( $channel ){
+             return (int) $channel->id;
+        });
+
+        return $hidden[0]->toArray();
+    }
 }

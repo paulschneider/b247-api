@@ -11,8 +11,18 @@ class ApiController Extends BaseController {
     {
         App::singleton('Api', function($app)
         {
-            return new ApiController;
+            return new ApiController();
         });
+    }
+
+    public function userIsAuthenticated()
+    {
+        if( Request::header("accessKey") )
+        {
+            return true;
+        }
+
+        return false;
     }
 
     /**

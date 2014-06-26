@@ -11,8 +11,9 @@ Class ChannelFeed {
     protected $ads;
     protected $channelTransformer;
     protected $articleRepository;
+    protected $inactiveUserChannels;
 
-    public function __construct( $channels = [], $subChannels = [], $ads = [] )
+    public function __construct( $channels = [], $subChannels = [], $ads = [], $inactiveUserChannels = [] )
     {
         $this->channelTransformer = new ChannelTransformer();
         $this->articleRepository = new ArticleRepository();
@@ -21,26 +22,29 @@ Class ChannelFeed {
         $this->channels = $channels;
         $this->subChannels = $subChannels;
         $this->ads = $ads;
+        $this->inactiveUserChannels = $inactiveUserChannels;
     }
 
     public function make()
     {
-        $channelFeed;
+        $channelFeed = [];
 
         foreach( $this->subChannels AS $channel )
         {
-            $articles = $this->articleRepository->getArticles( null, 20, $channel );
-            $response = $this->patternMaker->make( [ 'articles' => $articles, 'sponsors' => $this->ads ] );
-            $articles = $response->articles;
-            $ads = $response->sponsors;
+            if( ! in_array($channel, $this->inactiveUserChannels) )
+            {
+                 $articles = $this->articleRepository->getArticles( null, 20, $channel );
+                $response = $this->patternMaker->make( [ 'articles' => $articles, 'sponsors' => $this->ads ] );
+                $articles = $response->articles;
+                $ads = $response->sponsors;
 
-            $channel = $this->channelTransformer->transform( getChannel($this->channels, $channel) );
-            $channel['articles'] = $articles;
+                $channel = $this->channelTransformer->transform( getChannel($this->channels, $channel) );
+                $channel['articles'] = $articles;
 
-            $channelFeed[] = $channel;
+                $channelFeed[] = $channel;
+            }
         }
 
         return $channelFeed;
     }
-
 }
