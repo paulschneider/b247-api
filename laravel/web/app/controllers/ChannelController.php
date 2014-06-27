@@ -326,7 +326,7 @@ class ChannelController extends ApiController {
     {
         $articles = $this->articleRepository->getChannelListing( $identifier, 20, $duration, $timestamp );
 
-        if( $articles->count() > 0 )
+        if( count( $articles ) > 0 )
         {
             $articles = $this->listingTransformer->transformCollection( $articles );
         }

@@ -18,54 +18,49 @@ class ListingTransformer extends Transformer {
         $articleTransformer = new ArticleTransformer;
         $eventTransformer = new EventTransformer;
 
-        $articles = $articles->toArray();
-
         $categoryCounter = [];
 
         foreach( $articles AS $article )
         {
             $hasEvent = false;
 
-            if( isset($article['location'][0]['locationId']) )
+            $location = $article['location'][0];
+
+            $key = date('d-m-Y', strtotime($article['published']));
+
+            $categoryCounter[ $key ][$location['categoryId']][] = $location['categoryId'];
+
+            $response[ $key ]['publication'] = [
+                'date' => $article['published']
+                ,'day' => date('D', strtotime($article['published']))
+                ,'fullDay' => date('l', strtotime($article['published']))
+                ,'iso8601Date' => date('c', strtotime($article['published']))
+                ,'epoch' => strtotime($article['published'])
+            ];
+
+            $response[ $key ]['categories'][$location['categoryId']] = [
+                'categoryId' => $location['categoryId']
+                ,'categoryName' => $location['categoryName']
+                ,'categorySefName' => $location['categorySefName']
+                ,'path' => makePath( [ $location['channelSefName'], $location['subChannelSefName'], $location['categorySefName'] ] )
+                ,'count' => count($categoryCounter[ $key ][$location['categoryId']])
+            ];
+
+            if( isset($article['event']) )
             {
-                $location = $article['location'][0];
+                $event = $eventTransformer->transform( $article['event'] );
 
-                $key = date('d-m-Y', strtotime($article['published']));
-
-                $categoryCounter[ $key ][$location['categoryId']][] = $location['categoryId'];
-
-                $response[ $key ]['publication'] = [
-                    'date' => $article['published']
-                    ,'day' => date('D', strtotime($article['published']))
-                    ,'fullDay' => date('l', strtotime($article['published']))
-                    ,'iso8601Date' => date('c', strtotime($article['published']))
-                    ,'epoch' => strtotime($article['published'])
-                ];
-
-                $response[ $key ]['categories'][$location['categoryId']] = [
-                    'categoryId' => $location['categoryId']
-                    ,'categoryName' => $location['categoryName']
-                    ,'categorySefName' => $location['categorySefName']
-                    ,'path' => $location['channelSefName'] . '/' . $location['subChannelSefName'] . '/' . $location['categorySefName']
-                    ,'count' => count($categoryCounter[ $key ][$location['categoryId']])
-                ];
-
-                if( isset($article['event']) )
-                {
-                    $event = $eventTransformer->transform( $article['event'] );
-
-                    $hasEvent = true;
-                }
-
-                $article = $articleTransformer->transform($article, [ 'showBody' => false] );
-
-                if( $hasEvent )
-                {
-                    $article['event'] = $event;
-                }
-
-                $response[ $key ]['articles'][] = $article;
+                $hasEvent = true;
             }
+
+            $article = $articleTransformer->transform($article, [ 'showBody' => false] );
+
+            if( $hasEvent )
+            {
+                $article['event'] = $event;
+            }
+
+            $response[ $key ]['articles'][] = $article;
         }
 
         return array_values($response);

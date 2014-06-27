@@ -53,7 +53,17 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
         $result = $query->orderBy('article.published', 'asc')
                         ->get();
 
-        return $result;
+        $articles = [];
+
+        $articles[] = $result->map(function( $article )
+        {
+            if( $article->location->first() )
+            {
+                return $article;
+            }
+        }); 
+
+        return $articles[0]->toArray();
     }
 
     public function getArticlesBySubChannel($limit = 20, $channel = null, $articleTransformer)
