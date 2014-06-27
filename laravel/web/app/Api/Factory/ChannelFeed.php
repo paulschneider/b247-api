@@ -33,7 +33,7 @@ Class ChannelFeed {
         {
             if( ! in_array($channel, $this->inactiveUserChannels) )
             {
-                 $articles = $this->articleRepository->getArticles( null, 20, $channel );
+                $articles = $this->articleRepository->getArticles( null, 20, $channel, true );
                 $response = $this->patternMaker->make( [ 'articles' => $articles, 'sponsors' => $this->ads ] );
                 $articles = $response->articles;
                 $ads = $response->sponsors;
