@@ -42,7 +42,7 @@ class ArticleTransformer extends Transformer {
                 ,'sefName' => $article['sef_name']
                 ,'subHeading' => $article['sub_heading']
                 ,'body' => $article['body']
-                ,'path' => $articleLocation['channelSefName'] . '/' . $articleLocation['subChannelSefName'] . '/' . $articleLocation['categorySefName'] . '/' . $article['sef_name']
+                ,'path' => makePath( [ $articleLocation['channelSefName'], $articleLocation['subChannelSefName'], $articleLocation['categorySefName'], $article['sef_name'] ] )
                 ,'isAdvert' => false
                 ,'displayType' => [
                     'id' => $articleLocation['displayTypeId']

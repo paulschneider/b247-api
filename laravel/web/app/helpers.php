@@ -1,5 +1,16 @@
 <?php
 
+function makePath( $paths = [] )
+{
+    $str = "/";
+    foreach($paths AS $path)
+    {
+        $str .= $path.'/';
+    }
+
+    return $str;
+}
+
 function isChannelUserEnabled($channelId, $inactiveUserChannels)
 {
     return in_array($channelId, $inactiveUserChannels) ? false : true;

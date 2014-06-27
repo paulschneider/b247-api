@@ -31,7 +31,7 @@ Class Channel extends BaseModel {
     */
     public function category()
     {
-        return $this->hasMany('Version1\Channels\ChannelCategory');
+       return $this->belongsToMany('Version1\Categories\Category', 'channel_category', 'channel_id');
     }
 
     /**

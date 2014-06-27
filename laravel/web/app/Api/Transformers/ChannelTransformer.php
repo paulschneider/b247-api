@@ -47,7 +47,8 @@ class ChannelTransformer extends Transformer {
             ,'name' => $channel['name']
             ,'sefName' => $channel['sef_name']
             ,'colour' => $channel['colour']
-            ,'path' => $channel['sef_name'].'/'
+            ,'secondaryColour' => $channel['secondary_colour']
+            ,'path' => makePath( [ $channel['sef_name'] ] )
             ,'isEnabled' => isChannelUserEnabled( $channel['id'], $inactiveUserChannels )
         ];
 
@@ -57,7 +58,7 @@ class ChannelTransformer extends Transformer {
 
             foreach( $channel['sub_channel'] AS $subChannel )
             {
-                $pathToChannel = $response['path'].$subChannel['sef_name'].'/';
+                $pathToChannel = makePath( [ $channel['sef_name'], $subChannel['sef_name'] ] );
 
                 $sub = [
                     'id' => $subChannel['id']
@@ -73,7 +74,7 @@ class ChannelTransformer extends Transformer {
 
                     foreach( $subChannel['category'] AS $category )
                     {
-                        $pathToCategory = $pathToChannel.$category['sef_name'];
+                        $pathToCategory = makePath( [ $channel['sef_name'], $subChannel['sef_name'], $category['sef_name'] ] );
 
                         $cat = [
                             'id' => $category['id']

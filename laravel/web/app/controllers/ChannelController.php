@@ -1,6 +1,7 @@
 <?php
 
 use Api\Transformers\ChannelTransformer;
+use Api\Transformers\SubChannelTransformer;
 use Api\Transformers\ArticleTransformer;
 use Api\Transformers\SponsorTransformer;
 use Api\Transformers\ListingTransformer;
@@ -26,6 +27,12 @@ class ChannelController extends ApiController {
     * @var Api\Transformers\ChannelTransformer
     */
     protected $channelTransformer;
+
+    /**
+    *
+    * @var Api\Transformers\SubChannelTransformer
+    */
+    protected $subChannelTransformer;
 
     /**
     *
@@ -95,6 +102,7 @@ class ChannelController extends ApiController {
 
     public function __construct(
         ChannelTransformer $channelTransformer
+        , SubChannelTransformer $subChannelTransformer
         , ArticleTransformer $articleTransformer
         , SponsorTransformer $sponsorTransformer
         , ListingTransformer $listingTransformer
@@ -110,6 +118,7 @@ class ChannelController extends ApiController {
     )
     {
         $this->channelTransformer = $channelTransformer;
+        $this->subChannelTransformer = $subChannelTransformer;        
         $this->articleTransformer = $articleTransformer;
         $this->sponsorTransformer = $sponsorTransformer;
         $this->listingTransformer = $listingTransformer;
@@ -214,7 +223,6 @@ class ChannelController extends ApiController {
         $channelName = $channel['sef_name'];
 
         $allChannels = $this->channelRepository->getAllChannels();
-        $structure = $this->channelRepository->getChannels();
         $subChannels = $this->channelRepository->getChildren( $channelId );
         $sponsors = $this->sponsorRepository->getSponsors();
 
@@ -235,9 +243,9 @@ class ChannelController extends ApiController {
         if( ! $response = cached( $channelName ) )
         {
             $data = [
-                'channels' => $this->channelTransformer->transformCollection( $structure )
+                'channel' => $this->channelTransformer->transform( $channel )
                 ,'adverts' => $this->sponsorTransformer->transformCollection( $sponsors->toArray() )
-                ,'features' => $this->articleTransformer->transformCollection( $this->articleRepository->getArticles( 'featured', 25 ), [ 'showBody' => false] )
+                ,'features' => $this->articleTransformer->transformCollection( $this->articleRepository->getArticles( 'featured', 25 ), [ 'showBody' => false ] )
                 ,'picks' => $picks
                 ,'channelFeed' => $this->channelFeed->make()
             ];
@@ -255,10 +263,8 @@ class ChannelController extends ApiController {
     */
     private function getSubChannel($channel)
     {
-        $structure = $this->channelRepository->getChannels();
-
         $response = [
-            'channels' => $this->channelTransformer->transformCollection( $structure )
+            'channel' => $this->subChannelTransformer->transform( $channel )
             ,'adverts' => $this->sponsorTransformer->transformCollection( $this->sponsorRepository->getSponsors() )
         ];
 

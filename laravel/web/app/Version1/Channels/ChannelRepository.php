@@ -113,13 +113,13 @@ Class ChannelRepository extends BaseModel implements ChannelInterface {
     }
 
     /**
-    * get channels by an identifier
+    * get a specified channel by a provided identifier
     *
     * @var array
     */
     public function getChannelByIdentifier($identifier)
     {
-        $query = Channel::with('subChannel.category', 'display');
+        $query = Channel::with('subChannel.category', 'parent', 'category', 'display');
 
         if( is_numeric($identifier) )
         {
@@ -130,14 +130,14 @@ Class ChannelRepository extends BaseModel implements ChannelInterface {
             $query->where('sef_name', $identifier);
         }
 
-        $result = $query->get();
+        $result = $query->get()->first();
 
         if( $result->count() == 0)
         {
             return false;
         }
 
-        return parent::dataCheck($result->toArray());
+        return $result->toArray();
     }
 
     /**
