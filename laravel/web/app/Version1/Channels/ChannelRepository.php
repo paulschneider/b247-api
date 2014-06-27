@@ -132,7 +132,7 @@ Class ChannelRepository extends BaseModel implements ChannelInterface {
 
         $result = $query->get()->first();
 
-        if( $result->count() == 0)
+        if( is_null($result) or $result->count() == 0)
         {
             return false;
         }
