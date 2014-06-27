@@ -112,10 +112,10 @@ Class HomeController extends ApiController {
 
         $channelFeed = [];
 
-        // if( $this->userIsAuthenticated() )
-        // {
+        if( $this->userIsAuthenticated() )
+        {
             $inactiveUserChannels = $this->userRepository->getUserInactiveChannels( 1 );    
-        //}        
+        }        
 
         // Picks
         $picks = $this->articleRepository->getArticles( 'picks', 25 );
