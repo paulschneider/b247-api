@@ -43,6 +43,7 @@ class EventTransformer extends Transformer {
                 ,'sefName' => $event['sef_name']
                 ,'showDate' => $event['show_date']
                 ,'showTime' => $event['show_time']
+                ,'epoch' => strtotime( $event['show_date'] . ' ' . $event['show_time'] )
                 ,'price' => $event['price']
                 ,'url' => $event['url']
             ]

@@ -64,6 +64,7 @@ class ChannelTransformer extends Transformer {
                     ,'name' => $subChannel['name']
                     ,'sefName' => $subChannel['sef_name']
                     ,'path' => $pathToChannel
+                    ,'isEnabled' => isChannelUserEnabled( $subChannel['id'], $inactiveUserChannels )
                 ];
 
                 if( isset($subChannel['category']) and count($subChannel['category']) > 0 )
