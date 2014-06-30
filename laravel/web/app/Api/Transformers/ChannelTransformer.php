@@ -41,7 +41,7 @@ class ChannelTransformer extends Transformer {
      * @return array
      */
     public function transform( $channel, $inactiveUserChannels = [] )
-    {
+    { 
         $response = [
             'id' => $channel['id']
             ,'name' => $channel['name']
