@@ -100,6 +100,10 @@ Class HomeController extends ApiController {
         $this->userRepository = $userRepository;
     }
 
+    /**
+    *
+    *  Main call to get the homepage response object
+    */
     public function index()
     {
         $channels = $this->channelRepository->getChannels();
