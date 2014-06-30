@@ -238,7 +238,7 @@ class ChannelController extends ApiController {
 
         // create a new instance of the channel feed class and pass the required params to it
 
-        $this->channelFeed = new ChannelFeed($allChannels, $subChannels, $ads);
+        $this->channelFeed = new ChannelFeed($allChannels, $subChannels, $ads, true);
 
         if( ! $response = cached( $channelName ) )
         {

@@ -12,8 +12,9 @@ Class ChannelFeed {
     protected $channelTransformer;
     protected $articleRepository;
     protected $inactiveUserChannels;
+    protected $theseAreSubChannels;
 
-    public function __construct( $channels = [], $subChannels = [], $ads = [], $inactiveUserChannels = [] )
+    public function __construct( $channels = [], $subChannels = [], $ads = [], $inactiveUserChannels = [], $theseAreSubChannels = false )
     {
         $this->channelTransformer = new ChannelTransformer();
         $this->articleRepository = new ArticleRepository();
@@ -23,6 +24,7 @@ Class ChannelFeed {
         $this->subChannels = $subChannels;
         $this->ads = $ads;
         $this->inactiveUserChannels = $inactiveUserChannels;
+        $this->theseAreSubChannels = $theseAreSubChannels;
     }
 
     public function make()
@@ -33,7 +35,7 @@ Class ChannelFeed {
         {
             if( ! in_array($channel, $this->inactiveUserChannels) )
             {
-                $articles = $this->articleRepository->getArticles( null, 20, $channel, false );
+                $articles = $this->articleRepository->getArticles( null, 20, $channel, $this->theseAreSubChannels );
                 $response = $this->patternMaker->make( [ 'articles' => $articles, 'sponsors' => $this->ads ] );
                 $articles = $response->articles;
                 $ads = $response->sponsors;
