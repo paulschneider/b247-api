@@ -39,6 +39,18 @@ Class ChannelRepository extends BaseModel implements ChannelInterface {
     }
 
     /**
+    * get a list of categories assigned to a sub-channel
+    *
+    * @var array
+    */
+    public function getChannelCategories($channelId)
+    {
+        $result = Channel::with('category', 'parent')->where('id', $channelId)->get();
+
+        sd($result->toArray());
+    }
+
+    /**
     * get a specified channel and its relationships
     *
     * @var array

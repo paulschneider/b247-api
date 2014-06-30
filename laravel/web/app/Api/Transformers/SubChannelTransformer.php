@@ -37,6 +37,10 @@ class SubChannelTransformer extends Transformer {
             ,'sefName' => $channel['sef_name']
             ,'path' => makePath( [ $parent['sef_name'], $channel['sef_name'] ] )
             ,'isEnabled' => isChannelUserEnabled( $channel['id'], $inactiveUserChannels )
+            ,'displayType' => [
+                'id' => $channel['display']['id']
+                ,'type' => $channel['display']['type']
+            ]
         ];
 
         if( isset( $channel['category'] ) )

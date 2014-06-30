@@ -192,7 +192,7 @@ class ChannelController extends ApiController {
     {
         if( is_null($identifier) )
         {
-            return Api::respondWithInsufficientParameters();
+            return $this->respondWithInsufficientParameters();
         }
 
         if( ! $channel = $this->channelRepository->getChannelByIdentifier( $identifier ))
@@ -200,16 +200,16 @@ class ChannelController extends ApiController {
             return $this->respondNoDataFound("Channel does not exist.");
         }
 
-        if( isSubChannel($channel) )
+        if( isSubChannel( $channel ) )
         {
-            $data = $this->getSubChannel( $channel );
+            $response = $this->getSubChannel( $channel );
         }
         else
         {
-            $data = $this->getChannel( $channel );
+            $response = $this->getChannel( $channel );
         }
 
-        return $this->respondFound( 'Channel found', $data );
+        return $response;
     }
 
     /**
@@ -253,7 +253,7 @@ class ChannelController extends ApiController {
             cacheIt( $channelName, $response, "1 hour" );
         }
 
-        return $data;
+        return $this->respondFound( 'Channel found', $data );
     }
 
     /**
@@ -261,7 +261,7 @@ class ChannelController extends ApiController {
     *
     * @return *
     */
-    private function getSubChannel($channel)
+    private function getSubChannel( $channel )
     {
         $response = [
             'channel' => $this->subChannelTransformer->transform( $channel )
@@ -273,17 +273,32 @@ class ChannelController extends ApiController {
         switch( $type )
         {
             case Config::get('constants.displayType_article') :
-                $response['articles'] = $this->getChannelArticles( Config::get('constants.displayType_article'), $channel );
+                $result = $this->getChannelArticles( Config::get('constants.displayType_article'), $channel );
             break;
             case Config::get('constants.displayType_listing') :
-                $response['listing'] = $this->getChannelListing( $channel['id'], 'week', null, true );
+                $result = $this->getChannelListing( $channel['id'], 'week', null, true );
+            break;
+            case Config::get('constants.displayType_directory') :
+                $result = $this->getChannelArticles( Config::get('constants.displayType_directory'), $channel );
+            break;
+            case Config::get('constants.displayType_promotion') :                
+                $result = $this->getChannelArticles( Config::get('constants.displayType_promotion'), $channel );
             break;
             default;
-                $response['articles'] = $this->getChannelArticles( Config::get('constants.displayType_article'), $channel );
+                $result = $this->getChannelArticles( Config::get('constants.displayType_article'), $channel );
             break;
         }
 
-        return $response;
+        if( isApiResponse( $result ) )
+        {
+            return $result;             
+        }
+        else
+        {
+            $response['articles'] = $result;
+
+            return $this->respondFound( 'Sub-channel found', $response );
+        }
     }
 
     /**
@@ -313,7 +328,7 @@ class ChannelController extends ApiController {
         }
         else
         {
-            return $this->respondWithError("There are no articles assigned to this sub-channel.");
+            return $this->respondNoDataFound("There are no articles assigned to this sub-channel.");
         }
     }
 
@@ -332,7 +347,7 @@ class ChannelController extends ApiController {
         }
         else
         {
-            return $this->respondWithError("There are no articles assigned to this sub-channel for the specified " . $duration);
+            return $this->respondNoDataFound("There are no articles assigned to this sub-channel for the specified " . $duration);
         }
 
         // this was an internal call so just return the result set to the calling function
@@ -340,12 +355,11 @@ class ChannelController extends ApiController {
         {
             return $articles;
         }
-        // it was an external call so we need to send a full API response
+        // it was an direct external call so we need to send a full API response. Everything else is called from the getSubChannel() method above.
         else
         {
-            return $this->respondFound( 'Channel found', [ 'days' => $articles ] );
+            return $this->respondFound( 'Sub-channel found', [ 'days' => $articles ] );
         }
-
     }
 
     /**

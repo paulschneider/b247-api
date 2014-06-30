@@ -65,6 +65,10 @@ class ChannelTransformer extends Transformer {
                     ,'name' => $subChannel['name']
                     ,'sefName' => $subChannel['sef_name']
                     ,'path' => $pathToChannel
+                    ,'displayType' => [
+                        'id' => $subChannel['display']['id']
+                        ,'type' => $subChannel['display']['type']
+                    ]
                     ,'isEnabled' => isChannelUserEnabled( $subChannel['id'], $inactiveUserChannels )
                 ];
 

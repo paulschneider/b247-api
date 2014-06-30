@@ -1,5 +1,10 @@
 <?php
 
+function isApiResponse($data)
+{
+    return $data instanceOf Illuminate\Http\JsonResponse ? true : false;
+}
+
 function makePath( $paths = [] )
 {
     $str = "/";
