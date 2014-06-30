@@ -125,13 +125,13 @@ Class ChannelRepository extends BaseModel implements ChannelInterface {
     }
 
     /**
-    * get a specified channel by a provided identifier
+    * get a specified channel by a provided identifier. This is generic to cover off getting a channel or a sub-channel
     *
     * @var array
     */
     public function getChannelByIdentifier($identifier)
     {
-        $query = Channel::with('subChannel.category', 'parent', 'category', 'display');
+        $query = Channel::with('subChannel.category', 'parent', 'category', 'display', 'subChannel.display');
 
         if( is_numeric($identifier) )
         {
