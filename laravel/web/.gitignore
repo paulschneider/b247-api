@@ -2,6 +2,7 @@
 /bootstrap/compiled.php
 /vendor
 /app/storage/clockwork/*
+laravel/web/app/storage/
 composer.phar
 composer.lock
 .env.*.php
