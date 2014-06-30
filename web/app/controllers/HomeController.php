@@ -81,7 +81,6 @@ Class HomeController extends ApiController {
         , ArticleTransformer $articleTransformer
         , SponsorTransformer $sponsorTransformer
         , EventTransformer $eventTransformer
-        , PatternMaker $patternMaker
         , EventRepository $eventRepository
         , ChannelRepository $channelRepository
         , SponsorRepository $sponsorRepository

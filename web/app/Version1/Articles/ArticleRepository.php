@@ -22,7 +22,14 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
             $query->where('article.sef_name', '=', $identifier);
         }
 
-        return parent::dataCheck($query->first()->toArray());
+        if( ! $result = $query->first() )
+        {
+            return false;
+        }
+        else
+        {
+            return $result->toArray();    
+        }        
     }
 
     public function getChannelListing( $channelId, $limit = 1000, $duration = 'week', $timestamp = null )
@@ -50,19 +57,19 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
             $query->where('article.published', '=', $dateStamp);
         }
 
-        $result = $query->orderBy('article.published', 'asc')->get();
+        $result = $query->orderBy('article.published', 'asc')->get()->toArray();
 
         $articles = [];
 
-        $articles[] = $result->map(function( $article )
+        foreach($result AS $article)
         {
-            if( $article->location->first() )
+            if( isset( $article['location'][0] ) )
             {
-                return $article;
+                array_push($articles, $article);
             }
-        }); 
+        }
 
-        return $articles[0]->toArray();
+        return $articles;
     }
 
     public function getArticlesBySubChannel($limit = 20, $channel = null, $articleTransformer)
@@ -151,6 +158,11 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
         }
 
         return $articles;
+    }
+
+    public function getArticlesWhereNotInCollection( $articles = [], $type = 1, $limit = 20 )
+    {
+        return Article::with('location', 'asset')->whereNotIn( 'id', $articles )->orderBy('article.created_at', 'desc')->get();        
     }
 
     public function getArticlesWithEvents($type, $channel = 50)

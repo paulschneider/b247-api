@@ -124,6 +124,11 @@ Class ChannelRepository extends BaseModel implements ChannelInterface {
         return Channel::whereId($channelId)->get()->first();
     }
 
+    public function getChannelBySubChannel($channel)
+    {
+        return Channel::with('subChannel.category', 'subChannel.display')->where('id', $channel['parent']['id'])->first()->toArray();
+    }
+
     /**
     * get a specified channel by a provided identifier. This is generic to cover off getting a channel or a sub-channel
     *
@@ -201,5 +206,4 @@ Class ChannelRepository extends BaseModel implements ChannelInterface {
 
         return $channel;
     }
-
 }

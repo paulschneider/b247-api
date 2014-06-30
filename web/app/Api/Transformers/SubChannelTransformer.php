@@ -1,5 +1,7 @@
 <?php namespace Api\Transformers;
 
+use Api\Transformers\ChannelTransformer;
+
 class SubChannelTransformer extends Transformer {
 
     /**
@@ -31,6 +33,8 @@ class SubChannelTransformer extends Transformer {
     {
         $parent = $channel['parent'];
 
+        $channelTransformer = new ChannelTransformer();
+
         $response = [
             'id' => $channel['id']
             ,'name' => $channel['name']
@@ -41,6 +45,7 @@ class SubChannelTransformer extends Transformer {
                 'id' => $channel['display']['id']
                 ,'type' => $channel['display']['type']
             ]
+            ,'parentChannel' => $channelTransformer->transform( $parent )
         ];
 
         if( isset( $channel['category'] ) )

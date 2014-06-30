@@ -9,6 +9,7 @@ use Api\Transformers\EventTransformer;
 
 use Api\Factory\PatternMaker;
 use Api\Factory\ChannelFeed;
+use Version1\Channels\Toolbox;
 
 use Version1\Events\EventRepository;
 use Version1\Articles\ArticleRepository;
@@ -262,9 +263,11 @@ class ChannelController extends ApiController {
     * @return *
     */
     private function getSubChannel( $channel )
-    {
+    {   
+        $data = $this->channelRepository->getChannelBySubChannel($channel);
+
         $response = [
-            'channel' => $this->subChannelTransformer->transform( $channel )
+            'channel' => $this->channelTransformer->transform( Toolbox::filterSubChannels($data, $channel) )
             ,'adverts' => $this->sponsorTransformer->transformCollection( $this->sponsorRepository->getSponsors() )
         ];
 

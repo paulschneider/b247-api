@@ -50,20 +50,20 @@ Class PatternMaker
         return $this->activePattern;
     }
 
-    public function make( array $content, $type = "" )
+    public function make( array $content, $type = "", $pages = 5 )
     {
         $counter = 0;
         $patternCounter = 0;
         $totalPatterns = count($this->pattern);
         $sorted = [];
+        $pageCount = 1;
+        $spaceCount = 0;
 
         $articles = $content['articles'];
         $sponsors = $content['sponsors'];
 
         $sponsorTransformer = new SponsorTransformer();
         $articleTransformer = new ArticleTransformer();
-
-
 
         while (count($articles) > 0)
         {
@@ -77,7 +77,9 @@ Class PatternMaker
 
                  $thisAd['display_style'] = 1;
 
-                 $sorted[] = $sponsorTransformer->transform( $thisAd, [ 'showBody' => false] );
+                 $spaceCount = $spaceCount + 1;
+
+                 $sorted[] = $sponsorTransformer->transform( $thisAd );
              }
              else if($thisPattern == "doubleAd" and count($sponsors) > 0 )
              {
@@ -87,13 +89,17 @@ Class PatternMaker
 
                  $thisAd['display_style'] = 2;
 
-                 $sorted[] = $sponsorTransformer->transform( $thisAd, [ 'showBody' => false] );
+                 $spaceCount = $spaceCount + 2;
+
+                 $sorted[] = $sponsorTransformer->transform( $thisAd );
              }
              else
              {
                 $thisArticle = $articles[$counter];
 
                 $thisArticle['display_style'] = $thisPattern;
+
+                $spaceCount = $spaceCount + $thisPattern;
 
                 $article = $articleTransformer->transform( $thisArticle, [ 'showBody' => false] );
 
@@ -114,6 +120,18 @@ Class PatternMaker
              {
                  $patternCounter = 0;
              }
+
+             if( $spaceCount == 3 )
+             {
+                $spaceCount = 0;
+            
+                if( $pageCount == $pages )
+                {
+                    break;
+                }
+
+                $pageCount++;
+             }             
         }
 
         $response = new \stdClass();
