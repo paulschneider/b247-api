@@ -3,9 +3,9 @@
 return [
 	'connections' => [
 		'mysql' => [
-			'database' => 'wfbuildc_b247-com',
+			'database' => 'wfbuildc_b247_com',
 			'username' => 'root',
-			'password' => 'L5FjpF1e'
+			'password' => 'r]upoyJmL)2t'
 		]
 	]
 ];
