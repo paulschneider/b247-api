@@ -169,6 +169,8 @@ class ApiController Extends BaseController {
      */
     public function respondNoDataFound($message = "Call successful. Nothing to return.", $statusCode = 404)
     {
+        $this->setStatusCode( $statusCode );
+
         return $this->respond([
             'error' => [
                 'message' => $message
@@ -190,6 +192,8 @@ class ApiController Extends BaseController {
      */
     public function respondBadRequest($message = "Bad request. Please check the documention for the usage of this API endpoint.", $statusCode=400)
     {
+        $this->setStatusCode( $statusCode );
+
         return $this->respond([
             'error' => [
                 'message' => $message
@@ -211,6 +215,8 @@ class ApiController Extends BaseController {
      */
     public function respondNotAllowed($message = 'Endpoint does not support method.', $statusCode = 501)
     {
+        $this->setStatusCode( $statusCode );
+
         return $this->respond([
             'error' => [
                 'message' => $message

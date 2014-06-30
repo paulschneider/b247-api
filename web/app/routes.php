@@ -22,7 +22,7 @@ Route::resource('category', 'CategoryController');
 # Channels
 
 Route::group(['prefix' => 'channel'], function(){
-    Route::get('listing/{channelId}/{duration}/{timestamp}', 'ChannelController@getChannelListing');
+    Route::get('{channelId}/listing/{duration}/{timestamp}', 'ChannelController@getChannelListing');
     Route::get('{channelId}/{type}', 'ChannelController@show');
     Route::get('{channelId}', 'ChannelController@show');
 });
