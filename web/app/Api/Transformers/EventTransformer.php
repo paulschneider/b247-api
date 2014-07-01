@@ -44,7 +44,7 @@ class EventTransformer extends Transformer {
                 ,'showDate' => $event['show_date']
                 ,'showTime' => $event['show_time']
                 ,'epoch' => strtotime( $event['show_date'] . ' ' . $event['show_time'] )
-                ,'price' => $event['price']
+                ,'price' => number_format( $event['price'], 2 )
                 ,'url' => $event['url']
             ]
             ,'venue' => [

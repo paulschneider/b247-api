@@ -18,19 +18,6 @@ return array(
 
 	/*
 	|--------------------------------------------------------------------------
-	| Fake It
-	|--------------------------------------------------------------------------
-	|
-	| Whether we want to override the form inputs with faked data user Faker
-	| https://github.com/fzaninotto/Faker
-	|
-	|
-	*/
-
-	'fakeIt' => true,
-
-	/*
-	|--------------------------------------------------------------------------
 	| Application Debug Mode
 	|--------------------------------------------------------------------------
 	|
@@ -40,7 +27,7 @@ return array(
 	|
 	*/
 
-	'debug' => true,
+	'debug' => false,
 
 	/*
 	|--------------------------------------------------------------------------
@@ -119,7 +106,7 @@ return array(
 	*/
 
 	'providers' => array(
-
+		'Jenssegers\Agent\AgentServiceProvider', // https://github.com/jenssegers/Laravel-Agent
 		'Illuminate\Foundation\Providers\ArtisanServiceProvider',
 		'Illuminate\Auth\AuthServiceProvider',
 		'Illuminate\Cache\CacheServiceProvider',
@@ -146,8 +133,6 @@ return array(
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
-		'Jenssegers\Agent\AgentServiceProvider', // https://github.com/jenssegers/Laravel-Agent
-		'Clockwork\Support\Laravel\ClockworkServiceProvider', // https://github.com/itsgoingd/clockwork
 	),
 
 	/*
@@ -177,14 +162,12 @@ return array(
 	'aliases' => array(
 
 		'Agent'           => 'Jenssegers\Agent\Facades\Agent', // https://github.com/jenssegers/Laravel-Agent
-		'Api'			 => 'ApiController',
 		'App'             => 'Illuminate\Support\Facades\App',
 		'Artisan'         => 'Illuminate\Support\Facades\Artisan',
 		'Auth'            => 'Illuminate\Support\Facades\Auth',
 		'Blade'           => 'Illuminate\Support\Facades\Blade',
 		'Cache'           => 'Illuminate\Support\Facades\Cache',
-		'ClassLoader'     => 'Illuminate\Support\ClassLoader',
-		'Clockwork' 	  => 'Clockwork\Support\Laravel\Facade',
+		'ClassLoader'     => 'Illuminate\Support\ClassLoader',		
 		'Config'          => 'Illuminate\Support\Facades\Config',
 		'Controller'      => 'Illuminate\Routing\Controller',
 		'Cookie'          => 'Illuminate\Support\Facades\Cookie',
@@ -216,7 +199,5 @@ return array(
 		'URL'             => 'Illuminate\Support\Facades\URL',
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
-
 	),
-
 );

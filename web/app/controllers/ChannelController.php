@@ -380,7 +380,6 @@ class ChannelController extends ApiController {
         {
             // associate any sponsors with the channel
             $this->sponsorRepository->assignChannelSponsors($channel, Input::get('sponsor'));
-
             return Redirect::to('channel');
         }
     }

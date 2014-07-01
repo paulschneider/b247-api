@@ -2,7 +2,7 @@
 
 Class Toolbox
 {
-	public function getRelatedArticles( $source, $articles = [], $limit = 20 )
+	public static function getRelatedArticles( $source, $articles = [], $limit = 20 )
 	{
 		$subChannelId = $source['location'][0]['subChannelId'];
 		$displayTypeId = $source['location'][0]['displayTypeId'];

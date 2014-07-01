@@ -105,8 +105,6 @@ Class ArticleController extends ApiController {
 
     public function show($identifier = null)
     {
-
-
         // get some ads from the database
         $sponsors = $this->sponsorRepository->getSponsors();
 
@@ -122,9 +120,7 @@ Class ArticleController extends ApiController {
             return $this->respondNoDataFound("No article found with supplied identifier.");
         }
 
-        $toolbox = new Toolbox();   
-
-        $recommendations = $toolbox->getRelatedArticles( $mainArticle, $this->articleRepository->getArticlesWhereNotInCollection( [ $mainArticle['id'] ] ) );
+        $recommendations = Toolbox::getRelatedArticles( $mainArticle, $this->articleRepository->getArticlesWhereNotInCollection( [ $mainArticle['id'] ] ) );
 
         $data = [
             'adverts' => $this->sponsorTransformer->transformCollection( $sponsors->toArray() ), 

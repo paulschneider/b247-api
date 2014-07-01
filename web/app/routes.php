@@ -22,12 +22,13 @@ Route::resource('category', 'CategoryController');
 # Channels
 
 Route::group(['prefix' => 'channel'], function(){
+	Route::get('/', 'ChannelController@index');
+	Route::get('{channelId}/edit', 'ChannelController@edit');
+	Route::post('store', 'ChannelController@store');
     Route::get('{channelId}/listing/{duration}/{timestamp}', 'ChannelController@getChannelListing');
     Route::get('{channelId}/{type}', 'ChannelController@show');
     Route::get('{channelId}', 'ChannelController@show');
 });
-
-Route::resource('channel', 'ChannelController');
 
 # Events
 

@@ -11,7 +11,7 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
 
     public function getArticle($identifier)
     {
-        $query = Article::with('location', 'asset');
+        $query = Article::with('location', 'asset', 'event.venue');
 
         if( is_numeric($identifier) )
         {
@@ -160,9 +160,9 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
         return $articles;
     }
 
-    public function getArticlesWhereNotInCollection( $articles = [], $type = 1, $limit = 20 )
+    public function getArticlesWhereNotInCollection( $articles = [], $type = 1, $limit = 100 )
     {
-        return Article::with('location', 'asset')->whereNotIn( 'id', $articles )->orderBy('article.created_at', 'desc')->get();        
+        return Article::with('location', 'asset', 'event.venue')->whereNotIn( 'id', $articles )->orderBy('article.created_at', 'desc')->take($limit)->get();        
     }
 
     public function getArticlesWithEvents($type, $channel = 50)

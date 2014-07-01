@@ -59,6 +59,6 @@ class RegisterController extends ApiController {
 	*/
 	public function edit()
 	{
-		return ApiController::respondNotAllowed();
+		return $this->respondNotAllowed();
 	}
 }

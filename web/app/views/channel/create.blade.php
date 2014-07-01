@@ -8,7 +8,7 @@
     {{ link_to('channel', 'Back to List') }}
 </div>
 
-{{ Form::open([ 'url' => 'channel', 'class' => 'form' ]) }}
+{{ Form::open([ 'url' => 'channel/store', 'class' => 'form' ]) }}
     {{ Form::hidden('id', $channel->id) }}
 
 <div class="form-group">
