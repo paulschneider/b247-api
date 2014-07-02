@@ -55,7 +55,7 @@ App::error(function(Exception $exception, $code)
 
 App::error(function(Symfony\Component\HttpKernel\Exception\NotFoundHttpException $exception)
 {
-	$api = App::make('Api');
+	$api = App::make('Api');	
 	return $api->respondNotFound();
 });
 

@@ -34,7 +34,7 @@ class ArticleTransformer extends Transformer {
         if( isset($article['location'][0]) and isset($article['asset'][0]) )
         {
             $articleLocation = $article['location'][0];
-            $articleAsset = $article['asset'];
+            $articleAsset = $article['asset'][0];
 
             $response = [
                 'id' => $article['id']
@@ -65,32 +65,15 @@ class ArticleTransformer extends Transformer {
                         ,'name' => $articleLocation['categoryName']
                         ,'sefName' => $articleLocation['categorySefName']
                     ]
+                    ,'media' => [
+                        'filepath' => $articleAsset['filepath']
+                        ,'alt' => $articleAsset['alt']
+                        ,'title' => $articleAsset['title']
+                        ,'width' => $articleAsset['width']
+                        ,'height' => $articleAsset['height']
+                    ]
                 ]               
             ];
-
-            if( count( $articleAsset ) > 0 )
-            {
-                foreach ($articleAsset as $key => $asset) 
-                {
-                    $mediaItem = [
-                        'filepath' => $asset['filepath']
-                        ,'alt' => $asset['alt']
-                        ,'title' => $asset['title']
-                        ,'width' => $asset['width']
-                        ,'height' => $asset['height']
-                    ];
-
-                    if( ! isDesktop() )
-                    {
-                        unset($mediaItem['alt']);
-                        unset($mediaItem['title']);
-                        unset($mediaItem['width']);
-                        unset($mediaItem['height']);
-                    }
-
-                    $response['media'][] = $mediaItem;
-                }
-            }
 
             // If there is an event then transform that as well
 
@@ -113,6 +96,10 @@ class ArticleTransformer extends Transformer {
                 unset($response['event']['venue']['sefName']);
                 unset($response['event']['detail']['sefName']);
                 unset($response['event']['detail']['url']);
+                unset($response['media']['alt']);
+                unset($response['media']['title']);
+                unset($response['media']['width']);
+                unset($response['media']['height']);
             }
 
             if ( isset($options['showBody']) && ! $options['showBody'] )

@@ -9,6 +9,7 @@ use Api\Transformers\EventTransformer;
 
 use Api\Factory\PatternMaker;
 use Api\Factory\ChannelFeed;
+use Api\Factory\PageMaker;
 use Version1\Channels\Toolbox;
 
 use Version1\Events\EventRepository;
@@ -191,6 +192,7 @@ class ChannelController extends ApiController {
     */
     public function show($identifier = null, $type = null)
     {
+
         if( is_null($identifier) )
         {
             return $this->respondWithInsufficientParameters();
@@ -198,7 +200,7 @@ class ChannelController extends ApiController {
 
         if( ! $channel = $this->channelRepository->getChannelByIdentifier( $identifier ))
         {
-            return $this->respondNoDataFound("Channel does not exist.");
+            return $this->respondNoDataFound( Lang::get('api.channelNotFound') );
         }
 
         if( isSubChannel( $channel ) )
@@ -254,7 +256,7 @@ class ChannelController extends ApiController {
             cacheIt( $channelName, $response, "1 hour" );
         }
 
-        return $this->respondFound( 'Channel found', $data );
+        return $this->respondFound( Lang::get('api.channelFound'), $data );
     }
 
     /**
@@ -300,7 +302,7 @@ class ChannelController extends ApiController {
         {
             $response['articles'] = $result;
 
-            return $this->respondFound( 'Sub-channel found', $response );
+            return $this->respondFound( Lang::get('api.subChannelFound'), $response );
         }
     }
 
@@ -317,7 +319,9 @@ class ChannelController extends ApiController {
         // grab some articles regardless of type
         $articles = $this->articleRepository->getArticles( $type, 25, $channel['id'], true ); // ignore type, limit, channelId, isSubChannel
 
-        if ( count($articles) > 0 )
+        $articles = PageMaker::make($articles, Input::get('page'), Input::get('size'));
+
+        if ( count($articles->items) > 0 )
         {
             // get some more adverts that aren't any of the ones retrieved above
             $ads = $this->sponsorRepository->getWhereNotInCollection( $sponsors, 30 );
@@ -325,13 +329,13 @@ class ChannelController extends ApiController {
             // create a new instance of the pattern maker
             $this->patternMaker = new PatternMaker(1);
 
-            $articles = $this->patternMaker->make( [ 'articles' => $articles, 'sponsors' => $ads ] )->articles;
+            $articles = $this->patternMaker->make( [ 'articles' => $articles->items, 'sponsors' => $ads ] )->articles;
 
             return $articles;
         }
         else
         {
-            return $this->respondNoDataFound("There are no articles assigned to this sub-channel.");
+            return $this->respondNoDataFound( Lang::get('api.noSubChannelArticles') );
         }
     }
 
@@ -340,9 +344,9 @@ class ChannelController extends ApiController {
     *
     * @return array
     */
-    public function getChannelListing($identifier, $duration, $timestamp = null, $dataReturn = false)
+    public function getChannelListing($identifier, $duration, $dataReturn = false)
     {
-        $articles = $this->articleRepository->getChannelListing( $identifier, 20, $duration, $timestamp );
+        $articles = $this->articleRepository->getChannelListing( $identifier, 20, $duration, Input::get('time') );
 
         if( count( $articles ) > 0 )
         {
@@ -361,7 +365,7 @@ class ChannelController extends ApiController {
         // it was an direct external call so we need to send a full API response. Everything else is called from the getSubChannel() method above.
         else
         {
-            return $this->respondFound( 'Sub-channel found', [ 'days' => $articles ] );
+            return $this->respondFound( Lang::get('api.subChannelFound'), [ 'days' => $articles ] );
         }
     }
 
