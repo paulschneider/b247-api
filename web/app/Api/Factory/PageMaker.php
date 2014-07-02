@@ -4,6 +4,16 @@ Class PageMaker {
 
 	public static function make($items = [], $page = 1, $limit = 20)
 	{
+		if( \Input::get('page') )
+		{
+			$page = \Input::get('page');
+		} 
+
+		if( \Input::get('size') )
+		{
+			$limit = \Input::get('size');
+		}
+
 		$counter = 0;
 		$pagination = new \stdClass();
 		$pagination->totalItems	= count($items);

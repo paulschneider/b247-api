@@ -319,7 +319,7 @@ class ChannelController extends ApiController {
         // grab some articles regardless of type
         $articles = $this->articleRepository->getArticles( $type, 25, $channel['id'], true ); // ignore type, limit, channelId, isSubChannel
 
-        $articles = PageMaker::make($articles, Input::get('page'), Input::get('size'));
+        $articles = PageMaker::make($articles);
 
         if ( count($articles->items) > 0 )
         {
@@ -365,7 +365,19 @@ class ChannelController extends ApiController {
         // it was an direct external call so we need to send a full API response. Everything else is called from the getSubChannel() method above.
         else
         {
-            return $this->respondFound( Lang::get('api.subChannelFound'), [ 'days' => $articles ] );
+            if( ! $channel = $this->channelRepository->getChannelByIdentifier( $identifier ))
+            {
+                return $this->respondNoDataFound( Lang::get('api.channelNotFound') );
+            }
+
+            $data = $this->channelRepository->getChannelBySubChannel($channel);
+
+            $response = [
+                'channel' => $this->channelTransformer->transform( Toolbox::filterSubChannels($data, $channel) ),
+                'days' => $articles
+            ];
+
+            return $this->respondFound( Lang::get('api.subChannelFound'), $response );
         }
     }
 
