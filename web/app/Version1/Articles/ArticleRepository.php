@@ -39,7 +39,7 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
             $timestamp = \time();
         }
 
-        $dateStamp = convertTimestamp( 'Y-m-d', $timestamp );
+        $dateStamp = convertTimestamp( 'Y-m-d', $timestamp);
 
         $query = Article::with(['location' => function($query) use ($channelId) {
                 $query->where('article_location.sub_channel_id', $channelId);
@@ -49,7 +49,7 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
 
         if( $duration == "week" )
         {
-            $query->where('article.published', '>=', $dateStamp);
+            $query->where('article.published', '>=', $dateStamp.' 00:00:01');
             $query->where('article.published', '<=', Carbon::today()->addWeeks(1));
         }
         elseif ( $duration == "day" )

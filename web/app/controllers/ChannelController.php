@@ -375,7 +375,7 @@ class ChannelController extends ApiController {
 
             $response = [
                 'channel' => $this->channelTransformer->transform( Toolbox::filterSubChannels($data, $channel) ),
-                'days' => $articles
+                'days' => $this->listingTransformer->transformCollection( $articles )
             ];
 
             return $this->respondFound( Lang::get('api.subChannelFound'), $response );
