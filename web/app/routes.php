@@ -18,6 +18,9 @@ Route::resource('article', 'ArticleController');
 # Category
 
 Route::resource('category', 'CategoryController');
+Route::group(['prefix' => 'category'], function(){
+	Route::get('/', 'CategoryController@index');
+});
 
 # Channels
 
@@ -48,4 +51,4 @@ Route::resource('venue', 'VenueController');
 
 # Homepage
 
-Route::resource('/', 'HomeController');
+Route::get('/', 'HomeController@index');

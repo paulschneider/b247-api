@@ -41,7 +41,7 @@ Class CategoryController extends ApiController {
 
     public function show()
     {
-
+        return "here";
     }
 
     /**

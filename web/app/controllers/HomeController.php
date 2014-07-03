@@ -115,7 +115,7 @@ Class HomeController extends ApiController {
 
         $channelFeed = [];
 
-        if( $this->userIsAuthenticated() )
+        if( userIsAuthenticated() )
         {
             $inactiveUserChannels = $this->userRepository->getUserInactiveChannels( 1 );    
         }        
@@ -159,6 +159,6 @@ Class HomeController extends ApiController {
             cacheIt("homepage", $response, "1 hour");
         }
 
-        return $this->respondFound('Homepage found', $data);
+        return $this->respondFound(Lang::get('api.homepageFound'), $data);
     }
 }

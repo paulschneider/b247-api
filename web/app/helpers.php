@@ -1,5 +1,15 @@
 <?php
 
+function userIsAuthenticated()
+{
+    if( Request::header("accessKey") )
+    {
+        return true;
+    }
+
+    return false;
+}
+
 function isApiResponse($data)
 {
     return $data instanceOf Illuminate\Http\JsonResponse ? true : false;

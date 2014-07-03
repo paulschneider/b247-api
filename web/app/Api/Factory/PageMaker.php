@@ -48,13 +48,13 @@ Class PageMaker {
 
         if($pagination->meta->totalItems > $limit)
 		{
-			$pagination->meta->hasPages	= true;
+			$pagination->meta->hasMultiplePages	= true;
 		}
 
 		$pagination->meta->totalPages = ceil($pagination->meta->totalItems/$pagination->meta->perPage);
 		$pagination->meta->currentPage = $page;
 		$pagination->meta->nextPage = $page+1;
-		$pagination->meta->prevPage = $page-1 == 0 ? 1 : $page-1;
+		$pagination->meta->prevPage = $page-1 == 0 ? null : $page-1;
 
 		return $pagination;
 	}

@@ -128,7 +128,7 @@ Class ArticleController extends ApiController {
             'recommendations' => $this->patternMaker->make( [ 'articles' => $recommendations, 'sponsors' => $ads ] )->articles
         ]; 
 
-        return $this->respondFound('Article found', $data);
+        return $this->respondFound(Lang::get('api.articleFound'), $data);
     }
 
     public function edit($id = null)

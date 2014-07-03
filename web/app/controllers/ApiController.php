@@ -7,23 +7,10 @@ class ApiController Extends BaseController {
      */
     protected $statusCode = 200;
 
-    public function __construct()
-    {
-        App::singleton('Api', function($app)
-        {
-            return new ApiController();
-        });
-    }
-
-    public function userIsAuthenticated()
-    {
-        if( Request::header("accessKey") )
-        {
-            return true;
-        }
-
-        return false;
-    }
+    /**
+     * @var string
+     */
+    protected $message;
 
     /**
      * get the Api response code for this request
@@ -48,12 +35,40 @@ class ApiController Extends BaseController {
     }
 
     /**
+     * get the message for the current request
+     *
+     * @return message
+     */
+    public function getMessage()
+    {
+        return $this->message();
+    }
+
+    /**
+     * set the message for the current request
+     *
+     * @return null
+     */
+    public function setMessage($overrideMessage, $defaultMessage)
+    {
+        if( ! is_null($overrideMessage) )
+        {
+            $this->message = $overrideMessage;
+        }
+        else
+        {
+            $this->message = $defaultMessage;
+        }
+    }
+
+    /**
      * respond that a record was successfully created
      *
      * @return Response
      */
-    public function respondCreated($message = "Created", $data = null)
+    public function respondCreated($message = null, $data = null)
     {
+        $this->setMessage($message, Lang::get('api.defaultRespondCreated'));
         return $this->setStatusCode(201)->respondWithSuccess($message, $data);
     }
 
@@ -62,8 +77,9 @@ class ApiController Extends BaseController {
      *
      * @return Response
      */
-    public function respondNotFound($message = "Unrecognised endpoint.")
+    public function respondNotFound($message = null)
     {
+        $this->setMessage($message, Lang::get('api.defaultRespondNotFound'));
         return $this->setStatusCode(404)->respondWithError($message);
     }
 
@@ -72,8 +88,9 @@ class ApiController Extends BaseController {
      *
      * @return Response
      */
-    public function respondWithInsufficientParameters($message = "Not enough arguments")
+    public function respondWithInsufficientParameters($message = null)
     {
+        $this->setMessage($message, Lang::get('api.defaultRespondInsufficientParameters'));
         return $this->setStatusCode(412)->respondWithError($message);
     }
 
@@ -82,8 +99,9 @@ class ApiController Extends BaseController {
      *
      * @return Response
      */
-    public function respondNotValid($message = "Invalid")
+    public function respondNotValid($message = null)
     {
+        $this->setMessage($message, Lang::get('api.defaultRespondNotValid'));
         return $this->setStatusCode(422)->respondWithError($message);
     }
 
@@ -92,8 +110,9 @@ class ApiController Extends BaseController {
      *
      * @return Response
      */
-    public function respondNotSupported($message = "Not supported")
+    public function respondNotSupported($message = null)
     {
+        $this->setMessage($message, Lang::get('api.defaultRespondNotSupported'));
         return $this->setStatusCode(501)->respondWithError($message);
     }
 
@@ -104,8 +123,9 @@ class ApiController Extends BaseController {
      *
      * @return Response
      */
-    public function respondFound($message = "Found", $data = null)
+    public function respondFound($message = null, $data = null)
     {
+        $this->setMessage($message, Lang::get('api.defaultRespondFound'));
         return $this->respondWithSuccess($message, $data);
     }
 
@@ -167,13 +187,14 @@ class ApiController Extends BaseController {
      *
      * @return Response
      */
-    public function respondNoDataFound($message = "Call successful. Nothing to return.", $statusCode = 404)
+    public function respondNoDataFound($message = null, $statusCode = 404)
     {
         $this->setStatusCode( $statusCode );
+        $this->setMessage($message, Lang::get('api.defaultRespondNoDataFound'));
 
         return $this->respond([
             'error' => [
-                'message' => $message
+                'message' => $this->getMessage()
                 ,'statusCode' => $statusCode
                 ,'method' => Request::getMethod()
                 ,'endpoint' => Request::path()
@@ -190,13 +211,14 @@ class ApiController Extends BaseController {
      *
      * @return Response
      */
-    public function respondBadRequest($message = "Bad request. Please check the documention for the usage of this API endpoint.", $statusCode=400)
+    public function respondBadRequest($message = null, $statusCode=400)
     {
         $this->setStatusCode( $statusCode );
+        $this->setMessage($message, Lang::get('api.defaultRespondNoDataFound'));
 
         return $this->respond([
             'error' => [
-                'message' => $message
+                'message' => $this->getMessage()
                 ,'statusCode' => $statusCode
                 ,'method' => Request::getMethod()
                 ,'endpoint' => Request::path()
@@ -213,13 +235,14 @@ class ApiController Extends BaseController {
      *
      * @return Response
      */
-    public function respondNotAllowed($message = 'Endpoint does not support method.', $statusCode = 501)
+    public function respondNotAllowed($message = null, $statusCode = 501)
     {
         $this->setStatusCode( $statusCode );
+         $this->setMessage($message, Lang::get('api.defaultRespondNotAllowed'));
 
         return $this->respond([
             'error' => [
-                'message' => $message
+                'message' => $this->getMessage()
                 ,'statusCode' => $statusCode
                 ,'method' => Request::getMethod()
                 ,'endpoint' => Request::path()
@@ -228,6 +251,6 @@ class ApiController Extends BaseController {
             'source' => [
                 sourceClient()
             ]
-        ], $statusCode);
+        ]);
     }
 }
