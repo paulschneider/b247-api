@@ -128,6 +128,7 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
             case 'picks' :
                 $query->where('is_picked', '=', true)->where('is_featured', '=', false);
             break;
+            case \Config::get('constants.displayType_directory') :
             case 'featured' :
                 $query->where('is_featured', '=', true);
             break;

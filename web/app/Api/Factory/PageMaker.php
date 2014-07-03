@@ -19,7 +19,7 @@ Class PageMaker {
 		$pagination->meta = new \stdClass();
 		$pagination->meta->totalItems	= count($items);
 		$pagination->meta->perPage = (int) $limit;
-		$pagination->meta->hasPages = false;
+		$pagination->meta->hasPages = (bool) false;
 		$pagination->items = array();
 
         $offset = $pagination->meta->perPage * ($page-1);
@@ -51,10 +51,10 @@ Class PageMaker {
 			$pagination->meta->hasMultiplePages	= true;
 		}
 
-		$pagination->meta->totalPages = ceil($pagination->meta->totalItems/$pagination->meta->perPage);
-		$pagination->meta->currentPage = $page;
-		$pagination->meta->nextPage = $page+1;
-		$pagination->meta->prevPage = $page-1 == 0 ? null : $page-1;
+		$pagination->meta->totalPages = (int) ceil($pagination->meta->totalItems/$pagination->meta->perPage);
+		$pagination->meta->currentPage = (int) $page;
+		$pagination->meta->nextPage = (int) $page+1;
+		$pagination->meta->prevPage = $page-1 == 0 ? null : (int) $page-1;
 
 		return $pagination;
 	}

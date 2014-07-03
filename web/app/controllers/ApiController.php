@@ -10,7 +10,7 @@ class ApiController Extends BaseController {
     /**
      * @var string
      */
-    protected $message;
+    public $message;
 
     /**
      * get the Api response code for this request
@@ -41,7 +41,7 @@ class ApiController Extends BaseController {
      */
     public function getMessage()
     {
-        return $this->message();
+        return $this->message;
     }
 
     /**

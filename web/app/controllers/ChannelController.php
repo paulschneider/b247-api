@@ -287,6 +287,7 @@ class ChannelController extends ApiController {
             case Config::get('constants.displayType_directory') :
                 $result = $this->getChannelArticles( Config::get('constants.displayType_directory'), $channel );
                 $this->response['categories'] = Toolbox::getCategoryCount( $this->articleRepository->getChannelArticleCategory( $channel ) );
+                unset($this->response['pagination']);
             break;
             case Config::get('constants.displayType_promotion') :                
                 $result = $this->getChannelArticles( Config::get('constants.displayType_promotion'), $channel );
@@ -309,7 +310,7 @@ class ChannelController extends ApiController {
     *
     * @return array
     */
-    public function getChannelArticles($type = null, $channel )
+    public function getChannelArticles($type, $channel )
     {
         // get some adverts from the database
         $sponsors = $this->sponsorRepository->getSponsors();
