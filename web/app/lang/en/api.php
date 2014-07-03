@@ -16,4 +16,5 @@ return [
 	'defaultRespondNoDataFound' => "Call successful. Nothing to return.",
 	'defaultRespondBadRequest' => "Bad request. Please check the documentation for the usage of this API endpoint.",
 	'defaultRespondNotAllowed' => "Endpoint does not support method.",
+	'noArticlesForSpecifiedPeriod' => "There are no articles assigned to this sub-channel for the specified period.",
 ];

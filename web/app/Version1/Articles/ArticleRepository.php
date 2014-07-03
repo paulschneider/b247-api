@@ -58,7 +58,7 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
             $query->where('article.published', '<=', $dateStamp.' 23:59:59');
         }
 
-        $result = $query->orderBy('article.published', 'asc')->get()->toArray();
+        $result = $query->orderBy('article.published', 'desc')->get()->toArray();
 
         $articles = [];
 

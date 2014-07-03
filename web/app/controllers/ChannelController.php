@@ -351,16 +351,21 @@ class ChannelController extends ApiController {
 
         if( count( $articles ) > 0 )
         {
-            $this->response['articles'] = $this->listingTransformer->transformCollection( $articles );
+            $type = "picks";
+
+            $result = Toolbox::extractHighlightedArticle($articles);
+            $this->response['articles'] = $this->listingTransformer->transformCollection( $result->articles );
+            $this->response['picks'] = $this->listingTransformer->transformCollection( $result->{$type} );   
         }
         else
         {
-            return $this->respondNoDataFound("There are no articles assigned to this sub-channel for the specified " . $duration);
+            return $this->respondNoDataFound(Lang::get('api.noArticlesForSpecifiedPeriod'));
         }
 
         // this was an internal call so just return the result set to the calling function
         if( $dataReturn )
         {
+            exit('ChannelController::getChannelListing()');
             return;
         }
         // it was a direct external call so we need to send a full API response. Everything else is called from the getSubChannel() method above.
@@ -373,10 +378,23 @@ class ChannelController extends ApiController {
 
             $data = $this->channelRepository->getChannelBySubChannel($channel);
 
+            $type = "picks";
+            $result = Toolbox::extractHighlightedArticle($articles);
+
             $response = [
                 'channel' => $this->channelTransformer->transform( Toolbox::filterSubChannels($data, $channel) ),
-                'days' => $this->listingTransformer->transformCollection( $articles )
+                'adverts' => $this->sponsorTransformer->transformCollection( $this->sponsorRepository->getSponsors() ),                
             ];
+
+            if( $duration == "week" )
+            {
+                $response['days'] = $this->listingTransformer->transformCollection( $articles, [ 'perDayLimit' => 3 ] );
+            }
+            else if( $duration == "day" )
+            {
+                $response[$type] = $this->articleTransformer->transformCollection( $result->{$type} );
+                $response['articles'] = $this->listingTransformer->transformCollection( $result->articles );
+            }
 
             return $this->respondFound( Lang::get('api.subChannelFound'), $response );
         }

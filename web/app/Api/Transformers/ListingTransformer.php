@@ -17,8 +17,13 @@ class ListingTransformer extends Transformer {
 
         $articleTransformer = new ArticleTransformer;
         $eventTransformer = new EventTransformer;
-
+        $limitToShowPerDay = 999;   
         $categoryCounter = [];
+
+        if( isset($options['perDayLimit']) )
+        {
+            $limitToShowPerDay = $options['perDayLimit'];
+        }
 
         foreach( $articles AS $article )
         {
@@ -60,7 +65,15 @@ class ListingTransformer extends Transformer {
                 $article['event'] = $event;
             }
 
-            $response[ $key ]['articles'][] = $article;
+            if( ! isset($response[ $key ]['articles']) )
+            {
+                $response[ $key ]['articles'] = [];
+            }
+
+            if( ! is_null($limitToShowPerDay) && count($response[ $key ]['articles']) < $limitToShowPerDay )
+            {
+                $response[ $key ]['articles'][] = $article;
+            }
         }
 
         return array_values($response);
