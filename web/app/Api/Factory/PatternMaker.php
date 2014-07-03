@@ -32,12 +32,18 @@ Class PatternMaker
 
     public $activePattern;
 
+    public $limit;
+
+    public $maxPages;
+
     private $pattern;
 
-    public function __construct($activePattern = 1)
+    public function __construct($activePattern = 1, $limit = null, $maxPages = 5 )
     {
         $this->activePattern = $activePattern;
         $this->pattern = $this->patterns[ $this->activePattern ];
+        $this->limit = $limit;
+        $this->pages = $maxPages;
     }
 
     public function setPattern($pattern)
@@ -50,15 +56,16 @@ Class PatternMaker
         return $this->activePattern;
     }
 
-    public function make( array $content, $type = "", $pages = 5 )
+    public function make( array $content )
     {
         $counter = 0;
         $patternCounter = 0;
+        $iterationCounter = 1;
         $totalPatterns = count($this->pattern);
         $sorted = [];
         $pageCount = 1;
         $spaceCount = 0;
-
+    
         $articles = array_values($content['articles']); // reset the array keys as we'll be targeting them specifically
         $sponsors = $content['sponsors'];
 
@@ -125,13 +132,20 @@ Class PatternMaker
              {
                 $spaceCount = 0;
             
-                if( $pageCount == $pages )
+                if( $pageCount == $this->maxPages )
                 {
                     break;
                 }
 
                 $pageCount++;
-             }             
+             }  
+
+             if( $iterationCounter == $this->limit )
+             {
+                break;
+             }
+             
+            $iterationCounter++;
         }
 
         $response = new \stdClass();

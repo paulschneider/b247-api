@@ -325,7 +325,7 @@ class ChannelController extends ApiController {
             $ads = $this->sponsorRepository->getWhereNotInCollection( $sponsors, 30 );
 
             // create a new instance of the pattern maker
-            $this->patternMaker = new PatternMaker(1);
+            $this->patternMaker = new PatternMaker(1, $pagination->meta->perPage);
 
             $this->response['articles'] = $this->patternMaker->make( [ 'articles' => $pagination->items, 'sponsors' => $ads ] )->articles;
 
@@ -362,7 +362,7 @@ class ChannelController extends ApiController {
         {
             return;
         }
-        // it was an direct external call so we need to send a full API response. Everything else is called from the getSubChannel() method above.
+        // it was a direct external call so we need to send a full API response. Everything else is called from the getSubChannel() method above.
         else
         {
             if( ! $channel = $this->channelRepository->getChannelByIdentifier( $identifier ))

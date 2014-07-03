@@ -18,7 +18,7 @@ Class PageMaker {
 		$pagination = new \stdClass();
 		$pagination->meta = new \stdClass();
 		$pagination->meta->totalItems	= count($items);
-		$pagination->meta->perPage = $limit;
+		$pagination->meta->perPage = (int) $limit;
 		$pagination->meta->hasPages = false;
 		$pagination->items = array();
 
