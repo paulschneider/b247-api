@@ -64,21 +64,21 @@ class ArticleTransformer extends Transformer {
                         'id' => $articleLocation['categoryId']
                         ,'name' => $articleLocation['categoryName']
                         ,'sefName' => $articleLocation['categorySefName']
-                    ]
-                    ,'media' => [
-                        'filepath' => $articleAsset['filepath']
-                        ,'alt' => $articleAsset['alt']
-                        ,'title' => $articleAsset['title']
-                        ,'width' => $articleAsset['width']
-                        ,'height' => $articleAsset['height']
-                    ]
-                ]               
+                    ]                    
+                ]    
+                ,'media' => [
+                    'filepath' => $articleAsset['filepath']
+                    ,'alt' => $articleAsset['alt']
+                    ,'title' => $articleAsset['title']
+                    ,'width' => $articleAsset['width']
+                    ,'height' => $articleAsset['height']
+                ]           
             ];
 
             // If there is an event then transform that as well
 
-            if( isset($article['event']) )
-            {
+            if( isset($article['event']['id']) )
+            { 
                 $eventTransformer = new EventTransformer();
 
                 $response['event'] = $eventTransformer->transform( $article['event'] );

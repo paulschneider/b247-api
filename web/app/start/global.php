@@ -100,3 +100,13 @@ App::down(function()
 */
 
 require app_path().'/filters.php';
+
+/*
+|--------------------------------------------------------------------------
+| Require The Application Events Files
+|--------------------------------------------------------------------------
+|
+| Application events (custom)
+|
+*/
+require app_path().'/events.php';

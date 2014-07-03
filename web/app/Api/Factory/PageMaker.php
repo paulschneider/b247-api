@@ -16,27 +16,28 @@ Class PageMaker {
 
 		$counter = 0;
 		$pagination = new \stdClass();
-		$pagination->totalItems	= count($items);
-		$pagination->perPage = $limit;
-		$pagination->hasPages = false;
+		$pagination->meta = new \stdClass();
+		$pagination->meta->totalItems	= count($items);
+		$pagination->meta->perPage = $limit;
+		$pagination->meta->hasPages = false;
 		$pagination->items = array();
 
-        $offset = $pagination->perPage * ($page-1);
+        $offset = $pagination->meta->perPage * ($page-1);
 
- 		if(is_array($items) && $pagination->totalItems)
+ 		if(is_array($items) && $pagination->meta->totalItems)
 		{
 			foreach($items AS $key => $item)
 			{
 				if($page == 1)
 				{
-					if($counter+1*$page <= $pagination->perPage*$page)
+					if($counter+1*$page <= $pagination->meta->perPage*$page)
 					{
 						$pagination->items[$key] = $item;
 					}
 				}
 				else
 				{
-					if($counter >= $pagination->perPage*$page-$pagination->perPage && $counter <= $pagination->perPage*$page-1)
+					if($counter >= $pagination->meta->perPage*$page-$pagination->meta->perPage && $counter <= $pagination->meta->perPage*$page-1)
 					{
 						$pagination->items[$key] = $item;
 					}
@@ -45,17 +46,16 @@ Class PageMaker {
 			}
 		}
 
-        if($pagination->totalItems > $limit)
+        if($pagination->meta->totalItems > $limit)
 		{
-			$pagination->hasPages	= true;
+			$pagination->meta->hasPages	= true;
 		}
 
-		$pagination->totalPages = ceil($pagination->totalItems/$pagination->perPage);
-		$pagination->currentPage = $page;
-		$pagination->nextPage = $page+1;
-		$pagination->prevPage = $page-1 == 0 ? 1 : $page-1;
+		$pagination->meta->totalPages = ceil($pagination->meta->totalItems/$pagination->meta->perPage);
+		$pagination->meta->currentPage = $page;
+		$pagination->meta->nextPage = $page+1;
+		$pagination->meta->prevPage = $page-1 == 0 ? 1 : $page-1;
 
 		return $pagination;
 	}
-
 }

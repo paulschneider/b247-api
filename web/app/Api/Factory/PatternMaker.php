@@ -59,7 +59,7 @@ Class PatternMaker
         $pageCount = 1;
         $spaceCount = 0;
 
-        $articles = $content['articles'];
+        $articles = array_values($content['articles']); // reset the array keys as we'll be targeting them specifically
         $sponsors = $content['sponsors'];
 
         $sponsorTransformer = new SponsorTransformer();

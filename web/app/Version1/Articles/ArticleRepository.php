@@ -54,7 +54,8 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
         }
         elseif ( $duration == "day" )
         {
-            $query->where('article.published', '=', $dateStamp);
+            $query->where('article.published', '>=', $dateStamp.' 00:00:01');
+            $query->where('article.published', '<=', $dateStamp.' 23:59:59');
         }
 
         $result = $query->orderBy('article.published', 'asc')->get()->toArray();
@@ -120,7 +121,7 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
                 }
             }
 
-        }])->with('asset');
+        }])->with('asset', 'event.venue');
 
         switch($type)
         {
@@ -248,5 +249,12 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
         \DB::table('article_asset')->insert(['article_id' => $article->id, 'asset_id' => 1]);
 
         return $article;
+    }
+
+    public function getChannelArticleCategory($channel)
+    {
+        $id = $channel['id'];
+
+        return ArticleLocation::where('sub_channel_id', $id)->leftJoin('category', 'article_location.category_id', '=', 'category.id')->get()->toArray();
     }
 }

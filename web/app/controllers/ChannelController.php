@@ -102,6 +102,8 @@ class ChannelController extends ApiController {
     */
     protected $articleRepository;
 
+    var $response;
+
     public function __construct(
         ChannelTransformer $channelTransformer
         , SubChannelTransformer $subChannelTransformer
@@ -192,7 +194,6 @@ class ChannelController extends ApiController {
     */
     public function show($identifier = null, $type = null)
     {
-
         if( is_null($identifier) )
         {
             return $this->respondWithInsufficientParameters();
@@ -268,7 +269,7 @@ class ChannelController extends ApiController {
     {   
         $data = $this->channelRepository->getChannelBySubChannel($channel);
 
-        $response = [
+        $this->response = [
             'channel' => $this->channelTransformer->transform( Toolbox::filterSubChannels($data, $channel) )
             ,'adverts' => $this->sponsorTransformer->transformCollection( $this->sponsorRepository->getSponsors() )
         ];
@@ -285,6 +286,7 @@ class ChannelController extends ApiController {
             break;
             case Config::get('constants.displayType_directory') :
                 $result = $this->getChannelArticles( Config::get('constants.displayType_directory'), $channel );
+                $this->response['categories'] = Toolbox::getCategoryCount( $this->articleRepository->getChannelArticleCategory( $channel ) );
             break;
             case Config::get('constants.displayType_promotion') :                
                 $result = $this->getChannelArticles( Config::get('constants.displayType_promotion'), $channel );
@@ -294,16 +296,12 @@ class ChannelController extends ApiController {
             break;
         }
 
-        if( isApiResponse( $result ) )
+        if( isApiResponse($result) )
         {
-            return $result;             
+            return $result;
         }
-        else
-        {
-            $response['articles'] = $result;
 
-            return $this->respondFound( Lang::get('api.subChannelFound'), $response );
-        }
+        return $this->respondFound( Lang::get('api.subChannelFound'), $this->response );
     }
 
     /**
@@ -319,9 +317,9 @@ class ChannelController extends ApiController {
         // grab some articles regardless of type
         $articles = $this->articleRepository->getArticles( $type, 25, $channel['id'], true ); // ignore type, limit, channelId, isSubChannel
 
-        $articles = PageMaker::make($articles);
+        $pagination = PageMaker::make($articles);       
 
-        if ( count($articles->items) > 0 )
+        if ( count($pagination->items) > 0 )
         {
             // get some more adverts that aren't any of the ones retrieved above
             $ads = $this->sponsorRepository->getWhereNotInCollection( $sponsors, 30 );
@@ -329,9 +327,11 @@ class ChannelController extends ApiController {
             // create a new instance of the pattern maker
             $this->patternMaker = new PatternMaker(1);
 
-            $articles = $this->patternMaker->make( [ 'articles' => $articles->items, 'sponsors' => $ads ] )->articles;
+            $this->response['articles'] = $this->patternMaker->make( [ 'articles' => $pagination->items, 'sponsors' => $ads ] )->articles;
 
-            return $articles;
+            $this->response['pagination'] = $pagination->meta;
+
+            return;
         }
         else
         {
@@ -350,7 +350,7 @@ class ChannelController extends ApiController {
 
         if( count( $articles ) > 0 )
         {
-            $articles = $this->listingTransformer->transformCollection( $articles );
+            $this->response['articles'] = $this->listingTransformer->transformCollection( $articles );
         }
         else
         {
@@ -360,7 +360,7 @@ class ChannelController extends ApiController {
         // this was an internal call so just return the result set to the calling function
         if( $dataReturn )
         {
-            return $articles;
+            return;
         }
         // it was an direct external call so we need to send a full API response. Everything else is called from the getSubChannel() method above.
         else
