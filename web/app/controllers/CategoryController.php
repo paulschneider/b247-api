@@ -1,30 +1,12 @@
 <?php
 
-use Version1\Categories\CategoryRepository;
 use Version1\Categories\Category;
-use Version1\Channels\ChannelRepository;
 
 Class CategoryController extends ApiController {
 
-    /**
-    *
-    * @var Version1\Channels\ChannelRepository
-    */
-    protected $channelRepository;
-
-    /**
-    *
-    * @var Version1\Categories\CategoryRepository
-    */
-    protected $categoryRepository;
-
-    public function __construct(
-        CategoryRepository $categoryRepository
-        ,ChannelRepository $channelRepository
-    )
+    public function __construct()
     {
-        $this->categoryRepository = $categoryRepository;
-        $this->channelRepository = $channelRepository;
+        parent::__construct();        
     }
 
     /**
@@ -42,6 +24,31 @@ Class CategoryController extends ApiController {
     public function show()
     {
         return "here";
+    }
+
+    public function getCategoryArticles($categoryId = null)
+    {   
+        if( Input::get('subChannel') )
+        {
+            $channelId = Input::get('subChannel');
+
+            if( ! $channel = $this->channelRepository->getChannelByIdentifier( $channelId ))
+            {
+                return $this->respondNoDataFound( Lang::get('api.channelNotFound') );
+            }
+
+            $response = [
+                'resultCount' => $this->articleRepository->countArticlesInCategory($categoryId, $channelId)
+            ];
+            
+
+            return $response;
+        }
+        // We won't be able to determine which category the caller wants
+        else
+        {
+            return $this->respondWithInsufficientParameters(Lang::get('api.defaultRespondInsufficientParameters'));
+        }
     }
 
     /**

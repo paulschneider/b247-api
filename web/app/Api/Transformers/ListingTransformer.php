@@ -74,6 +74,20 @@ class ListingTransformer extends Transformer {
             {
                 $response[ $key ]['articles'][] = $article;
             }
+
+            // if an array of picked items was sent through then we want to go through each one and attach it to the right day
+
+            if( isset($options['picks']) )
+            {
+                foreach($options['picks'] AS $pick)
+                {
+                    // work out which day to append the article to
+                    $id = date('d-m-Y', strtotime($pick['published']));
+
+                    // transform and then append it
+                    $response[ $key ]['picks'][] = $articleTransformer->transform($pick, [ 'showBody' => false] );
+                }
+            }
         }
 
         return array_values($response);

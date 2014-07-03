@@ -20,6 +20,7 @@ Route::resource('article', 'ArticleController');
 Route::resource('category', 'CategoryController');
 Route::group(['prefix' => 'category'], function(){
 	Route::get('/', 'CategoryController@index');
+	Route::get('{categoryId}/articles', 'CategoryController@getCategoryArticles');
 });
 
 # Channels

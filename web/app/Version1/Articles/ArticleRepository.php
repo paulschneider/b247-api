@@ -252,6 +252,11 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
         return $article;
     }
 
+    public function countArticlesInCategory($categoryId, $channelId)
+    {
+        return ArticleLocation::where('category_id', $categoryId)->where('sub_channel_id', $channelId)->count();
+    }
+
     public function getChannelArticleCategory($channel)
     {
         $id = $channel['id'];

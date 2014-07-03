@@ -15,7 +15,6 @@ use Version1\Channels\Toolbox;
 use Version1\Events\EventRepository;
 use Version1\Articles\ArticleRepository;
 use Version1\Channels\ChannelRepository;
-
 use Version1\Sponsors\SponsorRepository;
 use Version1\Categories\CategoryRepository;
 
@@ -391,9 +390,8 @@ class ChannelController extends ApiController {
                 $response['days'] = $this->listingTransformer->transformCollection( $articles, [ 'perDayLimit' => 3 ] );
             }
             else if( $duration == "day" )
-            {
-                $response[$type] = $this->articleTransformer->transformCollection( $result->{$type} );
-                $response['articles'] = $this->listingTransformer->transformCollection( $result->articles );
+            {                
+                $response['days'] = $this->listingTransformer->transformCollection( $result->articles, [ 'picks' => $result->{$type} ] );
             }
 
             return $this->respondFound( Lang::get('api.subChannelFound'), $response );
