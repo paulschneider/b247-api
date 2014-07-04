@@ -387,10 +387,10 @@ class ChannelController extends ApiController {
 
             if( $duration == "week" )
             {
-                $response['days'] = $this->listingTransformer->transformCollection( $articles, [ 'perDayLimit' => 3 ] );
+                $response['days'] = $this->listingTransformer->transformCollection( $result->{$type}, [ 'perDayLimit' => 3 ] );
             }
             else if( $duration == "day" )
-            {                
+            {            
                 $response['days'] = $this->listingTransformer->transformCollection( $result->articles, [ 'picks' => $result->{$type} ] );
             }
 
