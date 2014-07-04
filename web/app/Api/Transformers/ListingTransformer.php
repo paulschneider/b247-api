@@ -45,9 +45,9 @@ class ListingTransformer extends Transformer {
             ];
 
             $response[ $key ]['categories'][$location['categoryId']] = [
-                'categoryId' => $location['categoryId']
-                ,'categoryName' => $location['categoryName']
-                ,'categorySefName' => $location['categorySefName']
+                'id' => $location['categoryId']
+                ,'name' => $location['categoryName']
+                ,'sefName' => $location['categorySefName']
                 ,'path' => makePath( [ $location['channelSefName'], $location['subChannelSefName'], $location['categorySefName'] ] )
                 ,'count' => count($categoryCounter[ $key ][$location['categoryId']])
             ];
@@ -77,6 +77,12 @@ class ListingTransformer extends Transformer {
             {
                 $response[ $key ]['articles'][] = $article;
             }
+        }
+
+        // once we're done reset the array keys for the category listing
+        foreach( $response AS $key => $day )
+        {
+            $response[$key]['categories'] = array_values($day['categories']);
         }
 
         return array_values($response);
@@ -120,9 +126,9 @@ class ListingTransformer extends Transformer {
             ];
 
             $response[ $key ]['categories'][$location['categoryId']] = [
-                'categoryId' => $location['categoryId']
-                ,'categoryName' => $location['categoryName']
-                ,'categorySefName' => $location['categorySefName']
+                'id' => $location['categoryId']
+                ,'name' => $location['categoryName']
+                ,'sefName' => $location['categorySefName']
                 ,'path' => makePath( [ $location['channelSefName'], $location['subChannelSefName'], $location['categorySefName'] ] )
                 ,'count' => count($categoryCounter[ $key ][$location['categoryId']])
             ];
@@ -167,6 +173,12 @@ class ListingTransformer extends Transformer {
             {
                 $response[ $key ]['articles'][] = $article;    
             }
+        }
+        
+        // once we're done reset the array keys for the category listing
+        foreach( $response AS $key => $day )
+        {
+            $response[$key]['categories'] = array_values($day['categories']);
         }
 
          return array_values($response);
