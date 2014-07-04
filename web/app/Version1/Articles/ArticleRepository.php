@@ -51,6 +51,8 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
         {
             $query->where('article.published', '>=', $dateStamp.' 00:00:01');
             $query->where('article.published', '<=', Carbon::today()->addWeeks(1));
+
+            $query->where('article.is_picked', '=', true);
         }
         elseif ( $duration == "day" )
         {

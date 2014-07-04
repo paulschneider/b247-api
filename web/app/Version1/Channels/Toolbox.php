@@ -39,34 +39,4 @@ Class Toolbox {
 
         return array_values($sorted);
 	}
-
-    public static function extractHighlightedArticle($articles = [], $type="picks")
-    {
-        $extracted = [];
-
-        switch($type)
-        {
-            case "picks" :
-                $selector = "is_picked";
-            break;
-            case "featured" :
-                $selector = "is_featured";
-            break;
-        }
-
-        foreach($articles AS $key => $article)
-        {
-            if( $article[ $selector ] )
-            {
-                $extracted[] = $article;
-                unset($articles[$key]);
-            }
-        }
-
-        $response = new \stdClass();
-        $response->articles = $articles;
-        $response->{$type} = $extracted;
-
-        return $response;
-    }
 }
