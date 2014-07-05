@@ -29,9 +29,11 @@ Route::group(['prefix' => 'channel'], function(){
 	Route::get('/', 'ChannelController@index');
 	Route::get('{channelId}/edit', 'ChannelController@edit');
 	Route::post('store', 'ChannelController@store');
-    Route::get('{channelId}/listing/{duration}', 'ChannelController@getChannelListing');
-    Route::get('{channelId}/{type}', 'ChannelController@show');
-    Route::get('{channelId}', 'ChannelController@show');
+    Route::get('{channelId}/{listing}', 'ChannelController@getSubChannel');
+    Route::get('{channelId}/{article}', 'ChannelController@getSubChannel');
+    Route::get('{channelId}/{directory}', 'ChannelController@getSubChannel');
+    Route::get('{channelId}/{promotion}', 'ChannelController@getSubChannel');
+    Route::get('{channelId}', 'ChannelController@getChannel');
 });
 
 # Events

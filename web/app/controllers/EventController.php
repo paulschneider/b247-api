@@ -1,30 +1,12 @@
 <?php
 
 use Version1\Events\Event;
-use Version1\Venues\VenueRepository;
-use Version1\Events\EventRepository;
 
 Class EventController extends ApiController {
 
-    /**
-    *
-    * @var Version1\Venues\VenueRepository
-    */
-    protected $venueRepository;
-
-    /**
-    *
-    * @var Version1\Events\EventRepository
-    */
-    protected $eventRepository;
-
-    public function __construct(
-        VenueRepository $venueRepository
-        ,EventRepository $eventRepository
-    )
+    public function __construct()
     {
-        $this->venueRepository = $venueRepository;
-        $this->eventRepository = $eventRepository;
+        parent::__construct();       
     }
 
     /**

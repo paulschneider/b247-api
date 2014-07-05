@@ -1,0 +1,115 @@
+<?php
+App::bind('CategoryResponseMaker', function($app)
+{
+    return new Api\Factory\CategoryResponseMaker;
+});
+
+App::bind('ChannelResponseMaker', function($app)
+{
+    return new Api\Factory\ChannelResponseMaker;
+});
+
+App::bind('SubChannelResponseMaker', function($app)
+{
+    return new Api\Factory\SubChannelResponseMaker;
+});
+
+App::bind('PatternMaker', function($app)
+{
+    return new Api\Factory\PatternMaker;
+});
+
+App::bind('SponsorRepository', function($app)
+{
+    return new Version1\Sponsors\SponsorRepository;
+});
+
+App::bind('SponsorTransformer', function($app)
+{
+    return new Api\Transformers\SponsorTransformer;
+});
+
+App::bind('MapTransformer', function($app)
+{
+    return new Api\Transformers\MapObjectTransformer;
+});
+
+App::bind('ArticleTransformer', function($app)
+{
+    return new Api\Transformers\ArticleTransformer;
+});
+
+App::bind('ChannelTransformer', function($app)
+{
+    return new Api\Transformers\ChannelTransformer;
+});
+
+App::bind('SponsorResponder', function($app)
+{
+    return new Api\Responders\SponsorResponder;
+});
+
+App::bind('CategoryResponder', function($app)
+{
+    return new Api\Responders\CategoryResponder;
+});
+
+App::bind('ArticleRepository', function($app)
+{
+    return new Version1\Articles\ArticleRepository;
+});
+
+App::bind('ChannelRepository', function($app)
+{
+    return new Version1\Channels\ChannelRepository;
+});
+
+App::bind('ChannelResponder', function($app)
+{
+    return new Api\Responders\ChannelResponder;
+});
+
+App::bind('ChannelArticleResponder', function($app)
+{
+    return new Api\Responders\ChannelArticleResponder;
+});
+
+App::bind('ChannelDirectoryResponder', function($app)
+{
+    return new Api\Responders\ChannelDirectoryResponder;
+});
+
+App::bind('ChannelListingResponder', function($app)
+{
+    return new Api\Responders\ChannelListingResponder;
+});
+
+App::bind('PageMaker', function($app)
+{
+    return new Api\Factory\PageMaker;
+});
+
+App::bind('PatternMaker', function($app)
+{
+    return new Api\Factory\PatternMaker;
+});
+
+App::bind('ListingTransformer', function($app)
+{
+    return new Api\Transformers\ListingTransformer;
+});
+
+App::bind('PickedResponder', function($app)
+{
+    return new Api\Responders\PickedResponder;
+});
+
+App::bind('FeaturedResponder', function($app)
+{
+    return new Api\Responders\FeaturedResponder;
+});
+
+App::bind('ChannelFeed', function($app)
+{
+    return new Api\Factory\ChannelFeed;
+});

@@ -46,6 +46,6 @@ class ArticleLocation extends BaseModel {
 
     public function article()
     {
-        return $this->belongsToMany('article', 'article_location', 'article_id');
+        return $this->hasOne('Version1\Articles\Article', 'id', 'article_id', 'id');
     }
 }

@@ -1,5 +1,43 @@
 <?php
 
+function isArticleType($channel)
+{
+    $type = getSubChannelType($channel);
+    
+    return in_array($type, [
+        Config::get('constants.displayType_article'),
+        Config::get('constants.displayType_promotion'),
+    ]) ? true : false;
+}
+
+function isDirectoryType($channel)
+{
+    $type = getSubChannelType($channel);
+    
+    return in_array($type, [
+        Config::get('constants.displayType_directory')
+    ]) ? true : false;
+}
+
+function isListingType($channel)
+{
+    $type = getSubChannelType($channel);
+    
+    return in_array($type, [
+        Config::get('constants.displayType_listing')
+    ]) ? true : false;
+}
+
+function getSubChannelType($channel)
+{
+    return $channel['subChannels'][0]['displayType']['id'];
+}
+
+function getSubChannelId($channel)
+{
+    return $channel['subChannels'][0]['id'];
+}
+
 function userIsAuthenticated()
 {
     if( Request::header("accessKey") )

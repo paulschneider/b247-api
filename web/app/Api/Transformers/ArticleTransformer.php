@@ -16,9 +16,7 @@ class ArticleTransformer extends Transformer {
 
         foreach($articles AS $article)
         {
-            $tmp = $this->transform($article, $options);
-
-            $response[] = $tmp;
+            $response[] = $this->transform($article, $options);
         }
         return $response;
     }

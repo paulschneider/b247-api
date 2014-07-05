@@ -4,8 +4,12 @@ use Version1\Categories\Category;
 
 Class CategoryController extends ApiController {
 
+    var $responseMaker;
+
     public function __construct()
     {
+        $this->responseMaker = App::make('CategoryResponseMaker');
+
         parent::__construct();        
     }
 
@@ -21,11 +25,6 @@ Class CategoryController extends ApiController {
         return View::make('category.show', compact('categories'));
     }
 
-    public function show()
-    {
-        return "here";
-    }
-
     public function getCategoryArticles($categoryId = null)
     {   
         if( Input::get('subChannel') )
@@ -39,9 +38,11 @@ Class CategoryController extends ApiController {
 
             $response = [
                 'resultCount' => $this->articleRepository->countArticlesInCategory($categoryId, $channelId)
+                ,'adverts' => $this->responseMaker->getSponsors()
+                ,'map' => $this->responseMaker->getCategoryMap($categoryId, $channelId)
+                ,'articles' => $this->responseMaker->getCategoryArticles($categoryId, $channelId)
             ];
             
-
             return $response;
         }
         // We won't be able to determine which category the caller wants

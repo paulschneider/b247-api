@@ -118,3 +118,13 @@ require app_path().'/filters.php';
 |
 */
 require app_path().'/events.php';
+
+/*
+|--------------------------------------------------------------------------
+| Require The IOC Bindings File
+|--------------------------------------------------------------------------
+|
+| Application events (custom)
+|
+*/
+require app_path().'/ioc.php';

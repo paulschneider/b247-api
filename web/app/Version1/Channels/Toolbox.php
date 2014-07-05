@@ -15,7 +15,7 @@ Class Toolbox {
 		return $channelList;
 	}
 
-	public static function getCategoryCount($list = [])
+	public static function getCategoryArticleCount($list = [])
 	{
 		$sorted = [];
 

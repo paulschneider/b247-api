@@ -9,6 +9,38 @@ use \Carbon\Carbon;
 
 Class ArticleRepository extends BaseModel implements ArticleInterface {
 
+    public function getArticlesByCategory($categoryId, $channelId)
+    {
+        $result = ArticleLocation::with('article.event.venue', 'article.asset', 'article.location')->select(
+            'article.title', 'article_location.article_id'
+        )
+        ->join('article', 'article.id', '=', 'article_location.article_id')        
+        ->where('sub_channel_id', $channelId)
+        ->where('category_id', $categoryId)
+        ->get();
+
+        $articles = [];
+        // they come out of this query slightly differently to how the articleTransformer needs them. sort that out !
+        foreach( $result->toArray() AS $item )
+        {
+            $articles[] = $item['article'];
+        }
+
+        return $articles;
+    }
+
+    public function getArticleMapObjects($categoryId, $channelId)
+    {
+        return ArticleLocation::select(
+            'article_id', 'article.title', 'article.lat', 'article.lon'
+        )->where('sub_channel_id', $channelId)
+        ->where('category_id', $categoryId)
+        ->join('article', 'article.id', '=', 'article_id')
+        ->active()
+        ->alive()
+        ->get();
+    }
+
     public function getArticle($identifier)
     {
         $query = Article::with('location', 'asset', 'event.venue');
@@ -32,44 +64,37 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
         }        
     }
 
-    public function getChannelListing( $channelId, $limit = 1000, $duration = 'week', $timestamp = null )
+    public function getChannelListing( $channel, $limit = 1000, $range, $timestamp )
     {
-        if ( is_null( $timestamp ) )
-        {
-            $timestamp = \time();
-        }
-
         $dateStamp = convertTimestamp( 'Y-m-d', $timestamp);
 
-        $query = Article::with(['location' => function($query) use ($channelId) {
-                $query->where('article_location.sub_channel_id', $channelId);
-        }])->with('asset')->with(['event' => function($query) {
-                $query->orderBy('event.show_date', 'asc')->alive()->active();
-        }])->with('event.venue');
+        $query = ArticleLocation::with('article.event.venue', 'article.asset', 'article.location')->select(
+            'article.title', 'article_location.article_id'
+        )
+        ->join('article', 'article.id', '=', 'article_location.article_id')
+        ->where('sub_channel_id', $channel);
 
-        if( $duration == "week" )
-        {
+        if( $range == "week" )
+        { 
             $query->where('article.published', '>=', $dateStamp.' 00:00:01');
             $query->where('article.published', '<=', Carbon::today()->addWeeks(1));
 
             $query->where('article.is_picked', '=', true);
         }
-        elseif ( $duration == "day" )
+        elseif ( $range == "day" )
         {
             $query->where('article.published', '>=', $dateStamp.' 00:00:01');
             $query->where('article.published', '<=', $dateStamp.' 23:59:59');
         }
 
-        $result = $query->orderBy('article.published', 'desc')->get()->toArray();
+        $result = $query->orderBy('article.published', 'desc')->get();
 
         $articles = [];
-
-        foreach($result AS $article)
+        
+        // they come out of this query slightly differently to how the articleTransformer needs them. sort that out !
+        foreach( $result->toArray() AS $item )
         {
-            if( isset( $article['location'][0] ) )
-            {
-                array_push($articles, $article);
-            }
+            $articles[] = $item['article'];
         }
 
         return $articles;
@@ -109,56 +134,39 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
 
     public function getArticles($type = 'article', $limit = 20, $channel = null, $subChannel = false)
     {
-        $query = Article::with(['location' => function($query) use ($channel, $subChannel) {
+        $query = ArticleLocation::with('article.event.venue', 'article.asset', 'article.location')->select(
+            'article.title', 'article_location.article_id'
+        )
+        ->join('article', 'article.id', '=', 'article_location.article_id');
 
-            if( ! is_null($channel) )
-            {
-                if( ! $subChannel )
-                {
-                    $query->where('article_location.channel_id', $channel);
-                }
-                else
-                {
-                    $query->where('article_location.sub_channel_id', $channel);
-                }
-            }
-
-        }])->with('asset', 'event.venue');
-
+        if(! $subChannel)        
+        {
+            $query->where('channel_id', $channel);
+        }
+        else
+        { 
+            $query->where('sub_channel_id', $channel);
+        }        
+            
         switch($type)
         {
             case 'picks' :
-                $query->where('is_picked', '=', true)->where('is_featured', '=', false);
+                $query->where('article.is_picked', '=', true)->where('article.is_featured', '=', false);
             break;
             case \Config::get('constants.displayType_directory') :
             case 'featured' :
-                $query->where('is_featured', '=', true);
+                $query->where('article.is_featured', '=', true);
             break;
         }
 
-        $result = $query->orderBy('article.created_at', 'desc')->get()->toArray();
+        $result = $query->orderBy('article.created_at', 'desc')->get();
 
         $articles = [];
-
-        // check to see if the article location information was returned. If not then don't return the article
-
-        $counter = 1;
-
-        foreach( $result AS $article )
+        
+        // they come out of this query slightly differently to how the articleTransformer needs them. sort that out !
+        foreach( $result->toArray() AS $item )
         {
-            if( isset($article['location'][0]['locationId']) )
-            {
-                if( $counter <= $limit )
-                {
-                    $articles[] = $article;
-
-                    $counter++;
-                }
-                else
-                {
-                    break;
-                }
-            }
+            $articles[] = $item['article'];
         }
 
         return $articles;
@@ -259,10 +267,8 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
         return ArticleLocation::where('category_id', $categoryId)->where('sub_channel_id', $channelId)->count();
     }
 
-    public function getChannelArticleCategory($channel)
+    public function getChannelArticleCategory($channelId)
     {
-        $id = $channel['id'];
-
-        return ArticleLocation::where('sub_channel_id', $id)->leftJoin('category', 'article_location.category_id', '=', 'category.id')->get()->toArray();
+        return ArticleLocation::where('sub_channel_id', $channelId)->leftJoin('category', 'article_location.category_id', '=', 'category.id')->get()->toArray();
     }
 }

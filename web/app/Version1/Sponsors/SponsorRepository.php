@@ -18,21 +18,19 @@ Class SponsorRepository extends BaseModel implements SponsorInterface {
         return Sponsor::with('asset')->alive()->take($limit)->whereNotIn('id', $list)->orderBy(\DB::raw('RAND()'))->get();
     }
 
+    public function getRandomSponsors($limit = 999)
+    {
+        return Sponsor::with('asset')->alive()->take($limit)->orderBy(\DB::raw('RAND()'))->get();
+    }
+
     /**
     * get a list of sponsors that aren't in a provided collection
     *
     * @return array
     */
-    public function getWhereNotInCollection($collection, $limit = 3)
+    public function getWhereNotInCollection($listOfAllocatedSponsorIds, $limit = 3)
     {
-        $list = [];
-
-        foreach( $collection->toArray() AS $item )
-        {
-            $list[] = $item['id'];
-        }
-
-        return static::getSponsors($list, $limit);
+        return static::getSponsors($listOfAllocatedSponsorIds, $limit);
     }
 
     /**

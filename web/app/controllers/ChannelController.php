@@ -1,137 +1,13 @@
 <?php
 
-use Api\Transformers\ChannelTransformer;
-use Api\Transformers\SubChannelTransformer;
-use Api\Transformers\ArticleTransformer;
-use Api\Transformers\SponsorTransformer;
-use Api\Transformers\ListingTransformer;
-use Api\Transformers\EventTransformer;
-
-use Api\Factory\PatternMaker;
-use Api\Factory\ChannelFeed;
-use Api\Factory\PageMaker;
-use Version1\Channels\Toolbox;
-
-use Version1\Events\EventRepository;
-use Version1\Articles\ArticleRepository;
-use Version1\Channels\ChannelRepository;
-use Version1\Sponsors\SponsorRepository;
-use Version1\Categories\CategoryRepository;
-
 use Version1\Models\DisplayType;
 use Version1\Channels\Channel;
 
+// check out BaseController.php if you can't see where the objects are instantiated !
+
 class ChannelController extends ApiController {
 
-    /**
-    *
-    * @var Api\Transformers\ChannelTransformer
-    */
-    protected $channelTransformer;
-
-    /**
-    *
-    * @var Api\Transformers\SubChannelTransformer
-    */
-    protected $subChannelTransformer;
-
-    /**
-    *
-    * @var Api\Transformers\ArticleTransformer
-    */
-    protected $articleTransformer;
-
-    /**
-    *
-    * @var Api\Transformers\SponsorTransformer
-    */
-    protected $sponsorTransformer;
-
-    /**
-    *
-    * @var Api\Transformers\ListingTransformer
-    */
-    protected $listingTransformer;
-
-    /**
-    *
-    * @var Api\Transformers\EventTransformer
-    */
-    protected $eventTransformer;
-
-    /**
-    *
-    * @var Api\Factory\PatternMaker
-    */
-    protected $patternMaker;
-
-    /**
-    *
-    * @var Api\Factory\ChannelFeed
-    */
-    protected $channelFeed;
-
-    /**
-    *
-    * @var Api\Events\EventRepository
-    */
-    protected $eventRepository;
-
-    /**
-    *
-    * @var Version1\Channels\ChannelRepository
-    */
-    protected $channelRepository;
-
-    /**
-    *
-    * @var Version1\Categories\CategoryRepository
-    */
-    protected $categoryRepository;
-
-    /**
-    *
-    * @var Version1\Sponsor\SponsorRepository
-    */
-    protected $sponsorRepository;
-
-    /**
-    *
-    * @var Version1\Articles\ArticleRepository
-    */
-    protected $articleRepository;
-
-    var $response;
-
-    public function __construct(
-        ChannelTransformer $channelTransformer
-        , SubChannelTransformer $subChannelTransformer
-        , ArticleTransformer $articleTransformer
-        , SponsorTransformer $sponsorTransformer
-        , ListingTransformer $listingTransformer
-        , EventTransformer $eventTransformer
-        , PatternMaker $patternMaker
-        , ChannelFeed $channelFeed
-
-        , EventRepository $eventRepository
-        , ChannelRepository $channelRepository
-        , CategoryRepository $categoryRepository
-        , SponsorRepository $sponsorRepository
-        , ArticleRepository $articleRepository
-    )
-    {
-        $this->channelTransformer = $channelTransformer;
-        $this->subChannelTransformer = $subChannelTransformer;        
-        $this->articleTransformer = $articleTransformer;
-        $this->sponsorTransformer = $sponsorTransformer;
-        $this->listingTransformer = $listingTransformer;
-        $this->eventTransformer = $eventTransformer;
-        $this->eventRepository = $eventRepository;
-        $this->channelRepository = $channelRepository;
-        $this->categoryRepository = $categoryRepository;
-        $this->sponsorRepository = $sponsorRepository;
-        $this->articleRepository = $articleRepository;
-    }
+    var $responseMaker;
 
     /**
     * display a html list of channels
@@ -187,76 +63,27 @@ class ChannelController extends ApiController {
     }
 
     /**
-    * display a list of existing channels
+    * get the details of a channel
     *
-    * @return View
+    * @return Response
     */
-    public function show($identifier = null, $type = null)
+    public function getChannel($identifier)
     {
         if( is_null($identifier) )
         {
             return $this->respondWithInsufficientParameters();
         }
 
-        if( ! $channel = $this->channelRepository->getChannelByIdentifier( $identifier ))
+        $this->responseMaker = App::make('ChannelResponseMaker');
+
+        if( ! $channel = $this->responseMaker->getChannel( $identifier ))
         {
             return $this->respondNoDataFound( Lang::get('api.channelNotFound') );
-        }
+        } 
 
-        if( isSubChannel( $channel ) )
-        {
-            $response = $this->getSubChannel( $channel );
-        }
-        else
-        {
-            $response = $this->getChannel( $channel );
-        }
+        $this->response = $this->responseMaker->make( $channel );
 
-        return $response;
-    }
-
-    /**
-    * get the details of a channel
-    *
-    * @return Response
-    */
-    private function getChannel($channel)
-    {
-        $channelId = $channel['id'];
-        $channelName = $channel['sef_name'];
-
-        $allChannels = $this->channelRepository->getAllChannels();
-        $subChannels = $this->channelRepository->getChildren( $channelId );
-        $sponsors = $this->sponsorRepository->getSponsors();
-
-        // create a new instance of the pattern maker
-        $this->patternMaker = new PatternMaker(1);
-
-        // Picks
-        $picks = $this->articleRepository->getArticles( 'picks', 25, $channelId );
-        $ads = $this->sponsorRepository->getWhereNotInCollection( $sponsors, 30 );
-        $response = $this->patternMaker->make( [ 'articles' => $picks, 'sponsors' => $ads ] );
-        $picks = $response->articles;
-        $ads = $response->sponsors;
-
-        // create a new instance of the channel feed class and pass the required params to it
-
-        $this->channelFeed = new ChannelFeed($allChannels, $subChannels, $ads, [], true);
-
-        if( ! $response = cached( $channelName ) )
-        {
-            $data = [
-                'channel' => $this->channelTransformer->transform( $channel )
-                ,'adverts' => $this->sponsorTransformer->transformCollection( $sponsors->toArray() )
-                ,'features' => $this->articleTransformer->transformCollection( $this->articleRepository->getArticles( 'featured', 25 ), [ 'showBody' => false ] )
-                ,'picks' => $picks
-                ,'channelFeed' => $this->channelFeed->make()
-            ];
-
-            cacheIt( $channelName, $response, "1 hour" );
-        }
-
-        return $this->respondFound( Lang::get('api.channelFound'), $data );
+        return $this->respondFound( Lang::get('api.channelFound'), $this->response );
     }
 
     /**
@@ -264,109 +91,23 @@ class ChannelController extends ApiController {
     *
     * @return *
     */
-    private function getSubChannel( $channel )
+    public function getSubChannel( $identifier, $type )
     {   
-        $data = $this->channelRepository->getChannelBySubChannel($channel);
-
-        $this->response = [
-            'channel' => $this->channelTransformer->transform( Toolbox::filterSubChannels($data, $channel) )
-            ,'adverts' => $this->sponsorTransformer->transformCollection( $this->sponsorRepository->getSponsors() )
-        ];
-
-        $type = $channel['display']['id'];
-
-        switch( $type )
+        if( is_null($identifier) )
         {
-            case Config::get('constants.displayType_article') :
-                $result = $this->getChannelArticles( Config::get('constants.displayType_article'), $channel );
-            break;
-            case Config::get('constants.displayType_directory') :
-                $result = $this->getChannelArticles( Config::get('constants.displayType_directory'), $channel );
-                $this->response['categories'] = Toolbox::getCategoryCount( $this->articleRepository->getChannelArticleCategory( $channel ) );
-                unset($this->response['pagination']);
-            break;
-            case Config::get('constants.displayType_promotion') :                
-                $result = $this->getChannelArticles( Config::get('constants.displayType_promotion'), $channel );
-            break;
-            default;
-                $result = $this->getChannelArticles( Config::get('constants.displayType_article'), $channel );
-            break;
+            return $this->respondWithInsufficientParameters();
         }
 
-        if( isApiResponse($result) )
-        {
-            return $result;
-        }
+        $this->responseMaker = App::make('SubChannelResponseMaker');
 
-        return $this->respondFound( Lang::get('api.subChannelFound'), $this->response );
-    }
-
-    /**
-    * return a list of articles for a given channel ( sub-channel )
-    *
-    * @return array
-    */
-    public function getChannelArticles($type, $channel )
-    {
-        // get some adverts from the database
-        $sponsors = $this->sponsorRepository->getSponsors();
-
-        // grab some articles regardless of type
-        $articles = $this->articleRepository->getArticles( $type, 25, $channel['id'], true ); // ignore type, limit, channelId, isSubChannel
-
-        $pagination = PageMaker::make($articles);       
-
-        if ( count($pagination->items) > 0 )
-        {
-            // get some more adverts that aren't any of the ones retrieved above
-            $ads = $this->sponsorRepository->getWhereNotInCollection( $sponsors, 30 );
-
-            // create a new instance of the pattern maker
-            $this->patternMaker = new PatternMaker(1, $pagination->meta->perPage);
-
-            $this->response['articles'] = $this->patternMaker->make( [ 'articles' => $pagination->items, 'sponsors' => $ads ] )->articles;
-
-            $this->response['pagination'] = $pagination->meta;
-
-            return;
-        }
-        else
-        {
-            return $this->respondNoDataFound( Lang::get('api.noSubChannelArticles') );
-        }
-    }
-
-    /**
-    * return a listing for a given sub-channel
-    *
-    * @return array
-    */
-    public function getChannelListing($identifier, $duration, $dataReturn = false)
-    {
-        $articles = $this->articleRepository->getChannelListing( $identifier, 20, $duration, Input::get('time') );
-
-        if( ! $channel = $this->channelRepository->getChannelByIdentifier( $identifier ))
+        if( ! $channel = $this->responseMaker->getChannel( $identifier ))
         {
             return $this->respondNoDataFound( Lang::get('api.channelNotFound') );
-        }
+        }        
 
-        $data = $this->channelRepository->getChannelBySubChannel($channel);
+        $this->response = $this->responseMaker->make( $channel );
 
-        $response = [
-            'channel' => $this->channelTransformer->transform( Toolbox::filterSubChannels($data, $channel) ),
-            'adverts' => $this->sponsorTransformer->transformCollection( $this->sponsorRepository->getSponsors() ),                
-        ];
-
-        if( $duration == "week" )
-        {         
-            $response['days'] = $this->listingTransformer->transformCollection( $articles, [ 'perDayLimit' => 3 ] );
-        }
-        else if( $duration == "day" )
-        {         
-            $response['days'] = $this->listingTransformer->transform( $articles );
-        }
-
-        return $this->respondFound( Lang::get('api.subChannelFound'), $response );
+        return $this->respondFound( Lang::get('api.subChannelFound'), $this->response );
     }
 
     /**

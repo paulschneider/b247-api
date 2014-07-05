@@ -1,8 +1,5 @@
 <?php namespace Api\Factory;
 
-use Api\Transformers\ArticleTransformer;
-use Api\Transformers\SponsorTransformer;
-
 Class PatternMaker
 {
     private $patterns = [
@@ -38,8 +35,14 @@ Class PatternMaker
 
     private $pattern;
 
+    public $articleTransformer;
+    public $sponsorTransformer;
+
     public function __construct($activePattern = 1, $limit = null, $maxPages = 5 )
     {
+        $this->articleTransformer = \App::make('ArticleTransformer');
+        $this->sponsorTransformer = \App::make('SponsorTransformer');
+
         $this->activePattern = $activePattern;
         $this->pattern = $this->patterns[ $this->activePattern ];
         $this->limit = $limit;
@@ -65,12 +68,10 @@ Class PatternMaker
         $sorted = [];
         $pageCount = 1;
         $spaceCount = 0;
+        $allocatedSponsors = [];
     
         $articles = array_values($content['articles']); // reset the array keys as we'll be targeting them specifically
-        $sponsors = $content['sponsors'];
-
-        $sponsorTransformer = new SponsorTransformer();
-        $articleTransformer = new ArticleTransformer();
+        $sponsors = $content['sponsors'];        
 
         while (count($articles) > 0)
         {
@@ -78,43 +79,37 @@ Class PatternMaker
 
              if( $thisPattern == "singleAd" and count($sponsors) > 0  )
              {
-                 $thisAd = $sponsors->shift();
+                 $thisAd = array_shift($sponsors);
 
-                 $thisAd = $thisAd->toArray();
-
-                 $thisAd['display_style'] = 1;
+                 $thisAd['displayStyle'] = 1;
 
                  $spaceCount = $spaceCount + 1;
 
-                 $sorted[] = $sponsorTransformer->transform( $thisAd );
+                 $sorted[] = $thisAd;
+
+                 $allocatedSponsors[] = $thisAd;
              }
              else if($thisPattern == "doubleAd" and count($sponsors) > 0 )
              {
-                 $thisAd =  $sponsors->shift();
+                $thisAd = array_shift($sponsors);
 
-                 $thisAd = $thisAd->toArray();
-
-                 $thisAd['display_style'] = 2;
+                 $thisAd['displayStyle'] = 2;
 
                  $spaceCount = $spaceCount + 2;
 
-                 $sorted[] = $sponsorTransformer->transform( $thisAd );
+                 $sorted[] = $thisAd;
+
+                 $allocatedSponsors[] = $thisAd;
              }
              else
              {
                 $thisArticle = $articles[$counter];
 
-                $thisArticle['display_style'] = $thisPattern;
+                $thisArticle['displayStyle'] = $thisPattern;
 
                 $spaceCount = $spaceCount + $thisPattern;
 
-                $article = $articleTransformer->transform( $thisArticle, [ 'showBody' => false] );
-
-                // make sure the transformer returned something
-                if( ! is_null($article) )
-                {
-                    $sorted[] = $article;
-                }
+                $sorted[] = $thisArticle;
 
                 unset($articles[$counter]);
 
@@ -150,7 +145,7 @@ Class PatternMaker
 
         $response = new \stdClass();
         $response->articles = $sorted;
-        $response->sponsors = $sponsors;
+        $response->sponsors = $allocatedSponsors;
 
         return $response;
     }
