@@ -12,6 +12,11 @@ Class ApiResponseMaker {
 		$this->setAllocatedSponsors( $this->channelSponsors );
 	}
 
+	public static function RespondWithError($message)
+	{
+		throw new \Api\Exceptions\InvalidResponseException($message);
+	}
+
 	public function getSponsors()
 	{
 		$sponsorResponder = \App::make('SponsorResponder');
@@ -39,4 +44,3 @@ Class ApiResponseMaker {
 		return $this->allocatedSponsors;
 	}
 }
-

@@ -9,9 +9,15 @@ Class SubChannelResponseMaker extends ApiResponseMaker implements ApiResponseMak
 		$channelRepository = \App::make( 'ChannelRepository' );
 		$channelTransformer = \App::make( 'ChannelTransformer' );
 
-		$subChannel = $channelRepository->getChannelByIdentifier( $identifier );
-		$parentChannel = $channelRepository->getChannelBySubChannel( $subChannel );
-		$channel = $channelTransformer->transform( Toolbox::filterSubChannels( $parentChannel, $subChannel ) );
+		$channel = $channelRepository->getChannelByIdentifier( $identifier );
+
+		if( ! aSubChannel($channel) )
+		{
+			ApiResponseMaker::RespondWithError(\Lang::get('api.thisIsNotASubChannel'));
+		}
+
+		$parentChannel = $channelRepository->getChannelBySubChannel( $channel );		
+		$channel = $channelTransformer->transform( Toolbox::filterSubChannels( $parentChannel, $channel ) );
 
 		return $channel;
 	}

@@ -148,7 +148,7 @@ class ApiController Extends BaseController {
     {
         return $this->respond([
             'error' => [
-                'message' => $message
+                'message' => $this->getMessage()
                 ,'statusCode' => $this->getStatusCode()
                 ,'method' => Request::getMethod()
                 ,'endpoint' => Request::path()
@@ -235,7 +235,7 @@ class ApiController Extends BaseController {
      *
      * @return Response
      */
-    public function respondNotAllowed($message = null, $statusCode = 501)
+    public function respondNotAllowed($message = "", $statusCode = 501)
     {
         $this->setStatusCode( $statusCode );
          $this->setMessage($message, Lang::get('api.defaultRespondNotAllowed'));

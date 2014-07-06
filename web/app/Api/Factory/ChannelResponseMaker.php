@@ -11,6 +11,11 @@ Class ChannelResponseMaker extends ApiResponseMaker implements ApiResponseMakerI
 
 		$channel = $channelRepository->getChannelByIdentifier( $identifier );
 
+		if( ! $channel )
+		{
+			return false;
+		}
+
 		return $channelTransformer->transform($channel);
 	}
 
@@ -44,7 +49,7 @@ Class ChannelResponseMaker extends ApiResponseMaker implements ApiResponseMakerI
 		$response = [
 			'channel' => $channel,
 			'adverts' => $this->channelSponsors,
-			'featured' => $this->getChannelFeatured( $channel ),
+			'features' => $this->getChannelFeatured( $channel ),
 			'picks' => $this->getChannelPicked( $channel ),
 			'channelFeed' => $this->getChannelFeed( $channel ),
 		];

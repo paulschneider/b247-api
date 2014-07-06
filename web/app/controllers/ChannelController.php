@@ -3,9 +3,7 @@
 use Version1\Models\DisplayType;
 use Version1\Channels\Channel;
 
-// check out BaseController.php if you can't see where the objects are instantiated !
-
-class ChannelController extends ApiController {
+Class ChannelController extends ApiController {
 
     var $responseMaker;
 
@@ -104,7 +102,7 @@ class ChannelController extends ApiController {
         {
             return $this->respondNoDataFound( Lang::get('api.channelNotFound') );
         }        
-
+       
         $this->response = $this->responseMaker->make( $channel );
 
         return $this->respondFound( Lang::get('api.subChannelFound'), $this->response );

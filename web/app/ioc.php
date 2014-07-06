@@ -9,6 +9,11 @@ App::bind('ChannelResponseMaker', function($app)
     return new Api\Factory\ChannelResponseMaker;
 });
 
+App::bind('HomeResponseMaker', function($app)
+{
+    return new Api\Factory\HomeResponseMaker;
+});
+
 App::bind('SubChannelResponseMaker', function($app)
 {
     return new Api\Factory\SubChannelResponseMaker;
@@ -42,6 +47,11 @@ App::bind('ArticleTransformer', function($app)
 App::bind('ChannelTransformer', function($app)
 {
     return new Api\Transformers\ChannelTransformer;
+});
+
+App::bind('SubChannelTransformer', function($app)
+{
+    return new Api\Transformers\SubChannelTransformer;
 });
 
 App::bind('SponsorResponder', function($app)
@@ -99,6 +109,11 @@ App::bind('ListingTransformer', function($app)
     return new Api\Transformers\ListingTransformer;
 });
 
+App::bind('HomeFeaturedResponder', function($app)
+{
+    return new Api\Responders\HomeFeaturedResponder;
+});
+
 App::bind('PickedResponder', function($app)
 {
     return new Api\Responders\PickedResponder;
@@ -112,4 +127,24 @@ App::bind('FeaturedResponder', function($app)
 App::bind('ChannelFeed', function($app)
 {
     return new Api\Factory\ChannelFeed;
+});
+
+App::bind('HomePickedResponder', function($app)
+{
+    return new Api\Responders\HomePickedResponder;
+});
+
+App::bind('WhatsOnResponder', function($app)
+{
+    return new Api\Responders\WhatsOnResponder;
+});
+
+App::bind('MessageBag', function($app)
+{
+    return new Illuminate\Support\MessageBag;
+});
+
+App::bind('InvalidResponseException', function($app)
+{
+    return new Api\Exceptions\InvalidResponseException;
 });

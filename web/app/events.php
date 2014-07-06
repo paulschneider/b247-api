@@ -2,5 +2,5 @@
 
 Event::listen('apiFire', function($message)
 {
-    exit($message);
+	App::abort(404, $message);
 });

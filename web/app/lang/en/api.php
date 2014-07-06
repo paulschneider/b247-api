@@ -6,6 +6,7 @@ return [
 	'channelFound' => "Channel Found.",
 	'articleFound' => "Article found",
 	'subChannelFound' => "Sub-channel found.",
+	'thisIsNotASubChannel' => "Channel is not a sub-channel. Aborting.",
 	'noSubChannelArticles' => "There are no articles to return.",
 	'defaultRespondCreated' => "created.",
 	'defaultRespondNotFound' => "Unrecognised endpoint.",

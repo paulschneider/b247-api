@@ -29,7 +29,7 @@ function isListingType($channel)
 }
 
 function getSubChannelType($channel)
-{
+{    
     return $channel['subChannels'][0]['displayType']['id'];
 }
 
@@ -96,7 +96,7 @@ function convertTimestamp($format, $timestamp)
     return date($format, $timestamp);
 }
 
-function isSubChannel($channel)
+function aSubChannel($channel)
 {
     return empty($channel['parent_channel']) ? false : true;
 }

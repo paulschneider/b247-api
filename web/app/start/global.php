@@ -61,20 +61,26 @@ App::error(function(Exception $exception, $code)
 	Log::error($exception);
 });
 
-App::error(function(Symfony\Component\HttpKernel\Exception\NotFoundHttpException $exception)
+App::error(function(Api\Exceptions\InvalidResponseException $exception, $code)
 {
+	$api = App::make('Api');	
+	return $api->respondNotFound( $exception->getMessage() );
+});
+
+App::error(function(Symfony\Component\HttpKernel\Exception\NotFoundHttpException $exception)
+{ 
 	$api = App::make('Api');	
 	return $api->respondNotFound();
 });
 
 App::error(function(Illuminate\Database\Eloquent\ModelNotFoundException $exception)
-{
+{ 
 	$api = App::make('Api');
 	return $api->respondNoDataFound();
 });
 
 App::error(function(\Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException $exception)
-{
+{ 
 	$api = App::make('Api');
 	return $api->respondNotAllowed();
 });

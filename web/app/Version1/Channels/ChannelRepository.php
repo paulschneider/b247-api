@@ -47,7 +47,7 @@ Class ChannelRepository extends BaseModel implements ChannelInterface {
     {
         $result = Channel::with('category', 'parent')->where('id', $channelId)->get();
 
-        sd($result->toArray());
+        sd('ChannelRepository::getChannelCategories()');
     }
 
     /**
@@ -126,7 +126,7 @@ Class ChannelRepository extends BaseModel implements ChannelInterface {
 
     public function getChannelBySubChannel($channel)
     {
-        return Channel::with('subChannel.category', 'subChannel.display')->where('id', $channel['parent']['id'])->first()->toArray();
+        return Channel::with('subChannel.category', 'subChannel.display')->where('id', $channel['parent_channel'])->first()->toArray();
     }
 
     /**
