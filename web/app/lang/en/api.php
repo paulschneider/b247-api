@@ -19,4 +19,5 @@ return [
 	'defaultRespondNotAllowed' => "Endpoint does not support method.",
 	'noArticlesForSpecifiedPeriod' => "There are no articles assigned to this sub-channel for the specified period.",
 	'noPickedArticlesForSpecifiedPeriod' => "There are no picked articles to return for the specified period.",
+	'categoryFound' => "Category found.",
 ];

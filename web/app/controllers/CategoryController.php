@@ -6,13 +6,6 @@ Class CategoryController extends ApiController {
 
     var $responseMaker;
 
-    public function __construct()
-    {
-        $this->responseMaker = App::make('CategoryResponseMaker');
-
-        parent::__construct();        
-    }
-
     /**
     * display a list of existing categories
     *
@@ -31,19 +24,16 @@ Class CategoryController extends ApiController {
         {
             $channelId = Input::get('subChannel');
 
-            if( ! $channel = $this->channelRepository->getChannelByIdentifier( $channelId ))
+            $this->responseMaker = App::make('CategoryResponseMaker');
+
+            if( ! $channel = $this->responseMaker->getChannel( $channelId ))
             {
                 return $this->respondNoDataFound( Lang::get('api.channelNotFound') );
             }
 
-            $response = [
-                'resultCount' => $this->articleRepository->countArticlesInCategory($categoryId, $channelId)
-                ,'adverts' => $this->responseMaker->getSponsors()
-                ,'map' => $this->responseMaker->getCategoryMap($categoryId, $channelId)
-                ,'articles' => $this->responseMaker->getCategoryArticles($categoryId, $channelId)
-            ];
-            
-            return $response;
+            $this->response = $this->responseMaker->make($categoryId, $channel);
+
+             return $this->respondFound(Lang::get('api.categoryFound'), $this->response);
         }
         // We won't be able to determine which category the caller wants
         else
