@@ -97,7 +97,7 @@ Class ChannelController extends ApiController {
         }
 
         $this->responseMaker = App::make('SubChannelResponseMaker');
-
+ 
         if( ! $channel = $this->responseMaker->getChannel( $identifier ))
         {
             return $this->respondNoDataFound( Lang::get('api.channelNotFound') );

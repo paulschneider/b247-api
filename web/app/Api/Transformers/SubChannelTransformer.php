@@ -1,8 +1,6 @@
 <?php namespace Api\Transformers;
 
-use Api\Transformers\ChannelTransformer;
-
-class SubChannelTransformer extends Transformer {
+Class SubChannelTransformer extends Transformer {
 
     /**
      * Transform a result set into the API required format
@@ -33,7 +31,8 @@ class SubChannelTransformer extends Transformer {
     {
         $parent = $channel['parent'];
 
-        $channelTransformer = new ChannelTransformer();
+        $channelTransformer = \App::make('ChannelTransformer');
+        $categoryTransformer = \App::make('CategoryTransformer');
 
         $response = [
             'id' => $channel['id']
@@ -52,12 +51,8 @@ class SubChannelTransformer extends Transformer {
         {
             foreach ($channel['category'] as $key => $category) 
             {
-                $response['categories'][$key] = [
-                    'id' => $category['id']
-                    ,'name' => $category['name']
-                    ,'sefName' => $category['sef_name']
-                    ,'path' => makePath( [ $parent['sef_name'], $channel['sef_name'], $category['sef_name'] ] )
-                ];
+                $response['categories'][$key] = $categoryTransformer($category);
+                $response['categories'][$key]['path'] = makePath( [ $parent['sef_name'], $channel['sef_name'], $category['sef_name'] ] )
 
                 if( isMobile() )
                 {

@@ -26,12 +26,7 @@ Class CategoryController extends ApiController {
 
             $this->responseMaker = App::make('CategoryResponseMaker');
 
-            if( ! $channel = $this->responseMaker->getChannel( $channelId ))
-            {
-                return $this->respondNoDataFound( Lang::get('api.channelNotFound') );
-            }
-
-            $this->response = $this->responseMaker->make($categoryId, $channel);
+            $this->response = $this->responseMaker->make($categoryId, $this->responseMaker->getChannel( $channelId, $categoryId ));
 
              return $this->respondFound(Lang::get('api.categoryFound'), $this->response);
         }

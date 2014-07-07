@@ -25,4 +25,25 @@ Class CategoryResponder {
 
 		return $articles;
 	}
+
+	public function getArticlesInRange($subChannelId, $category, $range, $time)
+	{
+		$articleRepository = \App::make('ArticleRepository');
+		$listingTransformer = \App::make('ListingTransformer');
+
+		$channelArticles = $articleRepository->getChannelListing( $subChannelId, 20, $range, $time );
+
+		$articles = [];
+
+		// see if the any of the articles returned by the call are in the provided range
+		foreach( $channelArticles AS $article )
+		{
+			if( $article['location'][0]['categoryId'] == $category )
+			{
+				$articles[] = $article;
+			}
+		}
+
+		return $listingTransformer->transformCollection($articles);
+	}
 }

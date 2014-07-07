@@ -1,5 +1,23 @@
 <?php
 
+function categoryBelongsToChannel( $channel, $category )
+{
+    if( empty($channel['category']) )
+    {
+        return false;
+    }
+
+    foreach( $channel['category'] AS $channelCat )
+    {
+        if( $channelCat['id'] == $category )
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 function isArticleType($channel)
 {
     $type = getSubChannelType($channel);
@@ -98,7 +116,7 @@ function convertTimestamp($format, $timestamp)
 
 function aSubChannel($channel)
 {
-    return empty($channel['parent_channel']) ? false : true;
+    return ! empty($channel['parent_channel']) ? true : false;
 }
 
 function short_time($time)

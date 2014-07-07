@@ -1,8 +1,6 @@
 <?php namespace Api\Transformers;
 
-use Api\Transformers\EventTransformer;
-
-class ArticleTransformer extends Transformer {
+Class ArticleTransformer extends Transformer {
 
     /**
      * Transform a result set into the API required format
@@ -39,7 +37,6 @@ class ArticleTransformer extends Transformer {
                 ,'title' => $article['title']
                 ,'sefName' => $article['sef_name']
                 ,'subHeading' => $article['sub_heading']
-                ,'body' => $article['body']
                 ,'path' => makePath( [ $articleLocation['channelSefName'], $articleLocation['subChannelSefName'], $articleLocation['categorySefName'], $article['sef_name'] ] )
                 ,'isAdvert' => false
                 ,'displayType' => [
@@ -77,7 +74,7 @@ class ArticleTransformer extends Transformer {
 
             if( isset($article['event']['id']) )
             { 
-                $eventTransformer = new EventTransformer();
+                $eventTransformer = \App::make('EventTransformer');
 
                 $response['event'] = $eventTransformer->transform( $article['event'] );
             }

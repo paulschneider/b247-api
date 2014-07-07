@@ -28,21 +28,12 @@ Class PatternMaker
     ];
 
     public $activePattern;
-
     public $limit;
-
     public $maxPages;
-
     private $pattern;
-
-    public $articleTransformer;
-    public $sponsorTransformer;
 
     public function __construct($activePattern = 1, $limit = null, $maxPages = 5 )
     {
-        $this->articleTransformer = \App::make('ArticleTransformer');
-        $this->sponsorTransformer = \App::make('SponsorTransformer');
-
         $this->activePattern = $activePattern;
         $this->pattern = $this->patterns[ $this->activePattern ];
         $this->limit = $limit;

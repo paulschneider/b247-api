@@ -20,4 +20,6 @@ return [
 	'noArticlesForSpecifiedPeriod' => "There are no articles assigned to this sub-channel for the specified period.",
 	'noPickedArticlesForSpecifiedPeriod' => "There are no picked articles to return for the specified period.",
 	'categoryFound' => "Category found.",
+	'noCategoryArticlesToReturn' => "There are no articles to return for category/sub-channel combination",
+	'categoryDoesNotBelongToChannel'=> "The supplied category does not belong to this sub-channel."
 ];

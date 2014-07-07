@@ -1,9 +1,6 @@
 <?php namespace Api\Transformers;
 
-use Api\Transformers\ArticleTransformer;
-use Api\Transformers\EventTransformer;
-
-class ListingTransformer extends Transformer {
+Class ListingTransformer extends Transformer {
 
     /**
      * Transform a result set into the API required format
@@ -16,8 +13,10 @@ class ListingTransformer extends Transformer {
     {
         $response = [];
 
-        $articleTransformer = new ArticleTransformer;
-        $eventTransformer = new EventTransformer;
+        $articleTransformer = \App::make('ArticleTransformer');
+        $eventTransformer = \App::make('EventTransformer');
+        $categoryTransformer = \App::make('CategoryTransformer');
+        
         $limitToShowPerDay = 100;   
         $categoryCounter = [];
 
@@ -98,8 +97,10 @@ class ListingTransformer extends Transformer {
     {
         $response = [];
 
-        $articleTransformer = new ArticleTransformer;
-        $eventTransformer = new EventTransformer;
+        $articleTransformer = \App::make('ArticleTransformer');
+        $eventTransformer = \App::make('EventTransformer');
+        $categoryTransformer = \App::make('CategoryTransformer');
+
         $highlightsToShow = 3;   
         $categoryCounter = [];
 

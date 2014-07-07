@@ -148,3 +148,28 @@ App::bind('InvalidResponseException', function($app)
 {
     return new Api\Exceptions\InvalidResponseException;
 });
+
+App::bind('CategoryTransformer', function($app)
+{
+    return new Api\Transformers\CategoryTransformer;
+});
+
+App::bind('EventTransformer', function($app)
+{
+    return new Api\Transformers\EventTransformer;
+});
+
+App::bind('CategoryDirectoryResponder', function($app)
+{
+    return new Api\Responders\CategoryDirectoryResponder;
+});
+
+App::bind('CategoryArticleResponder', function($app)
+{
+    return new Api\Responders\CategoryArticleResponder;
+});
+
+App::bind('CategoryListingResponder', function($app)
+{
+    return new Api\Responders\CategoryListingResponder;
+});
