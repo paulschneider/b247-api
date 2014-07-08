@@ -13,9 +13,17 @@ Class SponsorRepository extends BaseModel implements SponsorInterface {
     *
     * @return array
     */
-    public function getSponsors($list = [''], $limit = 3)
+    public function getSponsors($list = [], $limit = 3)
     {
-        return Sponsor::with('asset')->alive()->take($limit)->whereNotIn('id', $list)->orderBy(\DB::raw('RAND()'))->get();
+        $query = Sponsor::with('asset')->alive()->take($limit);
+
+        //check to see if there are any ID's we don't want to return
+        if( count($list) > 0 )
+        {
+            $query->whereNotIn('id', $list);
+        }
+
+        return $query->orderBy(\DB::raw('RAND()'))->get();
     }
 
     public function getRandomSponsors($limit = 999)
