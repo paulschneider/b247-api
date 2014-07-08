@@ -11,6 +11,11 @@ Class HomeController extends ApiController {
     {
         $this->responseMaker = App::make('HomeResponseMaker');
 
+        if( userIsAuthenticated() )
+        {
+            return "user is authenticated";
+        }
+
         $this->response = $this->responseMaker->make();
 
         return $this->respondFound(Lang::get('api.homepageFound'), $this->response);
