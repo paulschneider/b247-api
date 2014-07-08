@@ -133,7 +133,7 @@ Class ListingTransformer extends Transformer {
                 ,'name' => $location['categoryName']
                 ,'sefName' => $location['categorySefName']
                 ,'path' => makePath( [ $location['channelSefName'], $location['subChannelSefName'], $location['categorySefName'] ] )
-                ,'count' => count($categoryCounter[ $key ][$location['categoryId']])
+                ,'numberOfArticles' => count($categoryCounter[ $key ][$location['categoryId']])
             ];
 
             if( isset($article['event']) )

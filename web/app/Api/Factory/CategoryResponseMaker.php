@@ -53,7 +53,7 @@ Class CategoryResponseMaker extends ApiResponseMaker implements ApiResponseMaker
 		}
 		else if( isListingType( $this->channel ) )
 		{
-			$range = \Input::get('range') ? \Input::get('range') : 'week';
+			$range = 'day';
 			$time = \Input::get('time') ? \Input::get('time') : \time();
 
 			return $channelListingResponder = \App::make('CategoryListingResponder')->make( $this->categoryId, $this->subChannelId, $range, $time );
