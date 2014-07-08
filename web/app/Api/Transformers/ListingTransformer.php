@@ -35,12 +35,14 @@ Class ListingTransformer extends Transformer {
 
             $categoryCounter[ $key ][$location['categoryId']][] = $location['categoryId'];
 
+            $publishedDate = convertTimestamp('Y-m-d', strtotime($article['published']));
+
             $response[ $key ]['publication'] = [
-                'date' => $article['published']
+                'date' => $publishedDate
                 ,'day' => date('D', strtotime($article['published']))
                 ,'fullDay' => date('l', strtotime($article['published']))
                 ,'iso8601Date' => date('c', strtotime($article['published']))
-                ,'epoch' => strtotime($article['published'])
+                ,'epoch' => strtotime($publishedDate)
             ];
 
             $response[ $key ]['categories'][$location['categoryId']] = [

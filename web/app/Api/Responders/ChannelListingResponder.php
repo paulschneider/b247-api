@@ -22,6 +22,6 @@ Class ChannelListingResponder {
             ApiResponseMaker::RespondWithError(\Lang::get('api.noArticlesForSpecifiedPeriod'));
         }
 
-        return $articles;
+        return ['articles' => $articles];
 	}
 }
