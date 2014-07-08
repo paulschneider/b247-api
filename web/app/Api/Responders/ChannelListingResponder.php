@@ -1,5 +1,7 @@
 <?php namespace Api\Responders;
 
+use Api\Factory\ApiResponseMaker;
+
 Class ChannelListingResponder {
 
 	public function make( $channel, $articles, $range, $time )
@@ -8,15 +10,18 @@ Class ChannelListingResponder {
 
 		if( $range == "week" )
         {         
-            return [
-            	'days' => $listingTransformer->transformCollection( $articles, [ 'perDayLimit' => 3 ] )
-            ];
+            $articles = $listingTransformer->transformCollection( $articles, [ 'perDayLimit' => 3 ] );
         }
         else if( $range == "day" )
         {         
-            return [
-            	'days' => $listingTransformer->transform( $articles )
-            ];
+           	$articles = $listingTransformer->transform( $articles );
         }
+
+        if( count($articles) == 0 )
+        {
+            ApiResponseMaker::RespondWithError(\Lang::get('api.noArticlesForSpecifiedPeriod'));
+        }
+
+        return $articles;
 	}
 }

@@ -76,8 +76,9 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
 
         if( $range == "week" )
         { 
+            $dateArray = explode('-', $dateStamp);  
             $query->where('article.published', '>=', $dateStamp.' 00:00:01');
-            $query->where('article.published', '<=', Carbon::today()->addWeeks(1));
+            $query->where('article.published', '<=', Carbon::create($dateArray[0], $dateArray[1], $dateArray[2], '23', '59', '59')->addWeeks(1));
 
             $query->where('article.is_picked', '=', true);
         }
