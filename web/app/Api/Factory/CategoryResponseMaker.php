@@ -45,7 +45,7 @@ Class CategoryResponseMaker extends ApiResponseMaker implements ApiResponseMaker
 	{		
 		if( isArticleType( $this->channel ) )
 		{
-			return \App::make('CategoryArticleResponder')->make($this->categoryId, $this->subChannelId);
+			return \App::make('CategoryArticleResponder')->make($this->categoryId, $this->subChannelId, $this);
 		}
 		else if( isDirectoryType( $this->channel ) )
 		{

@@ -7,7 +7,7 @@ class HomeFeaturedResponder {
 		$articleRepository = \App::make('ArticleRepository');
 		$articleTransformer = \App::make('ArticleTransformer');
 
-        $articles = $articleRepository->getArticles( 'featured', 25 );
+        $articles = $articleRepository->getArticles( 'featured', 5 );
 
         return $articleTransformer->transformCollection( $articles );
 	}      

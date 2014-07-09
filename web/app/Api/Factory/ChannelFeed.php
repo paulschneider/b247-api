@@ -9,7 +9,7 @@ Class ChannelFeed {
     protected $articleRepository;
     protected $sponsorRepository;
     protected $inactiveUserChannels;
-    protected $theseAreSubChannels;
+    protected $isASubChannel;
     protected $allocatedSponsors = [];
 
     public function __construct()
@@ -22,13 +22,13 @@ Class ChannelFeed {
         $this->patternMaker = \App::make('PatternMaker');
     }
 
-    public function initialise( $channels = [], $subChannels = [], $ads = [], $inactiveUserChannels = [], $theseAreSubChannels = false )
+    public function initialise( $channels = [], $subChannels = [], $ads = [], $inactiveUserChannels = [], $isASubChannel = false )
     {
         $this->channels = $channels;
         $this->subChannels = $subChannels;
         $this->ads = $ads;
         $this->inactiveUserChannels = $inactiveUserChannels;
-        $this->theseAreSubChannels = $theseAreSubChannels;
+        $this->isASubChannel = $isASubChannel;
     }
 
     public function make()
@@ -42,7 +42,7 @@ Class ChannelFeed {
             if( ! in_array($channel, $this->inactiveUserChannels) )
             {
                 // get the articles for this channel
-                $articles = $this->articleRepository->getArticles( null, 20, $channel, $this->theseAreSubChannels );
+                $articles = $this->articleRepository->getArticles( null, 20, $channel, $this->isASubChannel, true );
 
                 // transform the articles and the sponsors into the API version 
                 $articles = $this->articleTransformer->transformCollection($articles);

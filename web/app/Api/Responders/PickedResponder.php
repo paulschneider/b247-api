@@ -12,6 +12,7 @@ class PickedResponder {
 		$sponsorTransformer = \App::make('SponsorTransformer');
 
         $picks = $articleRepository->getArticles( 'picks', 25, $channel['id'] );
+
         $ads = $sponsorRepository->getWhereNotInCollection( $caller->getAllocatedSponsors(), 30 )->toArray();
 
         $articles = $articleTransformer->transformCollection( $picks );

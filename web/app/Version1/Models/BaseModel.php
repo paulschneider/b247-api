@@ -47,7 +47,7 @@ Class BaseModel extends Eloquent
 
     public function scopeAlive($query, $field = '')
     {
-        return $query->where($field . 'is_deleted', null);
+        return $query->where($field . 'is_deleted', null)->orWhere($field . 'is_deleted', false);
     }
 
     public function scopeNotFeatured($query, $field = '')

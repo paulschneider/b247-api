@@ -15,11 +15,6 @@ Class CategoryArticleResponder {
 
 		$articles = $categoryResponder->getCategoryArticles($categoryId, $subChannelId);
 
-		if( count($articles) == 0 )
-		{
-			ApiResponseMaker::RespondWithError(\Lang::get('api.noCategoryArticlesToReturn'));
-		}
-
 		$pagination = \App::make('PageMaker')->make($articles);
 
 		$metaData = $pagination->meta;
@@ -30,7 +25,7 @@ Class CategoryArticleResponder {
 
 		return [
 			'articles' => $articles,
-			'pagination' => $metaData,v
+			'pagination' => $metaData,	
 		];
 	}
 }

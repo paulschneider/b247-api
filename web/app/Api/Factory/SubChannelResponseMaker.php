@@ -39,12 +39,7 @@ Class SubChannelResponseMaker extends ApiResponseMaker implements ApiResponseMak
 		}
 		else if( isListingType( $channel ) )
 		{
-			$range = \Input::get('range') ? \Input::get('range') : 'week';
-			$time = \Input::get('time') ? \Input::get('time') : \time();
-
-			$articles = $channelResponder->getArticlesInRange( $channel, $range, $time );
-
-			return $channelListingResponder = \App::make('ChannelListingResponder')->make( $channel, $articles, $range, $time );
+			return \App::make('ChannelListingResponder')->make( $channel );
 		}
 
 		return $channelResponder->make( $channel, $articles, $sponsors );

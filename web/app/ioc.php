@@ -1,4 +1,10 @@
 <?php
+
+App::singleton('Api', function($app)
+{
+    return new ApiController();
+});
+
 App::bind('CategoryResponseMaker', function($app)
 {
     return new Api\Factory\CategoryResponseMaker;

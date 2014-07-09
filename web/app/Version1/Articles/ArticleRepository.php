@@ -11,34 +11,30 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
 
     public function getArticlesByCategory($categoryId, $channelId)
     {
-        $result = ArticleLocation::with('article.event.venue', 'article.asset', 'article.location')->select(
-            'article.title', 'article_location.article_id'
-        )
-        ->join('article', 'article.id', '=', 'article_location.article_id')        
-        ->where('sub_channel_id', $channelId)
-        ->where('category_id', $categoryId)
-        ->get();
+        $result = Article::select('article.*')
+        ->join('article_location', 'article_location.article_id', '=', 'article.id')
+        ->where('article_location.sub_channel_id', $channelId)
+        ->where('article_location.category_id', $categoryId)
+        ->with(['location' => function($query) use($channelId, $categoryId) {
+                $query->where('article_location.sub_channel_id', $channelId)->where('article_location.category_id', $categoryId);
+         }])
+        ->with('event.venue', 'asset')
+         ->get();
 
-        $articles = [];
-        // they come out of this query slightly differently to how the articleTransformer needs them. sort that out !
-        foreach( $result->toArray() AS $item )
-        {
-            $articles[] = $item['article'];
-        }
-
-        return $articles;
+        return $result->toArray();
     }
 
     public function getArticleMapObjects($categoryId, $channelId)
     {
-        return ArticleLocation::select(
+        $result = ArticleLocation::select(
             'article_id', 'article.title', 'article.lat', 'article.lon'
         )->where('sub_channel_id', $channelId)
         ->where('category_id', $categoryId)
         ->join('article', 'article.id', '=', 'article_id')
         ->active()
-        ->alive()
         ->get();
+
+        return $result;
     }
 
     public function getArticle($identifier)
@@ -133,20 +129,20 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
         return array_values($response); // reset the associative array key values to integer valeus and return
     }
 
-    public function getArticles($type = 'article', $limit = 20, $channel = null, $subChannel = false)
+    public function getArticles($type = 'article', $limit = 20, $channel = null, $isASubChannel = null, $fromCF = false)
     {
         $query = ArticleLocation::with('article.event.venue', 'article.asset', 'article.location')->select(
             'article.title', 'article_location.article_id'
         )
         ->join('article', 'article.id', '=', 'article_location.article_id');
 
-        if(! $subChannel)        
+        if ( $isASubChannel )
         {
-            $query->where('channel_id', $channel);
-        }
-        else
-        { 
             $query->where('sub_channel_id', $channel);
+        }
+        else        
+        { 
+            $query->where('channel_id', $channel);
         }        
             
         switch($type)
@@ -160,7 +156,7 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
             break;
         }
 
-        $result = $query->orderBy('article.created_at', 'desc')->get();
+        $result = $query->orderBy('article.created_at', 'desc')->take($limit)->get();
 
         $articles = [];
         

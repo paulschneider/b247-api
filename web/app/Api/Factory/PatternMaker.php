@@ -118,7 +118,7 @@ Class PatternMaker
              {
                 $spaceCount = 0;
             
-                if( $pageCount == $this->maxPages )
+                if( $pageCount == $this->pages )
                 {
                     break;
                 }

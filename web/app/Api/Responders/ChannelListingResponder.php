@@ -1,12 +1,18 @@
 <?php namespace Api\Responders;
 
 use Api\Factory\ApiResponseMaker;
+use ApiController;
 
 Class ChannelListingResponder {
 
-	public function make( $channel, $articles, $range, $time )
+	public function make( $channel )
 	{
+        $range = \Input::get('range') ? \Input::get('range') : 'week';
+        $time = \Input::get('time') ? \Input::get('time') : \time();
+
 		$listingTransformer = \App::make('ListingTransformer');
+
+        $articles = \App::make('ChannelResponder')->getArticlesInRange( $channel, $range, $time );
 
 		if( $range == "week" )
         {         
@@ -15,11 +21,6 @@ Class ChannelListingResponder {
         else if( $range == "day" )
         {         
            	$articles = $listingTransformer->transform( $articles );
-        }
-
-        if( count($articles) == 0 )
-        {
-            ApiResponseMaker::RespondWithError(\Lang::get('api.noArticlesForSpecifiedPeriod'));
         }
 
         return ['days' => $articles];

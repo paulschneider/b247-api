@@ -1,13 +1,5 @@
 <?php
 
-// register a new singleton that we can call from anywhere in the app
-
-App::singleton('Api', function($app)
-{
-    return new ApiController();
-});
-
-
 define('VERSION', Config::get('app.version'));
 
 /*
