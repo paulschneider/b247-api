@@ -27,10 +27,9 @@ Class ArticleTransformer extends Transformer {
      */
     public function transform( $article, $options = [] )
     {
-        if( isset($article['location'][0]) and isset($article['asset'][0]) )
+        if( isset($article['location'][0]) )
         {
-            $articleLocation = $article['location'][0];
-            $articleAsset = $article['asset'][0];
+            $articleLocation = $article['location'][0];            
 
             $response = [
                 'id' => $article['id']
@@ -60,15 +59,21 @@ Class ArticleTransformer extends Transformer {
                         ,'name' => $articleLocation['categoryName']
                         ,'sefName' => $articleLocation['categorySefName']
                     ]                    
-                ]    
-                ,'media' => [
+                ]          
+            ];
+
+            if( isset($article['asset'][0]) )
+            {
+                $articleAsset = $article['asset'][0];
+
+                $response['media'] = [
                     'filepath' => $articleAsset['filepath']
                     ,'alt' => $articleAsset['alt']
                     ,'title' => $articleAsset['title']
                     ,'width' => $articleAsset['width']
                     ,'height' => $articleAsset['height']
-                ]           
-            ];
+                ];
+            }
 
             // If there is an event then transform that as well
 

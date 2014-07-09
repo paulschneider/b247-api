@@ -12,11 +12,6 @@ Class CategoryDirectoryResponder {
 
 		$articles = $categoryResponder->getCategoryArticles($categoryId, $subChannelId);
 
-		if( count($articles) == 0 )
-		{
-			ApiResponseMaker::RespondWithError(\Lang::get('api.noCategoryArticlesToReturn'));
-		}
-
 		return [
 			'map' => $categoryResponder->getCategoryMap($categoryId, $subChannelId),
 			'articles' => $articles,
