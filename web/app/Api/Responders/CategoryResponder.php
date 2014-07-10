@@ -44,6 +44,13 @@ Class CategoryResponder {
 			}
 		}
 
-		return $listingTransformer->transformCollection($articles);
+		if( $range == "week" )
+		{
+			return $listingTransformer->transformCollection($articles);
+		}
+		else
+		{
+			return $listingTransformer->transform($articles);
+		}
 	}
 }

@@ -13,11 +13,6 @@ Class CategoryListingResponder {
 
 		$articles = $categoryResponder->getArticlesInRange( $subChannelId, $category, $range, $time );
 
-		if( count($articles) == 0 )
-		{
-			ApiResponseMaker::RespondWithError(\Lang::get('api.noCategoryArticlesToReturn'));
-		}
-
 		return [
 			'days' => $articles,
 		];
