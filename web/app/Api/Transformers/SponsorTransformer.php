@@ -35,6 +35,8 @@ class SponsorTransformer extends Transformer {
             ,'isAdvert' => true
         ];
 
+        $tmp['media'] = null;
+
         if( isset($sponsor['asset']) )
         {
             $tmp['media'] = [

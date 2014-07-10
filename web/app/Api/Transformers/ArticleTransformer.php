@@ -66,7 +66,7 @@ Class ArticleTransformer extends Transformer {
             ];
 
             // init an empty media array even if there is no asset attached the current item
-            $response['media'] = [];
+            $response['media'] = null;
 
             if( isset($article['asset'][0]) )
             {
