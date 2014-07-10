@@ -46,7 +46,6 @@ Class HomeResponseMaker extends ApiResponseMaker implements ApiResponseMakerInte
         $sponsors = $sponsorRepository->getWhereNotInCollection( $this->getAllocatedSponsors(), 100 )->toArray();
 
         $channelFeed = \App::make('ChannelFeed');	
-
         $channelFeed->initialise( $allChannels, $this->homeChannels, $sponsors, [] );
 
 		$this->channelFeed = $channelFeed->make();

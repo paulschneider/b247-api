@@ -129,7 +129,7 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
         return array_values($response); // reset the associative array key values to integer valeus and return
     }
 
-    public function getArticles($type = 'article', $limit = 20, $channel = null, $isASubChannel = null, $fromCF = false)
+    public function getArticles($type = 'article', $limit = 20, $channel = null, $isASubChannel = false)
     {
         $query = ArticleLocation::with('article.event.venue', 'article.asset', 'article.location')->select(
             'article.title', 'article_location.article_id'
@@ -138,13 +138,15 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
 
         if ( $isASubChannel )
         {
+            sd('1');
             $query->where('sub_channel_id', $channel);
         }
-        else        
+       
+       if ( ! is_null($channel) )
         { 
             $query->where('channel_id', $channel);
-        }        
-            
+        }       
+           
         switch($type)
         {
             case 'picks' :

@@ -42,7 +42,7 @@ Class ChannelFeed {
             if( ! in_array($channel, $this->inactiveUserChannels) )
             {
                 // get the articles for this channel
-                $articles = $this->articleRepository->getArticles( null, 20, $channel, $this->isASubChannel, true );
+                $articles = $this->articleRepository->getArticles( null, 20, $channel, $this->isASubChannel );
 
                 // transform the articles and the sponsors into the API version 
                 $articles = $this->articleTransformer->transformCollection($articles);

@@ -48,16 +48,19 @@ Class ArticleTransformer extends Transformer {
                         'id' => $articleLocation['channelId']
                         ,'name' => $articleLocation['channelName']
                         ,'sefName' => $articleLocation['channelSefName']
+                        ,'path' => makePath( [ $articleLocation['channelSefName'] ] )
                     ]
                     ,'subChannel' => [
                         'id' => $articleLocation['subChannelId']
                         ,'name' => $articleLocation['subChannelName']
                         ,'sefName' => $articleLocation['subChannelSefName']
+                        ,'path' => makePath( [ $articleLocation['channelSefName'], $articleLocation['subChannelSefName'] ] )
                     ]
                     ,'category' => [
                         'id' => $articleLocation['categoryId']
                         ,'name' => $articleLocation['categoryName']
                         ,'sefName' => $articleLocation['categorySefName']
+                        ,'path' => makePath( [ $articleLocation['channelSefName'], $articleLocation['subChannelSefName'], $articleLocation['categorySefName'] ] )
                     ]                    
                 ]          
             ];
@@ -95,7 +98,10 @@ Class ArticleTransformer extends Transformer {
                 unset($response['path']);
                 unset($response['assignment']['channel']['sefName']);
                 unset($response['assignment']['subChannel']['sefName']);
-                unset($response['assignment']['category']['sefName']);                
+                unset($response['assignment']['category']['sefName']);
+                unset($response['assignment']['channel']['path']);
+                unset($response['assignment']['subChannel']['path']);
+                unset($response['assignment']['category']['path']);                
                 unset($response['event']['venue']['sefName']);
                 unset($response['event']['detail']['sefName']);
                 unset($response['event']['detail']['url']);
