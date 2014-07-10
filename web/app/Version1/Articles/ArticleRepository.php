@@ -138,7 +138,6 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
 
         if ( $isASubChannel )
         {
-            sd('1');
             $query->where('sub_channel_id', $channel);
         }
        
