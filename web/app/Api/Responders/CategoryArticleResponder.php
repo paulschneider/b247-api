@@ -26,6 +26,7 @@ Class CategoryArticleResponder {
 		return [
 			'articles' => $articles,
 			'pagination' => $metaData,	
+			'totalArticles' => count($articles)
 		];
 	}
 }

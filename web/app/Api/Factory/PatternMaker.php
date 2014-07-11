@@ -36,7 +36,7 @@ Class PatternMaker
     {
         $this->activePattern = $activePattern;
         $this->pattern = $this->patterns[ $this->activePattern ];
-        $this->limit = $limit;
+        $this->limit = \Input::get('size') ? \Input::get('size') : $limit;
         $this->pages = $maxPages;
     }
 
@@ -54,13 +54,13 @@ Class PatternMaker
     {
         $counter = 0;
         $patternCounter = 0;
-        $iterationCounter = 1;
+        $iterationCounter = 1; // how many times have we tried to add an item to the pattern
         $totalPatterns = count($this->pattern);
         $sorted = [];
         $pageCount = 1;
         $spaceCount = 0;
         $allocatedSponsors = [];
-    
+
         $articles = array_values($content['articles']); // reset the array keys as we'll be targeting them specifically
         $sponsors = $content['sponsors'];        
 
@@ -117,7 +117,7 @@ Class PatternMaker
              if( $spaceCount == 3 )
              {
                 $spaceCount = 0;
-            
+
                 if( $pageCount == $this->pages )
                 {
                     break;
