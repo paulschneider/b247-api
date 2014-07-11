@@ -20,7 +20,14 @@ Route::resource('article', 'ArticleController');
 Route::resource('category', 'CategoryController');
 Route::group(['prefix' => 'category'], function(){
 	Route::get('/', 'CategoryController@index');
-	Route::get('{categoryId}/articles', 'CategoryController@getCategoryArticles');
+
+	// route aliases as required by mobile apps (or at least requested)
+	Route::get('{categoryId}/{listing}/articles', 'CategoryController@getCategoryArticles');
+    Route::get('{categoryId}/{article}/articles', 'CategoryController@getCategoryArticles');
+    Route::get('{categoryId}/{directory}/articles', 'CategoryController@getCategoryArticles');
+    Route::get('{categoryId}/{promotion}/articles', 'CategoryController@getCategoryArticles');
+
+    Route::get('{categoryId}/articles', 'CategoryController@getCategoryArticles');
 });
 
 # Channels

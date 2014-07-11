@@ -12,9 +12,10 @@ Class CategoryListingResponder {
 		$categoryResponder = \App::make('CategoryResponder');
 
 		$articles = $categoryResponder->getArticlesInRange( $subChannelId, $category, $range, $time );
-
+		
 		return [
 			'days' => $articles,
+			'totalArticles' => count($articles)
 		];
 	}
 }

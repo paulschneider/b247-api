@@ -74,7 +74,7 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
         { 
             $dateArray = explode('-', $dateStamp);  
             $query->where('article.published', '>=', $dateStamp.' 00:00:01');
-            $query->where('article.published', '<=', Carbon::create($dateArray[0], $dateArray[1], $dateArray[2], '23', '59', '59')->addWeeks(1));
+            $query->where('article.published', '<=', Carbon::create($dateArray[0], $dateArray[1], $dateArray[2], '23', '59', '59')->addDays(6));
 
             $query->where('article.is_picked', '=', true);
         }
@@ -84,7 +84,7 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
             $query->where('article.published', '<=', $dateStamp.' 23:59:59');
         }
 
-        $result = $query->orderBy('article.published', 'desc')->get();
+        $result = $query->orderBy('article.published', 'asc')->get();
 
         $articles = [];
         
@@ -140,8 +140,7 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
         {
             $query->where('sub_channel_id', $channel);
         }
-       
-       if ( ! is_null($channel) )
+        else
         { 
             $query->where('channel_id', $channel);
         }       

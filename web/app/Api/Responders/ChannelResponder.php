@@ -15,9 +15,21 @@ Class ChannelResponder {
 	public function getArticlesInRange($channel, $range, $time)
 	{
 		$articleRepository = \App::make('ArticleRepository');
+		$listingTransformer = \App::make('ListingTransformer');
 
 		$subChannelId = getSubChannelId($channel);
 
-		return $articleRepository->getChannelListing( $subChannelId, 20, $range, $time );
+		$articles = $articleRepository->getChannelListing( $subChannelId, 20, $range, $time );
+
+		if( $range == "week" )
+        {         
+            $articles = $listingTransformer->transformCollection( $articles, [ 'perDayLimit' => 3 ] );
+        }
+        else if( $range == "day" )
+        {         
+           	$articles = $listingTransformer->transform( $articles );
+        }
+
+        return $articles;
 	}
 }
