@@ -15,6 +15,7 @@ Class CategoryDirectoryResponder {
 		return [
 			'map' => $categoryResponder->getCategoryMap($categoryId, $subChannelId),
 			'articles' => $articles,
+			'totalArticles' => count($articles)
 		];
 	}
 }

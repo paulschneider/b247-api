@@ -19,17 +19,39 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
                 $query->where('article_location.sub_channel_id', $channelId)->where('article_location.category_id', $categoryId);
          }])
         ->with('event.venue', 'asset')
-         ->get();
+        ->get();
 
         return $result->toArray();
     }
 
-    public function getArticleMapObjects($categoryId, $channelId)
+    public function getArticleMapObjects($categoryId, $channelId, $lat, $lon, $distance)
     {
+        //https://developers.google.com/maps/articles/phpsqlsearch_v3
+        $query = \DB::select(\DB::raw("
+            SELECT article.id, 
+            ( 6371 * acos( cos( radians($lat) ) * cos( radians( lat ) ) * cos( radians( lon ) - radians($lon) ) + sin( radians($lat) ) * sin( radians( lat ) ) ) ) AS distance 
+            FROM article 
+            JOIN article_location ON article_location.article_id = article.id
+            WHERE article_location.sub_channel_id = $channelId
+            AND article_location.category_id = $categoryId
+            HAVING distance < 25 ORDER BY distance LIMIT 0 , 100
+        "));
+
+        $ids = [];
+
+        foreach( $query AS $q )
+        {
+            if( $q->distance < $distance )
+            {
+                $ids[] = $q->id;
+            }
+        }
+
         $result = ArticleLocation::select(
             'article_id', 'article.title', 'article.lat', 'article.lon'
         )->where('sub_channel_id', $channelId)
         ->where('category_id', $categoryId)
+        ->whereIn('article.id', $ids)
         ->join('article', 'article.id', '=', 'article_id')
         ->active()
         ->get();

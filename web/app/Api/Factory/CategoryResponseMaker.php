@@ -36,11 +36,6 @@ Class CategoryResponseMaker extends ApiResponseMaker implements ApiResponseMaker
 		return $channel;
 	}
 
-	public function getArticleCount()
-	{
-		return \App::make('ArticleRepository')->countArticlesInCategory($this->categoryId, $this->subChannelId);
-	}
-
 	public function getCategoryContent()
 	{		
 		if( isArticleType( $this->channel ) )
@@ -68,7 +63,6 @@ Class CategoryResponseMaker extends ApiResponseMaker implements ApiResponseMaker
 		$response = [
 			'channel' => $channel,			
             'adverts' => $this->getSponsors(),
-            'totalArticles' => $this->getArticleCount(),
 		];
 
 		foreach( $this->getCategoryContent() AS $key => $content )
