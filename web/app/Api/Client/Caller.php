@@ -22,8 +22,8 @@ Class Caller {
 		]);
 
 		// getPath()
+		// getUrl()
 
-sd($request->getUrl());
 		try {
 		   $response = $this->client->send($request)->json();
 

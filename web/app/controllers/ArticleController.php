@@ -31,7 +31,7 @@ Class ArticleController extends ApiController {
 
         $data = ApiClient::get('app/article', [ 'channel' => Input::get('channel'), 'category' => Input::get('category'), 'article' => Input::get('article') ]);
 
-        sd($data);
+        return Response::json($data);
     }
 
     /**
