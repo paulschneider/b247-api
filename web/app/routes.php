@@ -13,14 +13,14 @@
 
 # Article
 
-if( isMobile() )
-{
+// if( isMobile() )
+// {
     Route::get('articles', 'ArticleController@getAppArticle');
-}
-else
-{
-    Route::get('articles', 'ArticleController@getWebArticle');   
-}
+// }
+// else
+// {
+//     Route::get('articles', 'ArticleController@getWebArticle');   
+// }
 
 
 # Application Navigation

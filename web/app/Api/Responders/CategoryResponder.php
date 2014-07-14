@@ -6,7 +6,7 @@ Class CategoryResponder {
 	{
 		$lat = \Input::get('lat') ? \Input::get('lat') : 51.451508;
 		$lon = \Input::get('lon') ? \Input::get('lon') : -2.598464;
-		$distance = \Input::get('dist') ? \Input::get('dist') : 1;
+		$distance = \Input::get('dist') ? \Input::get('dist') : 10;
 
 		$mapItems = \App::make('ArticleRepository')->getArticleMapObjects( $categoryId, $channelId, $lat, $lon, $distance );
 

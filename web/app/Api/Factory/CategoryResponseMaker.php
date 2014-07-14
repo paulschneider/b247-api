@@ -18,6 +18,8 @@ Class CategoryResponseMaker extends ApiResponseMaker implements ApiResponseMaker
         }
 
         $this->category = $categoryTransformer->transform($category->toArray());
+
+        return $this->category;
 	}
 
 	public function getChannel($identifier)
@@ -42,6 +44,15 @@ Class CategoryResponseMaker extends ApiResponseMaker implements ApiResponseMaker
 
 		$parentChannel = $channelRepository->getChannelBySubChannel( $channel );		
 		$this->channel = $channelTransformer->transform( Toolbox::filterSubChannels( $parentChannel, $channel ) );
+
+		// remove all other categories except the one requested
+		foreach( $this->channel['subChannels'][0]['categories'] AS $key => $category )
+		{
+			if( $category['id'] != $this->category['id'] )
+			{
+				unset($this->channel['subChannels'][0]['categories'][$key]);
+			}
+		}
 
 		return $this->channel;
 	}

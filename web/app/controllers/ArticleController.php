@@ -29,7 +29,9 @@ Class ArticleController extends ApiController {
             return apiErrorResponse('insufficientArguments');
         }
 
-        sd('ArticleController::getAppArticle()');
+        $data = ApiClient::get('app/article', [ 'channel' => Input::get('channel'), 'category' => Input::get('category'), 'article' => Input::get('article') ]);
+
+        sd($data);
     }
 
     /**

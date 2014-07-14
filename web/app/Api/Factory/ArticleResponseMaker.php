@@ -10,7 +10,13 @@ Class ArticleResponseMaker extends ApiResponseMaker implements ApiResponseMakerI
 
 	public function getChannel()
 	{
-		$this->category = \App::make( 'CategoryResponseMaker' )->getCategory( $this->category );
+		if( isApiResponse($result = \App::make( 'CategoryResponseMaker' )->getCategory( $this->category )))
+		{
+			return $result;
+		}
+
+		$this->category = $result;
+
 		$this->channel = \App::make( 'ChannelResponder' )->getChannel( $this->channel );
 
 		if( ! categoryBelongsToChannel( $this->channel, $this->category ) )

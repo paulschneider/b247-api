@@ -133,6 +133,7 @@ return array(
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
+		'Api\Client\ApiServiceProvider',
 	),
 
 	/*
@@ -199,5 +200,6 @@ return array(
 		'URL'             => 'Illuminate\Support\Facades\URL',
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
+		'ApiClient'		  => 'Api\Client\ApiFacade',
 	),
 );
