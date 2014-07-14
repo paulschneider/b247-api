@@ -14,7 +14,7 @@ Class HomeResponseMaker extends ApiResponseMaker implements ApiResponseMakerInte
 
 		$this->channels = $channelRepository->getChannels();
 
-		$this->response['channels']  = $channelTransformer->transformCollection($this->channels);
+		return $channelTransformer->transformCollection($this->channels);
 	}
 
 	public function getFeatured()
@@ -60,6 +60,7 @@ Class HomeResponseMaker extends ApiResponseMaker implements ApiResponseMakerInte
 		}
 
 		$this->response = [
+			'channels' => $this->getChannels(),
             'adverts' => $this->getSponsors(),
             'features' => $this->getFeatured(),
             'picks' => $this->getPicked(),
