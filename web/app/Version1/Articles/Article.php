@@ -107,4 +107,9 @@ class Article extends BaseModel {
     {
         return $this->belongsTo('\Version1\Events\Event', 'event_id')->orderBy('event.show_date', 'asc');
     }
+
+    public function venue()
+    {
+        return $this->belongsTo('\Version1\Venues\Venue', 'venue_id');   
+    }
 }

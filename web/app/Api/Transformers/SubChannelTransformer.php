@@ -51,8 +51,8 @@ Class SubChannelTransformer extends Transformer {
         {
             foreach ($channel['category'] as $key => $category) 
             {
-                $response['categories'][$key] = $categoryTransformer($category);
-                $response['categories'][$key]['path'] = makePath( [ $parent['sef_name'], $channel['sef_name'], $category['sef_name'] ] )
+                $response['categories'][$key] = $categoryTransformer->transform($category);
+                $response['categories'][$key]['path'] = makePath( [ $parent['sef_name'], $channel['sef_name'], $category['sef_name'] ] );
 
                 if( isMobile() )
                 {

@@ -4,59 +4,68 @@ use Version1\Channels\Toolbox;
 
 Class SubChannelResponseMaker extends ApiResponseMaker implements ApiResponseMakerInterface {
 
+	protected $response;
+	protected $channel;
+
 	public function getChannel($identifier)
 	{
 		$channelRepository = \App::make( 'ChannelRepository' );
 		$channelTransformer = \App::make( 'ChannelTransformer' );
 
-		$channel = $channelRepository->getChannelByIdentifier( $identifier );
-
-		if( ! aSubChannel($channel) )
+		if( ! $channel = $channelRepository->getChannelByIdentifier( $identifier ) )
 		{
-			ApiResponseMaker::RespondWithError(\Lang::get('api.thisIsNotASubChannel'));
+			return apiErrorResponse('notFound');
+		}
+		elseif( ! aSubChannel($channel))
+		{
+			return apiErrorResponse('expectationFailed');
 		}
 
 		$parentChannel = $channelRepository->getChannelBySubChannel( $channel );		
 		$channel = $channelTransformer->transform( Toolbox::filterSubChannels( $parentChannel, $channel ) );
 
-		return $channel;
+		$this->channel = $channel;
 	}
 
-	public function getChannelContent($channel)
+	public function getChannelContent()
 	{
 		$channelResponder = \App::make( 'ChannelResponder' );
 
-		$articles = $channelResponder->getArticles( $channel );
+		$articles = $channelResponder->getArticles( $this->channel );
 		$sponsors = $this->getRandomSponsors( null );
 
-		if( isArticleType( $channel ) )
+		if( isArticleType( $this->channel ) )
 		{
 			return $channelArticleResponse = \App::make('ChannelArticleResponder')->make( $articles, $sponsors );
 		}
-		else if( isDirectoryType( $channel ) )
+		else if( isDirectoryType( $this->channel ) )
 		{
-			return $channelDirectoryResponder = \App::make('ChannelDirectoryResponder')->make( $channel, $articles, $sponsors );
+			return $channelDirectoryResponder = \App::make('ChannelDirectoryResponder')->make( $this->channel, $articles, $sponsors );
 		}
-		else if( isListingType( $channel ) )
+		else if( isListingType( $this->channel ) )
 		{
-			return \App::make('ChannelListingResponder')->make( $channel );
+			return \App::make('ChannelListingResponder')->make( $this->channel );
 		}
 
-		return $channelResponder->make( $channel, $articles, $sponsors );
+		return $channelResponder->make( $this->channel, $articles, $sponsors );
 	}
 
-	public function make($channel)
+	public function make( $identifier )
 	{
-		$response = [
-			'channel' => $channel,
+		if( isApiResponse( $result = $this->getChannel($identifier) ) )
+		{
+			return $result;
+		}
+
+		$this->response = [
 			'adverts' => $this->getSponsors()
 		];
 
-		foreach( $this->getChannelContent($channel) AS $key => $item)
+		foreach( $this->getChannelContent($this->channel) AS $key => $item)
 		{
-			$response[$key] = $item;
+			$this->response[$key] = $item;
 		}
 
-		return $response;
+		return $this->response;
 	}
 }

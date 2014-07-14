@@ -5,6 +5,11 @@ App::singleton('Api', function($app)
     return new ApiController();
 });
 
+App::bind('AppNavResponseMaker', function($app)
+{
+    return new Api\Factory\AppNavResponseMaker;
+});
+
 App::bind('CategoryResponseMaker', function($app)
 {
     return new Api\Factory\CategoryResponseMaker;
@@ -178,4 +183,24 @@ App::bind('CategoryArticleResponder', function($app)
 App::bind('CategoryListingResponder', function($app)
 {
     return new Api\Responders\CategoryListingResponder;
+});
+
+App::bind('CategoryRepository', function($app)
+{
+    return new Version1\Categories\CategoryRepository;
+});
+
+App::bind('ArticleResponseMaker', function($app)
+{
+    return new Api\Factory\ArticleResponseMaker;
+});
+
+App::bind('ApiResponder', function($app)
+{
+    return new ApiController;
+});
+
+App::bind('VenueTransformer', function($app)
+{
+    return new Api\Transformers\VenueTransformer;
 });

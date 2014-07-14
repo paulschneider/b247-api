@@ -41,6 +41,12 @@ class ChannelTransformer extends Transformer {
             'isEnabled' => isChannelUserEnabled( $channel['id'], $inactiveUserChannels ),
         ];
 
+        // we use this transformer to transform the channelFeed as well. so this might be a sub-channel that contains parent data
+        if( isset($channel['parent']) )
+        {
+            $response['path'] = makePath( [ $channel['parent']['sef_name'], $channel['sef_name'] ] );
+        }
+
         if( isset($channel['sub_channel']) and count($channel['sub_channel']) > 0 )
         {
             $subChannels = [];

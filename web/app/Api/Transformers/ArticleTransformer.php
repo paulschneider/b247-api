@@ -8,7 +8,7 @@ Class ArticleTransformer extends Transformer {
      * @param user
      * @return array
      */
-    public function transformCollection( $articles, $options = [] )
+    public function transformCollection( $articles, $options = [ 'showBody' => false ] )
     {
         $response = [];
 
@@ -36,6 +36,7 @@ Class ArticleTransformer extends Transformer {
                 ,'title' => $article['title']
                 ,'sefName' => $article['sef_name']
                 ,'subHeading' => $article['sub_heading']
+                ,'body' => $article['body']
                 ,'path' => makePath( [ $articleLocation['channelSefName'], $articleLocation['subChannelSefName'], $articleLocation['categorySefName'], $article['sef_name'] ] )
                 ,'isAdvert' => false
                 ,'displayType' => [
@@ -85,9 +86,15 @@ Class ArticleTransformer extends Transformer {
 
             if( isset($article['event']['id']) )
             { 
-                $eventTransformer = \App::make('EventTransformer');
+                $eventTransformer = \App::make( 'EventTransformer' );
 
                 $response['event'] = $eventTransformer->transform( $article['event'] );
+            }
+            // venues can be attached to articles without an event (ref directory type article)
+            elseif (isset($article['venue']['id']))
+            {
+                $venueTransformer = \App::make( 'VenueTransformer' );                
+                $response['venue'] = $venueTransformer->transform( $article['venue'] );
             }
 
             // remove anything that only the desktop version needs

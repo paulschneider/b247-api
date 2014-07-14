@@ -20,6 +20,18 @@ Class CategoryRepository implements CategoryInterface {
         return Category::find($categoryId);
     }
 
+    public function getCategoryByIdentifier($category)
+    {
+        if( is_numeric($category) )
+        {
+            return $this->getCategory($category);
+        }
+        else
+        {
+            return Category::where('sef_name', $category)->first();
+        }
+    }
+
     /**
     * get a simple array containing categories and their ID's
     *

@@ -1,18 +1,54 @@
 <?php
 
+function apiErrorResponse($response)
+{
+    return App::make( 'ApiResponder' )
+                ->setStatusCode(\Config::get("responsecodes.{$response}.code"))
+                ->respondWithError(\Config::get("responsecodes.{$response}.message"));
+}
+
+function apiSuccessResponse($response, $data)
+{
+    return App::make( 'ApiResponder' )
+                ->setStatusCode(\Config::get("responsecodes.{$response}.code"))
+                ->respondWithSuccess(\Config::get("responsecodes.{$response}.message"), $data);
+}
+
 function categoryBelongsToChannel( $channel, $category )
 {
-    if( empty($channel['category']) )
+    if( isset($channel['subChannels']) )
     {
-        return false;
-    }
-
-    foreach( $channel['category'] AS $channelCat )
-    {
-        if( $channelCat['id'] == $category )
+        if( isset( $channel['subChannels'][0]['categories'] ) ) 
         {
-            return true;
+            $categories = $channel['subChannels'][0]['categories'];
+
+            foreach( $categories AS $cat )
+            {
+                if( $cat['id'] == $category['id'] )
+                {
+                    return true;
+                }
+            }
         }
+        else
+        {
+            return false;
+        }        
+    }
+    else
+    {
+        if( empty($channel['category']) )
+        {
+            return false;
+        }
+
+        foreach( $channel['category'] AS $channelCat )
+        {
+            if( $channelCat['id'] == $category )
+            {
+                return true;
+            }
+        }    
     }
 
     return false;
@@ -88,16 +124,21 @@ function isChannelUserEnabled($channelId, $inactiveUserChannels)
 }
 
 function getChannel( $channels, $channelId )
-{
+{ 
     if ( is_array($channels) )
     {
         foreach( $channels AS $channel )
         {
             if ( $channel['id'] == $channelId )
             {
+                if( ! empty($channel['parent_channel']) )
+                {
+                    $channel['parent'] = getChannel( $channels, $channel['parent_channel'] );
+                }
+
                 unset($channel['sub_channel']);
                 unset($channel['display']);
-
+                
                 return $channel;
             }
         }

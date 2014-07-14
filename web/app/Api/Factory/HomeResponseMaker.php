@@ -3,10 +3,9 @@
 Class HomeResponseMaker extends ApiResponseMaker implements ApiResponseMakerInterface {
 
 	protected $channelFeed;
-
 	protected $homeChannels = [ 48, 49, 51, 52 ];
-
 	protected $channels;
+	protected $response;
 
 	public function getChannels()
 	{
@@ -15,7 +14,7 @@ Class HomeResponseMaker extends ApiResponseMaker implements ApiResponseMakerInte
 
 		$this->channels = $channelRepository->getChannels();
 
-		return $channelTransformer->transformCollection($this->channels);
+		$this->response['channels']  = $channelTransformer->transformCollection($this->channels);
 	}
 
 	public function getFeatured()
@@ -55,16 +54,20 @@ Class HomeResponseMaker extends ApiResponseMaker implements ApiResponseMakerInte
 
 	public function make()
 	{ 
-		$response = [
-            'channels' => $this->getChannels(),
-            'adverts' => $this->channelSponsors,
+		if( isApiResponse( $result = $this->getChannels() ) )
+		{
+			return $result;
+		}
+
+		$this->response = [
+            'adverts' => $this->getSponsors(),
             'features' => $this->getFeatured(),
             'picks' => $this->getPicked(),
             'channelFeed' => $this->getChannelFeed(),
         ];
 
-        array_unshift($response['channelFeed'], $this->getWhatsOn());
+        array_unshift($this->response['channelFeed'], $this->getWhatsOn());
 
-		return $response;
+		return $this->response;
 	}
 }

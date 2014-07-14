@@ -59,9 +59,36 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
         return $result;
     }
 
+    public function getCategoryArticle($channel, $category, $article)
+    {       
+        $query = Article::select('article.*', 'article_id AS id')->with('location', 'asset', 'event.venue', 'venue');
+        $query->join('article_location', 'article_location.article_id', '=', 'article.id');
+
+        if( is_numeric($article) )
+        {
+            $query->where('article.id', '=', $article);
+        }
+        else
+        {
+            $query->where('article.sef_name', '=', $article);
+        }
+
+        $query->where('article_location.sub_channel_id', getSubChannelId($channel));
+        $query->where('article_location.category_id', $category['id']);
+
+        if( ! $result = $query->first() )
+        {
+            return false;
+        }
+        else
+        {
+            return $result;    
+        }   
+    }
+
     public function getArticle($identifier)
     {
-        $query = Article::with('location', 'asset', 'event.venue');
+        $query = Article::with('location', 'asset', 'event.venue', 'venue');
 
         if( is_numeric($identifier) )
         {
@@ -151,20 +178,23 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
         return array_values($response); // reset the associative array key values to integer valeus and return
     }
 
-    public function getArticles($type = 'article', $limit = 20, $channel = null, $isASubChannel = false)
+    public function getArticles($type = 'article', $limit = 20, $channel = null, $isASubChannel = false, $ignoreChannel = false)
     {
         $query = ArticleLocation::with('article.event.venue', 'article.asset', 'article.location')->select(
             'article.title', 'article_location.article_id'
         )
         ->join('article', 'article.id', '=', 'article_location.article_id');
 
-        if ( $isASubChannel )
+        if( !$ignoreChannel ) // on the homepage we don't care about which channel the featured or picked articles come from
         {
-            $query->where('sub_channel_id', $channel);
-        }
-        else
-        { 
-            $query->where('channel_id', $channel);
+            if ( $isASubChannel )
+            {
+                $query->where('sub_channel_id', $channel);
+            }
+            else
+            { 
+                $query->where('channel_id', $channel);
+            }           
         }       
            
         switch($type)
@@ -288,6 +318,21 @@ Class ArticleRepository extends BaseModel implements ArticleInterface {
 
     public function getChannelArticleCategory($channelId)
     {
-        return ArticleLocation::where('sub_channel_id', $channelId)->leftJoin('category', 'article_location.category_id', '=', 'category.id')->get()->toArray();
+        return ArticleLocation::select(
+            'article_id',
+            'cat.name AS categoryName',
+            'cat.sef_name AS categorySefName',
+            'cat.id AS categoryId',
+            'c.name as channelName',
+            'c.sef_name as channelSefName',
+            'sc.name as subChannelName',
+            'sc.sef_name as subChannelSefName'
+        )
+        ->where('sub_channel_id', $channelId)
+        ->join('category AS cat', 'article_location.category_id', '=', 'cat.id')
+        ->join('channel AS c', 'c.id', '=', 'article_location.channel_id')
+        ->join('channel AS sc', 'sc.id', '=', 'article_location.sub_channel_id')
+        ->get()
+        ->toArray();
     }
 }

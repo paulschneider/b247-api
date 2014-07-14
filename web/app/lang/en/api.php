@@ -6,7 +6,7 @@ return [
 	'channelFound' => "Channel Found.",
 	'articleFound' => "Article found",
 	'subChannelFound' => "Sub-channel found.",
-	'thisIsNotASubChannel' => "Channel is not a sub-channel. Aborting.",
+	'thisIsNotASubChannel' => "Channel is not a sub-channel.",
 	'noSubChannelArticles' => "There are no articles to return.",
 	'defaultRespondCreated' => "created.",
 	'defaultRespondNotFound' => "Unrecognised endpoint.",
@@ -21,5 +21,7 @@ return [
 	'noPickedArticlesForSpecifiedPeriod' => "There are no picked articles to return for the specified period.",
 	'categoryFound' => "Category found.",
 	'noCategoryArticlesToReturn' => "There are no articles to return for category/sub-channel combination",
-	'categoryDoesNotBelongToChannel'=> "The supplied category does not belong to this sub-channel."
+	'categoryDoesNotBelongToChannel'=> "The supplied category does not belong to this sub-channel.",
+	'appNavigationReturnSuccess' => "Application navigation successfully returned.",
+	'categoryNotFound' => "A category could not be found with that identifier.",
 ];

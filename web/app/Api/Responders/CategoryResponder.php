@@ -15,7 +15,19 @@ Class CategoryResponder {
 			$mapItems = \App::make('MapTransformer')->transformCollection( $mapItems );
 		}
 
-		return $mapItems;
+		$ids = [];
+
+		foreach($mapItems AS $item)
+		{
+			$ids[] = $item['id'];
+		}
+
+		$map = new \stdClass();
+
+		$map->ids = $ids;
+		$map->objects = $mapItems;
+
+		return $map;
 	}
 
 	public function getCategoryArticles($categoryId, $channelId)

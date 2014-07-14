@@ -16,8 +16,13 @@ Class HomeController extends ApiController {
             return "user is authenticated";
         }
 
-        $this->response = $this->responseMaker->make();
-
-        return $this->respondFound(Lang::get('api.homepageFound'), $this->response);
+        if( isApiResponse($response = $this->responseMaker->make()) )
+        {
+            return $response;
+        }
+        else
+        {
+            return apiSuccessResponse( 'contentLocated', $response );    
+        }
     }
 }

@@ -35,6 +35,7 @@ class EventTransformer extends Transformer {
 
         $venue = $event['venue'];
         unset($event['venue']);
+        $venueTransformer = \App::make( 'VenueTransformer' );                
 
         return [
             'details' => [
@@ -47,21 +48,7 @@ class EventTransformer extends Transformer {
                 ,'price' => (float) number_format( $event['price'], 2 )
                 ,'url' => $event['url']
             ]
-            ,'venue' => [
-                'id' => $venue['id']
-                ,'name' => $venue['name']
-                ,'sefName' => $venue['sef_name']
-                ,'address1' => $venue['address_line_1']
-                ,'address2' => $venue['address_line_2']
-                ,'address3' => $venue['address_line_3']
-                ,'postcode' => $venue['postcode']
-                ,'email' => $venue['email']
-                ,'facebook' => $venue['facebook']
-                ,'twitter' => $venue['twitter']
-                ,'phone' => $venue['phone']
-                ,'lat' => $venue['lat']
-                ,'lon' => $venue['lon']
-            ]
+            ,'venue' => $venueTransformer->transform( $venue )
         ];
     }
 }

@@ -16,7 +16,7 @@ Class ChannelDirectoryResponder {
 		$articles = $articleTransformer->transformCollection( $articles );
 		$sponsors = $sponsorTransformer->transformCollection( $sponsors );
 		
-		$categories = Toolbox::getCategoryArticleCount( $articleRepository->getChannelArticleCategory( getSubChannelId($channel) ) );
+		$categories = Toolbox::getCategoryArticleCategories( $articleRepository->getChannelArticleCategory( getSubChannelId($channel) ) );
 
 		$articles = $patternMaker->make( [ 'articles'=> $articles, 'sponsors' => $sponsors ] )->articles;
 

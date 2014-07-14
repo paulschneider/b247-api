@@ -1,6 +1,21 @@
 <?php namespace Api\Responders;
 
+use Version1\Channels\Toolbox;
+
 Class ChannelResponder {
+
+	public function getChannel( $identifier )
+	{
+		$channelRepository = \App::make( 'ChannelRepository' );
+		$channelTransformer = \App::make( 'ChannelTransformer' );
+
+		$channel = $channelRepository->getChannelByIdentifier( $identifier );
+
+		$parentChannel = $channelRepository->getChannelBySubChannel( $channel );		
+		$channel = $channelTransformer->transform( Toolbox::filterSubChannels( $parentChannel, $channel ) );
+
+		return $channel;
+	}
 
 	public function getArticles($channel)
 	{	

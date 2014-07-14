@@ -4,64 +4,84 @@ use Version1\Channels\Toolbox;
 
 Class CategoryResponseMaker extends ApiResponseMaker implements ApiResponseMakerInterface {	
 
-	protected $subChannelId;
-	protected $categoryId;
+	protected $category;
 	protected $channel;
 
-	public function getChannel($identifier, $category )
+	public function getCategory($categoryIdentifier)
+	{
+		$categoryRepository = \App::make( 'CategoryRepository' );
+		$categoryTransformer = \App::make( 'CategoryTransformer' );
+
+		if( ! $category = $categoryRepository->getCategoryByIdentifier( $categoryIdentifier ) )
+        {
+        	return apiErrorResponse('notFound');
+        }
+
+        $this->category = $categoryTransformer->transform($category->toArray());
+	}
+
+	public function getChannel($identifier)
 	{
 		$channelRepository = \App::make( 'ChannelRepository' );
 		$channelTransformer = \App::make( 'ChannelTransformer' );
 
 		if( ! $channel = $channelRepository->getChannelByIdentifier( $identifier ) )
         {
-        	ApiResponseMaker::RespondWithError(\Lang::get('api.channelNotFound'));
+        	return apiErrorResponse('notFound');
         }
 
 		if( ! aSubChannel($channel) )
 		{
-			ApiResponseMaker::RespondWithError(\Lang::get('api.thisIsNotASubChannel'));
+			return apiErrorResponse('expectationFailed');
 		}
 
-		if( ! categoryBelongsToChannel( $channel, $category ) )
+		if( ! categoryBelongsToChannel( $channel, $this->category['id'] ) )
 		{
-			ApiResponseMaker::RespondWithError(\Lang::get('api.categoryDoesNotBelongToChannel'));	
+			return apiErrorResponse('failedDependency');	
 		}
 
 		$parentChannel = $channelRepository->getChannelBySubChannel( $channel );		
-		$channel = $channelTransformer->transform( Toolbox::filterSubChannels( $parentChannel, $channel ) );
+		$this->channel = $channelTransformer->transform( Toolbox::filterSubChannels( $parentChannel, $channel ) );
 
-		$this->subChannelId = getSubChannelId($channel);
-
-		return $channel;
+		return $this->channel;
 	}
 
 	public function getCategoryContent()
-	{		
+	{	
+		$categoryId = $this->category['id'];
+		$subChannelId = getSubChannelId($this->channel);
+
 		if( isArticleType( $this->channel ) )
 		{
-			return \App::make('CategoryArticleResponder')->make($this->categoryId, $this->subChannelId, $this);
+			return \App::make('CategoryArticleResponder')->make($categoryId, $subChannelId, $this);
 		}
 		else if( isDirectoryType( $this->channel ) )
 		{
-			return \App::make('CategoryDirectoryResponder')->make($this->categoryId, $this->subChannelId);
+			return \App::make('CategoryDirectoryResponder')->make($categoryId, $subChannelId);
 		}
 		else if( isListingType( $this->channel ) )
 		{
 			$range = 'day';
 			$time = \Input::get('time') ? \Input::get('time') : \time();
 
-			return $channelListingResponder = \App::make('CategoryListingResponder')->make( $this->categoryId, $this->subChannelId, $range, $time );
+			return $channelListingResponder = \App::make('CategoryListingResponder')->make( $categoryId, $subChannelId, $range, $time );
 		}		
 	}
 
-	public function make($categoryId, $channel)
+	public function make($categoryIdentifier, $channelId)
 	{
-		$this->categoryId = $categoryId;
-		$this->channel = $channel;
+		if( isApiResponse( $result = $this->getCategory($categoryIdentifier) ))
+        {
+            return $result;
+        }
+
+        if( isApiResponse( $result = $this->getChannel( $channelId )) )
+        {
+        	return $result;	
+        }
 
 		$response = [
-			'channel' => $channel,			
+			'channel' => $this->channel,			
             'adverts' => $this->getSponsors(),
 		];
 

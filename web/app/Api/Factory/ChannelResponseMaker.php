@@ -4,6 +4,8 @@ use Version1\Channels\Toolbox;
 
 Class ChannelResponseMaker extends ApiResponseMaker implements ApiResponseMakerInterface {
 
+	protected $response;
+
 	public function getChannel( $identifier )
 	{
 		$channelRepository = \App::make( 'ChannelRepository' );
@@ -13,29 +15,37 @@ Class ChannelResponseMaker extends ApiResponseMaker implements ApiResponseMakerI
 
 		if( ! $channel )
 		{
-			return false;
+			// we couldn't find the channel
+			return apiErrorResponse('notFound');
+		}
+		elseif( aSubChannel( $channel ) )
+		{
+			// its a sub channel so report an error (as we're trying to get a top level channel)
+			return apiErrorResponse('failedDependency');	
 		}
 
-		return $channelTransformer->transform($channel);
+		$this->channel = $channelTransformer->transform($channel);
+
+		$this->response['channel'] = $this->channel;
 	}
 
-	public function getChannelPicked( $channel )
+	public function getChannelPicked()
 	{
-		return \App::make('PickedResponder')->get( $channel, $this );
+		return \App::make('PickedResponder')->get( $this->channel, $this );
 	}
 
-	public function getChannelFeatured( $channel )
+	public function getChannelFeatured()
 	{
-		return \App::make('FeaturedResponder')->get( $channel );
+		return \App::make('FeaturedResponder')->get( $this->channel );
 	}
 
-	public function getChannelFeed( $channel )
+	public function getChannelFeed()
 	{
 		$channelRepository = \App::make('ChannelRepository');
         $sponsorRepository = \App::make('SponsorRepository');
 
         $allChannels = $channelRepository->getAllChannels();
-        $subChannels = $channelRepository->getChildren( $channel['id'] );
+        $subChannels = $channelRepository->getChildren( $this->channel['id'] );
         $sponsors = $sponsorRepository->getWhereNotInCollection( $this->getAllocatedSponsors(), 100 )->toArray();
 
         $channelFeed = \App::make('ChannelFeed');	
@@ -44,16 +54,20 @@ Class ChannelResponseMaker extends ApiResponseMaker implements ApiResponseMakerI
 		return $channelFeed->make();
 	}
 
-	public function make( $channel )
+	public function make( $identifier )
 	{ 
-		$response = [
-			'channel' => $channel,
-			'adverts' => $this->channelSponsors,
-			'features' => $this->getChannelFeatured( $channel ),
-			'picks' => $this->getChannelPicked( $channel ),
-			'channelFeed' => $this->getChannelFeed( $channel ),
+		if( isApiResponse( $result = $this->getChannel($identifier) ) )
+		{
+			return $result;
+		}
+
+		$this->response = [
+			'adverts' => $this->getSponsors(),
+			'features' => $this->getChannelFeatured(),
+			'picks' => $this->getChannelPicked(),
+			'channelFeed' => $this->getChannelFeed(),
 		];
 
-		return $response;
+		return $this->response;
 	}
 }

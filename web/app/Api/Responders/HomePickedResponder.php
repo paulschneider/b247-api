@@ -11,7 +11,7 @@ class HomePickedResponder {
 		$articleTransformer = \App::make('ArticleTransformer');
 		$sponsorTransformer = \App::make('SponsorTransformer');
 
-        $picks = $articleRepository->getArticles( 'picks', 25 );
+        $picks = $articleRepository->getArticles( 'picks', 25, null, false, true );
 
         $ads = $sponsorRepository->getWhereNotInCollection( $caller->getAllocatedSponsors(), 30 )->toArray();
 

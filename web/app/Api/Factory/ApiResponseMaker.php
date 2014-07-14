@@ -2,26 +2,17 @@
 
 Class ApiResponseMaker {
 
-	protected $channelSponsors;
+	protected $channelSponsors = [];
 	protected $allocatedSponsors;
-
-	public function __construct()
-	{
-		$this->channelSponsors = $this->getSponsors();
-
-		$this->setAllocatedSponsors( $this->channelSponsors );
-	}
-
-	public static function RespondWithError($message)
-	{
-		throw new \Api\Exceptions\InvalidResponseException($message);
-	}
 
 	public function getSponsors()
 	{
 		$sponsorResponder = \App::make('SponsorResponder');
+		$this->channelSponsors = $sponsorResponder->getSponsors();
 
-		return $sponsorResponder->getSponsors();
+		$this->setAllocatedSponsors( $this->channelSponsors );
+		
+		return $this->channelSponsors;			
 	}
 
 	public function getRandomSponsors($limit)
@@ -33,9 +24,12 @@ Class ApiResponseMaker {
 
 	public function setAllocatedSponsors($sponsors = [])
 	{
-		foreach($sponsors AS $sponsor)
+		if( count($sponsors) > 0 )
 		{
-			$this->allocatedSponsors[] = $sponsor['id'];
+			foreach($sponsors AS $sponsor)
+			{
+				$this->allocatedSponsors[] = $sponsor['id'];
+			}	
 		}
 	}
 

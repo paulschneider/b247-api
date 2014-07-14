@@ -15,21 +15,26 @@ Class Toolbox {
 		return $channelList;
 	}
 
-	public static function getCategoryArticleCount($list = [])
+	public static function getCategoryArticleCategories($list = [])
 	{
 		$sorted = [];
 
         foreach($list AS $item)
         {
-            $categoryId = $item['category_id'];
+            $categoryId = $item['categoryId'];
 
             if( ! array_key_exists( $categoryId, $sorted ) )
             {
                 $sorted[$categoryId] = [
-                    'id' => $categoryId
-                    ,'name' => $item['name']
-                    ,'numberOfArticles' => 1
+                    'id' => $categoryId,
+                    'name' => $item['categoryName'],
+                    'numberOfArticles' => 1                    
                 ];
+
+                if( isDesktop())
+                {
+                    $sorted[$categoryId]['path'] = makePath( [ $item['channelSefName'], $item['subChannelSefName'], $item['categorySefName'] ] );
+                }
             }
             else
             {
