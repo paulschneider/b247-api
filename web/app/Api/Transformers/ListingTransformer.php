@@ -25,32 +25,51 @@ Class ListingTransformer extends Transformer {
             $limitToShowPerDay = $options['perDayLimit'];
         }
 
+        // grab the days array. This is an empty array with the keys set to the coming seven days
+        if( isset($options['days']) )
+        {
+            $days = $options['days'];
+        }
+        else
+        {
+            sd('The required DAYS array has not been provided to ListingTransformer::transformCollection()');
+        }
+
+        foreach( $days AS $key => $day )
+        {
+            $date = $key;
+
+            $days[$date]['publication'] = [
+                'date' => $date,
+                'day' => date('D', strtotime($date)),
+                'fullDay' => date('l', strtotime($date)),
+                'iso8601Date' => date('c', strtotime($date)),
+                'epoch' => strtotime($date),
+            ]; 
+
+            $days[$date]['categories'] = [];
+            $days[$date]['articles'] = [];
+        }
+
         foreach( $articles AS $article )
         {
+            // default event flag
             $hasEvent = false;
 
+            // grab the article location
             $location = $article['location'][0];
 
-            $key = date('d-m-Y', strtotime($article['published']));
+            // convert the publication date to a dateStamp
+            $day = date('Y-m-d', strtotime($article['published']));
 
-            $categoryCounter[ $key ][$location['categoryId']][] = $location['categoryId'];
+            $categoryCounter[ $day ][$location['categoryId']][] = $location['categoryId'];
 
-            $publishedDate = convertTimestamp('Y-m-d', strtotime($article['published']));
-
-            $response[ $key ]['publication'] = [
-                'date' => $publishedDate
-                ,'day' => date('D', strtotime($article['published']))
-                ,'fullDay' => date('l', strtotime($article['published']))
-                ,'iso8601Date' => date('c', strtotime($article['published']))
-                ,'epoch' => strtotime($publishedDate)
-            ];
-
-            $response[ $key ]['categories'][$location['categoryId']] = [
-                'id' => $location['categoryId']
-                ,'name' => $location['categoryName']
-                ,'sefName' => $location['categorySefName']
-                ,'path' => makePath( [ $location['channelSefName'], $location['subChannelSefName'], $location['categorySefName'] ] )
-                ,'numberOfArticles' => count($categoryCounter[ $key ][$location['categoryId']])
+            $days[ $day ]['categories'][$location['categoryId']] = [
+                'id' => $location['categoryId'],
+                'name' => $location['categoryName'],
+                'sefName' => $location['categorySefName'],
+                'path' => makePath( [ $location['channelSefName'], $location['subChannelSefName'], $location['categorySefName'] ] ),
+                'numberOfArticles' => count($categoryCounter[ $day ][$location['categoryId']]),
             ];
 
             if( isset($article['event']) )
@@ -60,33 +79,38 @@ Class ListingTransformer extends Transformer {
                 $hasEvent = true;
             }
 
-            $article = $articleTransformer->transform($article, [ 'showBody' => false] );
+            $article = $articleTransformer->transform($article);
 
             if( $hasEvent )
             {
                 $article['event'] = $event;
             }
 
-            if( ! isset($response[ $key ]['articles']) )
+            if( ! isset($days[ $day ]['articles']) )
             {
-                $response[ $key ]['articles'] = [];
+                $days[ $day ]['articles'] = [];
             }
 
             // if a limit has been passed through for each day then only add that number of articles to the return for that day
 
-            if( count($response[ $key ]['articles']) < $limitToShowPerDay )
+            if( count($days[ $day ]['articles']) < $limitToShowPerDay )
             {
-                $response[ $key ]['articles'][] = $article;
+                $days[ $day ]['articles'][] = $article;
             }
         }
 
         // once we're done reset the array keys for the category listing
-        foreach( $response AS $key => $day )
+        foreach( $days AS $key => $day )
         {
-            $response[$key]['categories'] = array_values($day['categories']);
+            // if we added some articles then we also added some categories. Reset those array keys to integers
+            if( isset($days[$key]['categories']) )
+            {
+                $days[$key]['categories'] = array_values($day['categories']);    
+            }            
         }
 
-        return array_values($response);
+        // no reset all top level array keys and return the result
+        return array_values($days);
     }
 
     /**

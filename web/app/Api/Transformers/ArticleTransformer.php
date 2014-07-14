@@ -25,7 +25,7 @@ Class ArticleTransformer extends Transformer {
      * @param user
      * @return array
      */
-    public function transform( $article, $options = [] )
+    public function transform( $article, $options = [ 'showBody' => false ] )
     {
         if( isset($article['location'][0]) )
         {
