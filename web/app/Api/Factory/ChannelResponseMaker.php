@@ -25,8 +25,6 @@ Class ChannelResponseMaker extends ApiResponseMaker implements ApiResponseMakerI
 		}
 
 		$this->channel = $channelTransformer->transform($channel);
-
-		$this->response['channel'] = $this->channel;
 	}
 
 	public function getChannelPicked()
@@ -62,6 +60,7 @@ Class ChannelResponseMaker extends ApiResponseMaker implements ApiResponseMakerI
 		}
 
 		$this->response = [
+			'channel' => $this->channel,
 			'adverts' => $this->getSponsors(),
 			'features' => $this->getChannelFeatured(),
 			'picks' => $this->getChannelPicked(),

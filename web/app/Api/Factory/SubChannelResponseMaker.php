@@ -58,6 +58,7 @@ Class SubChannelResponseMaker extends ApiResponseMaker implements ApiResponseMak
 		}
 
 		$this->response = [
+			'channel' => $this->channel,
 			'adverts' => $this->getSponsors()
 		];
 
