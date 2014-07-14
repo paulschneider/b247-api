@@ -17,11 +17,13 @@ Class Caller {
 		$this->endpoint = $endpoint;
 
 		$request = $this->client->createRequest('GET', $this->endpoint, [
-			'headers' => $headers
-		],
+			'headers' => $headers,
 			'query' => $params
 		]);
 
+		// getPath()
+
+sd($request->getUrl());
 		try {
 		   $response = $this->client->send($request)->json();
 
