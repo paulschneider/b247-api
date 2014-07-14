@@ -24,6 +24,15 @@ Class ArticleResponseMaker extends ApiResponseMaker implements ApiResponseMakerI
 			return apiErrorResponse( 'notAcceptable' );
 		}
 
+		// remove all other categories except the one requested
+		foreach( $this->channel['subChannels'][0]['categories'] AS $key => $category )
+		{
+			if( $category['id'] != $this->category['id'] )
+			{
+				unset($this->channel['subChannels'][0]['categories'][$key]);
+			}
+		}
+
 		$this->response['channel'] = $this->channel;
 	}
 

@@ -37,8 +37,12 @@ Class ArticleController extends ApiController {
         // make a call to the front end to retrieve the populated HTML template
         $data = ApiClient::get('app/article', [ 'data' => $response, 'type' => getChannelType($response['channel']) ]);
 
+        unset($response['article']);
+
+        $response['html'] = $data['html'];
+
         // return it all to the calling app
-        return apiSuccessResponse( 'contentLocated', $data );
+        return apiSuccessResponse( 'contentLocated', $response );
     }
 
     /**
