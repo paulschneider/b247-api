@@ -16,10 +16,10 @@ Class Caller {
 	{
 		$this->endpoint = $endpoint;
 
-		Caller::setQueryString($params);
-
 		$request = $this->client->createRequest('GET', $this->endpoint, [
 			'headers' => $headers
+		],
+			'query' => $params
 		]);
 
 		try {
