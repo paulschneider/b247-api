@@ -5,6 +5,14 @@ return [
 		'code' => 200,
 		'message' => "Content successfully returned."
 	],	
+	'noContent' => [
+		'code' => 206,
+		'message' => "Call successful however there is Nothing to return."
+	],		
+	'badRequest' => [
+		'code' => 400,
+		'message' => "Invalid request. Please refer to the documentation for the use of this endpoint."
+	],	
 	'notFound' => [
 		'code' => 404,
 		'message' => "The requested content item or resource could not be found."
@@ -24,5 +32,9 @@ return [
 	'notAcceptable' => [
 		'code' => 442,
 		'message' => "Invalid query parameter combination."
+	],
+	'notImplemented' => [
+		'code' => 501,
+		'message' => "Method action not available. Please refer to the documentation for the use of this endpoint."
 	],
 ];

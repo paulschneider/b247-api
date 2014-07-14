@@ -55,20 +55,17 @@ App::error(function(Exception $exception, $code)
 
 App::error(function(Symfony\Component\HttpKernel\Exception\NotFoundHttpException $exception)
 { 
-	$api = App::make('Api');	
-	return $api->respondNotFound();
+	return apiErrorResponse('badRequest');
 });
 
 App::error(function(Illuminate\Database\Eloquent\ModelNotFoundException $exception)
 { 
-	$api = App::make('Api');
-	return $api->respondNoDataFound();
+	return apiErrorResponse('noContent');
 });
 
 App::error(function(\Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException $exception)
 { 
-	$api = App::make('Api');
-	return $api->respondNotAllowed();
+	return apiErrorResponse('notImplemented');
 });
 
 

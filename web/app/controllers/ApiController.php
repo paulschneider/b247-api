@@ -13,11 +13,6 @@ class ApiController Extends BaseController {
     public $message;
 
     /**
-     * @var string
-     */
-    public $additionalInfo = null;
-
-    /**
      * get the Api response code for this request
      *
      * @return statusCode
@@ -37,16 +32,6 @@ class ApiController Extends BaseController {
         $this->statusCode = $statusCode;
 
         return $this;
-    }
-
-    public function setAdditionalInfo($info)
-    {
-        $this->additionalInfo = $info;
-    }
-
-    public function getAdditionalInfo()
-    {
-        return $this->additionalInfo;
     }
 
     /**
@@ -93,10 +78,9 @@ class ApiController Extends BaseController {
      */
     public function respondWithError($message)
     {   
-        $response = [
+        return $this->respond([
             'error' => [
                 'message' => $message,
-                'reason' => $this->getAdditionalInfo(),
                 'statusCode' => $this->getStatusCode(),
                 'method' => Request::getMethod(),
                 'endpoint' => Request::path(),
@@ -105,14 +89,7 @@ class ApiController Extends BaseController {
             'source' => [
                 sourceClient()
             ]
-        ];
-
-        if( ! empty($response['error']['reason']) )
-        {
-            unset($response['error']['reason']);
-        }
-
-        return $this->respond($response);
+        ]);
     }
 
     /**

@@ -87,6 +87,11 @@ function getSubChannelType($channel)
     return $channel['subChannels'][0]['displayType']['id'];
 }
 
+function getChannelType($channel)
+{
+    return $channel['subChannels'][0]['displayType']['type'];
+}
+
 function getSubChannelId($channel)
 {
     return $channel['subChannels'][0]['id'];
