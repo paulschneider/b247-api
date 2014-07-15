@@ -50,7 +50,7 @@ Class ArticleResponseMaker extends ApiResponseMaker implements ApiResponseMakerI
 
 		$article = $articleRepository->getCategoryArticle( $this->channel, $this->category, $this->article )->toArray();
 
-		$this->response['article'] = $articleTransformer->transform( $article );
+		$this->response['article'] = $articleTransformer->transform( $article, [ 'showBody' => true ] );
 	}
 
 	public function getAdverts()
