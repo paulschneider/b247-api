@@ -5,7 +5,6 @@ Class ArticleResponseMaker extends ApiResponseMaker implements ApiResponseMakerI
 	var $category;
 	var $channel; // sub-channel
 	var $article;
-	var $controller;
 	var $response = [];
 
 	public function getChannel()
@@ -58,12 +57,11 @@ Class ArticleResponseMaker extends ApiResponseMaker implements ApiResponseMakerI
 		$this->response['adverts'] = $this->getSponsors();
 	}
 
-	public function make($input, $controller)
+	public function make($input)
 	{ 	
 		$this->channel = $input['channel'];
 		$this->category = $input['category'];
 		$this->article = $input['article'];
-		$this->controller = $controller;
 
 		// if it returns an API response then there's something wrong
 		if( isApiResponse( $result = $this->getChannel()) )

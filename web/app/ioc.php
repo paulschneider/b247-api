@@ -204,3 +204,8 @@ App::bind('VenueTransformer', function($app)
 {
     return new Api\Transformers\VenueTransformer;
 });
+
+App::bind('SearchResponseMaker', function($app)
+{
+    return new Api\Factory\SearchResponseMaker;
+});

@@ -82,6 +82,11 @@ function isListingType($channel)
     ]) ? true : false;
 }
 
+function getChannelId($article)
+{
+    return $article['location'][0]['channelId'];
+}
+
 function getSubChannelType($channel)
 {    
     return $channel['subChannels'][0]['displayType']['id'];

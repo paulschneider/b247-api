@@ -29,11 +29,11 @@ Class ArticleController extends ApiController {
             return apiErrorResponse('insufficientArguments');
         }
 
-        if( isApiResponse( $response = $this->responseMaker->make(Input::all(), $this)))
+        if( isApiResponse( $response = $this->responseMaker->make(Input::all())))
         {
             return $response;
         }   
-
+ 
         // make a call to the front end to retrieve the populated HTML template
         $data = ApiClient::get('app/article', [ 'data' => $response, 'type' => getChannelType($response['channel']) ]);
 

@@ -67,6 +67,10 @@ Route::resource('event', 'EventController');
 
 Route::resource('register', 'RegisterController');
 
+# Search
+
+Route::get('search', 'SearchController@search');
+
 # Sponsor
 
 Route::resource('sponsor', 'SponsorController');
