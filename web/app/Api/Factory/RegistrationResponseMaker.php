@@ -47,8 +47,16 @@ Class RegistrationResponseMaker extends ApiResponseMaker implements ApiResponseM
 		// todo
 		// send out welcome email
 
-		return [
-			'user' => \App::make( 'UserTransformer' )->transform($this->user)
+		$response = [
+			'user' => \App::make( 'UserTransformer' )->transform($this->user)			
 		];
+
+		// this should be removed before production deployment
+		if( \App::environment() != 'production' )
+		{
+			$response['password'] = $this->user->plain_pass;
+		}
+
+		return $response;
 	}
 }
