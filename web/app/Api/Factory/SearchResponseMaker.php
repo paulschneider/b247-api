@@ -7,8 +7,13 @@ Class SearchResponseMaker extends ApiResponseMaker implements ApiResponseMakerIn
 	public function make($searchString)
 	{ 	
 		$articles = \App::make( 'ArticleRepository' )->search($searchString);
-		$articleTransformer = \App::make('ArticleTransformer');
+		$articleTransformer = \App::make('ArticleTransformer');		
 		$channels = [];
+
+		$pagination = \App::make('PageMaker')->make($articles);
+
+		$metaData = $pagination->meta;
+		$articles = $pagination->items;
 
 		if( count($articles) > 0 )
 		{
@@ -32,7 +37,8 @@ Class SearchResponseMaker extends ApiResponseMaker implements ApiResponseMakerIn
 		}
 			
 		$result['searchResults'] = array_values($channels);
-		$result['resultCount'] = count($articles);		
+		$result['resultCount'] = count($articles);
+		$result['pagination'] = $metaData;		
 
 		return $result;
 	}
