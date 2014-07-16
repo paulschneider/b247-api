@@ -71,4 +71,9 @@ Class UserRepository
     {
         return User::select('id', 'first_name', 'last_name', 'email', 'password', 'access_key')->where('email', $email)->first();
     }
+
+    public function hashAndStore($email, $password)
+    {
+         return \DB::table('user')->where('email', $email)->update([ 'password' => $this->makeHash($password) ]);   
+    }
 }

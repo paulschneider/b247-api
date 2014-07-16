@@ -9,31 +9,9 @@ Class BaseModel extends Eloquent
 
     protected $fillable = array('content_type', 'icon_img_id', 'name', 'sef_name', 'colour', 'created_at', 'updated_at');
 
+    public $timestamps = true;
+
     public $errors;
-
-    public static function boot()
-    {
-        parent::boot();
-
-        static::saving(function($model)
-        {
-            return $model->validate();
-        });
-    }
-
-    public function validate()
-    {
-        $validation = Validator::make($this->getAttributes(), static::$rules);
-
-        if($validation->fails())
-        {
-            $this->errors = $validation->messages()->toArray();
-
-            return false;
-        }
-
-        return true;
-    }
 
     public function scopeActive($query, $field = '')
     {
@@ -58,39 +36,5 @@ Class BaseModel extends Eloquent
     public function scopeNotPicked($query, $field = '')
     {
         return $query->where($field . 'is_picked', 0);
-    }
-
-    public function getErrors()
-    {
-        return $this->errors;
-    }
-
-    public static function dataCheck($data)
-    {
-        if( is_array($data) )
-        {
-            if( count($data) > 0)
-            {
-                if(count($data) == 1)
-                {
-                    return $data[0];
-                }
-
-                return $data;
-            }
-        }
-        else if( $data instanceOf \stdClass )
-        {
-            return $data;
-        }
-        else if( method_exists($data, 'count') )
-        {
-            if( $data->count() > 0 )
-            {
-                return $data->toArray();
-            }
-        }
-
-        throw new \Illuminate\Database\Eloquent\ModelNotFoundException;
     }
 }

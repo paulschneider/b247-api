@@ -69,7 +69,10 @@ Route::post('register', 'RegisterController@createSubscriber');
 
 Route::get('search', 'SearchController@search');
 
+# User
 
+Route::get('user/password', 'UserController@changeUserPassword');
+    
 # Homepage
 
 Route::get('/', 'HomeController@index');

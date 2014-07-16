@@ -225,3 +225,7 @@ App::bind('SessionsResponseMaker', function($app)
     return new Api\Factory\SessionsResponseMaker;
 });
 
+App::bind('SessionsValidator', function($app)
+{
+    return new Api\Validators\SessionsValidator;
+});

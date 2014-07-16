@@ -1,16 +1,14 @@
 <?php namespace Api\Factory;
 
-use Api\Validators\SessionsValidator;
-
 Class SessionsResponseMaker extends ApiResponseMaker implements ApiResponseMakerInterface {
 
 	private $validator;
 	private $form;
 	private $user;
 
-	public function __construct(SessionsValidator $validator)
+	public function __construct()
 	{
-		$this->validator = $validator;
+		$this->validator = \App::make( 'SessionsValidator' );
 	}
 
 	public function validate()
@@ -35,7 +33,7 @@ Class SessionsResponseMaker extends ApiResponseMaker implements ApiResponseMaker
 
 		if (! \Hash::check($this->form['password'], $user->password))
 		{	
-			return apiErrorResponse( 'unauthorised' );					
+			return apiErrorResponse( 'unauthorised', [ 'errorReason' => \Lang::get('api.userAccountPasswordMismatch') ]  );					
 		}
 
 		$this->user = \App::make('UserTransformer')->transform( $user->toArray() );

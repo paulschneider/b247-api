@@ -47,19 +47,6 @@ class User extends BaseModel implements UserInterface, RemindableInterface {
 	];
 
 	/**
-	* Form validation rules for a new user
-	*
-	* @var array
-	*/
-	protected static $rules = [
-
-		'first_name' => 'required'
-		,'last_name' => 'required'
-		,'email' => 'required'
-
-	];
-
-	/**
 	* Relate the user to a profile record
 	*
 	* @return ???
