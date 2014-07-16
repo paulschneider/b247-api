@@ -59,9 +59,7 @@ Route::group(['prefix' => 'channel'], function(){
     Route::get('{channel}', 'ChannelController@getChannel');
 });
 
-# Events
-
-Route::resource('event', 'EventController');
+Route::post('login', 'SessionsController@login');
 
 # Registration
 
@@ -71,13 +69,6 @@ Route::post('register', 'RegisterController@createSubscriber');
 
 Route::get('search', 'SearchController@search');
 
-# Sponsor
-
-Route::resource('sponsor', 'SponsorController');
-
-# Venue
-
-Route::resource('venue', 'VenueController');
 
 # Homepage
 

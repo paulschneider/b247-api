@@ -9,13 +9,18 @@ Class UserRepository
 
     // access key also acts as a salt
 
-    public function generatePassword($accessKey)
+    public function generatePassword()
     {
         $plain = str_random(8);
 
-        $encrypted = \Hash::make($accessKey.$plain);
+        $encrypted = $this->makeHash($plain);
 
         return [ 'plain' => $plain, 'encrypted' => $encrypted ];
+    }
+
+    public function makeHash($password)
+    {
+        return \Hash::make($password);
     }
 
     public function getUserChannels($accessKey)
@@ -34,7 +39,7 @@ Class UserRepository
     {
         $input['access_key'] = self::generateAccessKey();
 
-        $password = self::generatePassword($input['access_key']);
+        $password = self::generatePassword();
 
         $user = new User($input);
 
@@ -60,5 +65,10 @@ Class UserRepository
         });
 
         return $hidden[0]->toArray();
+    }
+
+    public function authenticate($email)
+    {
+        return User::select('id', 'first_name', 'last_name', 'email', 'password', 'access_key')->where('email', $email)->first();
     }
 }

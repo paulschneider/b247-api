@@ -26,7 +26,7 @@ Class RegistrationResponseMaker extends ApiResponseMaker implements ApiResponseM
 	{
 		if( ! $this->user = \App::make( 'UserRepository' )->create($this->form) )
 		{
-			return apiErrorResponse(  'serverError', [ 'errorReason' => "The user record could not be saved." ] );
+			return apiErrorResponse(  'serverError', [ 'errorReason' => \Lang::get('api.recordCouldNotBeSaved') ] );
 		}
 	}
 

@@ -9,6 +9,10 @@ return [
 		'code' => 201,
 		'message' => "Resource successfully created."
 	],	
+	'accepted' => [
+		'code' => 202,
+		'message' => "Accepted."
+	],	
 	'noContent' => [
 		'code' => 206,
 		'message' => "Call successful however there is Nothing to return."
@@ -16,6 +20,10 @@ return [
 	'badRequest' => [
 		'code' => 400,
 		'message' => "Invalid request. Please refer to the documentation for the use of this endpoint."
+	],	
+	'unauthorised' => [
+		'code' => 401,
+		'message' => "Invalid or non-matching security credentials provided."
 	],	
 	'notFound' => [
 		'code' => 404,

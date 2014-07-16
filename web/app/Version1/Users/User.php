@@ -21,8 +21,7 @@ class User extends BaseModel implements UserInterface, RemindableInterface {
 	 */
 	protected $hidden = [
 
-		'password'
-		, 'originating_ip'
+		'originating_ip'
 		, 'last_login'
 		, 'last_login_ip'
 		, 'is_active'

@@ -220,3 +220,8 @@ App::bind('UserTransformer', function($app)
     return new Api\Transformers\UserTransformer;
 });
 
+App::bind('SessionsResponseMaker', function($app)
+{
+    return new Api\Factory\SessionsResponseMaker;
+});
+
