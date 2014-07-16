@@ -1,5 +1,17 @@
 <?php
 
+// check an array to see if a required field is missing from a supplied list of required fields
+function aRequiredParameterIsMissing($requiredFields, $form)
+{
+    foreach($requiredFields AS $field)
+    {
+        if( ! array_key_exists($field, $form))
+        {
+            return true;
+        }
+    }
+}
+
 function apiErrorResponse($response, $data = [])
 {
     return App::make( 'ApiResponder' )

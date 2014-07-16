@@ -7,10 +7,21 @@ Class PasswordChangeResponseMaker extends ApiResponseMaker implements ApiRespons
 	private $validator;
 	private $form;
 	private $user;
+	private $requiredFields = ['email', 'password', 'accessKey', 'newPassword'];
 
 	public function __construct(PasswordValidator $validator)
 	{
 		$this->validator = $validator;
+	}
+
+	public function parameterCheck()
+	{
+		if( aRequiredParameterIsMissing($this->requiredFields, $this->form) )
+		{
+			return apiErrorResponse('insufficientArguments');
+		}
+
+		return true;
 	}
 
 	public function authenticate()
@@ -49,18 +60,24 @@ Class PasswordChangeResponseMaker extends ApiResponseMaker implements ApiRespons
 	{
 		$this->form = $form;
 
-		$processes = [
-			$this->authenticate(),
-			$this->validate(),
-			$this->store()
-		];
-
-		foreach( $processes AS $process )
+		if( isApiResponse( $result = $this->parameterCheck() ) )
 		{
-			if( isApiResponse( $process ))
-			{
-				return $process;
-			}
+			return $result;
+		}
+
+		if( isApiResponse( $result = $this->authenticate() ) )
+		{
+			return $result;
+		}
+
+		if( isApiResponse( $result = $this->validate() ) )
+		{
+			return $result;
+		}
+
+		if( isApiResponse( $result = $this->store() ) )
+		{
+			return $result;
 		}
 
 		return apiSuccessResponse( 'accepted', [$this->user] );

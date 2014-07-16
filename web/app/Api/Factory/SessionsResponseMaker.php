@@ -15,7 +15,7 @@ Class SessionsResponseMaker extends ApiResponseMaker implements ApiResponseMaker
 	{
 		if( ! $this->form['email'] || ! $this->form['password'] )
 		{
-			return apiErrorResponse( 'insufficientArguments', [ 'errorReason' => Lang::get('api.loginWithInsufficientParams') ] );
+			return apiErrorResponse( 'insufficientArguments', [ 'errorReason' => \Lang::get('api.loginWithInsufficientParams') ] );
 		}
 
 		if( ! $this->validator->run($this->form))

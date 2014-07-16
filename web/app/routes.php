@@ -71,7 +71,7 @@ Route::get('search', 'SearchController@search');
 
 # User
 
-Route::get('user/password', 'UserController@changeUserPassword');
+Route::post('user/password', 'UserController@changeUserPassword');
     
 # Homepage
 
