@@ -1,10 +1,10 @@
 <?php
 
-function apiErrorResponse($response)
+function apiErrorResponse($response, $data = [])
 {
     return App::make( 'ApiResponder' )
                 ->setStatusCode(\Config::get("responsecodes.{$response}.code"))
-                ->respondWithError(\Config::get("responsecodes.{$response}.message"));
+                ->respondWithError(\Config::get("responsecodes.{$response}.message"), $data);
 }
 
 function apiSuccessResponse($response, $data)

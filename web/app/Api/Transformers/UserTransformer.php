@@ -27,6 +27,6 @@ class UserTransformer extends Transformer {
      */
     public function transformCollection( $users, $options = [] )
     {
-        // Tranform a list of users
+        // Transform a list of users
     }
 }

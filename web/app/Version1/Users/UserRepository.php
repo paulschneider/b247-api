@@ -30,15 +30,21 @@ Class UserRepository
         }
     }
 
-    public function addUser(array $input)
+    public function create(array $input)
     {
         $input['access_key'] = self::generateAccessKey();
 
         $password = self::generatePassword($input['access_key']);
 
-        $input['password'] = $password['encrypted'];
-
         $user = new User($input);
+
+        $user->first_name = $input['firstname'];
+        $user->last_name = $input['lastname'];
+        $user->password = $password['encrypted'];        
+
+        $user->save();
+
+        $user->plain_pass = $password['plain'];
 
         return $user;
     }

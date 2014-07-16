@@ -1,64 +1,23 @@
 <?php
 
-use Version1\Users\UserRepository;
-use Api\Transformers\UserTransformer;
+use Api\Factory\RegistrationResponseMaker;
 
 class RegisterController extends ApiController {
 
-	/**
-	*
-	* @var Api\Transformers\UserTransformer
-	*/
-	protected $userTransformer;
+	public $validator;
 
-	/**
-	*
-	* @var Version1\Users\UserRepository
-	*/
-	protected $userRepository;
-
-	public function __construct(UserTransformer $userTransformer, UserRepository $userRepository)
+	public function __construct(RegistrationResponseMaker $responseMaker)
 	{
-		$this->userTransformer = $userTransformer;
-		$this->userRepository = $userRepository;
+		$this->responseMaker = $responseMaker;
 	}
 
-	/**
-	 * Show the form for creating a new user.
-	 *
-	 * @return Response
-	 */
-	public function index()
+	public function createSubscriber()
 	{
-		return View::make('register.show');
-	}
-
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
-	{
-		$user = $this->userRepository->addUser(Input::all());
-
-		if( ! $user->save() )
+		if( isApiResponse( $result = $this->responseMaker->make(Input::all()) ) )
 		{
-			return $this->respondNotValid($user->errors);
+			return $result;
 		}
-		else
-		{
-			return $this->respondCreated('User successfully registered', $this->userTransformer->transform($user->toArray()));
-		}
-	}
 
-	/**
-	* return a not supported error if an edit is called
-	*
-	* @return ApiResponse
-	*/
-	public function edit()
-	{
-		return $this->respondNotAllowed();
+		return apiSuccessResponse( 'created', $result );		
 	}
 }

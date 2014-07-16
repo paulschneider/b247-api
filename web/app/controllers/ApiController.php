@@ -76,9 +76,9 @@ class ApiController Extends BaseController {
      *
      * @return Response
      */
-    public function respondWithError($message)
+    public function respondWithError($message, $data = [])
     {   
-        return $this->respond([
+        $response = [
             'error' => [
                 'message' => $message,
                 'statusCode' => $this->getStatusCode(),
@@ -89,7 +89,14 @@ class ApiController Extends BaseController {
             'source' => [
                 sourceClient()
             ]
-        ]);
+        ];
+
+        if( !empty($data) )
+        {
+            $response['error']['data'] = $data;
+        }
+
+        return $this->respond($response);
     }
 
     /**

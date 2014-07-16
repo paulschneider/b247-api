@@ -209,3 +209,14 @@ App::bind('SearchResponseMaker', function($app)
 {
     return new Api\Factory\SearchResponseMaker;
 });
+
+App::bind('UserRepository', function($app)
+{
+    return new Version1\Users\UserRepository;
+});
+
+App::bind('UserTransformer', function($app)
+{
+    return new Api\Transformers\UserTransformer;
+});
+

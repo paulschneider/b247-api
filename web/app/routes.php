@@ -65,7 +65,7 @@ Route::resource('event', 'EventController');
 
 # Registration
 
-Route::resource('register', 'RegisterController');
+Route::post('register', 'RegisterController@createSubscriber');
 
 # Search
 

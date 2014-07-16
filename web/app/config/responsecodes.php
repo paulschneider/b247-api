@@ -5,6 +5,10 @@ return [
 		'code' => 200,
 		'message' => "Content successfully returned."
 	],	
+	'created' => [
+		'code' => 201,
+		'message' => "Resource successfully created."
+	],	
 	'noContent' => [
 		'code' => 206,
 		'message' => "Call successful however there is Nothing to return."
@@ -25,6 +29,10 @@ return [
 		'code' => 417,
 		'message' => "Supplied arguments did not meet the expectations of the endpoint."
 	],
+	'unprocessable' => [
+		'code' => 422,
+		'message' => "The request could not be processed due to errors."
+	],
 	'failedDependency' => [
 		'code' => 424,
 		'message' => "Request failed to satisfy endpoint requirements."
@@ -32,6 +40,10 @@ return [
 	'notAcceptable' => [
 		'code' => 442,
 		'message' => "Invalid query parameter combination."
+	],
+	'serverError' => [
+		'code' => 500,
+		'message' => "There was an error processing the request."
 	],
 	'notImplemented' => [
 		'code' => 501,
