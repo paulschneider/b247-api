@@ -11,6 +11,25 @@ Class SessionsResponseMaker extends ApiResponseMaker implements ApiResponseMaker
 		$this->validator = \App::make( 'SessionsValidator' );
 	}
 
+	public function make($form)
+	{
+		$this->form = $form;
+
+		if( isApiResponse( $result = $this->validate() ) )
+		{
+			return $result;
+		}	
+
+		if( isApiResponse( $result = $this->authenticate() ) )
+		{
+			return $result;
+		}
+
+		return [
+			'user' => $this->user
+		];
+	}
+
 	public function validate()
 	{
 		if( ! $this->form['email'] || ! $this->form['password'] )
@@ -37,24 +56,5 @@ Class SessionsResponseMaker extends ApiResponseMaker implements ApiResponseMaker
 		}
 
 		$this->user = \App::make('UserTransformer')->transform( $user->toArray() );
-	}
-
-	public function make($form)
-	{
-		$this->form = $form;
-
-		if( isApiResponse( $result = $this->validate() ) )
-		{
-			return $result;
-		}	
-
-		if( isApiResponse( $result = $this->authenticate() ) )
-		{
-			return $result;
-		}
-
-		return [
-			'user' => $this->user
-		];
 	}
 }

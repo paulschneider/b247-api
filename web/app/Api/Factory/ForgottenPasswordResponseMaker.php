@@ -1,16 +1,17 @@
 <?php namespace Api\Factory;
 
-Class PasswordChangeResponseMaker extends ApiResponseMaker implements ApiResponseMakerInterface {
+Class ForgottenPasswordResponseMaker extends ApiResponseMaker implements ApiResponseMakerInterface {
 
 	private $validator;
 	private $form;
 	private $user;
 	private $userResponder;
-	private $requiredFields = ['email', 'password', 'newPassword'];
+	private $requiredFields = ['email'];
+	private $newPassword;
 
 	public function __construct()
 	{
-		$this->validator = \App::make( 'PasswordValidator' );
+		$this->validator = \App::make('PasswordValidator');
 		$this->userResponder = \App::make( 'UserResponder' );
 	}
 
@@ -23,32 +24,31 @@ Class PasswordChangeResponseMaker extends ApiResponseMaker implements ApiRespons
 			return $result;
 		}
 
-		if( isApiResponse( $result = $this->userResponder->authenticate($this->form) ) )
+		if( isApiResponse( $result = $this->userResponder->getUser($this->form['email']) ) )
 		{
 			return $result;
 		}
 
-		if( isApiResponse( $result = $this->userResponder->validate($this->validator, $this->form) ) )
-		{
-			return $result;
-		}
+		$this->user = $result; // the previous call returns a transformed user object
 
 		if( isApiResponse( $result = $this->store() ) )
 		{
 			return $result;
 		}
 
-		return apiSuccessResponse( 'accepted', [$this->user] );
+		return apiSuccessResponse( 'accepted', [ 'user' => $this->user, 'newPassword' => $this->newPassword] );
 	}
 
 	public function store()
 	{
-		$stored = \App::make( 'UserRepository' )->hashAndStore( $this->form['email'], $this->form['newPassword'] );
+		$password = \App::make( 'UserRepository' )->generateAndStore( $this->form['email'] );
 
-		if( ! $stored )
+		if( ! $password )
 		{
 			return apiErrorResponse(  'serverError', [ 'errorReason' => \Lang::get('api.recordCouldNotBeSaved') ] );
 		}
+
+		$this->newPassword = $password;
 
 		return true;
 	}

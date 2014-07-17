@@ -229,3 +229,28 @@ App::bind('SessionsValidator', function($app)
 {
     return new Api\Validators\SessionsValidator;
 });
+
+App::bind('PasswordValidator', function($app)
+{
+    return new Api\Validators\PasswordValidator;
+});
+
+App::bind('EmailValidator', function($app)
+{
+    return new Api\Validators\EmailValidator;
+});
+
+App::bind('UserResponder', function($app)
+{
+    return new Api\Responders\UserResponder;
+});
+
+App::bind('PasswordChangeResponseMaker', function($app)
+{
+    return new Api\Factory\PasswordChangeResponseMaker;
+});
+
+App::bind('ForgottenPasswordResponseMaker', function($app)
+{
+    return new Api\Factory\ForgottenPasswordResponseMaker;
+});

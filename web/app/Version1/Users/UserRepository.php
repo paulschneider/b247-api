@@ -74,6 +74,20 @@ Class UserRepository
 
     public function hashAndStore($email, $password)
     {
-         return \DB::table('user')->where('email', $email)->update([ 'password' => $this->makeHash($password) ]);   
+        return \DB::table('user')->where('email', $email)->update([ 'password' => $this->makeHash($password) ]);   
+    }
+
+    public function generateAndStore($email)
+    {
+        $password = $this->generatePassword();
+
+        $result = \DB::table('user')->where('email', $email)->update([ 'password' => $password['encrypted'] ]);
+
+        if( ! $result)
+        {
+            return false;
+        }
+        
+        return $password['plain'];
     }
 }

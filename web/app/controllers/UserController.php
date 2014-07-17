@@ -1,19 +1,16 @@
 <?php
 
-use Api\Factory\PasswordChangeResponseMaker;
-
-Class UserController extends BaseController {
-
-	public $responseMaker;
-
-	public function __construct(PasswordChangeResponseMaker $responseMaker)
-	{
-		$this->responseMaker = $responseMaker;
-	}
+Class UserController extends BaseController {	
 
 	public function changeUserPassword()
 	{
-		return $this->responseMaker->make(Input::all());
+		if( Input::get('forgotten') )
+		{
+			return App::make( 'ForgottenPasswordResponseMaker' )->make(Input::all());	
+		}
+		else
+		{
+			return App::make( 'PasswordChangeResponseMaker' )->make(Input::all());	
+		}
 	}
-
 }
