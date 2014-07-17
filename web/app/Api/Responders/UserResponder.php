@@ -36,7 +36,9 @@ Class UserResponder {
 	{
 		if( !empty( $email ) )
 		{
-			if( ! \App::make( 'EmailValidator' )->run( ['email' => $email] )) 
+			$validator = \App::make( 'EmailValidator' );
+
+			if( ! $validator->run( ['email' => $email] )) 
 			{
 				return apiErrorResponse(  'unprocessable', $validator->errors() ); 
 			}
