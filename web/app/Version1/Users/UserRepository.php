@@ -74,14 +74,32 @@ Class UserRepository
 
     public function hashAndStore($email, $password)
     {
-        return \DB::table('user')->where('email', $email)->update([ 'password' => $this->makeHash($password) ]);   
+        $newAccessKey = $this->generateAccessKey();
+
+        $result =  \DB::table('user')->where('email', $email)->update([ 
+            'password' => $this->makeHash($password),
+            'access_key' => $newAccessKey
+        ]);   
+
+        if( ! $result )
+        {
+            return false;
+        }
+
+        $response = new \stdClass();
+        $response->accessKey = $newAccessKey;
+
+        return $response;
     }
 
     public function generateAndStore($email)
     {
         $password = $this->generatePassword();
 
-        $result = \DB::table('user')->where('email', $email)->update([ 'password' => $password['encrypted'] ]);
+        $result = \DB::table('user')->where('email', $email)->update([ 
+            'password' => $password['encrypted'],
+            'access_key' => $this->generateAccessKey()
+        ]);
 
         if( ! $result)
         {
@@ -89,5 +107,10 @@ Class UserRepository
         }
         
         return $password['plain'];
+    }
+
+    public function getUserAccessKey($userId)
+    {
+        return User::select('access_key')->where('id', $userId)->get();
     }
 }

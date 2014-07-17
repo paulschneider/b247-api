@@ -29,14 +29,12 @@ Class ForgottenPasswordResponseMaker extends ApiResponseMaker implements ApiResp
 			return $result;
 		}
 
-		$this->user = $result; // the previous call returns a transformed user object
-
 		if( isApiResponse( $result = $this->store() ) )
 		{
 			return $result;
 		}
 
-		return apiSuccessResponse( 'accepted', [ 'user' => $this->user, 'newPassword' => $this->newPassword] );
+		return apiSuccessResponse( 'accepted', [ 'newPassword' => $this->newPassword ] );
 	}
 
 	public function store()

@@ -28,6 +28,8 @@ Class PasswordChangeResponseMaker extends ApiResponseMaker implements ApiRespons
 			return $result;
 		}
 
+		$this->user = $result; // the previous call returns a transformed user object
+
 		if( isApiResponse( $result = $this->userResponder->validate($this->validator, $this->form) ) )
 		{
 			return $result;
@@ -43,12 +45,16 @@ Class PasswordChangeResponseMaker extends ApiResponseMaker implements ApiRespons
 
 	public function store()
 	{
-		$stored = \App::make( 'UserRepository' )->hashAndStore( $this->form['email'], $this->form['newPassword'] );
+		$userRepository = \App::make( 'UserRepository' );
 
-		if( ! $stored )
+		$response = $userRepository->hashAndStore( $this->form['email'], $this->form['newPassword'] );
+
+		if( ! $response )
 		{
 			return apiErrorResponse(  'serverError', [ 'errorReason' => \Lang::get('api.recordCouldNotBeSaved') ] );
 		}
+
+		$this->user['accessKey'] = $response->accessKey;
 
 		return true;
 	}

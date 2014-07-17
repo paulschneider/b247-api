@@ -19,7 +19,7 @@ Class UserResponder {
 			return $result;
 		}
 
-		$this->user = $result;
+		return $result;
 	}
 
 	public function validate($validator, $form)
