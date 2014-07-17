@@ -20,15 +20,11 @@ class User extends BaseModel implements UserInterface, RemindableInterface {
 	 * @var array
 	 */
 	protected $hidden = [
-
 		'originating_ip'
 		, 'last_login'
 		, 'last_login_ip'
 		, 'is_active'
 		, 'is_deleted'
-		, 'created_at'
-		, 'updated_at'
-
 	];
 
 	/**
