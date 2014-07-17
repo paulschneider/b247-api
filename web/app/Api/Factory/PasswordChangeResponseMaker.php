@@ -7,11 +7,38 @@ Class PasswordChangeResponseMaker extends ApiResponseMaker implements ApiRespons
 	private $validator;
 	private $form;
 	private $user;
-	private $requiredFields = ['email', 'password', 'accessKey', 'newPassword'];
+	private $requiredFields = ['email', 'password', 'newPassword'];
 
 	public function __construct(PasswordValidator $validator)
 	{
 		$this->validator = $validator;
+	}
+
+	public function make($form)
+	{
+		$this->form = $form;
+
+		if( isApiResponse( $result = $this->parameterCheck() ) )
+		{
+			return $result;
+		}
+
+		if( isApiResponse( $result = $this->authenticate() ) )
+		{
+			return $result;
+		}
+
+		if( isApiResponse( $result = $this->validate() ) )
+		{
+			return $result;
+		}
+
+		if( isApiResponse( $result = $this->store() ) )
+		{
+			return $result;
+		}
+
+		return apiSuccessResponse( 'accepted', [$this->user] );
 	}
 
 	public function parameterCheck()
@@ -55,32 +82,4 @@ Class PasswordChangeResponseMaker extends ApiResponseMaker implements ApiRespons
 
 		return true;
 	}
-
-	public function make($form)
-	{
-		$this->form = $form;
-
-		if( isApiResponse( $result = $this->parameterCheck() ) )
-		{
-			return $result;
-		}
-
-		if( isApiResponse( $result = $this->authenticate() ) )
-		{
-			return $result;
-		}
-
-		if( isApiResponse( $result = $this->validate() ) )
-		{
-			return $result;
-		}
-
-		if( isApiResponse( $result = $this->store() ) )
-		{
-			return $result;
-		}
-
-		return apiSuccessResponse( 'accepted', [$this->user] );
-	}
-
 }
