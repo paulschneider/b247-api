@@ -126,14 +126,14 @@ Class UserRepository
 
     public function saveProfile($user, $form)
     {
-        if( ! $user->find('profile') )
+        if( ! $user->has('profile') )
         {
             $profile = new UserProfile();           
             $profile->user_id = $user->id;
         }
         else
         {
-            $profile = $this->getProfileRow($user->id);               
+            $profile = $this->getUserProfile($user);               
         }
 
         $profile->age_group_id = $form['ageGroup'];
