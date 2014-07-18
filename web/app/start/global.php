@@ -2,6 +2,11 @@
 
 define('VERSION', Config::get('app.version'));
 
+Validator::resolver(function($translator, $data, $rules, $messages)
+{
+    return new Api\Validators\PostcodeValidator($translator, $data, $rules, $messages);
+});
+
 /*
 |--------------------------------------------------------------------------
 | Register The Laravel Class Loader
