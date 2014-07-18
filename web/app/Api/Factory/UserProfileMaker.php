@@ -9,7 +9,7 @@ Class UserProfileMaker {
 	private $userResponder;
 	private $userRepository;
 	private $user;
-	private $requiredFields = [ 'firstname', 'lastname', 'nickname', 'postcode', 'ageGroup' ];
+	private $requiredFields = [ 'firstName', 'lastName', 'nickName', 'postCode', 'ageGroup' ];
 
 	public function __construct()
 	{
@@ -52,14 +52,19 @@ Class UserProfileMaker {
 
 	public function store($form)
 	{	
-		// attempt to translate the user provided postcode to lat and lon
-		$address = App::make('GoogleMapsMaker')->translatePostcode($this->user->postcode);
-
-		if(isset($address->lat) && $address->lon)
+		// if the user already has a profile
+		if( ! $this->user->has('profile') || $this->user->profile->postcode != $form['postcode'] )
 		{
-			$this->user->lat = $address->lat;
-			$this->user->lon = $address->lon;	
-		}		
+			// attempt to translate the user provided postcode to lat and lon
+			$address = App::make('GoogleMapsMaker')->translatePostcode($form['postcode']);
+
+			// and then add it to the user object so we can save it later
+			if(isset($address->lat) && $address->lon)
+			{
+				$this->user->lat = $address->lat;
+				$this->user->lon = $address->lon;	
+			}
+		}
 
 		if( ! $result = $this->userRepository->saveProfile($this->user, $form) )
 		{
