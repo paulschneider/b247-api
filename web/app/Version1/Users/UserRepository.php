@@ -43,8 +43,8 @@ Class UserRepository
 
         $user = new User($input);
 
-        $user->first_name = $input['firstname'];
-        $user->last_name = $input['lastname'];
+        $user->first_name = $input['firstName'];
+        $user->last_name = $input['lastName'];
         $user->password = $password['encrypted'];        
 
         $user->save();
@@ -137,7 +137,7 @@ Class UserRepository
         }
 
         $profile->age_group_id = $form['ageGroup'];
-        $profile->nickname = $form['nickname'];
+        $profile->nickname = $form['nicknameame'];
         $profile->facebook = isset( $form['facebook'] ) ? $form['facebook'] : null;
         $profile->twitter = isset( $form['twitter'] ) ? $form['twitter'] : null;
         $profile->postcode = $form['postcode'];
