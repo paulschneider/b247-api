@@ -3,8 +3,8 @@
 Class RegistrationValidator extends ApiValidator {
 
 	public $rules = [
-		'firstname' => 'required',
-		'lastname' => 'required',
+		'firstName' => 'required',
+		'lastName' => 'required',
 		'email' => 'required|email|unique:user'
 	];
 
