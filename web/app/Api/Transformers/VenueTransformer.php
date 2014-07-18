@@ -38,7 +38,7 @@ Class VenueTransformer {
             'facebook' => $venue['facebook'],
             'twitter' => $venue['twitter'],
             'phone' => $venue['phone'],
-            'website' => $venue['website'],
+            //'website' => $venue['website'],
         ];
     }
 }
