@@ -35,7 +35,8 @@ Class SearchResponseMaker extends ApiResponseMaker implements ApiResponseMakerIn
 				$channels[$channelId]['articles'][] = $articleTransformer->transform($article);
 			}	
 		}
-			
+		
+		$result['adverts'] = $this->getSponsors();
 		$result['searchResults'] = array_values($channels);
 		$result['resultCount'] = count($articles);
 		$result['pagination'] = $metaData;		
