@@ -1,10 +1,22 @@
 <?php
 
-function apiErrorResponse($response)
+// check an array to see if a required field is missing from a supplied list of required fields
+function aRequiredParameterIsMissing($requiredFields, $form)
+{
+    foreach($requiredFields AS $field)
+    {
+        if( ! array_key_exists($field, $form))
+        {
+            return true;
+        }
+    }
+}
+
+function apiErrorResponse($response, $data = [])
 {
     return App::make( 'ApiResponder' )
                 ->setStatusCode(\Config::get("responsecodes.{$response}.code"))
-                ->respondWithError(\Config::get("responsecodes.{$response}.message"));
+                ->respondWithError(\Config::get("responsecodes.{$response}.message"), $data);
 }
 
 function apiSuccessResponse($response, $data)
@@ -80,6 +92,11 @@ function isListingType($channel)
     return in_array($type, [
         Config::get('constants.displayType_listing')
     ]) ? true : false;
+}
+
+function getChannelId($article)
+{
+    return $article['location'][0]['channelId'];
 }
 
 function getSubChannelType($channel)

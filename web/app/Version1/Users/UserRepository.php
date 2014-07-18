@@ -9,13 +9,18 @@ Class UserRepository
 
     // access key also acts as a salt
 
-    public function generatePassword($accessKey)
+    public function generatePassword()
     {
         $plain = str_random(8);
 
-        $encrypted = \Hash::make($accessKey.$plain);
+        $encrypted = $this->makeHash($plain);
 
         return [ 'plain' => $plain, 'encrypted' => $encrypted ];
+    }
+
+    public function makeHash($password)
+    {
+        return \Hash::make($password);
     }
 
     public function getUserChannels($accessKey)
@@ -30,15 +35,21 @@ Class UserRepository
         }
     }
 
-    public function addUser(array $input)
+    public function create(array $input)
     {
         $input['access_key'] = self::generateAccessKey();
 
-        $password = self::generatePassword($input['access_key']);
-
-        $input['password'] = $password['encrypted'];
+        $password = self::generatePassword();
 
         $user = new User($input);
+
+        $user->first_name = $input['firstname'];
+        $user->last_name = $input['lastname'];
+        $user->password = $password['encrypted'];        
+
+        $user->save();
+
+        $user->plain_pass = $password['plain'];
 
         return $user;
     }
@@ -54,5 +65,52 @@ Class UserRepository
         });
 
         return $hidden[0]->toArray();
+    }
+
+    public function authenticate($email)
+    {
+        return User::select('id', 'first_name', 'last_name', 'email', 'password', 'access_key')->where('email', $email)->first();
+    }
+
+    public function hashAndStore($email, $password)
+    {
+        $newAccessKey = $this->generateAccessKey();
+
+        $result =  \DB::table('user')->where('email', $email)->update([ 
+            'password' => $this->makeHash($password),
+            'access_key' => $newAccessKey
+        ]);   
+
+        if( ! $result )
+        {
+            return false;
+        }
+
+        $response = new \stdClass();
+        $response->accessKey = $newAccessKey;
+
+        return $response;
+    }
+
+    public function generateAndStore($email)
+    {
+        $password = $this->generatePassword();
+
+        $result = \DB::table('user')->where('email', $email)->update([ 
+            'password' => $password['encrypted'],
+            'access_key' => $this->generateAccessKey()
+        ]);
+
+        if( ! $result)
+        {
+            return false;
+        }
+        
+        return $password['plain'];
+    }
+
+    public function getUserAccessKey($userId)
+    {
+        return User::select('access_key')->where('id', $userId)->get();
     }
 }

@@ -20,16 +20,11 @@ class User extends BaseModel implements UserInterface, RemindableInterface {
 	 * @var array
 	 */
 	protected $hidden = [
-
-		'password'
-		, 'originating_ip'
+		'originating_ip'
 		, 'last_login'
 		, 'last_login_ip'
 		, 'is_active'
 		, 'is_deleted'
-		, 'created_at'
-		, 'updated_at'
-
 	];
 
 	/**
@@ -44,19 +39,6 @@ class User extends BaseModel implements UserInterface, RemindableInterface {
 		, 'last_name'
 		, 'email'
 		, 'password'
-
-	];
-
-	/**
-	* Form validation rules for a new user
-	*
-	* @var array
-	*/
-	protected static $rules = [
-
-		'first_name' => 'required'
-		,'last_name' => 'required'
-		,'email' => 'required'
 
 	];
 

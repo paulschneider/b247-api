@@ -59,22 +59,20 @@ Route::group(['prefix' => 'channel'], function(){
     Route::get('{channel}', 'ChannelController@getChannel');
 });
 
-# Events
-
-Route::resource('event', 'EventController');
+Route::post('login', 'SessionsController@login');
 
 # Registration
 
-Route::resource('register', 'RegisterController');
+Route::post('register', 'RegisterController@createSubscriber');
 
-# Sponsor
+# Search
 
-Route::resource('sponsor', 'SponsorController');
+Route::get('search', 'SearchController@search');
 
-# Venue
+# User
 
-Route::resource('venue', 'VenueController');
-
+Route::post('user/password', 'UserController@changeUserPassword');
+    
 # Homepage
 
 Route::get('/', 'HomeController@index');
