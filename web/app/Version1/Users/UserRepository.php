@@ -137,10 +137,10 @@ Class UserRepository
         }
 
         $profile->age_group_id = $form['ageGroup'];
-        $profile->nickname = $form['nicknameame'];
+        $profile->nickname = $form['nickName'];
         $profile->facebook = isset( $form['facebook'] ) ? $form['facebook'] : null;
         $profile->twitter = isset( $form['twitter'] ) ? $form['twitter'] : null;
-        $profile->postcode = $form['postcode'];
+        $profile->postcode = $form['postCode'];
         $profile->updated_at = getDateTime();
 
         if(isset($user->lat) && isset($user->lon))
