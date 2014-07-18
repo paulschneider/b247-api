@@ -13,4 +13,9 @@ Class UserController extends BaseController {
 			return App::make( 'PasswordChangeResponseMaker' )->make(Input::all());	
 		}
 	}
+
+	public function profile()
+	{
+		return App::make( 'UserProfileResponseMaker' )->make(Input::all());
+	}
 }
