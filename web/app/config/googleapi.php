@@ -1,5 +1,5 @@
 <?php
 
 return [
-	'key' => 'AIzaSyAFSu-7Tw9QUTtknEfJW5QlCiTnpwJsVQQ'
+	'key' => 'AIzaSyDCxI1zC59DcR_rO5gKkpr_g7aT-1luIeA'
 ];
