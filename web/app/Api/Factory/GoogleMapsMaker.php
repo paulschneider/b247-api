@@ -3,6 +3,8 @@
 use Config;
 use ApiClient;
 
+//https://developers.google.com/maps/documentation/geocoding/
+
 Class GoogleMapsMaker {
 
 	public function translatePostcode($postcode)
@@ -10,7 +12,7 @@ Class GoogleMapsMaker {
 		$address = new \stdClass();
 
 		$apiKey = Config::get('googleapi.key');
-		$response = ApiClient::get('https://maps.googleapis.com/maps/api/geocode/json', [ 'address' => $postcode ]);
+		$response = ApiClient::get('https://maps.googleapis.com/maps/api/geocode/json', [ 'address' => $postcode, 'key' => $apiKey ]);
 
 		if( $response['status'] == "OK" )
 		{
