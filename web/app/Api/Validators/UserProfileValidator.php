@@ -5,11 +5,13 @@ use Lang;
 Class UserProfileValidator extends ApiValidator {
 
 	public $rules = [
-		'firstname' => 'required|max:75',
-		'lastname' => 'required|max:75',
-		'nickname' => 'required|unique:user_profile|max:45',
-		'postcode' => 'required|max:15',
+		'firstName' => 'required|max:75',
+		'lastName' => 'required|max:75',
+		'nickName' => 'required|max:45',
+		'postCode' => 'required|max:15|Postcode',
 		'ageGroup' => 'required|integer',
+		'facebook' => 'max:75',
+		'twitter' => 'max:75'
 	];
 
 	public $messages;
@@ -18,7 +20,8 @@ Class UserProfileValidator extends ApiValidator {
 	{
 		$this->messages	= [
 			'agegroup.required' => Lang::get('api_validation.ageGroupRequired'),
-			'agegroup.integer' => Lang::get('api_validation.ageGroupInteger')
+			'agegroup.integer' => Lang::get('api_validation.ageGroupInteger'),
+			'postcode.validation' => Lang::get('api_validation.postcode')
 		];
 
 		$this->setRules($this->rules);
