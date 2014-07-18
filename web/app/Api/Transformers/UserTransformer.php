@@ -24,10 +24,10 @@ class UserTransformer extends Transformer {
 
             $response['profile'] = [
                 'ageGroup' => $profile['age_group_id'],
-                'nickname' => $profile['nickname'],
+                'nickName' => $profile['nickname'],
                 'facebook' => $profile['facebook'],
                 'twitter' => $profile['twitter'],
-                'postcode' => $profile['postcode'],
+                'postCode' => $profile['postcode'],
             ];
         }
 
