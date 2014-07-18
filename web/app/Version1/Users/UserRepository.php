@@ -69,7 +69,7 @@ Class UserRepository
 
     public function authenticate($email)
     {
-        return User::select('id', 'first_name', 'last_name', 'email', 'password', 'access_key')->where('email', $email)->first();
+        return User::select('id', 'first_name', 'last_name', 'email', 'password', 'access_key')->with('profile')->where('email', $email)->first();
     }
 
     public function hashAndStore($email, $password)
@@ -112,5 +112,43 @@ Class UserRepository
     public function getUserAccessKey($userId)
     {
         return User::select('access_key')->where('id', $userId)->get();
+    }
+
+    public function getProfile($accessKey)
+    {
+        return User::with('profile')->where('access_key', $accessKey)->first();
+    }
+
+    public function getUserProfile($user)
+    {
+        return UserProfile::where('user_id', $user->id)->first();
+    }
+
+    public function saveProfile($user, $form)
+    {
+        if( ! $user->find('profile') )
+        {
+            $profile = new UserProfile();           
+            $profile->user_id = $user->id;
+        }
+        else
+        {
+            $profile = $this->getProfileRow($user->id);               
+        }
+
+        $profile->age_group_id = $form['ageGroup'];
+        $profile->nickname = $form['nickname'];
+        $profile->facebook = isset( $form['facebook'] ) ? $form['facebook'] : null;
+        $profile->twitter = isset( $form['twitter'] ) ? $form['twitter'] : null;
+        $profile->postcode = $form['postcode'];
+        $profile->updated_at = getDateTime();
+
+        if(isset($user->lat) && isset($user->lon))
+        {
+            $profile->lat = $user->lat;
+            $profile->lon = $user->lon;
+        }
+
+        return $profile->save();
     }
 }

@@ -19,7 +19,7 @@ Class ArticleController extends ApiController {
             return $response;
         }
         
-        return apiSuccessResponse( 'contentLocated', $response );
+        return apiSuccessResponse( 'ok', $response );
     }
 
     public function getAppArticle()
@@ -42,7 +42,7 @@ Class ArticleController extends ApiController {
         $response['html'] = $data['html'];
 
         // return it all to the calling app
-        return apiSuccessResponse( 'contentLocated', $response );
+        return apiSuccessResponse( 'ok', $response );
     }
 
     /**

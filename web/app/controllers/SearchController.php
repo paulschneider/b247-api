@@ -15,6 +15,6 @@ Class SearchController extends ApiController {
         }
 
         // return it all to the calling app
-        return apiSuccessResponse( 'contentLocated', $response );
+        return apiSuccessResponse( 'ok', $response );
 	}
 }

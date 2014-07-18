@@ -22,7 +22,7 @@ Class HomeController extends ApiController {
         }
         else
         {
-            return apiSuccessResponse( 'contentLocated', $response );    
+            return apiSuccessResponse( 'ok', $response );    
         }
     }
 }

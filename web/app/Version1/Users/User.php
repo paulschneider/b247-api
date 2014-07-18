@@ -25,6 +25,7 @@ class User extends BaseModel implements UserInterface, RemindableInterface {
 		, 'last_login_ip'
 		, 'is_active'
 		, 'is_deleted'
+		, 'password'
 	];
 
 	/**
@@ -49,7 +50,7 @@ class User extends BaseModel implements UserInterface, RemindableInterface {
 	*/
 	public function profile()
 	{
-		return $this->hasOne('\Version1\Users\UserProfile');
+		return $this->hasOne('\Version1\Users\UserProfile', 'user_id');
 	}
 
 	public function Channels()

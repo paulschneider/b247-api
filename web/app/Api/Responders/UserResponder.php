@@ -1,5 +1,7 @@
 <?php namespace Api\Responders;
 
+use App;
+
 Class UserResponder {
 
 	public function parameterCheck($requiredFields, $form)
@@ -14,7 +16,7 @@ Class UserResponder {
 
 	public function authenticate($form)
 	{
-		if( isApiResponse($result = \App::make( 'SessionsResponseMaker' )->make( $form )) )
+		if( isApiResponse($result = App::make( 'SessionsResponseMaker' )->make( $form )) )
 		{
 			return $result;
 		}
@@ -36,19 +38,33 @@ Class UserResponder {
 	{
 		if( !empty( $email ) )
 		{
-			$validator = \App::make( 'EmailValidator' );
+			$validator = App::make( 'EmailValidator' );
 
 			if( ! $validator->run( ['email' => $email] )) 
 			{
 				return apiErrorResponse(  'unprocessable', $validator->errors() ); 
 			}
 
-			if( ! $user = \App::make( 'UserRepository' )->authenticate($email) )
+			if( ! $user = App::make( 'UserRepository' )->authenticate($email) )
 			{
 				return apiErrorResponse(  'notFound', [ 'errorReason' => "User email address not found." ] ); 	
 			}
 
-			return \App::make( 'UserTransformer' )->transform($user);
+			return App::make( 'UserTransformer' )->transform($user);
 		}
+	}
+
+	public function getUserProfile($accessKey)
+	{
+		$userRepository = App::make( 'UserRepository' );
+
+		$user = $userRepository->getProfile($accessKey);
+
+		if( ! $user )
+		{
+			return apiErrorResponse(  'notFound', [ 'errorReason' => "User account could not be located." ] ); 	
+		}
+		
+		return $user;
 	}
 }

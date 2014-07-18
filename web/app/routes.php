@@ -72,6 +72,7 @@ Route::get('search', 'SearchController@search');
 # User
 
 Route::post('user/password', 'UserController@changeUserPassword');
+Route::post('user/profile', 'UserController@profile');
     
 # Homepage
 

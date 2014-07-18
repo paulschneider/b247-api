@@ -1,5 +1,10 @@
 <?php
 
+function getDateTime()
+{
+    return date("Y-m-d H:i:s");   
+}
+
 // check an array to see if a required field is missing from a supplied list of required fields
 function aRequiredParameterIsMissing($requiredFields, $form)
 {
@@ -122,6 +127,11 @@ function userIsAuthenticated()
     }
 
     return false;
+}
+
+function getAccessKey()
+{
+    return Request::header("accessKey") ? : false;
 }
 
 function isApiResponse($data)

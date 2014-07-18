@@ -1,5 +1,6 @@
 <?php namespace Api\Client;
 
+use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 
 Class Caller {
@@ -21,9 +22,6 @@ Class Caller {
 			'query' => $params
 		]);
 
-		// getPath()
-		// getUrl()
-
 		try {
 		   $response = $this->client->send($request)->json();
 
@@ -31,10 +29,9 @@ Class Caller {
 		   {
 		   		return $response['success']['data'];	
 		   }
-		   else
-		   {
-		   		exit('Api\Client\Caller::get() -> could not get the data from the API');
-		   }		   
+		
+			return $response;   
+
 		} 
 		catch (ClientException $e) {
 			dd($e->getMessage());
