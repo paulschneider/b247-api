@@ -45,18 +45,16 @@ Route::group(['prefix' => 'category'], function(){
 # Channels
 
 Route::group(['prefix' => 'channel'], function(){
-	Route::get('/', 'ChannelController@index');
-	Route::get('{channel}/edit', 'ChannelController@edit');
-	Route::post('store', 'ChannelController@store');
+    Route::get('{channel}', 'ChannelController@getChannel');
+});
 
+Route::group(['prefix' => 'subchannel'], function(){
     Route::get('{channel}/{listing}', 'ChannelController@getSubChannel'); // these
     Route::get('{channel}/{article}', 'ChannelController@getSubChannel'); // are
     Route::get('{channel}/{directory}', 'ChannelController@getSubChannel'); // aliases
     Route::get('{channel}/{promotion}', 'ChannelController@getSubChannel'); // for
 
     Route::get('{channel}/articles', 'ChannelController@getSubChannel'); // this
-
-    Route::get('{channel}', 'ChannelController@getChannel');
 });
 
 Route::post('login', 'SessionsController@login');
