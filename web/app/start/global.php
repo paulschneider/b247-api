@@ -58,6 +58,11 @@ App::error(function(Exception $exception, $code)
 	Log::error($exception);
 });
 
+App::error(function(Api\Exceptions\InvalidDataSupply $exception)
+{ 
+	return apiErrorResponse('badRequest', ['errorReason' => $exception->getMessage()]);
+});
+
 App::error(function(Symfony\Component\HttpKernel\Exception\NotFoundHttpException $exception)
 { 
 	return apiErrorResponse('badRequest');

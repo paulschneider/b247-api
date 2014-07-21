@@ -2,6 +2,7 @@
 
 use stdClass;
 use Version1\Users\User;
+use Lang;
 
 Class UserPreferenceOrganiser {
 
@@ -57,8 +58,13 @@ Class UserPreferenceOrganiser {
 				}
 			}
 		}
+		else
+		{
+			// caught in app/start/global.php
+			throw new \Api\Exceptions\InvalidDataSupply(Lang::get('api.userPreferencesAreNotAnArray'));
+		}
 
-		// and finally return an object containing the result of the organistion
+		// and finally return an object containing the result of the organisation
 		$result->channels = $channels;
 		$result->categories = $categories;
 

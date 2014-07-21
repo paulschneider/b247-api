@@ -7,5 +7,6 @@ return [
 	"accessKeyNotProvided" => "Required user access key not provided.",
 	"noAccountWithThatAccessKey" => "User account could not be located with the supplied access key.",
 	"userPreferencesUpdated" => "User content preferences successfully updated.",
-	"insufficientParametersProvidedToContinue" => "Insufficient form parameters supplied. Unable to continue."
+	"insufficientParametersProvidedToContinue" => "Insufficient form parameters supplied. Unable to continue.",
+	"userPreferencesAreNotAnArray" => "The supplied user preferences are not an array.",
 ];
