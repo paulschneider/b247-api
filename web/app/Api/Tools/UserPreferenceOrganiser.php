@@ -49,6 +49,7 @@ Class UserPreferenceOrganiser {
 								{
 									$categories[] = [
 										'user_id' => $user->id,
+										'sub_channel_id' => $subChannel['id'],
 										'category_id' => $category['id']
 									];
 								}
