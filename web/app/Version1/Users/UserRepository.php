@@ -1,5 +1,7 @@
 <?php namespace Version1\Users;
 
+use DB;
+
 Class UserRepository
 {
     public function generateAccessKey()
@@ -150,5 +152,26 @@ Class UserRepository
         }
 
         return $profile->save();
+    }
+
+    public function setContentPreferences($user, $data)
+    {
+        // remove all previous user prefs for both channels and categories
+        DB::table('user_inactive_channel')->where('user_id', $user->id)->delete();
+        DB::table('user_inactive_category')->where('user_id', $user->id)->delete();
+
+        // if there are channels prefs then insert them
+        if( count($data->channels) > 0 )
+        {
+            DB::table('user_inactive_channel')->insert($data->channels);    
+        }
+        
+        // if there are category prefs then insert them too
+        if( count($data->categories) > 0 )
+        {
+            DB::table('user_inactive_category')->insert($data->categories);    
+        }
+        
+        return true;
     }
 }

@@ -119,6 +119,12 @@ function getSubChannelId($channel)
     return $channel['subChannels'][0]['id'];
 }
 
+// more readable alias for userIsAuthenticated function
+function userAccessKeyPresent()
+{
+    return userIsAuthenticated();
+}
+
 function userIsAuthenticated()
 {
     if( Request::header("accessKey") )
