@@ -11,42 +11,46 @@ Class UserPreferenceOrganiser {
 		$categories = [];
 		$result = new stdClass();
 
-		// go through all supplied channels preferences
-		foreach($preferences['channels'] AS $channel)
+		// make sure its an array and there are items to go through
+		if( is_array($preferences['channels']) && count($preferences['channels']) )
 		{
-			// the top level preferences are the channels
-			if( ! $channel['isEnabled'] )
+			// go through all supplied channels preferences
+			foreach($preferences['channels'] AS $channel)
 			{
-				$channels[] = [
-					'user_id' => $user->id,
-					'channel_id' => $channel['id']
-				];
-			}
-
-			// and we could also have some subChannels
-			if( isset($channel['subChannels']) )
-			{
-				foreach( $channel['subChannels'] AS $subChannel )
+				// the top level preferences are the channels
+				if( ! $channel['isEnabled'] )
 				{
-					if( ! $subChannel['isEnabled'] )
-					{
-						$channels[] = [
-							'user_id' => $user->id,
-							'channel_id' => $subChannel['id']
-						];
-					}					
+					$channels[] = [
+						'user_id' => $user->id,
+						'channel_id' => $channel['id']
+					];
+				}
 
-					// and the subChannels might have categories
-					if( isset($subChannel['categories']) )
+				// and we could also have some subChannels
+				if( isset($channel['subChannels']) )
+				{
+					foreach( $channel['subChannels'] AS $subChannel )
 					{
-						foreach( $subChannel['categories'] AS $category )
+						if( ! $subChannel['isEnabled'] )
 						{
-							if( ! $category['isEnabled'] )
+							$channels[] = [
+								'user_id' => $user->id,
+								'channel_id' => $subChannel['id']
+							];
+						}					
+
+						// and the subChannels might have categories
+						if( isset($subChannel['categories']) )
+						{
+							foreach( $subChannel['categories'] AS $category )
 							{
-								$categories[] = [
-									'user_id' => $user->id,
-									'category_id' => $category['id']
-								];
+								if( ! $category['isEnabled'] )
+								{
+									$categories[] = [
+										'user_id' => $user->id,
+										'category_id' => $category['id']
+									];
+								}
 							}
 						}
 					}
