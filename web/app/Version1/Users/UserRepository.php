@@ -156,19 +156,29 @@ Class UserRepository
 
     public function setContentPreferences($user, $data)
     {
-        // remove all previous user prefs for both channels and categories
-        DB::table('user_inactive_channel')->where('user_id', $user->id)->delete();
-        DB::table('user_inactive_category')->where('user_id', $user->id)->delete();
+        sd($data);
 
         // if there are channels prefs then insert them
         if( count($data->channels) > 0 )
-        {
-            DB::table('user_inactive_channel')->insert($data->channels);    
+        {            
+            foreach( $data->channels AS $channel ) 
+            {
+                // remove all previous user prefs for the channel being affected
+                DB::table('user_inactive_channel')->where('user_id', $user->id)->where('channel_id', $channel['channel_id'])->delete();
+            }
+
+            DB::table('user_inactive_channel')->insert($data->channels);
         }
         
         // if there are category prefs then insert them too
         if( count($data->categories) > 0 )
         {
+            foreach( $data->categories AS $category )
+            {
+                // remove all previous user prefs for the category being affected for a specified sub_channel
+                DB::table('user_inactive_category')->where('user_id', $user->id)->where('sub_channel_id', $category['sub_channel_id'])->delete();   
+            }
+            
             DB::table('user_inactive_category')->insert($data->categories);    
         }
         
