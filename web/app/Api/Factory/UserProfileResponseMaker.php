@@ -1,6 +1,7 @@
 <?php namespace Api\Factory;
 
 use App;
+use Lang;
 
 Class UserProfileResponseMaker extends ApiResponseMaker implements ApiResponseMakerInterface {
 
@@ -9,7 +10,7 @@ Class UserProfileResponseMaker extends ApiResponseMaker implements ApiResponseMa
 		// check to see if we have the accessKey header param. This is a helper function.
 		if( ! userIsAuthenticated() )
 		{
-			return apiErrorResponse(  'unauthorised', ['errorReason' => "Required user access key not provided."] );
+			return apiErrorResponse(  'unauthorised', ['errorReason' => Lang::get('api.accessKeyNotProvided')] );
 		}
 
 		$accessKey = getAccessKey();				

@@ -18,4 +18,9 @@ Class UserController extends BaseController {
 	{
 		return App::make( 'UserProfileResponseMaker' )->make(Input::all());
 	}
+
+	public function preferences()
+	{
+		return App::make( 'UserPreferencesResponseMaker' )->make(Input::all());
+	}
 }

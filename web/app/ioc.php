@@ -274,3 +274,13 @@ App::bind('GoogleMapsMaker', function($app)
 {
     return new Api\Factory\GoogleMapsMaker;
 });
+
+App::bind('UserPreferencesResponseMaker', function($app)
+{
+    return new Api\Factory\UserPreferencesResponseMaker;
+});
+
+App::bind('UserPreferenceOrganiser', function($app)
+{
+    return new Api\Tools\UserPreferenceOrganiser;
+});

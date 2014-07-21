@@ -1,6 +1,9 @@
 <?php namespace Api\Responders;
 
 use App;
+use Lang;
+use stdClass;
+use Version1\Users\User;
 
 Class UserResponder {
 
@@ -8,7 +11,7 @@ Class UserResponder {
 	{
 		if( aRequiredParameterIsMissing($requiredFields, $form) )
 		{
-			return apiErrorResponse('insufficientArguments');
+			return apiErrorResponse('insufficientArguments', ['errorReason' => Lang::get('api.insufficientParametersProvidedToContinue')]);
 		}
 
 		return true;
@@ -62,9 +65,16 @@ Class UserResponder {
 
 		if( ! $user )
 		{
-			return apiErrorResponse(  'notFound', [ 'errorReason' => "User account could not be located." ] ); 	
+			return apiErrorResponse(  'notFound', [ 'errorReason' => Lang::get('api.noAccountWithThatAccessKey') ] ); 	
 		}
 		
 		return $user;
+	}
+
+	public function setUserContentPreferences(User $user, stdClass $data)
+	{
+		App::make( 'UserRepository' )->setContentPreferences($user, $data);
+		
+		return true;
 	}
 }
