@@ -1,5 +1,10 @@
 <?php
 
+function dateFormat($date)
+{
+    return date('Y-m-d', strtotime($date));
+}
+
 function getDateTime()
 {
     return date("Y-m-d H:i:s");   

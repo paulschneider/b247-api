@@ -59,7 +59,7 @@ Class ArticleResponseMaker extends ApiResponseMaker implements ApiResponseMakerI
 
 	public function make($input)
 	{ 	
-		$this->channel = $input['channel'];
+		$this->channel = $input['subchannel'];
 		$this->category = $input['category'];
 		$this->article = $input['article'];
 

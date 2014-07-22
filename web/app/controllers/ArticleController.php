@@ -24,7 +24,7 @@ Class ArticleController extends ApiController {
 
     public function getAppArticle()
     {
-        if( ! Input::get('channel') || ! Input::get('category') || ! Input::get('article'))
+        if( ! Input::get('subchannel') || ! Input::get('category') || ! Input::get('article'))
         {
             return apiErrorResponse('insufficientArguments');
         }
@@ -38,8 +38,8 @@ Class ArticleController extends ApiController {
         $data = ApiClient::get('app/article', [ 'data' => $response, 'type' => getChannelType($response['channel']) ]);
 
         unset($response['article']);
-
-        $response['html'] = $data['html'];
+        
+        $response['article'] = preg_replace('/[^[:print:]]/', "", $data['html']);
 
         // return it all to the calling app
         return apiSuccessResponse( 'ok', $response );

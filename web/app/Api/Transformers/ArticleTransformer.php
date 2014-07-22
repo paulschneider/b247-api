@@ -39,6 +39,7 @@ Class ArticleTransformer extends Transformer {
                 ,'body' => $article['body']
                 ,'path' => makePath( [ $articleLocation['channelSefName'], $articleLocation['subChannelSefName'], $articleLocation['categorySefName'], $article['sef_name'] ] )
                 ,'isAdvert' => false
+                ,'published' => dateFormat($article['published'])
                 ,'displayType' => [
                     'id' => $articleLocation['displayTypeId']
                     ,'type' => $articleLocation['displayType']
