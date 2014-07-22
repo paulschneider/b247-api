@@ -39,7 +39,7 @@ Class ArticleController extends ApiController {
 
         unset($response['article']);
         
-        $response['article'] = preg_replace('/[^[:print:]]/', "", $data['html']);
+        $response['html'] = preg_replace('/[^[:print:]]/', "", $data['html']);
 
         // return it all to the calling app
         return apiSuccessResponse( 'ok', $response );
