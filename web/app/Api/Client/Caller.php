@@ -13,6 +13,15 @@ Class Caller {
 		$this->client = $client;
 	}
 
+	public function post($endpoint = "/", $data = [], $headers = [])
+	{
+		$this->endpoint = $endpoint;
+
+		$request = $this->client->createRequest('POST', $this->endpoint, ['json' => $data]);
+
+		return $this->send($request);
+	}
+
 	public function get($endpoint = "/", $params = [], $headers = [])
 	{
 		$this->endpoint = $endpoint;
@@ -22,6 +31,11 @@ Class Caller {
 			'query' => $params
 		]);
 
+		return $this->send($request);
+	}
+
+	public function send($request)
+	{
 		try {
 		   $response = $this->client->send($request)->json();
 
@@ -41,50 +55,5 @@ Class Caller {
 		}
 
 		return $response->json();
-	}
-
-	public function setRequestHeaders($request, $headers = [])
-	{
-		if( count($headers) > 0 )
-		{
-			foreach($headers AS $header => $value)
-			{
-				if( ! $request->getHeader($header) )
-				{
-					$request->setHeader($header, $value);
-				}				
-			}
-		}
-
-		return $request;
-	}
-
-	public function setQueryString($params = [])
-	{
-		// only do this if we have some parameters to submit
-		if( count($params) > 0)
-		{
-			$queryStr = "?";
-
-			// go through each of the supplied parameters and created a query string
-			foreach( $params AS $key => $param )
-			{
-				$queryStr .= $key . '=' . $param . '&';
-			}
-
-			// remove the trailing '&' 
-			if( substr($queryStr, strlen($queryStr)-1, strlen($queryStr)) == "&" )
-			{
-				$queryStr = substr($queryStr, 0, strlen($queryStr)-1);
-			}
-
-			// append the query string to the endpoint
-			$this->endpoint .= $queryStr;
-		}
-	}
-
-	public function post($path, $params)
-	{
-		// to do
 	}
 }

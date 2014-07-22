@@ -9,12 +9,12 @@ Class ArticleController extends ApiController {
 
     public function getWebArticle()
     {
-        if( ! Input::get('channel') || ! Input::get('category') || ! Input::get('article'))
+        if( ! Input::get('subchannel') || ! Input::get('category') || ! Input::get('article'))
         {
             return apiErrorResponse('insufficientArguments');
         }
         
-        if( isApiResponse( $response = $this->responseMaker->make(Input::all(), $this)))
+        if( isApiResponse( $response = $this->responseMaker->make(Input::all())))
         {
             return $response;
         }
@@ -24,7 +24,7 @@ Class ArticleController extends ApiController {
 
     public function getAppArticle()
     {
-        if( ! Input::get('channel') || ! Input::get('category') || ! Input::get('article'))
+        if( ! Input::get('subchannel') || ! Input::get('category') || ! Input::get('article'))
         {
             return apiErrorResponse('insufficientArguments');
         }
@@ -35,11 +35,11 @@ Class ArticleController extends ApiController {
         }   
  
         // make a call to the front end to retrieve the populated HTML template
-        $data = ApiClient::get('app/article', [ 'data' => $response, 'type' => getChannelType($response['channel']) ]);
+        $data = ApiClient::post('app/article', [ 'data' => $response['article'], 'type' => getChannelType($response['channel']) ]);
 
         unset($response['article']);
 
-        $response['html'] = $data['html'];
+        $response['article'] = $data['html'];
 
         // return it all to the calling app
         return apiSuccessResponse( 'ok', $response );
