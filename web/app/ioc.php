@@ -284,3 +284,8 @@ App::bind('UserPreferenceOrganiser', function($app)
 {
     return new Api\Tools\UserPreferenceOrganiser;
 });
+
+App::bind('ArticleNavigationTransformer', function($app)
+{
+    return new Api\Transformers\ArticleNavigationTransformer;
+});
