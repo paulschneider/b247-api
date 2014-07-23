@@ -28,9 +28,9 @@ Class ArticleResponseMaker extends ApiResponseMaker implements ApiResponseMakerI
 		// remove all other categories except the one requested
 		foreach( $this->channel['subChannels'][0]['categories'] AS $key => $category )
 		{
-			if( $category['id'] != $this->category['id'] )
+			if( $category['id'] == $this->category['id'] )
 			{
-				unset($this->channel['subChannels'][0]['categories'][$key]);
+				$this->channel['subChannels'][0]['categories'] = [$category];
 			}
 		}
 
