@@ -36,8 +36,6 @@ Class PatternMaker
     {
         $this->activePattern = $activePattern;
         $this->pattern = $this->patterns[ $this->activePattern ];
-        $this->limit = \Input::get('size') ? \Input::get('size') : $limit;
-        $this->pages = $maxPages;
     }
 
     public function setPattern($pattern)
@@ -54,14 +52,12 @@ Class PatternMaker
     {
         $counter = 0;
         $patternCounter = 0;
-        $iterationCounter = 1; // how many times have we tried to add an item to the pattern
         $totalPatterns = count($this->pattern);
         $sorted = [];
-        $pageCount = 1;
-        $spaceCount = 0;
         $allocatedSponsors = [];
 
         $articles = array_values($content['articles']); // reset the array keys as we'll be targeting them specifically
+
         $sponsors = $content['sponsors'];        
 
         while (count($articles) > 0)
@@ -74,8 +70,6 @@ Class PatternMaker
 
                  $thisAd['displayStyle'] = 1;
 
-                 $spaceCount = $spaceCount + 1;
-
                  $sorted[] = $thisAd;
 
                  $allocatedSponsors[] = $thisAd;
@@ -86,8 +80,6 @@ Class PatternMaker
 
                  $thisAd['displayStyle'] = 2;
 
-                 $spaceCount = $spaceCount + 2;
-
                  $sorted[] = $thisAd;
 
                  $allocatedSponsors[] = $thisAd;
@@ -97,8 +89,6 @@ Class PatternMaker
                 $thisArticle = $articles[$counter];
 
                 $thisArticle['displayStyle'] = $thisPattern;
-
-                $spaceCount = $spaceCount + $thisPattern;
 
                 $sorted[] = $thisArticle;
 
@@ -114,24 +104,10 @@ Class PatternMaker
                  $patternCounter = 0;
              }
 
-             if( $spaceCount == 3 )
-             {
-                $spaceCount = 0;
-
-                if( $pageCount == $this->pages )
-                {
-                    break;
-                }
-
-                $pageCount++;
-             }  
-
-             if( $iterationCounter == $this->limit )
+             if( count($articles) == 0 )
              {
                 break;
              }
-             
-            $iterationCounter++;
         }
 
         $response = new \stdClass();
