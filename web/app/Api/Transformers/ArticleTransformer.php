@@ -100,7 +100,7 @@ Class ArticleTransformer extends Transformer {
 
             // remove anything that only the desktop version needs
 
-            if( ! isDesktop() )
+            if( isMobile() && ! isset($options['ignorePlatform']) ) // but only do this when this option isn't around. This prevents content hiding when its in fact needed, namely in the case of the HTML template creation on the front end.
             {
                 unset($response['sefName']);
                 unset($response['path']);

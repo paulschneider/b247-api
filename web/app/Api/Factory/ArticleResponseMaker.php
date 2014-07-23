@@ -51,7 +51,7 @@ Class ArticleResponseMaker extends ApiResponseMaker implements ApiResponseMakerI
 
 		$this->article = $article;
 
-		$this->response['article'] = $articleTransformer->transform( $article->toArray(), [ 'showBody' => true ] );
+		$this->response['article'] = $articleTransformer->transform( $article->toArray(), [ 'showBody' => true, 'ignorePlatform' => true ] );
 	}
 
 	public function getAdverts()

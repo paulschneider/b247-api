@@ -13,8 +13,6 @@
 
 # Article
 
-//if( isMobile() )
-
 if( Input::get('dataOnly') )
 {
     Route::get('articles', 'ArticleController@getWebArticle');   
