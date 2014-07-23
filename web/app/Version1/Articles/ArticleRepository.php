@@ -322,4 +322,26 @@ Class ArticleRepository extends BaseModel {
 
         return $articles;
     }
+
+    public function getRelatedArticles($article)
+    {
+        $articleLocation = $article->location->first();
+
+        $result  = ArticleLocation::with('article.event.venue', 'article.asset', 'article.location')
+                ->join('article', 'article.id', '=', 'article_location.article_id')
+                ->where('article_location.sub_channel_id', '=', $articleLocation['subChannelId'])
+                ->where('article_location.category_id', '=', $articleLocation['categoryId'])
+                ->where('article.id', '!=', $article->id)
+                ->orderBy('article.published', 'desc')
+                ->get()->toArray();
+
+        $articles = [];
+
+        foreach($result AS $item)
+        {
+            $articles[] = $item['article'];
+        }
+
+        return $articles;
+    }
 }
