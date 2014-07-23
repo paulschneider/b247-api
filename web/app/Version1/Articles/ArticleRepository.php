@@ -6,6 +6,7 @@ use Version1\Articles\Article;
 use Version1\Search\Search;
 use Version1\Models\BaseModel;
 use \Carbon\Carbon;
+use Config;
 
 Class ArticleRepository extends BaseModel {
 
@@ -254,8 +255,10 @@ Class ArticleRepository extends BaseModel {
         return Article::with('location', 'asset', 'event.venue')->whereNotIn( 'id', $articles )->orderBy('article.created_at', 'desc')->take($limit)->get();        
     }
 
-    public function getArticlesWithEvents($type, $channel = 50, $limit = 20)
+    public function getArticlesWithEvents($type, $channel = 50)
     {
+        $limit = Config::get('constants.channelFeed_limit');
+
         $query = Article::with('asset')->with(['location' => function($query) use($channel) {
                 $query->where('article_location.channel_id', $channel);
         }])->with(['event' => function($query) {
