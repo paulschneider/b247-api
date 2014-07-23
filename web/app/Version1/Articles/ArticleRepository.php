@@ -6,6 +6,7 @@ use Version1\Articles\Article;
 use Version1\Search\Search;
 use Version1\Models\BaseModel;
 use \Carbon\Carbon;
+use Config;
 
 Class ArticleRepository extends BaseModel {
 
@@ -256,13 +257,15 @@ Class ArticleRepository extends BaseModel {
 
     public function getArticlesWithEvents($type, $channel = 50)
     {
+        $limit = Config::get('constants.channelFeed_limit');
+
         $query = Article::with('asset')->with(['location' => function($query) use($channel) {
                 $query->where('article_location.channel_id', $channel);
         }])->with(['event' => function($query) {
                 $query->orderBy('event.show_date', 'asc')->alive()->active();
         }])->with('event.venue');
 
-        return $query->whereNotNull('article.event_id')->get()->toArray();
+        return $query->whereNotNull('article.event_id')->take($limit)->get()->toArray();
     }
 
     public function countArticlesInCategory($categoryId, $channelId)

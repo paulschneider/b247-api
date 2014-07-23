@@ -1,5 +1,7 @@
 <?php namespace Api\Factory;
 
+use Config;
+
 Class ChannelFeed {
 
     protected $channels;
@@ -42,7 +44,7 @@ Class ChannelFeed {
             if( ! in_array($channel, $this->inactiveUserChannels) )
             {
                 // get the articles for this channel
-                $articles = $this->articleRepository->getArticles( null, 20, $channel, $this->isASubChannel );
+                $articles = $this->articleRepository->getArticles( null, Config::get('constants.channelFeed_limit'), $channel, $this->isASubChannel );
 
                 // transform the articles and the sponsors into the API version 
                 $articles = $this->articleTransformer->transformCollection($articles);
