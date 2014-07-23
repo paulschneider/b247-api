@@ -51,6 +51,10 @@ Class ArticleResponseMaker extends ApiResponseMaker implements ApiResponseMakerI
 
 		$this->article = $article;
 
+		$related = $articleRepository->getRelatedArticles($this->article);
+
+		$this->response['relatedArticles'] = $articleTransformer->transformCollection($related);
+
 		$this->response['article'] = $articleTransformer->transform( $article->toArray(), [ 'showBody' => true ] );
 	}
 
