@@ -18,6 +18,6 @@ Class CategoryController extends ApiController {
             return $response;
         }
 
-        return apiSuccessResponse( 'contentLocated', $response );
+        return apiSuccessResponse( 'ok', $response );
     }
 }

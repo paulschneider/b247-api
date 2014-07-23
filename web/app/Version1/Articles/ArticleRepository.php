@@ -289,4 +289,34 @@ Class ArticleRepository extends BaseModel {
         ->get()
         ->toArray();
     }
+
+    public function getNextAndPreviousArticles($article)
+    {
+        $categoryId = $article->location->first()->categoryId;
+        $subChannelId = $article->location->first()->subChannelId;
+
+        $result = ArticleLocation::with('article.location')
+                ->join('article', 'article.id', '=', 'article_location.article_id')
+                ->where('article_location.category_id', '=', $categoryId)
+                ->where('article_location.sub_channel_id', '=', $subChannelId)
+                ->orderBy('article.published', 'asc')
+                ->get()->toArray();
+
+        $counter = 0;
+        $articles = [];
+
+        foreach( $result AS $item )
+        {         
+            if( $item['article_id'] == $article->id)
+            {
+                $articles['previous'] = isset($result[$counter-1]) ? $result[$counter-1]['article'] : null;
+                $articles['article'] = $article->toArray();
+                $articles['next'] = isset($result[$counter+1]) ? $result[$counter+1]['article'] : null;
+            }
+
+            $counter++;
+        }
+
+        return $articles;
+    }
 }

@@ -1,5 +1,15 @@
 <?php
 
+function dateFormat($date)
+{
+    return date('Y-m-d', strtotime($date));
+}
+
+function getDateTime()
+{
+    return date("Y-m-d H:i:s");   
+}
+
 // check an array to see if a required field is missing from a supplied list of required fields
 function aRequiredParameterIsMissing($requiredFields, $form)
 {
@@ -114,6 +124,12 @@ function getSubChannelId($channel)
     return $channel['subChannels'][0]['id'];
 }
 
+// more readable alias for userIsAuthenticated function
+function userAccessKeyPresent()
+{
+    return userIsAuthenticated();
+}
+
 function userIsAuthenticated()
 {
     if( Request::header("accessKey") )
@@ -122,6 +138,11 @@ function userIsAuthenticated()
     }
 
     return false;
+}
+
+function getAccessKey()
+{
+    return Request::header("accessKey") ? : false;
 }
 
 function isApiResponse($data)

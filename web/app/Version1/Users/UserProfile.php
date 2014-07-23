@@ -1,9 +1,11 @@
-<?php
+<?php namespace Version1\Users;
 
-namespace Version1\Models;
+use Version1\Models\BaseModel;
 
 class UserProfile extends BaseModel
-{
+{   
+    public $timestamps = false;
+
     /**
     * The database table used by the model.
     *

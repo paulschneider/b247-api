@@ -1,5 +1,7 @@
 <?php namespace Api\Factory;
 
+use App;
+
 Class ArticleResponseMaker extends ApiResponseMaker implements ApiResponseMakerInterface {
 
 	var $category;
@@ -42,14 +44,14 @@ Class ArticleResponseMaker extends ApiResponseMaker implements ApiResponseMakerI
 		
 		if( ! $article = $articleRepository->getCategoryArticle( $this->channel, $this->category, $this->article ))
 		{
-			return \App::make( 'ApiResponder' )
-				->setStatusCode(\Config::get('responsecodes.notFound.code'))
-				->respondWithError(\Config::get('responsecodes.notFound.message'));
+			return apiErrorResponse('notFound', []);
 		}
 
-		$article = $articleRepository->getCategoryArticle( $this->channel, $this->category, $this->article )->toArray();
+		$article = $articleRepository->getCategoryArticle( $this->channel, $this->category, $this->article );
 
-		$this->response['article'] = $articleTransformer->transform( $article, [ 'showBody' => true ] );
+		$this->article = $article;
+
+		$this->response['article'] = $articleTransformer->transform( $article->toArray(), [ 'showBody' => true ] );
 	}
 
 	public function getAdverts()
@@ -57,9 +59,19 @@ Class ArticleResponseMaker extends ApiResponseMaker implements ApiResponseMakerI
 		$this->response['adverts'] = $this->getSponsors();
 	}
 
+	public function nextPreviousArticles()
+	{
+		$articles = \App::make( 'ArticleRepository' )->getNextAndPreviousArticles($this->article);
+		
+		$articleNavigationTransformer = App::make('ArticleNavigationTransformer');	
+
+		$this->response['previousArticle'] = $articleNavigationTransformer->transform($articles['previous']);
+		$this->response['nextArticle'] = $articleNavigationTransformer->transform($articles['next']);
+	}
+
 	public function make($input)
 	{ 	
-		$this->channel = $input['channel'];
+		$this->channel = $input['subchannel'];
 		$this->category = $input['category'];
 		$this->article = $input['article'];
 
@@ -69,16 +81,19 @@ Class ArticleResponseMaker extends ApiResponseMaker implements ApiResponseMakerI
 			return $result;
 		}
 
+		if( isApiResponse( $result = $this->getAdverts() ) )
+		{
+			return $result;
+		}	
+
 		if( isApiResponse( $result = $this->getArticle() ) )
 		{
 			return $result;
 		}
 
-		if( isApiResponse( $result = $this->getAdverts() ) )
-		{
-			return $result;
-		}
+		$this->nextPreviousArticles();			
 
+		// we return this differently to everywhere else because there is two ways of calling this class
 		return $this->response;
 	}
 }

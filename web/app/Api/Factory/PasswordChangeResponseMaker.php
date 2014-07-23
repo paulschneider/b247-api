@@ -28,7 +28,7 @@ Class PasswordChangeResponseMaker extends ApiResponseMaker implements ApiRespons
 			return $result;
 		}
 
-		$this->user = $result; // the previous call returns a transformed user object
+		$this->user = $result['user']; // the previous call returns a transformed user object
 
 		if( isApiResponse( $result = $this->userResponder->validate($this->validator, $this->form) ) )
 		{
@@ -40,7 +40,7 @@ Class PasswordChangeResponseMaker extends ApiResponseMaker implements ApiRespons
 			return $result;
 		}
 
-		return apiSuccessResponse( 'accepted', [$this->user] );
+		return apiSuccessResponse( 'accepted', $this->user );
 	}
 
 	public function store()

@@ -18,7 +18,7 @@ Class ChannelController extends ApiController {
             return $response;
         } 
 
-        return apiSuccessResponse( 'contentLocated', $response );
+        return apiSuccessResponse( 'ok', $response );
     }
 
     /**
@@ -38,7 +38,7 @@ Class ChannelController extends ApiController {
             return $response;
         }        
 
-        return apiSuccessResponse( 'contentLocated', $response );
+        return apiSuccessResponse( 'ok', $response );
     }
 
     /**
