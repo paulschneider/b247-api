@@ -254,7 +254,7 @@ Class ArticleRepository extends BaseModel {
         return Article::with('location', 'asset', 'event.venue')->whereNotIn( 'id', $articles )->orderBy('article.created_at', 'desc')->take($limit)->get();        
     }
 
-    public function getArticlesWithEvents($type, $channel = 50)
+    public function getArticlesWithEvents($type, $channel = 50, $limit = 20)
     {
         $query = Article::with('asset')->with(['location' => function($query) use($channel) {
                 $query->where('article_location.channel_id', $channel);
@@ -262,7 +262,7 @@ Class ArticleRepository extends BaseModel {
                 $query->orderBy('event.show_date', 'asc')->alive()->active();
         }])->with('event.venue');
 
-        return $query->whereNotNull('article.event_id')->get()->toArray();
+        return $query->whereNotNull('article.event_id')->take($limit)->get()->toArray();
     }
 
     public function countArticlesInCategory($categoryId, $channelId)
