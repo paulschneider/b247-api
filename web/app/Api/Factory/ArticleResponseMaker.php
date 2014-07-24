@@ -7,7 +7,47 @@ Class ArticleResponseMaker extends ApiResponseMaker implements ApiResponseMakerI
 	var $category;
 	var $channel; // sub-channel
 	var $article;
-	var $response = [];
+	var $articleRepository;
+	var $articleTransformer;
+
+	public function __construct()
+	{
+		$this->articleRepository = App::make( 'ArticleRepository' );
+		$this->articleTransformer = \App::make( 'ArticleTransformer' );
+	}
+
+	public function make($input)
+	{ 	
+		$this->channel = $input['subchannel'];
+		$this->category = $input['category'];
+		$this->article = $input['article'];
+
+		if( isApiResponse( $result = $this->getChannel()) )
+		{
+			return $result;
+		}
+
+		if( isApiResponse( $result = $this->getAdverts() ) )
+		{
+			return $result;
+		}	
+
+		if( isApiResponse( $result = $this->getArticle() ) )
+		{
+			return $result;
+		}
+
+		$response = [
+			'channel' => $this->channel,
+			'adverts' => $this->getAdverts(),
+			'article' => $this->articleTransformer->transform( $this->article->toArray(), [ 'showBody' => true ] ),
+			'related' => $this->getRelatedArticles($this->article),
+			'navigation' => $this->nextPreviousArticles(),
+		];
+
+		// we return this differently to everywhere else because there is two ways of calling this class
+		return $response;
+	}
 
 	public function getChannel()
 	{
@@ -34,70 +74,40 @@ Class ArticleResponseMaker extends ApiResponseMaker implements ApiResponseMakerI
 			}
 		}
 
-		$this->response['channel'] = $this->channel;
+		return $this->channel;
 	}
 
 	public function getArticle()
-	{
-		$articleRepository = \App::make( 'ArticleRepository' );
-		$articleTransformer = \App::make( 'ArticleTransformer' );
-		
-		if( ! $article = $articleRepository->getCategoryArticle( $this->channel, $this->category, $this->article ))
+	{		
+		if( ! $article = $this->articleRepository->getCategoryArticle( $this->channel, $this->category, $this->article ))
 		{
 			return apiErrorResponse('notFound', []);
 		}
 
-		$article = $articleRepository->getCategoryArticle( $this->channel, $this->category, $this->article );
+		$this->article = $article;		
 
-		$this->article = $article;
+		return $this->article;
+	}
 
-		$related = $articleRepository->getRelatedArticles($this->article);
-
-		$this->response['relatedArticles'] = $articleTransformer->transformCollection($related);
-
-		$this->response['article'] = $articleTransformer->transform( $article->toArray(), [ 'showBody' => true ] );
+	public function getRelatedArticles(\Version1\Articles\Article $article)
+	{
+		return $this->articleTransformer->transformCollection($this->articleRepository->getRelatedArticles($article));
 	}
 
 	public function getAdverts()
 	{
-		$this->response['adverts'] = $this->getSponsors();
+		return $this->getSponsors();
 	}
 
 	public function nextPreviousArticles()
 	{
-		$articles = \App::make( 'ArticleRepository' )->getNextAndPreviousArticles($this->article);
+		$articles = $this->articleRepository->getNextAndPreviousArticles($this->article);
 		
 		$articleNavigationTransformer = App::make('ArticleNavigationTransformer');	
 
-		$this->response['previousArticle'] = $articleNavigationTransformer->transform($articles['previous']);
-		$this->response['nextArticle'] = $articleNavigationTransformer->transform($articles['next']);
-	}
-
-	public function make($input)
-	{ 	
-		$this->channel = $input['subchannel'];
-		$this->category = $input['category'];
-		$this->article = $input['article'];
-
-		// if it returns an API response then there's something wrong
-		if( isApiResponse( $result = $this->getChannel()) )
-		{
-			return $result;
-		}
-
-		if( isApiResponse( $result = $this->getAdverts() ) )
-		{
-			return $result;
-		}	
-
-		if( isApiResponse( $result = $this->getArticle() ) )
-		{
-			return $result;
-		}
-
-		$this->nextPreviousArticles();			
-
-		// we return this differently to everywhere else because there is two ways of calling this class
-		return $this->response;
+		return [
+			'previous' => $articleNavigationTransformer->transform($articles['previous']),
+			'next' => $articleNavigationTransformer->transform($articles['next'])
+		];
 	}
 }
