@@ -48,13 +48,13 @@ class SponsorTransformer extends Transformer {
             ];
         }
 
-        if( ! isDesktop() )
-        {
-            unset($tmp['media']['alt']);
-            unset($tmp['media']['title']);
-            unset($tmp['media']['width']);
-            unset($tmp['media']['height']);
-        }
+        // if( ! isDesktop() )
+        // {
+        //     unset($tmp['media']['alt']);
+        //     unset($tmp['media']['title']);
+        //     unset($tmp['media']['width']);
+        //     unset($tmp['media']['height']);
+        // }
 
         return $tmp;
     }

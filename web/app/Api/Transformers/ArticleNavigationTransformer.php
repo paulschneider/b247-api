@@ -31,20 +31,20 @@ Class ArticleNavigationTransformer extends Transformer {
         return [
             'article' => [
                 'id' => $article['id'],
-                'path' => makePath( [  $articleLocation['channelSefName'], $articleLocation['subChannelSefName'], $articleLocation['categorySefName'], $article['sef_name']  ] )
+                'path' => isDesktop() ? makePath( [  $articleLocation['channelSefName'], $articleLocation['subChannelSefName'], $articleLocation['categorySefName'], $article['sef_name']  ] ) : makeArticleLink($articleLocation['subChannelId'], $articleLocation['categoryId'], $article['id'])
             ],
             'assignment' => [
                     'channel' => [
                         'id' => $articleLocation['channelId'],                        
-                        'path' => makePath( [ $articleLocation['channelSefName'] ] )
+                        'path' => isDesktop() ? makePath( [ $articleLocation['channelSefName'] ] ) : makeChannelLink($articleLocation['channelId'])
                     ],
                     'subChannel' => [
                         'id' => $articleLocation['subChannelId'],
-                        'path' => makePath( [ $articleLocation['channelSefName'], $articleLocation['subChannelSefName'] ] )
+                        'path' => isDesktop() ? makePath( [ $articleLocation['channelSefName'], $articleLocation['subChannelSefName'] ] ) : makeSubChannelPath($articleLocation['subChannelId'], $articleLocation['displayType'])
                     ],
                     'category' => [
                         'id' => $articleLocation['categoryId'],
-                        'path' => makePath( [ $articleLocation['channelSefName'], $articleLocation['subChannelSefName'], $articleLocation['categorySefName'] ] )
+                        'path' => isDesktop() ? makePath( [ $articleLocation['channelSefName'], $articleLocation['subChannelSefName'], $articleLocation['categorySefName'] ] ) : makeCategoryPath($articleLocation['categoryId'], $articleLocation['displayType'], $articleLocation['subChannelId'])
                     ]                    
                 ] 
         ];

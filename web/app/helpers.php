@@ -1,5 +1,22 @@
 <?php
 
+// insert a new array item after a given associative array key
+function insertInto($thisArray, $after, $withThisContent, $withThisArrayKey)
+{
+    if( array_key_exists($after, $thisArray) )
+    {
+        $keyAtPosition = array_search($after, array_keys($thisArray)); // the integer value of the array key
+
+        $everythingAfterKeyAtPosition = array_splice($thisArray, $keyAtPosition+1, count($thisArray)); // splice off everything after the keyAtPosition value
+
+        $thisArray[$withThisArrayKey] = $withThisContent; // the array item to be inserted
+
+        return array_merge($thisArray, $everythingAfterKeyAtPosition); // merge and return the arrays
+    }
+    
+    return false;
+}
+
 function dateFormat($date)
 {
     return date('Y-m-d', strtotime($date));

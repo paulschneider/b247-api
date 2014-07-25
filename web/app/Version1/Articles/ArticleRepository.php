@@ -62,7 +62,7 @@ Class ArticleRepository extends BaseModel {
 
     public function getCategoryArticle($channel, $category, $article)
     {       
-        $query = Article::select('article.*', 'article_id AS id')->with('location', 'asset', 'event.venue', 'venue');
+        $query = Article::select('article.*', 'article_id AS id')->with('location', 'asset', 'event.venue', 'venue', 'video');
         $query->join('article_location', 'article_location.article_id', '=', 'article.id');
 
         if( is_numeric($article) )
@@ -202,11 +202,6 @@ Class ArticleRepository extends BaseModel {
         return $articles;
     }
 
-    public function recordSearch($term, $articles)
-    {
-
-    }
-
     public function getArticles($type = 'article', $limit = 20, $channel = null, $isASubChannel = false, $ignoreChannel = false)
     {
         $query = ArticleLocation::with('article.event.venue', 'article.asset', 'article.location')->select(
@@ -333,7 +328,7 @@ Class ArticleRepository extends BaseModel {
                 ->where('article_location.category_id', '=', $articleLocation['categoryId'])
                 ->where('article.id', '!=', $article->id)
                 ->orderBy('article.published', 'desc')
-                ->get()->toArray();
+                ->get()->take(5)->toArray();
 
         $articles = [];
 

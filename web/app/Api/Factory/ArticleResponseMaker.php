@@ -13,7 +13,9 @@ Class ArticleResponseMaker extends ApiResponseMaker implements ApiResponseMakerI
 	public function __construct()
 	{
 		$this->articleRepository = App::make( 'ArticleRepository' );
-		$this->articleTransformer = \App::make( 'ArticleTransformer' );
+		$this->articleTransformer = App::make( 'ArticleTransformer' );
+		$this->articleTransformer = App::make( 'ArticleTransformer' );
+		$this->articleTemplateTransformer = App::make( 'ArticleTemplateTransformer' );
 	}
 
 	public function make($input)
@@ -40,7 +42,7 @@ Class ArticleResponseMaker extends ApiResponseMaker implements ApiResponseMakerI
 		$response = [
 			'channel' => $this->channel,
 			'adverts' => $this->getAdverts(),
-			'article' => $this->articleTransformer->transform( $this->article->toArray(), [ 'showBody' => true ] ),
+			'article' => $this->articleTemplateTransformer->transform( $this->article->toArray() ),
 			'related' => $this->getRelatedArticles($this->article),
 			'navigation' => $this->nextPreviousArticles(),
 		];
@@ -89,9 +91,9 @@ Class ArticleResponseMaker extends ApiResponseMaker implements ApiResponseMakerI
 		return $this->article;
 	}
 
-	public function getRelatedArticles(\Version1\Articles\Article $article)
+	public function getRelatedArticles($article)
 	{
-		return $this->articleTransformer->transformCollection($this->articleRepository->getRelatedArticles($article));
+		return $this->articleTransformer->transformCollection($this->articleRepository->getRelatedArticles($article), ['ignorePlatform' => true]);
 	}
 
 	public function getAdverts()
@@ -109,5 +111,10 @@ Class ArticleResponseMaker extends ApiResponseMaker implements ApiResponseMakerI
 			'previous' => $articleNavigationTransformer->transform($articles['previous']),
 			'next' => $articleNavigationTransformer->transform($articles['next'])
 		];
+	}
+
+	public function getRequiredArticleData($article)
+	{
+		return $this->articleTemplateTransformer->extract($article);
 	}
 }

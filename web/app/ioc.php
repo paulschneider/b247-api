@@ -289,3 +289,13 @@ App::bind('ArticleNavigationTransformer', function($app)
 {
     return new Api\Transformers\ArticleNavigationTransformer;
 });
+
+App::bind('VideoTransformer', function($app)
+{
+    return new Api\Transformers\VideoTransformer;
+});
+
+App::bind('ArticleTemplateTransformer', function($app)
+{
+    return new Api\Transformers\ArticleTemplateTransformer;
+});
