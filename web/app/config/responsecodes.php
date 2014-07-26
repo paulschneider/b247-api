@@ -1,9 +1,9 @@
 <?php
 
 return [
-	'contentLocated' => [
+	'ok' => [
 		'code' => 200,
-		'message' => "Content successfully returned."
+		'message' => "Success."
 	],	
 	'created' => [
 		'code' => 201,
@@ -23,7 +23,7 @@ return [
 	],	
 	'unauthorised' => [
 		'code' => 401,
-		'message' => "Invalid or non-matching security credentials provided."
+		'message' => "Required security credentials could not be validated or were not provided."
 	],	
 	'notFound' => [
 		'code' => 404,

@@ -62,7 +62,7 @@ Class ArticleRepository extends BaseModel {
 
     public function getCategoryArticle($channel, $category, $article)
     {       
-        $query = Article::select('article.*', 'article_id AS id')->with('location', 'asset', 'event.venue', 'venue');
+        $query = Article::select('article.*', 'article_id AS id')->with('location', 'asset', 'event.venue', 'venue', 'video');
         $query->join('article_location', 'article_location.article_id', '=', 'article.id');
 
         if( is_numeric($article) )
@@ -202,11 +202,6 @@ Class ArticleRepository extends BaseModel {
         return $articles;
     }
 
-    public function recordSearch($term, $articles)
-    {
-
-    }
-
     public function getArticles($type = 'article', $limit = 20, $channel = null, $isASubChannel = false, $ignoreChannel = false)
     {
         $query = ArticleLocation::with('article.event.venue', 'article.asset', 'article.location')->select(
@@ -291,5 +286,57 @@ Class ArticleRepository extends BaseModel {
         ->join('channel AS sc', 'sc.id', '=', 'article_location.sub_channel_id')
         ->get()
         ->toArray();
+    }
+
+    public function getNextAndPreviousArticles($article)
+    {
+        $categoryId = $article->location->first()->categoryId;
+        $subChannelId = $article->location->first()->subChannelId;
+
+        $result = ArticleLocation::with('article.location')
+                ->join('article', 'article.id', '=', 'article_location.article_id')
+                ->where('article_location.category_id', '=', $categoryId)
+                ->where('article_location.sub_channel_id', '=', $subChannelId)
+                ->orderBy('article.published', 'asc')
+                ->get()->toArray();
+
+        $counter = 0;
+        $articles = [];
+
+        foreach( $result AS $item )
+        {         
+            if( $item['article_id'] == $article->id)
+            {
+                $articles['previous'] = isset($result[$counter-1]) ? $result[$counter-1]['article'] : null;
+                $articles['article'] = $article->toArray();
+                $articles['next'] = isset($result[$counter+1]) ? $result[$counter+1]['article'] : null;
+            }
+
+            $counter++;
+        }
+
+        return $articles;
+    }
+
+    public function getRelatedArticles($article)
+    {
+        $articleLocation = $article->location->first();
+
+        $result  = ArticleLocation::with('article.event.venue', 'article.asset', 'article.location')
+                ->join('article', 'article.id', '=', 'article_location.article_id')
+                ->where('article_location.sub_channel_id', '=', $articleLocation['subChannelId'])
+                ->where('article_location.category_id', '=', $articleLocation['categoryId'])
+                ->where('article.id', '!=', $article->id)
+                ->orderBy('article.published', 'desc')
+                ->get()->take(5)->toArray();
+
+        $articles = [];
+
+        foreach($result AS $item)
+        {
+            $articles[] = $item['article'];
+        }
+
+        return $articles;
     }
 }

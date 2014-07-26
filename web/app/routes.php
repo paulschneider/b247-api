@@ -13,8 +13,6 @@
 
 # Article
 
-//if( isMobile() )
-
 if( Input::get('dataOnly') )
 {
     Route::get('articles', 'ArticleController@getWebArticle');   
@@ -70,6 +68,8 @@ Route::get('search', 'SearchController@search');
 # User
 
 Route::post('user/password', 'UserController@changeUserPassword');
+Route::post('user/profile', 'UserController@profile');
+Route::post('user/preferences', 'UserController@preferences');
     
 # Homepage
 

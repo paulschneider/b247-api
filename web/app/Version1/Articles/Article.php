@@ -112,4 +112,9 @@ class Article extends BaseModel {
     {
         return $this->belongsTo('\Version1\Venues\Venue', 'venue_id');   
     }
+
+    public function video()
+    {
+        return $this->belongsToMany('\Version1\Videos\Video', 'article_video', 'article_id');
+    }
 }

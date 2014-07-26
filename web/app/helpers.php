@@ -1,5 +1,32 @@
 <?php
 
+// insert a new array item after a given associative array key
+function insertInto($thisArray, $after, $withThisContent, $withThisArrayKey)
+{
+    if( array_key_exists($after, $thisArray) )
+    {
+        $keyAtPosition = array_search($after, array_keys($thisArray)); // the integer value of the array key
+
+        $everythingAfterKeyAtPosition = array_splice($thisArray, $keyAtPosition+1, count($thisArray)); // splice off everything after the keyAtPosition value
+
+        $thisArray[$withThisArrayKey] = $withThisContent; // the array item to be inserted
+
+        return array_merge($thisArray, $everythingAfterKeyAtPosition); // merge and return the arrays
+    }
+    
+    return false;
+}
+
+function dateFormat($date)
+{
+    return date('Y-m-d', strtotime($date));
+}
+
+function getDateTime()
+{
+    return date("Y-m-d H:i:s");   
+}
+
 // check an array to see if a required field is missing from a supplied list of required fields
 function aRequiredParameterIsMissing($requiredFields, $form)
 {
@@ -114,6 +141,12 @@ function getSubChannelId($channel)
     return $channel['subChannels'][0]['id'];
 }
 
+// more readable alias for userIsAuthenticated function
+function userAccessKeyPresent()
+{
+    return userIsAuthenticated();
+}
+
 function userIsAuthenticated()
 {
     if( Request::header("accessKey") )
@@ -122,6 +155,11 @@ function userIsAuthenticated()
     }
 
     return false;
+}
+
+function getAccessKey()
+{
+    return Request::header("accessKey") ? : false;
 }
 
 function isApiResponse($data)

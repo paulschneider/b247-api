@@ -254,3 +254,48 @@ App::bind('ForgottenPasswordResponseMaker', function($app)
 {
     return new Api\Factory\ForgottenPasswordResponseMaker;
 });
+
+App::bind('UserProfileResponseMaker', function($app)
+{
+    return new Api\Factory\UserProfileResponseMaker;
+});
+
+App::bind('UserProfileValidator', function($app)
+{
+    return new Api\Validators\UserProfileValidator;
+});
+
+App::bind('UserProfileMaker', function($app)
+{
+    return new Api\Factory\UserProfileMaker;
+});
+
+App::bind('GoogleMapsMaker', function($app)
+{
+    return new Api\Factory\GoogleMapsMaker;
+});
+
+App::bind('UserPreferencesResponseMaker', function($app)
+{
+    return new Api\Factory\UserPreferencesResponseMaker;
+});
+
+App::bind('UserPreferenceOrganiser', function($app)
+{
+    return new Api\Tools\UserPreferenceOrganiser;
+});
+
+App::bind('ArticleNavigationTransformer', function($app)
+{
+    return new Api\Transformers\ArticleNavigationTransformer;
+});
+
+App::bind('VideoTransformer', function($app)
+{
+    return new Api\Transformers\VideoTransformer;
+});
+
+App::bind('ArticleTemplateTransformer', function($app)
+{
+    return new Api\Transformers\ArticleTemplateTransformer;
+});

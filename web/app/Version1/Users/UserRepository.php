@@ -1,5 +1,7 @@
 <?php namespace Version1\Users;
 
+use DB;
+
 Class UserRepository
 {
     public function generateAccessKey()
@@ -43,8 +45,8 @@ Class UserRepository
 
         $user = new User($input);
 
-        $user->first_name = $input['firstname'];
-        $user->last_name = $input['lastname'];
+        $user->first_name = $input['firstName'];
+        $user->last_name = $input['lastName'];
         $user->password = $password['encrypted'];        
 
         $user->save();
@@ -69,7 +71,7 @@ Class UserRepository
 
     public function authenticate($email)
     {
-        return User::select('id', 'first_name', 'last_name', 'email', 'password', 'access_key')->where('email', $email)->first();
+        return User::select('id', 'first_name', 'last_name', 'email', 'password', 'access_key')->with('profile')->where('email', $email)->first();
     }
 
     public function hashAndStore($email, $password)
@@ -112,5 +114,74 @@ Class UserRepository
     public function getUserAccessKey($userId)
     {
         return User::select('access_key')->where('id', $userId)->get();
+    }
+
+    public function getProfile($accessKey)
+    {
+        return User::with('profile')->where('access_key', $accessKey)->first();
+    }
+
+    public function getUserProfile($user)
+    {
+        return UserProfile::where('user_id', $user->id)->first();
+    }
+
+    public function saveProfile($user, $form)
+    {
+        if( ! $user->has('profile') )
+        {
+            $profile = new UserProfile();           
+            $profile->user_id = $user->id;
+        }
+        else
+        {
+            $profile = $this->getUserProfile($user);               
+        }
+
+        $profile->age_group_id = $form['ageGroup'];
+        $profile->nickname = $form['nickName'];
+        $profile->facebook = isset( $form['facebook'] ) ? $form['facebook'] : null;
+        $profile->twitter = isset( $form['twitter'] ) ? $form['twitter'] : null;
+        $profile->postcode = $form['postCode'];
+        $profile->updated_at = getDateTime();
+
+        if(isset($user->lat) && isset($user->lon))
+        {
+            $profile->lat = $user->lat;
+            $profile->lon = $user->lon;
+        }
+
+        return $profile->save();
+    }
+
+    public function setContentPreferences($user, $data)
+    {
+        sd($data);
+
+        // if there are channels prefs then insert them
+        if( count($data->channels) > 0 )
+        {            
+            foreach( $data->channels AS $channel ) 
+            {
+                // remove all previous user prefs for the channel being affected
+                DB::table('user_inactive_channel')->where('user_id', $user->id)->where('channel_id', $channel['channel_id'])->delete();
+            }
+
+            DB::table('user_inactive_channel')->insert($data->channels);
+        }
+        
+        // if there are category prefs then insert them too
+        if( count($data->categories) > 0 )
+        {
+            foreach( $data->categories AS $category )
+            {
+                // remove all previous user prefs for the category being affected for a specified sub_channel
+                DB::table('user_inactive_category')->where('user_id', $user->id)->where('sub_channel_id', $category['sub_channel_id'])->delete();   
+            }
+            
+            DB::table('user_inactive_category')->insert($data->categories);    
+        }
+        
+        return true;
     }
 }

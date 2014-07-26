@@ -20,7 +20,8 @@
 			"app/tests/TestCase.php"
 		]
 		,"files" : [
-			"app/helpers.php"
+			"app/helpers.php",
+			"app/linkMaker.php"
 		]
 		,"psr-4": {
 			"Version1\\" : "app/Version1"

@@ -9,7 +9,7 @@ Class ArticleController extends ApiController {
 
     public function getWebArticle()
     {
-        if( ! Input::get('channel') || ! Input::get('category') || ! Input::get('article'))
+        if( ! Input::get('subchannel') || ! Input::get('category') || ! Input::get('article'))
         {
             return apiErrorResponse('insufficientArguments');
         }
@@ -19,12 +19,12 @@ Class ArticleController extends ApiController {
             return $response;
         }
         
-        return apiSuccessResponse( 'contentLocated', $response );
+        return apiSuccessResponse( 'ok', $response );
     }
 
     public function getAppArticle()
     {
-        if( ! Input::get('channel') || ! Input::get('category') || ! Input::get('article'))
+        if( ! Input::get('subchannel') || ! Input::get('category') || ! Input::get('article'))
         {
             return apiErrorResponse('insufficientArguments');
         }
@@ -33,16 +33,18 @@ Class ArticleController extends ApiController {
         {
             return $response;
         }   
- 
+
         // make a call to the front end to retrieve the populated HTML template
-        $data = ApiClient::get('app/article', [ 'data' => $response, 'type' => getChannelType($response['channel']) ]);
+        $data = ApiClient::post('app/article', [ 'data' => $response, 'type' => getChannelType($response['channel']) ]);
 
-        unset($response['article']);
-
-        $response['html'] = $data['html'];
+        $response['article'] = $this->responseMaker->getRequiredArticleData($response['article']);
+        unset($response['related']);
+        
+        // remove all hidden chars from the returned HTML as they break the markup on the device
+        $response['html'] = preg_replace('/[^[:print:]]/', "", $data['html']);
 
         // return it all to the calling app
-        return apiSuccessResponse( 'contentLocated', $response );
+        return apiSuccessResponse( 'ok', $response );
     }
 
     /**

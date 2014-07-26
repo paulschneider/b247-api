@@ -2,6 +2,11 @@
 
 define('VERSION', Config::get('app.version'));
 
+Validator::resolver(function($translator, $data, $rules, $messages)
+{
+    return new Api\Validators\PostcodeValidator($translator, $data, $rules, $messages);
+});
+
 /*
 |--------------------------------------------------------------------------
 | Register The Laravel Class Loader
@@ -51,6 +56,11 @@ Log::useFiles(storage_path().'/logs/laravel.log');
 App::error(function(Exception $exception, $code)
 {
 	Log::error($exception);
+});
+
+App::error(function(Api\Exceptions\InvalidDataSupply $exception)
+{ 
+	return apiErrorResponse('badRequest', ['errorReason' => $exception->getMessage()]);
 });
 
 App::error(function(Symfony\Component\HttpKernel\Exception\NotFoundHttpException $exception)

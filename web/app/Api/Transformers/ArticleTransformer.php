@@ -1,5 +1,7 @@
 <?php namespace Api\Transformers;
 
+use App;
+
 Class ArticleTransformer extends Transformer {
 
     /**
@@ -36,9 +38,9 @@ Class ArticleTransformer extends Transformer {
                 ,'title' => $article['title']
                 ,'sefName' => $article['sef_name']
                 ,'subHeading' => $article['sub_heading']
-                ,'body' => $article['body']
-                ,'path' => makePath( [ $articleLocation['channelSefName'], $articleLocation['subChannelSefName'], $articleLocation['categorySefName'], $article['sef_name'] ] )
+                ,'path' => isDesktop() ? makePath( [ $articleLocation['channelSefName'], $articleLocation['subChannelSefName'], $articleLocation['categorySefName'], $article['sef_name'] ] ) : makeArticleLink($articleLocation['subChannelId'], $articleLocation['categoryId'], $article['id'])
                 ,'isAdvert' => false
+                ,'published' => dateFormat($article['published'])
                 ,'displayType' => [
                     'id' => $articleLocation['displayTypeId']
                     ,'type' => $articleLocation['displayType']
@@ -49,19 +51,19 @@ Class ArticleTransformer extends Transformer {
                         'id' => $articleLocation['channelId']
                         ,'name' => $articleLocation['channelName']
                         ,'sefName' => $articleLocation['channelSefName']
-                        ,'path' => makePath( [ $articleLocation['channelSefName'] ] )
+                        ,'path' => isDesktop() ? makePath( [ $articleLocation['channelSefName'] ] ) : makeChannelLink($articleLocation['channelId'])
                     ]
                     ,'subChannel' => [
                         'id' => $articleLocation['subChannelId']
                         ,'name' => $articleLocation['subChannelName']
                         ,'sefName' => $articleLocation['subChannelSefName']
-                        ,'path' => makePath( [ $articleLocation['channelSefName'], $articleLocation['subChannelSefName'] ] )
+                        ,'path' => isDesktop() ? makePath( [ $articleLocation['channelSefName'], $articleLocation['subChannelSefName'] ] ) : makeSubChannelPath($articleLocation['subChannelId'], $articleLocation['displayType'])
                     ]
                     ,'category' => [
                         'id' => $articleLocation['categoryId']
                         ,'name' => $articleLocation['categoryName']
                         ,'sefName' => $articleLocation['categorySefName']
-                        ,'path' => makePath( [ $articleLocation['channelSefName'], $articleLocation['subChannelSefName'], $articleLocation['categorySefName'] ] )
+                        ,'path' => isDesktop() ? makePath( [ $articleLocation['channelSefName'], $articleLocation['subChannelSefName'], $articleLocation['categorySefName'] ] ) : makeCategoryPath($articleLocation['categoryId'], $articleLocation['displayType'], $articleLocation['subChannelId'])
                     ]                    
                 ]          
             ];
@@ -80,26 +82,25 @@ Class ArticleTransformer extends Transformer {
                     ,'width' => $articleAsset['width']
                     ,'height' => $articleAsset['height']
                 ];
-            }
+            }   
 
             // If there is an event then transform that as well
 
             if( isset($article['event']['id']) )
             { 
-                $eventTransformer = \App::make( 'EventTransformer' );
+                $eventTransformer = App::make( 'EventTransformer' );
 
                 $response['event'] = $eventTransformer->transform( $article['event'] );
             }
             // venues can be attached to articles without an event (ref directory type article)
             elseif (isset($article['venue']['id']))
             {
-                $venueTransformer = \App::make( 'VenueTransformer' );                
-                $response['venue'] = $venueTransformer->transform( $article['venue'] );
-            }
+                $response['venue'] = App::make( 'VenueTransformer' )->transform( $article['venue'] );                
+            }           
 
             // remove anything that only the desktop version needs
 
-            if( ! isDesktop() )
+            if( isMobile() && ! isset($options['ignorePlatform']) ) // but only do this when this option isn't around. This prevents content hiding when its in fact needed, namely in the case of the HTML template creation on the front end.
             {
                 unset($response['sefName']);
                 unset($response['path']);
@@ -116,11 +117,6 @@ Class ArticleTransformer extends Transformer {
                 unset($response['media']['title']);
                 unset($response['media']['width']);
                 unset($response['media']['height']);
-            }
-
-            if ( isset($options['showBody']) && ! $options['showBody'] )
-            {
-                unset($response['body']);
             }
 
             return $response;
