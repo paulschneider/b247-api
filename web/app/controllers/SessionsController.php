@@ -1,6 +1,6 @@
 <?php
 
-use Api\Factory\SessionsResponseMaker;
+use Apiv1\Factory\SessionsResponseMaker;
 
 Class SessionsController extends ApiController {
 
