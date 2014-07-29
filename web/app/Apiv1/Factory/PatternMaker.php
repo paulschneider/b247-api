@@ -5,11 +5,11 @@ Class PatternMaker
     private $patterns = [
         1 => [
                         //  [2 , 1]
-            0 => "doubleAd"
+            0 => 2
             , 1 => 1
-                        //  [2 , 1]
+                        //  [1 , 2]
             , 2 => 1
-            , 3 => "doubleAd"
+            , 3 => 2
                         //  [1, 2]
             ,4 => 1
             , 5 => 2
