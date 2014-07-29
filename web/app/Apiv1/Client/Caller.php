@@ -2,6 +2,7 @@
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\RequestException;
 use Config;
 
 Class Caller {
@@ -35,7 +36,7 @@ Class Caller {
 	{
 		$this->endpoint = $endpoint;
 
-		$request = $this->client->createRequest('POST', $this->endpoint, ['json' => $data]);
+		$request = $this->client->createRequest('POST', $this->endpoint, ['body' => $data]);
 
 		return $this->send($request);
 	}

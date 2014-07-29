@@ -1,8 +1,8 @@
 <?php namespace Apiv1\Factory;
 
-use Apiv1\Validators\RegistrationValidator;
 use App;
 use Lang;
+use Apiv1\Validators\RegistrationValidator;
 
 Class RegistrationResponseMaker extends ApiResponseMaker implements ApiResponseMakerInterface {
 
@@ -44,20 +44,22 @@ Class RegistrationResponseMaker extends ApiResponseMaker implements ApiResponseM
 		if( isApiResponse( $result = $this->register() ) )
 		{
 			return $result;
-		}
-
-		// todo
-		// send out welcome email
+		}		
 
 		$response = [
 			'user' => App::make( 'UserTransformer' )->transform($this->user)			
 		];
+
+		// send out welcome email
+		$mailClient = App::make('MailClient')->request('Apiv1\Mail\RegistrationEmail', ['user' => $response['user'], 'plainPassword' => $this->user->plain_pass] );
 
 		// this should be removed before production deployment
 		if( App::environment() != 'production' )
 		{
 			$response['password'] = $this->user->plain_pass;
 		}
+
+
 
 		return $response;
 	}
