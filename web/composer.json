@@ -8,7 +8,6 @@
 		,"nesbot/Carbon": "*"
 		,"jenssegers/agent": "*"
 		,"codeception/codeception": "*"
-		,"itsgoingd/clockwork": "1.*"
 	},
 	"autoload": {
 		"classmap": [
