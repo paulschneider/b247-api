@@ -53,7 +53,7 @@ Class UserProfileMaker {
 	public function store($form)
 	{	
 		// if the user already has a profile
-		if( ! $this->user->has('profile') || $this->user->profile->postcode != $form['postCode'] )
+		if( ! isset($this->user->profile) || ! $this->user->has('profile') || $this->user->profile->postcode != $form['postCode'] )
 		{
 			// attempt to translate the user provided postcode to lat and lon
 			$address = App::make('GoogleMapsMaker')->translatePostcode($form['postCode']);

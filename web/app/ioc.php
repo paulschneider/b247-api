@@ -299,3 +299,8 @@ App::bind('ArticleTemplateTransformer', function($app)
 {
     return new Apiv1\Transformers\ArticleTemplateTransformer;
 });
+
+App::bind('ApiClient', function($app)
+{
+    return new Apiv1\Client\Caller;
+});

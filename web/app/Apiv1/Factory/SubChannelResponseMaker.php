@@ -1,6 +1,6 @@
 <?php namespace Apiv1\Factory;
 
-use Version1\Channels\Toolbox;
+use Apiv1\Repositories\Channels\Toolbox;
 
 Class SubChannelResponseMaker extends ApiResponseMaker implements ApiResponseMakerInterface {
 

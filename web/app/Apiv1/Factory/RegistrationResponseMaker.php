@@ -1,6 +1,8 @@
 <?php namespace Apiv1\Factory;
 
-use Api\Validators\RegistrationValidator;
+use Apiv1\Validators\RegistrationValidator;
+use App;
+use Lang;
 
 Class RegistrationResponseMaker extends ApiResponseMaker implements ApiResponseMakerInterface {
 
@@ -24,9 +26,9 @@ Class RegistrationResponseMaker extends ApiResponseMaker implements ApiResponseM
 
 	public function register()
 	{
-		if( ! $this->user = \App::make( 'UserRepository' )->create($this->form) )
+		if( ! $this->user = App::make( 'UserRepository' )->create($this->form) )
 		{
-			return apiErrorResponse(  'serverError', [ 'errorReason' => \Lang::get('api.recordCouldNotBeSaved') ] );
+			return apiErrorResponse(  'serverError', [ 'errorReason' => Lang::get('api.recordCouldNotBeSaved') ] );
 		}
 	}
 
@@ -48,11 +50,11 @@ Class RegistrationResponseMaker extends ApiResponseMaker implements ApiResponseM
 		// send out welcome email
 
 		$response = [
-			'user' => \App::make( 'UserTransformer' )->transform($this->user)			
+			'user' => App::make( 'UserTransformer' )->transform($this->user)			
 		];
 
 		// this should be removed before production deployment
-		if( \App::environment() != 'production' )
+		if( App::environment() != 'production' )
 		{
 			$response['password'] = $this->user->plain_pass;
 		}

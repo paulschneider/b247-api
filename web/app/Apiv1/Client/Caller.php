@@ -2,15 +2,21 @@
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use Config;
 
 Class Caller {
 
 	protected $client;
 	protected $endpoint;
 
-	public function __construct($client)
+	public function __construct()
 	{
-		$this->client = $client;
+		$this->client = new Client( [ 'base_url' => Config::get('api.baseUrl') ] );
+	}
+
+	public function testing()
+	{
+		return "here";
 	}
 
 	public function get($endpoint = "/", $params = [], $headers = [])

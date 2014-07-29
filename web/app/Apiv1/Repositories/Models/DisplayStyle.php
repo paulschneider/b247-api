@@ -1,6 +1,6 @@
 <?php namespace Apiv1\Repositories\Models;
 
-use Version1\Models\BaseModel;
+use Apiv1\Repositories\Model\BaseModel;
 
 class DisplayStyle extends BaseModel
 {

@@ -3,7 +3,7 @@
 use App;
 use Lang;
 use stdClass;
-use Version1\Users\User;
+use Apiv1\Repositories\Users\User;
 
 Class UserResponder {
 
@@ -65,7 +65,7 @@ Class UserResponder {
 
 		if( ! $user )
 		{
-			return apiErrorResponse(  'notFound', [ 'errorReason' => Lang::get('api.noAccountWithThatAccessKey') ] ); 	
+			return apiErrorResponse(  'notFound', [ 'errorReason' => Lang::get('api.noAccountWithThatAccessKey'), 'accessKey' => $accessKey ] ); 	
 		}
 		
 		return $user;

@@ -1,8 +1,9 @@
 <?php namespace Apiv1\Tools;
 
 use stdClass;
-use Version1\Users\User;
 use Lang;
+use Apiv1\Repositories\Users\User;
+use Apiv1\Exceptions\InvalidDataSupply;
 
 Class UserPreferenceOrganiser {
 
@@ -62,7 +63,7 @@ Class UserPreferenceOrganiser {
 		else
 		{
 			// caught in app/start/global.php
-			throw new \Api\Exceptions\InvalidDataSupply(Lang::get('api.userPreferencesAreNotAnArray'));
+			throw new InvalidDataSupply(Lang::get('api.userPreferencesAreNotAnArray'));
 		}
 
 		// and finally return an object containing the result of the organisation

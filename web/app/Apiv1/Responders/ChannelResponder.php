@@ -1,7 +1,7 @@
 <?php namespace Apiv1\Responders;
 
-use Version1\Channels\Toolbox;
-use \Carbon\Carbon;
+use Apiv1\Repositories\Channels\Toolbox;
+use Carbon\Carbon;
 
 Class ChannelResponder {
 

@@ -14,7 +14,7 @@ return array(
 	|
 	*/
 
-	'version' => 'Version1',
+	'version' => '1.0',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -200,6 +200,5 @@ return array(
 		'URL'             => 'Illuminate\Support\Facades\URL',
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
-		'ApiClient'		  => 'Apiv1\Client\ApiFacade',
 	),
 );

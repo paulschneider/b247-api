@@ -1,6 +1,6 @@
 <?php namespace Apiv1\Responders;
 
-use Version1\Channels\Toolbox;
+use Apiv1\Repositories\Channels\Toolbox;
 
 Class ChannelDirectoryResponder {
 

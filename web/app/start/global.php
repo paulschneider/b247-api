@@ -2,7 +2,7 @@
 
 Validator::resolver(function($translator, $data, $rules, $messages)
 {
-    return new Api\Validators\PostcodeValidator($translator, $data, $rules, $messages);
+    return new Apiv1\Validators\PostcodeValidator($translator, $data, $rules, $messages);
 });
 
 /*

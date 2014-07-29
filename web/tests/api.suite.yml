@@ -1,0 +1,8 @@
+class_name: ApiTester
+modules:
+    enabled: [PhpBrowser, REST, ApiHelper, Db]
+    config: 
+        PhpBrowser: 
+            url: http://local.b247-api/
+        REST:
+            url: http://local.b247-api/v1/

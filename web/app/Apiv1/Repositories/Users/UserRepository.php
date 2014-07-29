@@ -128,7 +128,7 @@ Class UserRepository
 
     public function saveProfile($user, $form)
     {
-        if( ! $user->has('profile') )
+        if( ! $user->has('profile') || empty($user->profile))
         {
             $profile = new UserProfile();           
             $profile->user_id = $user->id;
@@ -156,8 +156,6 @@ Class UserRepository
 
     public function setContentPreferences($user, $data)
     {
-        sd($data);
-
         // if there are channels prefs then insert them
         if( count($data->channels) > 0 )
         {            

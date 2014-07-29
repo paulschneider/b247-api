@@ -1,7 +1,8 @@
 <?php namespace Apiv1\Factory;
 
+use App;
 use Config;
-use ApiClient;
+use stdClass;
 
 //https://developers.google.com/maps/documentation/geocoding/
 
@@ -9,10 +10,11 @@ Class GoogleMapsMaker {
 
 	public function translatePostcode($postcode)
 	{
-		$address = new \stdClass();
+		$address = new stdClass();
 
 		$apiKey = Config::get('googleapi.key');
-		$response = ApiClient::get('https://maps.googleapis.com/maps/api/geocode/json', [ 'address' => $postcode, 'key' => $apiKey ]);
+
+		$response = App::make('ApiClient')->get('https://maps.googleapis.com/maps/api/geocode/json', [ 'address' => $postcode, 'key' => $apiKey ]);
 
 		if( $response['status'] == "OK" )
 		{
