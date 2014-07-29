@@ -17,6 +17,9 @@ Class ArticleTemplateTransformer extends ArticleTransformer {
 
         $body = $article['body'];
 
+        $articleLocation = $article['location'][0];
+        $externalPath = makePath( [ $articleLocation['channelSefName'], $articleLocation['subChannelSefName'], $articleLocation['categorySefName'], $article['sef_name'] ] );
+
         // grab the article continued item and store it or it will be removed
         $bodyContinued = $article['body_continued'];
 
@@ -47,13 +50,16 @@ Class ArticleTemplateTransformer extends ArticleTransformer {
         // insert a mapItems object into the article at the desired position
         $article = insertInto($article, 'bodyContinued', $mapItems, 'mapItems');
 
+        // insert a mapItems object into the article at the desired position
+        $article = insertInto($article, 'path', $externalPath, 'shareLink');
+
         return $article;
     }
 
     public function extract($article)
     {
         return [
-            'path' => $article['path'],
+            'shareLink' => \URL::to('/').$article['shareLink'],
             'map' => $article['mapItems'],
         ];
     }
