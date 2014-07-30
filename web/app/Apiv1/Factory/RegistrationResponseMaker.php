@@ -53,14 +53,6 @@ Class RegistrationResponseMaker extends ApiResponseMaker implements ApiResponseM
 		// send out welcome email
 		$mailClient = App::make('MailClient')->request('Apiv1\Mail\RegistrationEmail', ['user' => $response['user'], 'plainPassword' => $this->user->plain_pass] );
 
-		// this should be removed before production deployment
-		if( App::environment() != 'production' )
-		{
-			$response['password'] = $this->user->plain_pass;
-		}
-
-
-
 		return $response;
 	}
 }

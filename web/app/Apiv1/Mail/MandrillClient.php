@@ -8,7 +8,7 @@ Class MandrillClient {
 	protected $apiClient;
 	protected $baseUrl = 'https://mandrillapp.com/api/1.0/';
 	protected $endpoints = [
-		'registration' => 'messages/send.json'
+		'message' => 'messages/send.json'
 	];
 
 	public function __construct()

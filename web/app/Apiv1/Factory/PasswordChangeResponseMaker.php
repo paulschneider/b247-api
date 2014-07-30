@@ -1,5 +1,8 @@
 <?php namespace Apiv1\Factory;
 
+use App;
+use Lang;
+
 Class PasswordChangeResponseMaker extends ApiResponseMaker implements ApiResponseMakerInterface {
 
 	private $validator;
@@ -10,8 +13,8 @@ Class PasswordChangeResponseMaker extends ApiResponseMaker implements ApiRespons
 
 	public function __construct()
 	{
-		$this->validator = \App::make( 'PasswordValidator' );
-		$this->userResponder = \App::make( 'UserResponder' );
+		$this->validator = App::make( 'PasswordValidator' );
+		$this->userResponder = App::make( 'UserResponder' );
 	}
 
 	public function make($form)
@@ -40,18 +43,21 @@ Class PasswordChangeResponseMaker extends ApiResponseMaker implements ApiRespons
 			return $result;
 		}
 
+		// send out password updated email
+		$mailClient = App::make('MailClient')->request('Apiv1\Mail\AccountPasswordChangedEmail', ['user' => $this->user, 'password' => $this->form['newPassword']]);
+
 		return apiSuccessResponse( 'accepted', $this->user );
 	}
 
 	public function store()
 	{
-		$userRepository = \App::make( 'UserRepository' );
+		$userRepository = App::make( 'UserRepository' );
 
 		$response = $userRepository->hashAndStore( $this->form['email'], $this->form['newPassword'] );
 
 		if( ! $response )
 		{
-			return apiErrorResponse(  'serverError', [ 'errorReason' => \Lang::get('api.recordCouldNotBeSaved') ] );
+			return apiErrorResponse(  'serverError', [ 'errorReason' => Lang::get('api.recordCouldNotBeSaved') ] );
 		}
 
 		$this->user['accessKey'] = $response->accessKey;
