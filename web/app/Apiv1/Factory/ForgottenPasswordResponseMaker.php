@@ -1,5 +1,8 @@
 <?php namespace Apiv1\Factory;
 
+use App;
+use Lang;
+
 Class ForgottenPasswordResponseMaker extends ApiResponseMaker implements ApiResponseMakerInterface {
 
 	private $validator;
@@ -11,8 +14,8 @@ Class ForgottenPasswordResponseMaker extends ApiResponseMaker implements ApiResp
 
 	public function __construct()
 	{
-		$this->validator = \App::make('PasswordValidator');
-		$this->userResponder = \App::make( 'UserResponder' );
+		$this->validator = App::make('PasswordValidator');
+		$this->userResponder = App::make( 'UserResponder' );
 	}
 
 	public function make($form)
@@ -34,16 +37,19 @@ Class ForgottenPasswordResponseMaker extends ApiResponseMaker implements ApiResp
 			return $result;
 		}
 
-		return apiSuccessResponse( 'accepted', [ 'newPassword' => $this->newPassword ] );
+		// send out the forgotten password email
+		$mailClient = App::make('MailClient')->request('Apiv1\Mail\ForgottenPasswordEmail', ['email' => $this->form['email'], 'password' => $this->newPassword]);
+
+		return apiSuccessResponse( 'accepted', [ 'additionalResponse' => 'Password sent to user email address.' ] );
 	}
 
 	public function store()
 	{
-		$password = \App::make( 'UserRepository' )->generateAndStore( $this->form['email'] );
+		$password = App::make( 'UserRepository' )->generateAndStore( $this->form['email'] );
 
 		if( ! $password )
 		{
-			return apiErrorResponse(  'serverError', [ 'errorReason' => \Lang::get('api.recordCouldNotBeSaved') ] );
+			return apiErrorResponse(  'serverError', [ 'errorReason' => Lang::get('api.recordCouldNotBeSaved') ] );
 		}
 
 		$this->newPassword = $password;

@@ -2,7 +2,7 @@
 
 use View;
 
-Class RegistrationEmail {
+Class ForgottenPasswordEmail {
 
 	/**
 	* email address to send from
@@ -32,13 +32,13 @@ Class RegistrationEmail {
 	* the subject line to show for the email
 	* @var $subject
 	*/
-	var $subject = 'New Account';
+	var $subject = 'Account password updated';
 
 	/**
 	* what to tag the email as
 	* @var $subject
 	*/
-	var $tags = ['subscriber-registration'];
+	var $tags = ['password-reminder'];
 
 	/**
 	* what type of email are we sending
@@ -56,12 +56,11 @@ Class RegistrationEmail {
 
 	private function setHTML($data)
 	{
-		$this->html = View::make("Email.SubscriberRegistration", $data)->render();
+		$this->html = View::make("Email.ForgottenAccountPassword", $data)->render();
 	}
 
 	private function setTo($data)
 	{
-		$this->toEmail = $data['user']['email'];
-		$this->toName = $data['user']['firstName'] .' '. $data['user']['lastName'];
+		$this->toEmail = $data['email'];
 	}
 }
