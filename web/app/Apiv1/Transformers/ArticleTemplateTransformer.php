@@ -1,6 +1,7 @@
 <?php namespace Apiv1\Transformers;
 
 use App;
+use Config;
 
 Class ArticleTemplateTransformer extends ArticleTransformer {
 
@@ -59,7 +60,7 @@ Class ArticleTemplateTransformer extends ArticleTransformer {
     public function extract($article)
     {
         return [
-            'shareLink' => \URL::to('/').$article['shareLink'],
+            'shareLink' => Config::get('api.baseUrl').$article['shareLink'],
             'map' => $article['mapItems'],
         ];
     }
