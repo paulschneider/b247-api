@@ -8,13 +8,13 @@ Class RegistrationEmail {
 	* email address to send from
 	* @var $fromEmail
 	*/
-	var $fromEmail = 'paul.schneider@yepyep.co.uk';
+	var $fromEmail = 'notifications@bristol247.com';
 
 	/**
 	* name displayed to the recipient as the 'from' name
 	* @var $fromName
 	*/
-	var $fromName = 'Paul Schneider';
+	var $fromName = 'Notifications';
 
 	/**
 	* email address to send to

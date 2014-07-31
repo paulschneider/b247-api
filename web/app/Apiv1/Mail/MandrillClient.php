@@ -23,6 +23,7 @@ Class MandrillClient {
 			'key' => $this->apiKey,
 			'message' => [
 				'html' => $email->html,
+				'text' => strip_tags($email->html),
 				'subject' => $email->subject,
 				'from_email' => $email->fromEmail,
 				'from_name' => $email->fromName,
