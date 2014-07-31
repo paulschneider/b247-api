@@ -1,8 +1,8 @@
-<?php namespace Apiv1\Mail;
+<?php namespace Apiv1\Mail\Notifications\Mandrill;
 
 use App;
 
-Class MandrillClient {
+Class Client {
 
 	protected $apiKey;
 	protected $apiClient;
