@@ -149,7 +149,7 @@ function userAccessKeyPresent()
 
 function userIsAuthenticated()
 {
-    if( Request::header("accessKey") )
+    if( array_key_exists('accessKey', getallheaders()) || Input::get('accessKey'))
     {
         return true;
     }
@@ -159,7 +159,18 @@ function userIsAuthenticated()
 
 function getAccessKey()
 {
-    return Request::header("accessKey") ? : false;
+    if(Request::header("accessKey"))
+    {
+        return Request::header("accessKey");
+    }
+    elseif(Input::get('accessKey'))
+    {
+        return Input::get('accessKey');
+    }
+    else
+    {
+        return false;
+    }
 }
 
 function isApiResponse($data)
@@ -257,6 +268,11 @@ function isMobile()
     {
         return true;
     }
+}
+
+function isTablet()
+{
+    return Agent::isTablet();
 }
 
 function isDesktop()

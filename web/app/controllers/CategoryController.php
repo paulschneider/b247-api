@@ -1,7 +1,5 @@
 <?php
 
-use Version1\Categories\Category;
-
 Class CategoryController extends ApiController {
 
     var $responseMaker;

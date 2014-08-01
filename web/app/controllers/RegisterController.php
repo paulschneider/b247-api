@@ -1,6 +1,6 @@
 <?php
 
-use Api\Factory\RegistrationResponseMaker;
+use Apiv1\Factory\RegistrationResponseMaker;
 
 class RegisterController extends ApiController {
 

@@ -1,10 +1,8 @@
 <?php
 
-define('VERSION', Config::get('app.version'));
-
 Validator::resolver(function($translator, $data, $rules, $messages)
 {
-    return new Api\Validators\PostcodeValidator($translator, $data, $rules, $messages);
+    return new Apiv1\Validators\PostcodeValidator($translator, $data, $rules, $messages);
 });
 
 /*
@@ -58,7 +56,7 @@ App::error(function(Exception $exception, $code)
 	Log::error($exception);
 });
 
-App::error(function(Api\Exceptions\InvalidDataSupply $exception)
+App::error(function(Apiv1\Exceptions\InvalidDataSupply $exception)
 { 
 	return apiErrorResponse('badRequest', ['errorReason' => $exception->getMessage()]);
 });
@@ -107,16 +105,6 @@ App::down(function()
 */
 
 require app_path().'/filters.php';
-
-/*
-|--------------------------------------------------------------------------
-| Require The Application Events Files
-|--------------------------------------------------------------------------
-|
-| Application events (custom)
-|
-*/
-require app_path().'/events.php';
 
 /*
 |--------------------------------------------------------------------------

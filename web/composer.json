@@ -4,12 +4,11 @@
 	"keywords": ["framework", "laravel"],
 	"license": "MIT",
 	"require": {
-		"laravel/framework": "4.1.*"
+		"laravel/framework": "4.2.*"
 		,"nesbot/Carbon": "*"
-		,"fzaninotto/faker": "1.4.*@dev"
 		,"jenssegers/agent": "*"
 		,"codeception/codeception": "*"
-		,"itsgoingd/clockwork": "1.*"
+		,"mailchimp/mailchimp": "2.*"
 	},
 	"autoload": {
 		"classmap": [
@@ -24,8 +23,7 @@
 			"app/linkMaker.php"
 		]
 		,"psr-4": {
-			"Version1\\" : "app/Version1"
-			,"Api\\" : "app/Api"
+			"Apiv1\\" : "app/Apiv1"
 		}
 	},
 	"scripts": {
