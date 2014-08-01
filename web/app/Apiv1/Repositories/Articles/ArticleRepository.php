@@ -62,7 +62,7 @@ Class ArticleRepository extends BaseModel {
 
     public function getCategoryArticle($channel, $category, $article)
     {       
-        $query = Article::select('article.*', 'article_id AS id')->with('location', 'asset', 'event.venue', 'venue', 'video');
+        $query = Article::select('article.*', 'article_id AS id')->with('location', 'gallery', 'event.venue', 'venue', 'video');
         $query->join('article_location', 'article_location.article_id', '=', 'article.id');
 
         if( is_numeric($article) )

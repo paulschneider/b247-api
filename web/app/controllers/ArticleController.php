@@ -33,12 +33,12 @@ Class ArticleController extends ApiController {
         {
             return $response;
         }   
-
+sd($response);
         // make a call to the front end to retrieve the populated HTML template
         $result = App::make('ApiClient')->post('app/article', [ 'data' => $response, 'type' => getChannelType($response['channel']) ]);
 
         $response['article'] = $this->responseMaker->getRequiredArticleData($response['article']);
-        unset($response['related']);
+        //unset($response['related']);
 
         // remove all hidden chars from the returned HTML as they break the markup on the device
         $response['html'] = preg_replace('/[^[:print:]]/', "", $result['html']);

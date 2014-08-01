@@ -1,6 +1,7 @@
 <?php namespace Apiv1\Factory;
 
 use App;
+use Lang;
 
 Class ArticleResponseMaker extends ApiResponseMaker implements ApiResponseMakerInterface {
 
@@ -53,14 +54,14 @@ Class ArticleResponseMaker extends ApiResponseMaker implements ApiResponseMakerI
 
 	public function getChannel()
 	{
-		if( isApiResponse($result = \App::make( 'CategoryResponseMaker' )->getCategory( $this->category )))
+		if( isApiResponse($result = App::make( 'CategoryResponseMaker' )->getCategory( $this->category )))
 		{
 			return $result;
 		}
 
 		$this->category = $result;
 
-		$this->channel = \App::make( 'ChannelResponder' )->getChannel( $this->channel );
+		$this->channel = App::make( 'ChannelResponder' )->getChannel( $this->channel );
 
 		if( ! categoryBelongsToChannel( $this->channel, $this->category ) )
 		{
@@ -81,12 +82,10 @@ Class ArticleResponseMaker extends ApiResponseMaker implements ApiResponseMakerI
 
 	public function getArticle()
 	{		
-		if( ! $article = $this->articleRepository->getCategoryArticle( $this->channel, $this->category, $this->article ))
+		if( ! $this->article = $this->articleRepository->getCategoryArticle( $this->channel, $this->category, $this->article ))
 		{
-			return apiErrorResponse('notFound', []);
+			return apiErrorResponse('notFound', [ 'errorReason' => Lang::get('api.articleCouldNotBeLocated') ]);
 		}
-
-		$this->article = $article;		
 
 		return $this->article;
 	}
