@@ -15,14 +15,9 @@ Class Caller {
 		$this->client = new Client( [ 'base_url' => Config::get('api.baseUrl') ] );
 	}
 
-	public function testing()
+	public function get($endpoint = "", $params = [], $headers = [])
 	{
-		return "here";
-	}
-
-	public function get($endpoint = "/", $params = [], $headers = [])
-	{
-		$this->endpoint = $endpoint;
+		$this->endpoint = $this->client->getBaseUrl().$endpoint;
 
 		$request = $this->client->createRequest('GET', $this->endpoint, [
 			'headers' => $headers,
