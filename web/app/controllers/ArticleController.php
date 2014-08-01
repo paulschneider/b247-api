@@ -33,7 +33,7 @@ Class ArticleController extends ApiController {
         {
             return $response;
         }   
-sd($response);
+
         // make a call to the front end to retrieve the populated HTML template
         $result = App::make('ApiClient')->post('app/article', [ 'data' => $response, 'type' => getChannelType($response['channel']) ]);
 
