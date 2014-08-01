@@ -9,4 +9,5 @@ return [
 	"userPreferencesUpdated" => "User content preferences successfully updated.",
 	"insufficientParametersProvidedToContinue" => "Insufficient form parameters supplied. Unable to continue.",
 	"userPreferencesAreNotAnArray" => "The supplied user preferences are not an array.",
+	"articleCouldNotBeLocated" => "An article with the supplied identifier could not be located.",
 ];

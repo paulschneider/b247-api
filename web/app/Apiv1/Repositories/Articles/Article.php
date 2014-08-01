@@ -92,6 +92,11 @@ class Article extends BaseModel {
         return $this->belongsToMany('Apiv1\Repositories\Models\Asset', 'article_asset', 'article_id')->where('image_type', '=', 1);
     }
 
+    public function gallery()
+    {
+        return $this->belongsToMany('Apiv1\Repositories\Models\Asset', 'article_asset', 'article_id')->where('image_type', '!=', 1);
+    }
+
     public function event()
     {
         return $this->belongsTo('Apiv1\Repositories\Events\Event', 'event_id')->orderBy('event.show_date', 'asc');

@@ -31,7 +31,13 @@ Class ArticleTemplateTransformer extends ArticleTransformer {
             'lon' => $article['lon'],
         ];
 
-        // transform the article
+        // if this article has a gallery array then transform it
+        if( isset($article['gallery']) )
+        {
+            $gallery = App::make( 'Apiv1\Transformers\MediaTransformer' )->transformCollection($article);
+        }
+
+        // transform the article itself
         $article = ArticleTransformer::transform($article, $options);
 
         // if there is a video then transfer that too and add it into the article array
@@ -54,9 +60,12 @@ Class ArticleTemplateTransformer extends ArticleTransformer {
         // insert a mapItems object into the article at the desired position
         $article = insertInto($article, 'path', $externalPath, 'shareLink');
 
+        $article['gallery'] = $gallery;
+
         return $article;
     }
 
+    // the apps still want certain bits of data about the article. Grab what they want and return a cut down article array
     public function extract($article)
     {
         return [
