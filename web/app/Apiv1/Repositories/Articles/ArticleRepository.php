@@ -250,7 +250,7 @@ Class ArticleRepository extends BaseModel {
         return Article::with('location', 'asset', 'event.venue')->whereNotIn( 'id', $articles )->orderBy('article.created_at', 'desc')->take($limit)->get();        
     }
 
-    public function getArticlesWithEvents($type, $channel = 50)
+    public function getArticlesWithEvents($type, $channel)
     {
         $limit = Config::get('constants.channelFeed_limit');
 
