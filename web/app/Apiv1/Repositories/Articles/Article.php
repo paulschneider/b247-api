@@ -89,7 +89,7 @@ class Article extends BaseModel {
 
     public function asset()
     {
-        return $this->belongsToMany('Apiv1\Repositories\Models\Asset', 'article_asset', 'article_id');
+        return $this->belongsToMany('Apiv1\Repositories\Models\Asset', 'article_asset', 'article_id')->where('image_type', '=', 1);
     }
 
     public function event()
