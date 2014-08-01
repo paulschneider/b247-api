@@ -1,16 +1,18 @@
 <?php namespace Apiv1\Factory;
 
+use App;
+
 Class HomeResponseMaker extends ApiResponseMaker implements ApiResponseMakerInterface {
 
 	protected $channelFeed;
-	protected $homeChannels = [ 48, 49, 51, 52 ];
+	protected $homeChannels = [ 1, 3 ];
 	protected $channels;
 	protected $response;
 
 	public function getChannels()
 	{
-		$channelRepository = \App::make( 'ChannelRepository' );
-		$channelTransformer = \App::make( 'ChannelTransformer' );
+		$channelRepository = App::make( 'ChannelRepository' );
+		$channelTransformer = App::make( 'ChannelTransformer' );
 
 		$this->channels = $channelRepository->getChannels();
 
@@ -19,32 +21,32 @@ Class HomeResponseMaker extends ApiResponseMaker implements ApiResponseMakerInte
 
 	public function getFeatured()
 	{
-		return \App::make('HomeFeaturedResponder')->get();
+		return App::make('HomeFeaturedResponder')->get();
 	}
 
 	public function getPicked()
 	{
-		return \App::make('HomePickedResponder')->get( $this );
+		return App::make('HomePickedResponder')->get( $this );
 	}
 
 	public function getWhatsOn()
 	{
-		$sponsorRepository = \App::make('SponsorRepository');
+		$sponsorRepository = App::make('SponsorRepository');
 
 		$sponsors = $sponsorRepository->getWhereNotInCollection( $this->getAllocatedSponsors(), 100 )->toArray();
 
-		return \App::make('WhatsOnResponder')->get( $sponsors, $this, $this->channels );
+		return App::make('WhatsOnResponder')->get( $sponsors, $this, $this->channels );
 	}
 
 	public function getChannelFeed()
 	{
-		$channelRepository = \App::make('ChannelRepository');
-        $sponsorRepository = \App::make('SponsorRepository');
+		$channelRepository = App::make('ChannelRepository');
+        $sponsorRepository = App::make('SponsorRepository');
 
         $allChannels = $channelRepository->getAllChannels();
         $sponsors = $sponsorRepository->getWhereNotInCollection( $this->getAllocatedSponsors(), 100 )->toArray();
 
-        $channelFeed = \App::make('ChannelFeed');	
+        $channelFeed = App::make('ChannelFeed');	
         $channelFeed->initialise( $allChannels, $this->homeChannels, $sponsors, [] );
 
 		$this->channelFeed = $channelFeed->make();
