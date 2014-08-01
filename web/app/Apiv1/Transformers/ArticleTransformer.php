@@ -72,16 +72,8 @@ Class ArticleTransformer extends Transformer {
             $response['media'] = null;
 
             if( isset($article['asset'][0]) )
-            {
-                $articleAsset = $article['asset'][0];
-
-                $response['media'] = [
-                    'filepath' => $articleAsset['filepath']
-                    ,'alt' => $articleAsset['alt']
-                    ,'title' => $articleAsset['title']
-                    ,'width' => $articleAsset['width']
-                    ,'height' => $articleAsset['height']
-                ];
+            {             
+                $response['media'] = App::make( 'Apiv1\Transformers\MediaTransformer' )->transform($article);
             }   
 
             // If there is an event then transform that as well

@@ -270,6 +270,11 @@ function isMobile()
     }
 }
 
+function isTablet()
+{
+    return Agent::isTablet();
+}
+
 function isDesktop()
 {
     // if its not mobile then its desktop
