@@ -304,8 +304,3 @@ App::bind('ApiClient', function($app)
 {
     return new Apiv1\Client\Caller;
 });
-
-App::bind('MailClient', function($app)
-{
-    return new Apiv1\Mail\Client;
-});

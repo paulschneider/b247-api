@@ -133,6 +133,8 @@ return array(
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
+		'Apiv1\Mail\Newsletters\NewsletterListServiceProvider',
+		'Apiv1\Mail\Notifications\NotificationsServiceProvider',
 	),
 
 	/*

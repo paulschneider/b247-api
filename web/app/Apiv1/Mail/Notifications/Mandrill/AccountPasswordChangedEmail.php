@@ -1,8 +1,9 @@
-<?php namespace Apiv1\Mail;
+<?php namespace Apiv1\Mail\Notifications\Mandrill;
 
 use View;
+use Apiv1\Mail\Notifications\AccountPasswordChangedEmail as AccountPasswordChangedEmailInterface;
 
-Class RegistrationEmail {
+Class AccountPasswordChangedEmail extends Client implements AccountPasswordChangedEmailInterface {
 
 	/**
 	* email address to send from
@@ -32,13 +33,13 @@ Class RegistrationEmail {
 	* the subject line to show for the email
 	* @var $subject
 	*/
-	var $subject = 'New Account';
+	var $subject = 'Account password updated';
 
 	/**
 	* what to tag the email as
 	* @var $subject
 	*/
-	var $tags = ['subscriber-registration'];
+	var $tags = ['password-updated'];
 
 	/**
 	* what type of email are we sending
@@ -46,17 +47,17 @@ Class RegistrationEmail {
 	*/
 	var $type = 'message';
 
-	public function set($data)
+	public function notify($data)
 	{
 		$this->setTo($data);
 		$this->setHTML($data);
 
-		return $this;
+		Client::send($this);
 	}
 
 	private function setHTML($data)
 	{
-		$this->html = View::make("Email.SubscriberRegistration", $data)->render();
+		$this->html = View::make("Email.AccountPasswordChanged", $data)->render();
 	}
 
 	private function setTo($data)

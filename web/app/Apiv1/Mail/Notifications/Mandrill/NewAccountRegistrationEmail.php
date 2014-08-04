@@ -1,8 +1,9 @@
-<?php namespace Apiv1\Mail;
+<?php namespace Apiv1\Mail\Notifications\Mandrill;
 
 use View;
+use Apiv1\Mail\Notifications\NewAccountRegistrationEmail as NewAccountRegistrationEmailInterface;
 
-Class ForgottenPasswordEmail {
+Class NewAccountRegistrationEmail extends Client implements NewAccountRegistrationEmailInterface {
 
 	/**
 	* email address to send from
@@ -32,13 +33,13 @@ Class ForgottenPasswordEmail {
 	* the subject line to show for the email
 	* @var $subject
 	*/
-	var $subject = 'Account password updated';
+	var $subject = 'New Account';
 
 	/**
 	* what to tag the email as
 	* @var $subject
 	*/
-	var $tags = ['password-reminder'];
+	var $tags = ['subscriber-registration'];
 
 	/**
 	* what type of email are we sending
@@ -46,21 +47,22 @@ Class ForgottenPasswordEmail {
 	*/
 	var $type = 'message';
 
-	public function set($data)
+	public function notify($data)
 	{
 		$this->setTo($data);
 		$this->setHTML($data);
 
-		return $this;
+		Client::send($this);
 	}
 
 	private function setHTML($data)
 	{
-		$this->html = View::make("Email.ForgottenAccountPassword", $data)->render();
+		$this->html = View::make("Email.SubscriberRegistration", $data)->render();
 	}
 
 	private function setTo($data)
 	{
-		$this->toEmail = $data['email'];
+		$this->toEmail = $data['user']['email'];
+		$this->toName = $data['user']['firstName'] .' '. $data['user']['lastName'];
 	}
 }

@@ -11,10 +11,17 @@ Class PasswordChangeResponseMaker extends ApiResponseMaker implements ApiRespons
 	private $userResponder;
 	private $requiredFields = ['email', 'password', 'newPassword'];
 
+	/**
+	 * @var $passwordNotifier
+	 */
+	protected $passwordNotifier;
+
 	public function __construct()
 	{
 		$this->validator = App::make( 'PasswordValidator' );
 		$this->userResponder = App::make( 'UserResponder' );
+
+		$this->passwordNotifier = App::make('Apiv1\Mail\Notifications\AccountPasswordChangedEmail');
 	}
 
 	public function make($form)
@@ -44,7 +51,7 @@ Class PasswordChangeResponseMaker extends ApiResponseMaker implements ApiRespons
 		}
 
 		// send out password updated email
-		$mailClient = App::make('MailClient')->request('Apiv1\Mail\AccountPasswordChangedEmail', ['user' => $this->user, 'password' => $this->form['newPassword']]);
+		$this->passwordNotifier->notify( ['user' => $this->user, 'password' => $this->form['newPassword']] );
 
 		return apiSuccessResponse( 'accepted', $this->user );
 	}
