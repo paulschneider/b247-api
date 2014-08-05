@@ -14,8 +14,8 @@ $forbidden = [
 $I = new ApiTester($scenario);
 $I->am('An API client');
 $I->wantTo('Obtain the details of a sub-channel of type article');
-$I->seeInDatabase('channel', ['id' => 53, 'parent_channel' => 48]);
-$I->sendGET	('subchannel/53/article');
+$I->seeInDatabase('channel', ['id' => 4, 'parent_channel' => 1]);
+$I->sendGET	('subchannel/4/article');
 $I->seeResponseCodeIs(200);
 $I->seeResponseIsJson();
 

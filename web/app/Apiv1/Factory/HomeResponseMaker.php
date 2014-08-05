@@ -1,22 +1,29 @@
 <?php namespace Apiv1\Factory;
 
 use App;
+use Config;
 
-Class HomeResponseMaker extends ApiResponseMaker implements ApiResponseMakerInterface {
+Class HomeResponseMaker {
 
 	protected $channelFeed;
-	protected $homeChannels = [ 1, 3 ];
+	protected $homeChannels;
 	protected $channels;
 	protected $response;
+	protected $channelRepository;
+	protected $sponsorResponder;
+
+	public function __construct()
+	{
+		$this->homeChannels = Config::get('global.homeChannels'); // channels to show on the homepage
+		$this->channelRepository = App::make( 'ChannelRepository' );
+		$this->sponsorResponder = App::make('SponsorResponder');
+	}
 
 	public function getChannels()
 	{
-		$channelRepository = App::make( 'ChannelRepository' );
-		$channelTransformer = App::make( 'ChannelTransformer' );
+		$this->channels = $this->channelRepository->getChannels();
 
-		$this->channels = $channelRepository->getChannels();
-
-		return $channelTransformer->transformCollection($this->channels);
+		return App::make( 'ChannelTransformer' )->transformCollection($this->channels);
 	}
 
 	public function getFeatured()
@@ -24,34 +31,41 @@ Class HomeResponseMaker extends ApiResponseMaker implements ApiResponseMakerInte
 		return App::make('HomeFeaturedResponder')->get();
 	}
 
+	/**
+	 * return a list of articles that have been picked
+	 * @return array
+	 */
 	public function getPicked()
 	{
-		return App::make('HomePickedResponder')->get( $this );
+		$response = App::make('HomePickedResponder')->get($this->sponsorResponder);
+
+		$this->sponsorResponder->setAllocatedSponsors($response['sponsors']);
+
+		return $response['articles'];
+	}	
+
+	/**
+	 * Get a channel feed object containing formatted articles organised by channel
+	 * @return array
+	 */
+	public function getChannelFeed()
+	{
+        $channelFeed = App::make('ChannelFeed');	
+        $channelFeed->initialise($this->homeChannels);
+
+		$response = $channelFeed->make($this->sponsorResponder);
+		$this->sponsorResponder->setAllocatedSponsors($response['sponsors']);
+
+		return $response['channelFeed'];
 	}
 
 	public function getWhatsOn()
 	{
-		$sponsorRepository = App::make('SponsorRepository');
+		$response = App::make('WhatsOnResponder')->get( $this->sponsorResponder, $this->channels );
 
-		$sponsors = $sponsorRepository->getWhereNotInCollection( $this->getAllocatedSponsors(), 100 )->toArray();
+		$this->sponsorResponder->setAllocatedSponsors($response['sponsors']);
 
-		return App::make('WhatsOnResponder')->get( $sponsors, $this, $this->channels );
-	}
-
-	public function getChannelFeed()
-	{
-		$channelRepository = App::make('ChannelRepository');
-        $sponsorRepository = App::make('SponsorRepository');
-
-        $allChannels = $channelRepository->getAllChannels();
-        $sponsors = $sponsorRepository->getWhereNotInCollection( $this->getAllocatedSponsors(), 100 )->toArray();
-
-        $channelFeed = App::make('ChannelFeed');	
-        $channelFeed->initialise( $allChannels, $this->homeChannels, $sponsors, [] );
-
-		$this->channelFeed = $channelFeed->make();
-
-		return $this->channelFeed;
+		return $response['channel'];
 	}
 
 	public function make()
@@ -61,15 +75,19 @@ Class HomeResponseMaker extends ApiResponseMaker implements ApiResponseMakerInte
 			return $result;
 		}
 
+		// get 3 related adverts and set them as allocated
+		$adverts = $this->sponsorResponder->getChannelSponsors(3, $this->homeChannels); 
+		$this->sponsorResponder->setAllocatedSponsors($adverts);
+
 		$this->response = [
 			'channels' => $this->getChannels(),
-            'adverts' => $this->getSponsors(),
+            'adverts' => $adverts,
             'features' => $this->getFeatured(),
             'picks' => $this->getPicked(),
             'channelFeed' => $this->getChannelFeed(),
         ];
 
-        array_unshift($this->response['channelFeed'], $this->getWhatsOn());
+		array_unshift($this->response['channelFeed'], $this->getWhatsOn());
 
 		return $this->response;
 	}

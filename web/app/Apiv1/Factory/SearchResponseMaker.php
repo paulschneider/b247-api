@@ -2,15 +2,18 @@
 
 // this is the first draft of a simple search mechanism. It ultimately only searches article titles and organises them in a response by top level channel
 
-Class SearchResponseMaker extends ApiResponseMaker implements ApiResponseMakerInterface {
+use App;
+use Config;
+
+Class SearchResponseMaker {
 
 	public function make($searchString)
 	{ 	
-		$articles = \App::make( 'ArticleRepository' )->search($searchString);
-		$articleTransformer = \App::make('ArticleTransformer');		
+		$articles = App::make( 'ArticleRepository' )->search($searchString);
+		$articleTransformer = App::make('ArticleTransformer');		
 		$channels = [];
 
-		$pagination = \App::make('PageMaker')->make($articles);
+		$pagination = App::make('PageMaker')->make($articles);
 
 		$metaData = $pagination->meta;
 		$articles = $pagination->items;
@@ -36,7 +39,7 @@ Class SearchResponseMaker extends ApiResponseMaker implements ApiResponseMakerIn
 			}	
 		}
 		
-		$result['adverts'] = $this->getSponsors();
+		$result['adverts'] = App::make('SponsorResponder')->getChannelSponsors(3, Config::get('global.homeChannels')); // channels to show on the homepage;
 		$result['searchResults'] = array_values($channels);
 		$result['resultCount'] = count($articles);
 		$result['pagination'] = $metaData;		

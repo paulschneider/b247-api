@@ -1,5 +1,5 @@
 <?php
 
 return [
-	"baseUrl" => "http://local.b247-com/"
+	"baseUrl" => "http://app.wf-staging.co.uk/"
 ];

@@ -57,11 +57,21 @@ class Sponsor extends BaseModel {
 
     public function channel()
     {
-        return $this->belongsToMany('Apiv1\Repositories\Channels\Channel', 'sponsor_placement', 'sponsor_id', 'id');
+        return $this->belongsToMany('Apiv1\Repositories\Channels\Channel');
     }
 
     public function displayStyle()
     {
         return $this->belongsTo('Apiv1\Repositories\Models\DisplayStyle', 'display_style');
+    }
+
+    public function pageTypeSponsor()
+    {
+        return $this->hasOne('Apiv1\Repositories\Sponsors\SponsorType', 'id', 'sponsor_type');
+    }
+
+    public function location()
+    {
+        return $this->hasOne('Apiv1\Repositories\Sponsors\SponsorLocation', 'sponsor_id');   
     }
 }

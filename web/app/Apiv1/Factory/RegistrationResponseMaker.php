@@ -6,7 +6,7 @@ use Apiv1\Validators\RegistrationValidator;
 use Apiv1\Mail\Newsletters\NewsletterList;
 use Apiv1\Mail\Notifications\NewAccountRegistrationEmail;
 
-Class RegistrationResponseMaker extends ApiResponseMaker implements ApiResponseMakerInterface {
+Class RegistrationResponseMaker {
 
 	/**
 	 * @var array $form

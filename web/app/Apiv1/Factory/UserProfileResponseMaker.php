@@ -3,7 +3,7 @@
 use App;
 use Lang;
 
-Class UserProfileResponseMaker extends ApiResponseMaker implements ApiResponseMakerInterface {
+Class UserProfileResponseMaker {
 
 	public function make($form)
 	{
