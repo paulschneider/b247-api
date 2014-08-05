@@ -1,32 +1,24 @@
 <?php namespace Apiv1\Responders;
 
+use App;
 use Api\Factory\ApiResponseMaker;
 
 Class CategoryArticleResponder {
 
-	public function make( $categoryId, $subChannelId, $caller )
+	public function make(SponsorResponder $sponsorResponder, $articles)
 	{
-		$patternMaker = \App::make('PatternMaker');
-		$sponsorRepository = \App::make('SponsorRepository');
-		$categoryResponder = \App::make('CategoryResponder');
-
-		$articleTransformer = \App::make('ArticleTransformer');
-		$sponsorTransformer = \App::make('SponsorTransformer');
-
-		$articles = $categoryResponder->getCategoryArticles($categoryId, $subChannelId);
-
-		$pagination = \App::make('PageMaker')->make($articles);
+		$pagination = App::make('PageMaker')->make($articles);
 
 		$metaData = $pagination->meta;
 		$articles = $pagination->items;
 
-		$sponsors = $sponsorRepository->getWhereNotInCollection( $caller->getAllocatedSponsors(), 30 )->toArray();
-		$articles = $patternMaker->make( [ 'articles' => $articles, 'sponsors' => $sponsorTransformer->transformCollection($sponsors) ] )->articles;
+		$response = App::make('PatternMaker')->setPattern(1)->limit($pagination->meta->perPage)->make( [ 'articles' => $articles, 'sponsors' => $sponsorResponder->getCategorySponsors(30) ] );
 
 		return [
-			'articles' => $articles,
+			'articles' => $response->articles,
 			'pagination' => $metaData,	
-			'totalArticles' => count($articles)
+			'totalArticles' => count($response->articles),
+			'sponsors' => $response->sponsors
 		];
 	}
 }

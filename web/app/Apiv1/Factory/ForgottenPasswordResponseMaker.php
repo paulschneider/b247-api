@@ -3,7 +3,7 @@
 use App;
 use Lang;
 
-Class ForgottenPasswordResponseMaker extends ApiResponseMaker implements ApiResponseMakerInterface {
+Class ForgottenPasswordResponseMaker {
 
 	private $validator;
 	private $form;

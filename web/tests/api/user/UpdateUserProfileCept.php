@@ -1,6 +1,6 @@
 <?php 
 
-$accessKey = 'OGuzm6pDHsFwrXW6Zb0ICc1iR';
+$accessKey = 'CDC42A2E03C028C';
 
 $profileDetails = [
 	'firstName' => 'Paul',

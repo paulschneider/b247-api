@@ -1,25 +1,22 @@
 <?php namespace Apiv1\Responders;
 
+use App;
+
 Class ChannelArticleResponder {
 
-	public function make( $articles, $sponsors )
+	public function make( $articles, SponsorResponder $sponsorResponder )
 	{
-		$pagination = \App::make('PageMaker')->make($articles);	
-		$articleTransformer = \App::make('ArticleTransformer');
-		$sponsorTransformer = \App::make('SponsorTransformer');
+		$pagination = App::make('PageMaker')->make($articles);	
 
 		$metaData = $pagination->meta;
 		$articles = $pagination->items;
 
-		$patternMaker = \App::make('PatternMaker');
-		$patternMaker->setPattern(1);
-
-		$articles = $articleTransformer->transformCollection( $articles );
-		$sponsors = $sponsorTransformer->transformCollection( $sponsors );
+		$response = App::make('PatternMaker')->setPattern(1)->limit($pagination->meta->perPage)->make( [ 'articles'=> $articles, 'sponsors' => $sponsorResponder->getUnassignedSponsors() ] );
 
 		return [
-			'articles' => $patternMaker->make( [ 'articles'=> $articles, 'sponsors' => $sponsors ] )->articles,
-			'pagination' => $metaData
+			'articles' => $response->articles,
+			'pagination' => $metaData,
+			'sponsors' => $response->sponsors
 		];
 	}
 

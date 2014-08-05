@@ -1,17 +1,33 @@
 <?php namespace Apiv1\Factory;
 
+use App;
 use Apiv1\Repositories\Channels\Toolbox;
 
-Class ChannelResponseMaker extends ApiResponseMaker implements ApiResponseMakerInterface {
+Class ChannelResponseMaker {
 
 	protected $response;
+	
+	/**
+	 * Apiv1\Repositories\ChannelRepository
+	 * @var mixed
+	 */
+	protected $channelRepository;
+
+	/**
+	 * Apiv1\Responders\SponsorResponder
+	 * @var mixed
+	 */
+	protected $sponsorResponder;
+
+	public function __construct()
+	{
+		$this->channelRepository = App::make( 'ChannelRepository' );
+		$this->sponsorResponder = App::make( 'SponsorResponder' );
+	}
 
 	public function getChannel( $identifier )
-	{
-		$channelRepository = \App::make( 'ChannelRepository' );
-		$channelTransformer = \App::make( 'ChannelTransformer' );
-
-		$channel = $channelRepository->getChannelByIdentifier( $identifier );
+	{		
+		$channel = $this->channelRepository->getChannelByIdentifier( $identifier );
 
 		if( ! $channel )
 		{
@@ -24,32 +40,34 @@ Class ChannelResponseMaker extends ApiResponseMaker implements ApiResponseMakerI
 			return apiErrorResponse('failedDependency');	
 		}
 
-		$this->channel = $channelTransformer->transform($channel);
+		$this->channel = App::make( 'ChannelTransformer' )->transform($channel);
 	}
 
-	public function getChannelPicked()
+	public function getPicked()
 	{
-		return \App::make('PickedResponder')->get( $this->channel, $this );
+		$response = App::make('PickedResponder')->get( $this->sponsorResponder, $this->channel );
+
+		$this->sponsorResponder->setAllocatedSponsors($response['sponsors']);
+
+		return $response['articles'];
 	}
 
-	public function getChannelFeatured()
+	public function getFeatured()
 	{
-		return \App::make('FeaturedResponder')->get( $this->channel );
+		return App::make('FeaturedResponder')->get( $this->channel );
 	}
 
 	public function getChannelFeed()
 	{
-		$channelRepository = \App::make('ChannelRepository');
-        $sponsorRepository = \App::make('SponsorRepository');
+        $subChannels = $this->channelRepository->getChildren( $this->channel['id'] );
 
-        $allChannels = $channelRepository->getAllChannels();
-        $subChannels = $channelRepository->getChildren( $this->channel['id'] );
-        $sponsors = $sponsorRepository->getWhereNotInCollection( $this->getAllocatedSponsors(), 100 )->toArray();
+        $channelFeed = App::make('ChannelFeed');	
+        $channelFeed->initialise( $subChannels, [], true );
 
-        $channelFeed = \App::make('ChannelFeed');	
-        $channelFeed->initialise( $allChannels, $subChannels, $sponsors, [], true );
+		$response = $channelFeed->make($this->sponsorResponder);
+		$this->sponsorResponder->setAllocatedSponsors($response['sponsors']);
 
-		return $channelFeed->make();
+		return $response['channelFeed'];
 	}
 
 	public function make( $identifier )
@@ -59,11 +77,15 @@ Class ChannelResponseMaker extends ApiResponseMaker implements ApiResponseMakerI
 			return $result;
 		}
 
+		// get 3 related adverts and set them as allocated
+		$adverts = $this->sponsorResponder->getChannelSponsors(3, [$this->channel['id']]); 
+		$this->sponsorResponder->setAllocatedSponsors($adverts);
+
 		$this->response = [
 			'channel' => $this->channel,
-			'adverts' => $this->getSponsors(),
-			'features' => $this->getChannelFeatured(),
-			'picks' => $this->getChannelPicked(),
+			'adverts' => $adverts,
+			'features' => $this->getFeatured(),
+			'picks' => $this->getPicked(),
 			'channelFeed' => $this->getChannelFeed(),
 		];
 

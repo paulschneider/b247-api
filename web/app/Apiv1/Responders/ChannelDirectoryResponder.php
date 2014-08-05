@@ -1,28 +1,29 @@
 <?php namespace Apiv1\Responders;
 
+use App;
 use Apiv1\Repositories\Channels\Toolbox;
 
 Class ChannelDirectoryResponder {
 
-	public function make( $channel, $articles, $sponsors )
-	{
-		$articleTransformer = \App::make( 'ArticleTransformer' );
-		$sponsorTransformer = \App::make( 'SponsorTransformer' );
-		$articleRepository = \App::make( 'ArticleRepository' );
-		$patternMaker = \App::make( 'PatternMaker' );
+	public function make( $channel, $articles, SponsorResponder $sponsorResponder )
+	{	
+		## Note - the articles here are is_featured = true. The count returned below is of all articles in that sub-channel split between their assigned categories
+		## and not of the articles being returned.
 
-		$patternMaker->setPattern( 1 );
-
-		$articles = $articleTransformer->transformCollection( $articles );
-		$sponsors = $sponsorTransformer->transformCollection( $sponsors );
+		// get a list of articles assigned to this sub-channel based on their category
+		$categories = App::make( 'ArticleRepository' )->getChannelArticleCategory( getSubChannelId($channel));
 		
-		$categories = Toolbox::getCategoryArticleCategories( $articleRepository->getChannelArticleCategory( getSubChannelId($channel) ) );
+		// go through each of the article categories returned and get a counter
+		$sortedCategories = Toolbox::getCategoryArticleCategories( $categories );
 
-		$articles = $patternMaker->make( [ 'articles'=> $articles, 'sponsors' => $sponsors ] )->articles;
+		// create the desired pattern
+		$response = App::make( 'PatternMaker' )->setPattern( 1 )->make( [ 'articles'=> $articles, 'sponsors' => $sponsorResponder->getUnassignedSponsors() ] );
 
+		// return all the data requested
 		return [
-			'articles' => $articles,
-			'categories' => $categories
+			'articles' => $response->articles,
+			'categories' => $sortedCategories,
+			'sponsors' => $response->sponsors
 		];
 	}
 }

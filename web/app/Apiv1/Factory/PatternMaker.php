@@ -1,38 +1,39 @@
 <?php namespace Apiv1\Factory;
 
+use stdClass;
+
 Class PatternMaker
 {
     private $patterns = [
         1 => [
                         //  [2 , 1]
-            0 => 2
-            , 1 => 1
+            0 => 2,
+            1 => 1,
                         //  [1 , 2]
-            , 2 => 1
-            , 3 => 2
-                        //  [1, 2]
-            ,4 => 1
-            , 5 => 2
-        ]
-        ,2 => [
-                        //  [1 , 2]
-            0 => "singleAd"
-            , 1 => 2
-                        //  [2 , 1]
-            , 2 => 1
-            , 3 => 2
-                        //  [1, 1, 1]
-            ,4 => "doubleAd"
-            , 5 => 1
+            2 => 1,
+            3 => 2,
+                        //  [advert, 1]
+            4 => "doubleAd",
+            5 => 1,
+
+            6 => 1,     // [1, 1, 1]
+            7 => 1,
+            8 => 1,
+
+            9 => 1,     // [1, 1, 1]
+            10 => 1,
+            11 => 1,
+
+            12 => 1,     // [1, advert]
+            13 => "doubleAd",
         ]
     ];
 
     public $activePattern;
-    public $limit;
-    public $maxPages;
+    public $size;
     private $pattern;
 
-    public function __construct($activePattern = 1, $limit = null, $maxPages = 5 )
+    public function __construct($activePattern = 1, $limit = null )
     {
         $this->activePattern = $activePattern;
         $this->pattern = $this->patterns[ $this->activePattern ];
@@ -41,6 +42,15 @@ Class PatternMaker
     public function setPattern($pattern)
     {
         $this->activePattern = $pattern;
+
+        return $this;
+    }
+
+    public function limit($limit)
+    {
+        $this->size = $limit;
+
+        return $this;
     }
 
     public function getPattern()
@@ -54,6 +64,7 @@ Class PatternMaker
         $patternCounter = 0;
         $totalPatterns = count($this->pattern);
         $sorted = [];
+        $index = 0;
         $allocatedSponsors = [];
 
         $articles = array_values($content['articles']); // reset the array keys as we'll be targeting them specifically
@@ -73,6 +84,9 @@ Class PatternMaker
                  $sorted[] = $thisAd;
 
                  $allocatedSponsors[] = $thisAd;
+
+                 // we've added another item so increment the counter
+                 $counter++;
              }
              else if($thisPattern == "doubleAd" and count($sponsors) > 0 )
              {
@@ -83,18 +97,23 @@ Class PatternMaker
                  $sorted[] = $thisAd;
 
                  $allocatedSponsors[] = $thisAd;
+
+                 // we've added another item so increment the counter
+                 $counter++;
              }
              else
              {
-                $thisArticle = $articles[$counter];
+                $thisArticle = $articles[$index];
 
                 $thisArticle['displayStyle'] = $thisPattern;
 
                 $sorted[] = $thisArticle;
 
-                unset($articles[$counter]);
+                unset($articles[$index]);
 
+                // we've added another item so increment the counter
                 $counter++;
+                $index++;
              }
 
              $patternCounter++;
@@ -104,13 +123,15 @@ Class PatternMaker
                  $patternCounter = 0;
              }
 
-             if( count($articles) == 0 )
+             // if we've run out of articles or reached the required limit then stop doing what we're doing!
+             if( count($articles) == 0 || $counter == $this->size )
              {
                 break;
              }
         }
 
-        $response = new \stdClass();
+        // return something
+        $response = new stdClass();
         $response->articles = $sorted;
         $response->sponsors = $allocatedSponsors;
 

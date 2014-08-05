@@ -1,29 +1,21 @@
 <?php namespace Apiv1\Responders;
 
+use App;
+
 class PickedResponder {
 
-	public function get( $channel, $caller )
+	public function get( SponsorResponder $sponsorResponder, $channel )
 	{
-		$articleRepository = \App::make('ArticleRepository');
-		$sponsorRepository = \App::make('SponsorRepository');
-		$patternMaker = \App::make('PatternMaker');
+        $picks = App::make('ArticleRepository')->getArticles( 'picks', 25, $channel['id'] );
+        $articles = App::make('ArticleTransformer')->transformCollection( $picks );
 
-		$articleTransformer = \App::make('ArticleTransformer');
-		$sponsorTransformer = \App::make('SponsorTransformer');
+        $ads = $sponsorResponder->getUnassignedSponsors();
 
-        $picks = $articleRepository->getArticles( 'picks', 25, $channel['id'] );
+        $response = App::make('PatternMaker')->setPattern(1)->make( [ 'articles' => $articles, 'sponsors' => $ads ] );
 
-        $ads = $sponsorRepository->getWhereNotInCollection( $caller->getAllocatedSponsors(), 30 )->toArray();
-
-        $articles = $articleTransformer->transformCollection( $picks );
-        $sponsors = $sponsorTransformer->transformCollection( $ads );
-
-        $response = $patternMaker->make( [ 'articles' => $articles, 'sponsors' => $sponsors ] );
-        $articles = $response->articles;
-
-     	// let the calling function know which sponsors have been used up so we don't repeat them on the channel
-        $caller->setAllocatedSponsors($response->sponsors);
-
-        return $articles;
+        return [
+            'articles' => $response->articles,
+            'sponsors' => $response->sponsors
+        ];
 	}      
 }

@@ -10,11 +10,11 @@ $required = AppArticle::get();
 $I = new ApiTester($scenario);
 $I->am('An API client');
 $I->wantTo('Retrieve the details of an article for display on a mobile device or tablet');
-$I->seeInDatabase('article', ['id' => 199]);
-$I->seeInDatabase('channel', ['id' => 71]);
-$I->seeInDatabase('category', ['id' => 15]);
+$I->seeInDatabase('article', ['id' => 231]);
+$I->seeInDatabase('channel', ['id' => 6]);
+$I->seeInDatabase('category', ['id' => 5]);
 
-$I->sendGET	('articles?subchannel=71&category=15&article=199');
+$I->sendGET	('articles?subchannel=6&category=5&article=231');
 
 $I->seeResponseCodeIs(200);
 $I->seeResponseIsJson();

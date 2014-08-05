@@ -1,14 +1,13 @@
 <?php namespace Apiv1\Responders;
 
+use App;
+
 class FeaturedResponder {
 
 	public function get( $channel )
 	{
-		$articleRepository = \App::make('ArticleRepository');
-		$articleTransformer = \App::make('ArticleTransformer');
+        $articles = App::make('ArticleRepository')->getArticles( 'featured', 5, $channel['id'] );
 
-        $articles = $articleRepository->getArticles( 'featured', 5, $channel['id'] );
-
-        return $articleTransformer->transformCollection( $articles );
+        return App::make('ArticleTransformer')->transformCollection( $articles );
 	}      
 }

@@ -1,31 +1,35 @@
 <?php namespace Apiv1\Factory;
 
+use App;
+use Input;
 use Apiv1\Repositories\Channels\Toolbox;
 
-Class CategoryResponseMaker extends ApiResponseMaker implements ApiResponseMakerInterface {	
+Class CategoryResponseMaker {	
 
 	protected $category;
 	protected $channel;
+	protected $sponsorResponder;
+
+	public function __construct()
+	{
+		$this->sponsorResponder = App::make('SponsorResponder');
+	}
 
 	public function getCategory($categoryIdentifier)
 	{
-		$categoryRepository = \App::make( 'CategoryRepository' );
-		$categoryTransformer = \App::make( 'CategoryTransformer' );
-
-		if( ! $category = $categoryRepository->getCategoryByIdentifier( $categoryIdentifier ) )
+		if( ! $category = App::make( 'CategoryRepository' )->getCategoryByIdentifier( $categoryIdentifier ) )
         {
         	return apiErrorResponse('notFound');
         }
 
-        $this->category = $categoryTransformer->transform($category->toArray());
+        $this->category = App::make( 'CategoryTransformer' )->transform($category->toArray());
 
         return $this->category;
 	}
 
 	public function getChannel($identifier)
 	{
-		$channelRepository = \App::make( 'ChannelRepository' );
-		$channelTransformer = \App::make( 'ChannelTransformer' );
+		$channelRepository = App::make( 'ChannelRepository' );
 
 		if( ! $channel = $channelRepository->getChannelByIdentifier( $identifier ) )
         {
@@ -39,11 +43,11 @@ Class CategoryResponseMaker extends ApiResponseMaker implements ApiResponseMaker
 
 		if( ! categoryBelongsToChannel( $channel, $this->category['id'] ) )
 		{
-			return apiErrorResponse('failedDependency');	
+			return apiErrorResponse('failedDependency', [ 'ErrorReason' => "Supplied channel is not a sub-channel." ]);	
 		}
 
 		$parentChannel = $channelRepository->getChannelBySubChannel( $channel );		
-		$this->channel = $channelTransformer->transform( Toolbox::filterSubChannels( $parentChannel, $channel ) );
+		$this->channel = App::make( 'ChannelTransformer' )->transform( Toolbox::filterSubChannels( $parentChannel, $channel ) );
 
 		// remove all other categories except the one requested
 		foreach( $this->channel['subChannels'][0]['categories'] AS $key => $category )
@@ -63,21 +67,34 @@ Class CategoryResponseMaker extends ApiResponseMaker implements ApiResponseMaker
 		$categoryId = $this->category['id'];
 		$subChannelId = getSubChannelId($this->channel);
 
+		$articles = App::make('CategoryResponder')->getCategoryArticles($categoryId, $subChannelId);
+
+		// ARTICLE type articles
 		if( isArticleType( $this->channel ) )
 		{
-			return \App::make('CategoryArticleResponder')->make($categoryId, $subChannelId, $this);
+			$response = App::make('CategoryArticleResponder')->make($this->sponsorResponder, $articles);
 		}
+		// DIRECTORY type articles
 		else if( isDirectoryType( $this->channel ) )
 		{
-			return \App::make('CategoryDirectoryResponder')->make($categoryId, $subChannelId);
+			$response = App::make('CategoryDirectoryResponder')->make($articles, $categoryId, $subChannelId);
 		}
+		// LISTING type articles
 		else if( isListingType( $this->channel ) )
 		{
-			$range = 'day';
-			$time = \Input::get('time') ? \Input::get('time') : \time();
+			$response = App::make('CategoryListingResponder')->make( $categoryId, $subChannelId );
+		}
 
-			return $channelListingResponder = \App::make('CategoryListingResponder')->make( $categoryId, $subChannelId, $range, $time );
+		// if there were sponsors in the response we need to do something with them or they'll be returned by the API
+		if(isset($response['sponsors']))
+		{
+			$this->sponsorResponder->setAllocatedSponsors($response['sponsors']);	
+
+			// we dont want to return this so get rid of it
+			unset($response['sponsors']);
 		}		
+
+		return $response;
 	}
 
 	public function make($categoryIdentifier, $channelId)
@@ -92,9 +109,16 @@ Class CategoryResponseMaker extends ApiResponseMaker implements ApiResponseMaker
         	return $result;	
         }
 
+        // get 3 related adverts and set them as allocated
+        $this->sponsorResponder->channel = $this->channel;
+        $this->sponsorResponder->category = $this->category;
+
+		$adverts = $this->sponsorResponder->getCategorySponsors(3); 
+		$this->sponsorResponder->setAllocatedSponsors($adverts);
+
 		$response = [
 			'channel' => $this->channel,			
-            'adverts' => $this->getSponsors(),
+            'adverts' => $adverts,
 		];
 
 		foreach( $this->getCategoryContent() AS $key => $content )

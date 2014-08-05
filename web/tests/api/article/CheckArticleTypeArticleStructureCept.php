@@ -15,9 +15,9 @@ $required = Article::get();
 $I = new ApiTester($scenario);
 $I->am('An API client');
 $I->wantTo('Retrieve the details of an article');
-$I->seeInDatabase('article', ['id' => 142]);
-$I->seeInDatabase('channel', ['id' => 60]);
-$I->sendGET	('category/5/article/articles?subChannel=53');
+$I->seeInDatabase('article', ['id' => 1]);
+$I->seeInDatabase('channel', ['id' => 4 ]);
+$I->sendGET	('category/1/article/articles?subChannel=4');
 
 $I->seeResponseCodeIs(200);
 $I->seeResponseIsJson();

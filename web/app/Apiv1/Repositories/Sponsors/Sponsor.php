@@ -57,7 +57,7 @@ class Sponsor extends BaseModel {
 
     public function channel()
     {
-        return $this->belongsToMany('Apiv1\Repositories\Channels\Channel', 'sponsor_placement', 'sponsor_id', 'id');
+        return $this->belongsToMany('Apiv1\Repositories\Channels\Channel');
     }
 
     public function displayStyle()

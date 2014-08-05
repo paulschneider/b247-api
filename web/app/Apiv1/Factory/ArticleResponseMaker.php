@@ -3,7 +3,7 @@
 use App;
 use Lang;
 
-Class ArticleResponseMaker extends ApiResponseMaker implements ApiResponseMakerInterface {
+Class ArticleResponseMaker {
 
 	var $category;
 	var $channel; // sub-channel
@@ -97,7 +97,11 @@ Class ArticleResponseMaker extends ApiResponseMaker implements ApiResponseMakerI
 
 	public function getAdverts()
 	{
-		return $this->getSponsors();
+		$sponsorResponder = App::make('SponsorResponder');
+		$sponsorResponder->channel = $this->channel;
+		$sponsorResponder->category = $this->category;
+
+		return $sponsorResponder->getCategorySponsors(3);
 	}
 
 	public function nextPreviousArticles()

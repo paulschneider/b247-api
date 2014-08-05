@@ -3,7 +3,7 @@
 use App;
 use Lang;
 
-Class PasswordChangeResponseMaker extends ApiResponseMaker implements ApiResponseMakerInterface {
+Class PasswordChangeResponseMaker {
 
 	private $validator;
 	private $form;

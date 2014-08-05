@@ -4,7 +4,7 @@ use App;
 use Lang;
 use Apiv1\Validators\RegistrationValidator;
 
-Class RegistrationResponseMaker extends ApiResponseMaker implements ApiResponseMakerInterface {
+Class RegistrationResponseMaker {
 
 	public $form;
 	public $user;

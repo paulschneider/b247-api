@@ -1,6 +1,6 @@
 <?php 
 
-# GetListingTypeSubChannelCept.php
+# subchannel/GetListingTypeSubChannelCept.php
 
 $required = [
  	'channel' => [],
@@ -17,8 +17,8 @@ $forbidden = [
 $I = new ApiTester($scenario);
 $I->am('An API client');
 $I->wantTo('Obtain the details of a sub-channel of type listing');
-$I->seeInDatabase('channel', ['id' => 60, 'parent_channel' => 50]);
-$I->sendGET	('subchannel/60/listing');
+$I->seeInDatabase('channel', ['id' => 6, 'parent_channel' => 2]);
+$I->sendGET	('subchannel/6/listing');
 $I->seeResponseCodeIs(200);
 $I->seeResponseIsJson();
 $I->canSeeHttpHeader('Content-Type','application/json');
