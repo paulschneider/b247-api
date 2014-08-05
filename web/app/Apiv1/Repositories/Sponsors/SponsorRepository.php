@@ -11,24 +11,28 @@ Class SponsorRepository extends BaseModel {
     *
     * @return array
     */
-    public function getChannelSponsors($limit = 3, array $channelList, $subChannel = false, $allocated = [])
+    public function getChannelSponsors($limit = 3, array $channelList, $subChannel = false, $allocated = [], $type)
     {
-        $query = SponsorLocation::with('sponsor', 'sponsor.asset');
+        $query = Sponsor::select('sponsor.*')
+            ->join('sponsor_location', 'sponsor_location.sponsor_id', '=', 'sponsor.id')
+            ->with('location', 'asset');            
 
         // if we passed a list of channel then only get sponsors for those channels
         if( count($channelList) > 0)
         {            
             if( ! $subChannel) {
-                $query->whereIn('channel_id', $channelList);
+                $query->whereIn('sponsor_location.channel_id', $channelList);
             }
             else {
-                $query->whereIn('sub_channel_id', $channelList);   
+                $query->whereIn('sponsor_location.sub_channel_id', $channelList);   
             }    
         }
+
+        $query->where('sponsor.sponsor_type', $type);
         
         // if a list of sponsors has been passed then only get sponsors thats aren't in that list
         if( is_array($allocated) && count($allocated) > 0 ) {
-            $query->whereNotIn('sponsor_id', $allocated);    
+            $query->whereNotIn('sponsor.id', $allocated);    
         }      
 
         $result = $query->take($limit)->orderBy(\DB::raw('RAND()'))->get();       
@@ -41,12 +45,18 @@ Class SponsorRepository extends BaseModel {
      * @param  int $channelId
      * @param  int $categoryId
      * @param array $allocated
+     * @param int $type // from the sponsor_type DB table
      * @return mixed
      */
-    public function getCategorySponsors($limit, $channelId, $categoryId, $allocated = [])
+    public function getCategorySponsors($limit, $channelId, $categoryId, $allocated = [], $type)
     {
-       $query = SponsorLocation::with('sponsor', 'sponsor.asset')->where('sub_channel_id', $channelId)->where('category_id', $categoryId);
-
+        $query = Sponsor::select('sponsor.*')
+            ->join('sponsor_location', 'sponsor_location.sponsor_id', '=', 'sponsor.id')
+            ->with('location', 'asset')
+            ->where('sub_channel_id', $channelId)
+            ->where('category_id', $categoryId)
+            ->where('sponsor.sponsor_type', $type); 
+            
        // if a list of sponsors has been passed then only get sponsors thats aren't in that list
         if( is_array($allocated) && count($allocated) > 0 ) {
             $query->whereNotIn('sponsor_id', $allocated);    

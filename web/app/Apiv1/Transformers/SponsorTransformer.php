@@ -1,5 +1,7 @@
 <?php namespace Apiv1\Transformers;
 
+use App;
+
 class SponsorTransformer extends Transformer {
 
     /**
@@ -39,13 +41,7 @@ class SponsorTransformer extends Transformer {
 
         if( isset($sponsor['asset']) )
         {
-            $tmp['media'] = [
-                'filepath' => $sponsor['asset']['filepath']
-                ,'alt' => $sponsor['asset']['alt']
-                ,'title' => $sponsor['asset']['title']
-                ,'width' => $sponsor['asset']['width']
-                ,'height' => $sponsor['asset']['height']
-            ];
+            $tmp['media'] = App::make( 'Apiv1\Transformers\SponsorMediaTransformer' )->transform($sponsor);            
         }
 
         // if( ! isDesktop() )

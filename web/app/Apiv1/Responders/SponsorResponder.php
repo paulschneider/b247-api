@@ -1,6 +1,7 @@
 <?php namespace Apiv1\Responders;
 
 use App;
+use Config;
 
 Class SponsorResponder {
 
@@ -19,15 +20,9 @@ Class SponsorResponder {
 	 */
 	public function getChannelSponsors($limit, $channelList, $subChannel = false)
 	{
-		$result = App::make('SponsorRepository')->getChannelSponsors($limit, $channelList, $subChannel);
+		$sponsors = App::make('SponsorRepository')->getChannelSponsors($limit, $channelList, $subChannel, [], Config::get('global.sponsorLETTERBOX'));
 
-		// with the way this call has been made the sponsor object needs to be extracted
-        $sponsors = [];
-        foreach($result AS $r)
-        {
-            $sponsors[] = $r['sponsor'][0];
-        }
-
+		// transform them in to the API format 
 		$transformedSponsors = App::make('SponsorTransformer')->transformCollection($sponsors);
 
 		return $transformedSponsors;
@@ -44,14 +39,7 @@ Class SponsorResponder {
 		$subChannelId = getSubChannelId($this->channel);
 
 		// grab some sponsors and filter them by the requested category
-		$result = App::make('SponsorRepository')->getCategorySponsors($limit, $subChannelId, $this->category['id'], $this->getAllocatedSponsors());
-
-		// with the way this call has been made the sponsor object needs to be extracted
-        $sponsors = [];
-        foreach($result AS $r)
-        {
-            $sponsors[] = $r['sponsor'][0];
-        }
+		$sponsors = App::make('SponsorRepository')->getCategorySponsors($limit, $subChannelId, $this->category['id'], $this->getAllocatedSponsors(), Config::get('global.sponsorMPU'));
 
 		// transform them in to the API format 
 		$transformedSponsors = App::make('SponsorTransformer')->transformCollection($sponsors);

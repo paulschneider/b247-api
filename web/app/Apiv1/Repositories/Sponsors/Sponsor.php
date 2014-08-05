@@ -64,4 +64,14 @@ class Sponsor extends BaseModel {
     {
         return $this->belongsTo('Apiv1\Repositories\Models\DisplayStyle', 'display_style');
     }
+
+    public function pageTypeSponsor()
+    {
+        return $this->hasOne('Apiv1\Repositories\Sponsors\SponsorType', 'id', 'sponsor_type');
+    }
+
+    public function location()
+    {
+        return $this->hasOne('Apiv1\Repositories\Sponsors\SponsorLocation', 'sponsor_id');   
+    }
 }

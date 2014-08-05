@@ -87,7 +87,7 @@ Class HomeResponseMaker {
             'channelFeed' => $this->getChannelFeed(),
         ];
 
-        array_unshift($this->response['channelFeed'], $this->getWhatsOn());
+		array_unshift($this->response['channelFeed'], $this->getWhatsOn());
 
 		return $this->response;
 	}

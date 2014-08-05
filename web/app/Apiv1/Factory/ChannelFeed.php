@@ -50,9 +50,10 @@ Class ChannelFeed {
 
                 // transform the articles and the sponsors into the API format 
                 $articles = $this->articleTransformer->transformCollection($articles);
+
                 $sponsors = $sponsorResponder->getUnassignedSponsors( [$channel], $this->isASubChannel );
 
-                // create the patter to repeat for this channel
+                // create the pattern to repeat for this channel
                 $response = $this->patternMaker->setPattern(1)->make( [ 'articles' => $articles, 'sponsors' => $sponsors ] );
 
                 // grab the channel details for this channel and transform it
