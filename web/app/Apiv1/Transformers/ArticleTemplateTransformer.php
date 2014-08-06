@@ -21,6 +21,9 @@ Class ArticleTemplateTransformer extends ArticleTransformer {
         $articleLocation = $article['location'][0];
         $externalPath = makePath( [ $articleLocation['channelSefName'], $articleLocation['subChannelSefName'], $articleLocation['categorySefName'], $article['sef_name'] ] );
 
+        // grab the author of the article and store it temporarily
+        $author = $article['author'][0]['name'];
+
         // grab the article continued item and store it or it will be removed
         $bodyContinued = $article['body_continued'];
 
@@ -54,8 +57,11 @@ Class ArticleTemplateTransformer extends ArticleTransformer {
         // insert the temp bodyContinued in to the article at the desired position
         $article = insertInto($article, 'body', $bodyContinued, 'bodyContinued');
 
+        // insert the author object into the article at the desired position
+        $article = insertInto($article, 'bodyContinued', $author, 'author');
+
         // insert a mapItems object into the article at the desired position
-        $article = insertInto($article, 'bodyContinued', $mapItems, 'mapItems');
+        $article = insertInto($article, 'author', $mapItems, 'mapItems');
 
         // insert a mapItems object into the article at the desired position
         $article = insertInto($article, 'path', $externalPath, 'shareLink');

@@ -111,4 +111,9 @@ class Article extends BaseModel {
     {
         return $this->belongsToMany('Apiv1\Repositories\Videos\Video', 'article_video', 'article_id');
     }
+
+    public function author()
+    {
+        return $this->belongsToMany('Apiv1\Repositories\Articles\Author', 'article_author', 'article_id');
+    }
 }
