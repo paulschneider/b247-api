@@ -1,5 +1,18 @@
 <?php
 
+function anExternalUrl($string)
+{
+    $protocols = [ 'http://', 'https://' ];
+
+    foreach($protocols AS $protocol)
+    {
+        if(strpos($string, $protocol) !== false)
+        {
+            return true;
+        }
+    }    
+}
+
 function getDay($dayNumber)
 {
     $days = [
