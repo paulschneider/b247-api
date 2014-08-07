@@ -158,7 +158,7 @@ Class ArticleRepository extends BaseModel {
 
     public function search($searchTerm)
     {
-        $query = ArticleLocation::with('article.event.venue', 'article.asset', 'article.location')->select(
+        $query = ArticleLocation::with('article.event.venue', 'article.event.showTime', 'article.asset', 'article.location')->select(
             'article.title', 'article_location.article_id'
         )
         ->join('article', 'article.id', '=', 'article_location.article_id')
