@@ -45,7 +45,7 @@ class EventTransformer extends Transformer {
                 ,'showTime' => $performances['summary']['nextPerformance']['time']
                 ,'price' => $performances['summary']['nextPerformance']['price']
                 ,'url' => $event['url']
-                ,'performances' => $performances['times']
+                ,'performances' => $performances
             ]
             ,'venue' => App::make( 'VenueTransformer' )->transform( $venue )
         ];
