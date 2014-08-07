@@ -78,15 +78,13 @@ Class ArticleTransformer extends Transformer {
 
             // If there is an event then transform that as well
 
-            if( isset($article['event']['id']) )
-            { 
-                $eventTransformer = App::make( 'EventTransformer' );
-
-                $response['event'] = $eventTransformer->transform( $article['event'] );
+            if( isset($article['event']['id']) ) { 
+                $response['event'] = App::make( 'EventTransformer' )->transform( $article, $options );
             }
+
             // venues can be attached to articles without an event (ref directory type article)
-            elseif (isset($article['venue']['id']))
-            {
+            //  
+            elseif (isset($article['venue']['id'])) {
                 $response['venue'] = App::make( 'VenueTransformer' )->transform( $article['venue'] );                
             }           
 

@@ -1,5 +1,7 @@
 <?php namespace Apiv1\Transformers;
 
+use App;
+
 class EventTransformer extends Transformer {
 
     /**
@@ -26,29 +28,28 @@ class EventTransformer extends Transformer {
      * @param sponsor
      * @return array
      */
-    public function transform( $event, $options = [] )
-    {
-        if( ! is_array($event))
-        {
-            $event = $event->toArray();
-        }
+    public function transform( $article, $options = [] )
+    {        
+        $venue = $article['event']['venue'];
+        $event = $article['event'];
+        unset($article['event']['venue']);        
 
-        $venue = $event['venue'];
-        unset($event['venue']);
-        $venueTransformer = \App::make( 'VenueTransformer' );                
+        $performances = App::make( 'Apiv1\Transformers\ShowTimeTransformer' )->transformCollection($article['event']['show_time'], $options);
 
-        return [
+        $response = [
             'details' => [
                 'id' => $event['id']
                 ,'title' => $event['title']
                 ,'sefName' => $event['sef_name']
-                ,'showDate' => $event['show_date']
-                ,'showTime' => $event['show_time']
-                ,'epoch' => strtotime( $event['show_date'] . ' ' . $event['show_time'] )
-                ,'price' => number_format( $event['price'], 2 )
+                ,'showDate' => $performances['summary']['nextPerformance']['start']
+                ,'showTime' => $performances['summary']['nextPerformance']['time']
+                ,'price' => $performances['summary']['nextPerformance']['price']
                 ,'url' => $event['url']
+                ,'performances' => $performances['times']
             ]
-            ,'venue' => $venueTransformer->transform( $venue )
+            ,'venue' => App::make( 'VenueTransformer' )->transform( $venue )
         ];
+
+        return $response;
     }
 }
