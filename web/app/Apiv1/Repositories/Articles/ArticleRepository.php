@@ -118,6 +118,10 @@ Class ArticleRepository extends BaseModel {
             'article.title', 'article_location.article_id'
         )
         ->join('article', 'article.id', '=', 'article_location.article_id')
+        ->join('channel', 'channel.id', '=', 'article_location.sub_channel_id')
+        ->join('category', 'category.id', '=', 'article_location.category_id')
+        ->where('channel.is_active', true)
+        ->where('category.is_active', true)
         ->where('sub_channel_id', $channel);
 
         if( $range == "week" )
@@ -147,38 +151,6 @@ Class ArticleRepository extends BaseModel {
         return $articles;
     }
 
-    public function getArticlesBySubChannel($limit = 20, $channel = null, $articleTransformer)
-    {
-        $articles = static::getArticles(null, 1000, $channel);
-
-        $response = [];
-
-        foreach( $articles AS $article )
-        {
-            if( ! $article['is_featured'] and ! $article['is_picked'] and empty($article['event_id']) )
-            {
-                $subChannel = $article['location'][0];
-
-                $response[$subChannel['subChannelSefName']]['details'] = [
-                    'id' => $subChannel['subChannelId']
-                    ,'name' => $subChannel['subChannelName']
-                ];
-
-                if( !isset($response[$subChannel['subChannelSefName']]['articles']) )
-                {
-                    $response[$subChannel['subChannelSefName']]['articles'] = [];
-                }
-
-                if( count($response[$subChannel['subChannelSefName']]['articles']) < $limit)
-                {
-                    $response[$subChannel['subChannelSefName']]['articles'][] = $articleTransformer->transform($article, [ 'showBody' => false] );
-                }
-            }
-        }
-
-        return array_values($response); // reset the associative array key values to integer valeus and return
-    }
-
     public function search($searchTerm)
     {
         $query = ArticleLocation::with('article.event.venue', 'article.asset', 'article.location')->select(
@@ -202,12 +174,17 @@ Class ArticleRepository extends BaseModel {
         return $articles;
     }
 
+    // Articles for everywhere except listings
     public function getArticles($type = 'article', $limit = 20, $channel = null, $isASubChannel = false, $ignoreChannel = false)
     {
         $query = ArticleLocation::with('article.event.venue', 'article.asset', 'article.location')->select(
             'article.title', 'article_location.article_id'
         )
-        ->join('article', 'article.id', '=', 'article_location.article_id');
+        ->join('article', 'article.id', '=', 'article_location.article_id')
+        ->join('channel', 'channel.id', '=', 'article_location.sub_channel_id')
+        ->join('category', 'category.id', '=', 'article_location.category_id')
+        ->where('channel.is_active', true)
+        ->where('category.is_active', true);
 
         if( !$ignoreChannel ) // on the homepage we don't care about which channel the featured or picked articles come from
         {

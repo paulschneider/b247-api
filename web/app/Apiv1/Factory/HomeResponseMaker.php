@@ -11,12 +11,9 @@ Class HomeResponseMaker extends ApiResponseMaker implements ApiResponseMakerInte
 
 	public function getChannels()
 	{
-		$channelRepository = App::make( 'ChannelRepository' );
-		$channelTransformer = App::make( 'ChannelTransformer' );
+		$this->channels = App::make( 'ChannelRepository' )->getChannels();
 
-		$this->channels = $channelRepository->getChannels();
-
-		return $channelTransformer->transformCollection($this->channels);
+		return App::make( 'ChannelTransformer' )->transformCollection($this->channels);
 	}
 
 	public function getFeatured()

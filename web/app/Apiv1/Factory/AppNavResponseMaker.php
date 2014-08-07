@@ -1,17 +1,16 @@
 <?php namespace Apiv1\Factory;
 
+use App;
+
 Class AppNavResponseMaker extends ApiResponseMaker implements ApiResponseMakerInterface {
 
 	var $channels;
 
 	public function getChannels()
 	{
-		$channelRepository = \App::make( 'ChannelRepository' );
-		$channelTransformer = \App::make( 'ChannelTransformer' );
+		$channels = App::make( 'ChannelRepository' )->getChannels();
 
-		$channels = $channelRepository->getChannels();
-
-		return $channelTransformer->transformCollection($channels);
+		return App::make( 'ChannelTransformer' )->transformCollection($channels);
 	}
 
 	public function make()
