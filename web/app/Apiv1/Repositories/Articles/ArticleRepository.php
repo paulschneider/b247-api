@@ -62,7 +62,7 @@ Class ArticleRepository extends BaseModel {
 
     public function getCategoryArticle($channel, $category, $article)
     {       
-        $query = Article::select('article.*', 'article_id AS id')->with('location', 'gallery', 'event.venue', 'venue', 'video', 'author');
+        $query = Article::select('article.*', 'article_id AS id')->with('location', 'gallery', 'event.venue', 'event.showTime', 'venue', 'video', 'author');
         $query->join('article_location', 'article_location.article_id', '=', 'article.id');
 
         if( is_numeric($article) )
@@ -114,74 +114,51 @@ Class ArticleRepository extends BaseModel {
     {
         $dateStamp = convertTimestamp( 'Y-m-d', $timestamp);
 
-        $query = ArticleLocation::with('article.event.venue', 'article.asset', 'article.location')->select(
+        $query = ArticleLocation::with('article.event.venue', 'article.event.showTime', 'article.asset', 'article.location')->select(
             'article.title', 'article_location.article_id'
         )
         ->join('article', 'article.id', '=', 'article_location.article_id')
+        ->join('event_showtimes', 'event_showtimes.event_id', '=', 'article.event_id')
         ->where('sub_channel_id', $channel);
 
         if( $range == "week" )
         { 
+
             $dateArray = explode('-', $dateStamp);  
-            $query->where('article.published', '>=', $dateStamp.' 00:00:01');
-            $query->where('article.published', '<=', Carbon::create($dateArray[0], $dateArray[1], $dateArray[2], '23', '59', '59')->addDays(6));
+            $query->where('event_showtimes.showtime', '>=', $dateStamp.' 00:00:01');
+            $query->where('event_showtimes.showtime', '<=', Carbon::create($dateArray[0], $dateArray[1], $dateArray[2], '23', '59', '59')->addDays(6));
 
             $query->where('article.is_picked', '=', true);
         }
         elseif ( $range == "day" )
         {
-            $query->where('article.published', '>=', $dateStamp.' 00:00:01');
-            $query->where('article.published', '<=', $dateStamp.' 23:59:59');
+            $query->where('event_showtimes.showtime', '>=', $dateStamp.' 00:00:01');
+            $query->where('event_showtimes.showtime', '<=', $dateStamp.' 23:59:59');
         }
 
-        $result = $query->orderBy('article.published', 'asc')->get();
+        $result = $query->orderBy('event_showtimes.showtime', 'asc')->get();
 
         $articles = [];
-        
+        $articleIds = [];
+
         // they come out of this query slightly differently to how the articleTransformer needs them. sort that out !
         foreach( $result->toArray() AS $item )
         {
-            $articles[] = $item['article'];
+            $articleId = $item['article']['id'];
+            
+            if( ! in_array($articleId, $articleIds)) {
+                $articles[] = $item['article'];    
+            }
+            
+            $articleIds[] = $articleId;
         }
 
         return $articles;
     }
 
-    public function getArticlesBySubChannel($limit = 20, $channel = null, $articleTransformer)
-    {
-        $articles = static::getArticles(null, 1000, $channel);
-
-        $response = [];
-
-        foreach( $articles AS $article )
-        {
-            if( ! $article['is_featured'] and ! $article['is_picked'] and empty($article['event_id']) )
-            {
-                $subChannel = $article['location'][0];
-
-                $response[$subChannel['subChannelSefName']]['details'] = [
-                    'id' => $subChannel['subChannelId']
-                    ,'name' => $subChannel['subChannelName']
-                ];
-
-                if( !isset($response[$subChannel['subChannelSefName']]['articles']) )
-                {
-                    $response[$subChannel['subChannelSefName']]['articles'] = [];
-                }
-
-                if( count($response[$subChannel['subChannelSefName']]['articles']) < $limit)
-                {
-                    $response[$subChannel['subChannelSefName']]['articles'][] = $articleTransformer->transform($article, [ 'showBody' => false] );
-                }
-            }
-        }
-
-        return array_values($response); // reset the associative array key values to integer valeus and return
-    }
-
     public function search($searchTerm)
     {
-        $query = ArticleLocation::with('article.event.venue', 'article.asset', 'article.location')->select(
+        $query = ArticleLocation::with('article.event.venue', 'article.event.showTime', 'article.asset', 'article.location')->select(
             'article.title', 'article_location.article_id'
         )
         ->join('article', 'article.id', '=', 'article_location.article_id')
@@ -204,7 +181,7 @@ Class ArticleRepository extends BaseModel {
 
     public function getArticles($type = 'article', $limit = 20, $channel = null, $isASubChannel = false, $ignoreChannel = false)
     {
-        $query = ArticleLocation::with('article.event.venue', 'article.asset', 'article.location')->select(
+        $query = ArticleLocation::with('article.event.venue', 'article.event.showTime', 'article.asset', 'article.location')->select(
             'article.title', 'article_location.article_id'
         )
         ->join('article', 'article.id', '=', 'article_location.article_id');
@@ -258,7 +235,7 @@ Class ArticleRepository extends BaseModel {
                 $query->where('article_location.channel_id', $channel);
         }])->with(['event' => function($query) {
                 $query->orderBy('event.show_date', 'asc')->alive()->active();
-        }])->with('event.venue');
+        }])->with('event.venue', 'event.showTime');
 
         return $query->whereNotNull('article.event_id')->take($limit)->get()->toArray();
     }
@@ -322,7 +299,7 @@ Class ArticleRepository extends BaseModel {
     {
         $articleLocation = $article->location->first();
 
-        $result  = ArticleLocation::with('article.event.venue', 'article.asset', 'article.location')
+        $result  = ArticleLocation::with('article.event.venue', 'article.event.showTime', 'article.asset', 'article.location')
                 ->join('article', 'article.id', '=', 'article_location.article_id')
                 ->where('article_location.sub_channel_id', '=', $articleLocation['subChannelId'])
                 ->where('article_location.category_id', '=', $articleLocation['categoryId'])

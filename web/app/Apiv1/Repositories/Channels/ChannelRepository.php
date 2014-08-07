@@ -24,7 +24,7 @@ Class ChannelRepository extends BaseModel {
     */
     public function getChannels()
     {
-        return Channel::with('subChannel.category', 'subChannel.display')->whereNull('parent_channel')->get()->toArray();
+        return Channel::with('subChannel.category', 'subChannel.display')->whereNull('parent_channel')->active()->get()->toArray();
     }
 
     /**

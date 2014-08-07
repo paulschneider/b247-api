@@ -36,23 +36,23 @@ Class SubChannelResponseMaker {
 
 	public function getChannelContent()
 	{
-		$channelResponder = App::make( 'ChannelResponder' );
-
-		$articles = $channelResponder->getArticles( $this->channel );
-
 		// if its a channel of type - article
 		if( isArticleType( $this->channel ) )
 		{
+			$articles = App::make( 'ChannelResponder' )->getArticles( $this->channel );
+
 			$response = App::make('ChannelArticleResponder')->make( $articles, $this->sponsorResponder );
 		}
 		// if its a channel of type - directory
 		else if( isDirectoryType( $this->channel ) )
 		{
+			$articles = App::make( 'ChannelResponder' )->getArticles( $this->channel );
+
 			$response = App::make('ChannelDirectoryResponder')->make( $this->channel, $articles, $this->sponsorResponder );
 		}
 		// if its a channel of type - listing
 		else if( isListingType( $this->channel ) )
-		{
+		{		
 			$response = App::make('ChannelListingResponder')->make( $this->channel );
 		}
 

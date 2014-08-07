@@ -3,8 +3,6 @@
 use Input;
 use time;
 use App;
-use Api\Factory\ApiResponseMaker;
-use ApiController;
 
 Class ChannelListingResponder {
 
