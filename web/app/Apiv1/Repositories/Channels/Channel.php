@@ -48,7 +48,7 @@ Class Channel extends BaseModel {
     */
     public function subChannel()
     {
-        return $this->hasMany('Apiv1\Repositories\Channels\SubChannel', 'parent_channel');
+        return $this->hasMany('Apiv1\Repositories\Channels\SubChannel', 'parent_channel')->alive()->active();
     }
 
     public function parent()

@@ -23,7 +23,7 @@ Class SubChannel extends BaseModel
     *
     * @var string
     */
-    protected $hidden = [ 'is_active', 'is_deleted', 'created_at', 'updated_at' ];
+    protected $hidden = [ 'created_at', 'updated_at' ];
 
     /**
      * Relate categories to their parent sub-channels
@@ -32,7 +32,7 @@ Class SubChannel extends BaseModel
      */
     public function category()
     {
-        return $this->belongsToMany('Apiv1\Repositories\Categories\Category', 'channel_category', 'channel_id');
+        return $this->belongsToMany('Apiv1\Repositories\Categories\Category', 'channel_category', 'channel_id')->alive()->active();
     }
 
     /**
@@ -58,30 +58,5 @@ Class SubChannel extends BaseModel
     public function display()
     {
         return $this->belongsTo('Apiv1\Repositories\Models\DisplayType', 'display_type');
-    }
-
-    public static function getWithArticles($channel)
-    {
-        $channels = static::with('articles.location')->with('articles.asset')->where('parent_channel', $channel)->get()->toArray();
-
-        foreach($channels AS $key => $channel)
-        {
-            if( isset($channel['articles']) )
-            {
-                $articles = [];
-
-                foreach($channel['articles'] AS $article)
-                {
-                    if( ! $article['is_featured'] and ! $article['is_picked'] )
-                    {
-                        $articles[] = $article;
-                    }
-                }
-
-                $channels[$key]['articles'] = $articles;
-            }
-        }
-
-        return $channels;
     }
 }
