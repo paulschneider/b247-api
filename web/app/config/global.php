@@ -6,5 +6,5 @@ return [
 	'sponsorMPU' => 2, 
 	'sponsorLETTERBOX' => 1,
 	'whatsOnChannelId' => 2,
-	'mailChimpNewsLetterTag' => 'daily-digest'.
+	'mailChimpNewsLetterTag' => 'daily-digest'
 ];
