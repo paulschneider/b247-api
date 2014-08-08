@@ -71,11 +71,11 @@ Class RegistrationResponseMaker {
 			'user' => App::make( 'UserTransformer' )->transform($this->user)			
 		];
 
-		// send out welcome email
-		$this->registration->notify( ['user' => $response['user'], 'plainPassword' => $this->user->plain_pass] );
-
 		// register the user to receive the newsletter
 		 $this->newsletter->subscribeTo('daily-digest', $response['user']['email']);
+
+		 // send out welcome email
+		$this->registration->notify( ['user' => $response['user'], 'plainPassword' => $this->user->plain_pass] );
 
 		return $response;
 	}

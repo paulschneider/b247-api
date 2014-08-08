@@ -66,4 +66,8 @@ Route::group(['prefix' => 'v1'], function(){
 
     Route::get('/', 'HomeController@index');
     Route::get('/home', 'HomeController@index');
+
+    # Mail
+
+    Route::get('mail/confirm-subscription', 'MailController@verifyUserIsSubscribed');
 });

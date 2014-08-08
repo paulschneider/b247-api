@@ -20,4 +20,12 @@ interface NewsletterList {
 	 */
 	public function unsubscribeFrom($list, $email);
 
+	/**
+	 * Check that a user email is registered in the mailing list
+	 * 
+	 * @param  string $email [the email address of the registered user]
+	 * @return boolean $status [whether the user is registered]
+	 */
+	public function confirmUserSubscribed($list, $email);
+
 }
