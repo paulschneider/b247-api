@@ -44,4 +44,17 @@ class ApiHelper extends \Codeception\Module
 			}			
 		}	
 	}
+
+	public function checkRequiredItemExists($requiredItemArrayKey, $response)
+	{
+		$this->assertTrue(array_key_exists($requiredItemArrayKey, $response));	
+	}
+
+	public function checkItsTheSameDataType($responseItem, $requiredItem)
+	{
+		if( gettype($responseItem) != gettype($requiredItem) )
+        {
+            $this->assertFalse(false);
+        }
+	}	
 }
