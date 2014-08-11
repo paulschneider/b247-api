@@ -24,18 +24,13 @@ Class ArticleResponseMaker {
 		$this->category = $input['category'];
 		$this->article = $input['article'];
 
-		if( isApiResponse( $result = $this->getChannel()) )
-		{
+		# Get the details of the channel. Return an API response if not found
+		if( isApiResponse( $result = $this->getChannel()) ) {
 			return $result;
 		}
 
-		if( isApiResponse( $result = $this->getAdverts() ) )
-		{
-			return $result;
-		}	
-
-		if( isApiResponse( $result = $this->getArticle() ) )
-		{
+		# Get the article. Return an API response if not found
+		if( isApiResponse( $result = $this->getArticle() ) ) {
 			return $result;
 		}
 

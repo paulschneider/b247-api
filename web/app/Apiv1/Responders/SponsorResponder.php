@@ -39,7 +39,12 @@ Class SponsorResponder {
 		$subChannelId = getSubChannelId($this->channel);
 
 		// grab some sponsors and filter them by the requested category
-		$sponsors = App::make('SponsorRepository')->getCategorySponsors($limit, $subChannelId, $this->category['id'], $this->getAllocatedSponsors(), Config::get('global.sponsorMPU'));
+		# $limit = how many to return
+		# $subChannelId = which sub-channel do we want to get the ads for
+		# $this->category['id'] = which category of this sub-channel do we want to get ads for
+		# $this->getAllocatedSponsors() = provide an array of sponsors already used on the page. Helps to provide unique sponsors as we wont get these ones back
+		# Config::get('global.sponsorLETTERBOX') = which type of sponsor do we want to get back, in this case page wide letterbox ads
+		$sponsors = App::make('SponsorRepository')->getCategorySponsors($limit, $subChannelId, $this->category['id'], $this->getAllocatedSponsors(), Config::get('global.sponsorLETTERBOX'));
 
 		// transform them in to the API format 
 		$transformedSponsors = App::make('SponsorTransformer')->transformCollection($sponsors);
