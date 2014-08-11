@@ -169,6 +169,15 @@ function isListingType($channel)
     ]) ? true : false;
 }
 
+function isPromotionType($channel)
+{
+    $type = getSubChannelType($channel);
+    
+    return in_array($type, [
+        Config::get('constants.displayType_promotion')
+    ]) ? true : false;
+}
+
 function getChannelId($article)
 {
     return $article['location'][0]['channelId'];
