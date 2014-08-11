@@ -84,6 +84,12 @@ Class ArticleRepository extends BaseModel {
             $query->where('article.sef_name', '=', $article);
         }
 
+        # if its a promotional channel then we also want to get the promotion data
+        if( isPromotionType($channel) )
+        {
+            $query->with('promotion');
+        }
+
         $query->where('article_location.sub_channel_id', getSubChannelId($channel));
         $query->where('article_location.category_id', $category['id']);
 

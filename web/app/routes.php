@@ -48,6 +48,10 @@ Route::group(['prefix' => 'v1'], function(){
 
     Route::post('login', 'SessionsController@login');
 
+    # Promotion
+
+    Route::post('promotion/redeem', 'ArticleController@redeemArticlePromotion');
+
     # Registration
 
     Route::post('register', 'RegisterController@createSubscriber');

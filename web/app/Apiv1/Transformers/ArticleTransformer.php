@@ -86,7 +86,11 @@ Class ArticleTransformer extends Transformer {
             //  
             elseif (isset($article['venue']['id'])) {
                 $response['venue'] = App::make( 'VenueTransformer' )->transform( $article['venue'] );                
-            }           
+            }    
+
+            if(isset($article['promotion'][0])) {
+                $response['promotion'] = App::make( 'Apiv1\Transformers\PromotionTransformer' )->transformCollection( $article );                
+            }       
 
             // remove anything that only the desktop version needs
 

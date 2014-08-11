@@ -48,6 +48,16 @@ Class ArticleController extends ApiController {
     }
 
     /**
+     * Redeem an article promotional code
+     * 
+     * @return mixed $response
+     */
+    public function redeemArticlePromotion()
+    {
+        return App::make('Apiv1\Factory\ArticlePromotionRedemptionResponseMaker')->redeem(Input::all());
+    }
+
+    /**
     * action on an UPDATE call to the resource
     *
     * @return ApiController Response

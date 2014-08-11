@@ -20,6 +20,11 @@ class NotificationsServiceProvider extends ServiceProvider {
         	'Apiv1\Mail\Notifications\ForgottenPasswordEmail',
         	'Apiv1\Mail\Notifications\Mandrill\ForgottenPasswordEmail'
         );
+
+        $this->app->bind(
+            'Apiv1\Mail\Notifications\PromotionRedemptionEmail',
+            'Apiv1\Mail\Notifications\Mandrill\PromotionRedemptionEmail'
+        );
     }
 
 }

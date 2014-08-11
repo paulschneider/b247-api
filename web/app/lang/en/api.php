@@ -10,4 +10,8 @@ return [
 	"insufficientParametersProvidedToContinue" => "Insufficient form parameters supplied. Unable to continue.",
 	"userPreferencesAreNotAnArray" => "The supplied user preferences are not an array.",
 	"articleCouldNotBeLocated" => "An article with the supplied identifier could not be located.",
+	"promotionNotFound" => "A promotion with the supplied code could not be found.",
+	"promotionIsInactive" => "This promotion is not currently available for use.",
+	"promotionOutOfRange" => "This promotion has either expired is not yet available.",
+	"promotionalCodeSuccessfullyRedeemed" => "The promotional code was successfully sent.",
 ];
