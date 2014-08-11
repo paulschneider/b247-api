@@ -116,15 +116,15 @@ class ArticlePromotionRedemptionResponseMaker {
 		}
 
 		# grab the validity data
-		$validFrom = $promotion->validFrom;
-		$validTo = $promotion->validTo;
+		$validFrom = strtotime($promotion->valid_from);
+		$validTo = strtotime($promotion->valid_to);
 
 		$today = time();
 
 		# make sure the promotion has started but not ended
-		if($validFrom < $today || $validTo > $today)
+		if($validFrom > $today || $validTo < $today)
         {
-            return apiErrorResponse(  'forbidden', ['errorReason' => Lang::get('api.promotionOutOfRange')] );
+            return apiErrorResponse( 'forbidden', ['errorReason' => Lang::get('api.promotionOutOfRange')] );
         }
 		
 		# send it back
