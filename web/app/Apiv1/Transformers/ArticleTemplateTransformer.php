@@ -13,6 +13,8 @@ Class ArticleTemplateTransformer extends ArticleTransformer {
      */
     public function transform( $article, $options = [] )
     {
+        $video = null;
+
         // ensure we always get the body and that we always ignore the platform. The platform (mobile, web) determines what is returned. Ignore that in this case
         $options =  ['showBody' => true, 'ignorePlatform' => true];
 
@@ -23,7 +25,7 @@ Class ArticleTemplateTransformer extends ArticleTransformer {
 
         // grab the author of the article and store it temporarily
         $author = $article['author'][0]['name'];
-
+    
         // grab the article continued item and store it or it will be removed
         $bodyContinued = $article['body_continued'];
 
@@ -38,16 +40,23 @@ Class ArticleTemplateTransformer extends ArticleTransformer {
         if( isset($article['gallery']) )
         {
             $gallery = App::make( 'Apiv1\Transformers\MediaTransformer' )->transformCollection($article);
+        }   
+
+        // if there's a video grab it before its over-written
+        if( isset($article['video'][0]) )
+        {
+            $video = $article['video'][0];
         }
 
         // transform the article itself
         $article = ArticleTransformer::transform($article, $options);
 
         // if there is a video then transfer that too and add it into the article array
-        if( isset($article['video'][0]) )
+        if( ! is_null($video) )
         {
-            $video = App::make( 'VideoTransformer' )->transform( $article['video'][0] );                
+            $video = App::make( 'VideoTransformer' )->transform( $video );                
 
+            // assign the video to the article
             $article['video'] = $video;
         }   
 
@@ -61,7 +70,7 @@ Class ArticleTemplateTransformer extends ArticleTransformer {
         $article = insertInto($article, 'bodyContinued', $author, 'author');
 
         // insert a mapItems object into the article at the desired position
-        $article = insertInto($article, 'author', $mapItems, 'mapItems');
+        $article = insertInto($article, 'author', $mapItems, 'mapItems');                
 
         // insert a mapItems object into the article at the desired position
         $article = insertInto($article, 'path', $externalPath, 'shareLink');

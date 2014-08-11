@@ -2,6 +2,10 @@ class_name: ApiTester
 modules:
     enabled: [PhpBrowser, REST, ApiHelper, Db]
     config: 
+        Db:
+            populate: true
+            cleanup: true
+            dump: 'tests/_data/dump.sql'
         PhpBrowser: 
             url: http://local.b247-api/
         REST:
