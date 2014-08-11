@@ -1,6 +1,8 @@
 <?php namespace Apiv1\Repositories\Videos;
 
-Class Video extends \Eloquent {
+use Apiv1\Repositories\Models\BaseModel;
+
+Class Video extends BaseModel {
 
     protected $table = 'video';
 }

@@ -1,6 +1,6 @@
 <?php
 
-// this is an included file and not a directly run cept. It provides common check for all article types
+// this is an included file and not a directly run cept. It provides common checks for all article types
 
 require_once('./tests/api/variables/DisplayType.php');
 require_once('./tests/api/variables/ArticleAssignmentChannel.php');

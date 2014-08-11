@@ -60,17 +60,27 @@ Class ArticleRepository extends BaseModel {
         return $result;
     }
 
+    /**
+     * When we get down to the category level the article content is more verbose. Grab all of the data
+     * we need to populate the templates!
+     * 
+     * @param  array $channel  [transformed channel array containing all sub-channels and categories]
+     * @param  array $category [transformed category array]
+     * @param  mixed $article  [unique identifer for the article. Can be a string or an integer]
+     * @return mixed           [boolean on failure, Apiv1\Repositories\Articles\Article on success]
+     */
     public function getCategoryArticle($channel, $category, $article)
     {       
-        $query = Article::select('article.*', 'article_id AS id')->with('location', 'gallery', 'event.venue', 'event.showTime', 'venue', 'video', 'author');
+        $query = Article::select('article.*', 'article_id AS id')->with('location', 'asset', 'gallery', 'event.venue', 'venue', 'video', 'author');
+
         $query->join('article_location', 'article_location.article_id', '=', 'article.id');
 
-        if( is_numeric($article) )
-        {
+        # If the identifier passed through is an integer then grab the row by the ID
+        if( is_numeric($article) ) {
             $query->where('article.id', '=', $article);
         }
-        else
-        {
+        # if its a string then try and fine it by the sef_name field
+        else {
             $query->where('article.sef_name', '=', $article);
         }
 

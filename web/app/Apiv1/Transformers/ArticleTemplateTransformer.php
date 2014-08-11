@@ -13,6 +13,8 @@ Class ArticleTemplateTransformer extends ArticleTransformer {
      */
     public function transform( $article, $options = [] )
     {
+        $video = null;
+
         // ensure we always get the body and that we always ignore the platform. The platform (mobile, web) determines what is returned. Ignore that in this case
         $options =  ['showBody' => true, 'ignorePlatform' => true];
 
@@ -38,16 +40,23 @@ Class ArticleTemplateTransformer extends ArticleTransformer {
         if( isset($article['gallery']) )
         {
             $gallery = App::make( 'Apiv1\Transformers\MediaTransformer' )->transformCollection($article);
+        }   
+
+        // if there's a video grab it before its over-written
+        if( isset($article['video'][0]) )
+        {
+            $video = $article['video'][0];
         }
 
         // transform the article itself
         $article = ArticleTransformer::transform($article, $options);
 
         // if there is a video then transfer that too and add it into the article array
-        if( isset($article['video'][0]) )
+        if( ! is_null($video) )
         {
-            $video = App::make( 'VideoTransformer' )->transform( $article['video'][0] );                
+            $video = App::make( 'VideoTransformer' )->transform( $video );                
 
+            // assign the video to the article
             $article['video'] = $video;
         }   
 

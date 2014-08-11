@@ -8,13 +8,12 @@ Class ArticleResponseMaker {
 	var $category;
 	var $channel; // sub-channel
 	var $article;
-	var $articleRepository;
 	var $articleTransformer;
+	var $articleRepository;
 
 	public function __construct()
 	{
 		$this->articleRepository = App::make( 'ArticleRepository' );
-		$this->articleTransformer = App::make( 'ArticleTransformer' );
 		$this->articleTransformer = App::make( 'ArticleTransformer' );
 		$this->articleTemplateTransformer = App::make( 'ArticleTemplateTransformer' );
 	}
@@ -82,7 +81,7 @@ Class ArticleResponseMaker {
 
 	public function getArticle()
 	{		
-		if( ! $this->article = $this->articleRepository->getCategoryArticle( $this->channel, $this->category, $this->article ))
+		if( ! $this->article = App::make('Apiv1\Responders\ArticleResponder')->getArticle($this->channel, $this->category, $this->article))
 		{
 			return apiErrorResponse('notFound', [ 'errorReason' => Lang::get('api.articleCouldNotBeLocated') ]);
 		}
@@ -106,7 +105,7 @@ Class ArticleResponseMaker {
 
 	public function nextPreviousArticles()
 	{
-		$articles = $this->articleRepository->getNextAndPreviousArticles($this->article);
+		$articles = App::make( 'ArticleRepository' )->getNextAndPreviousArticles($this->article);
 		
 		$articleNavigationTransformer = App::make('ArticleNavigationTransformer');	
 

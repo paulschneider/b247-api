@@ -4,59 +4,12 @@ use Apiv1\Repositories\Models\BaseModel;
 
 class Article extends BaseModel {
 
-    public $version = "Apiv1\Repositories\/";
-
     /**
      * The database table used by the model.
      *
      * @var string
      */
     protected $table = 'article';
-
-    /**
-     * The attributes excluded from the database response
-     *
-     * @var array
-     */
-    protected $hidden = [
-
-        'content_type'
-        , 'sponsor_id'
-        , 'author_id'
-        , 'is_deleted'
-        , 'is_comments'
-        , 'updated_at'
-        , 'impressions'
-        , 'is_approved'
-
-    ];
-
-    /**
-    * The attributes of an article that can be manually set
-    *
-    * @var array
-    */
-    protected $fillable = [
-
-        'content_type'
-        , 'title'
-        , 'sub_heading'
-        , 'body'
-        , 'postcode'
-        , 'is_active'
-        , 'is_featured'
-        , 'is_picked'
-        , 'is_promo'
-        , 'is_approved'
-
-    ];
-
-    /**
-    * default status for new articles
-    *
-    * @var int
-    */
-    protected $is_active = true;
 
     public function location()
     {
@@ -115,5 +68,10 @@ class Article extends BaseModel {
     public function author()
     {
         return $this->belongsToMany('Apiv1\Repositories\Articles\Author', 'article_author', 'article_id');
+    }
+
+    public function promotion()
+    {
+        return $this->belongsToMany('Apiv1\Repositories\Promotions\Promotion', 'article_promo', 'article_id', 'promo_id');
     }
 }
