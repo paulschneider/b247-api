@@ -7,7 +7,7 @@
 #
 # Host: 127.0.01 (MySQL 5.6.17)
 # Database: b247-com
-# Generation Time: 2014-08-10 06:24:25 +0000
+# Generation Time: 2014-08-11 15:22:49 +0000
 # ************************************************************
 
 
@@ -864,6 +864,31 @@ VALUES
 UNLOCK TABLES;
 
 
+# Dump of table article_promotion
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `article_promotion`;
+
+CREATE TABLE `article_promotion` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `article_id` int(11) DEFAULT NULL,
+  `promotion_id` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+LOCK TABLES `article_promotion` WRITE;
+/*!40000 ALTER TABLE `article_promotion` DISABLE KEYS */;
+
+INSERT INTO `article_promotion` (`id`, `article_id`, `promotion_id`, `created_at`, `updated_at`)
+VALUES
+	(1,318,2,'2014-08-11 10:15:06','2014-08-11 10:15:06');
+
+/*!40000 ALTER TABLE `article_promotion` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
 # Dump of table article_related
 # ------------------------------------------------------------
 
@@ -1521,7 +1546,7 @@ CREATE TABLE `competition_questions` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`),
   KEY `offer_id` (`offer_id`),
-  CONSTRAINT `competition_questions_ibfk_1` FOREIGN KEY (`offer_id`) REFERENCES `offers` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `competition_questions_ibfk_1` FOREIGN KEY (`offer_id`) REFERENCES `promotion` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -1548,29 +1573,6 @@ VALUES
 	(4,'category');
 
 /*!40000 ALTER TABLE `content_type` ENABLE KEYS */;
-UNLOCK TABLES;
-
-
-# Dump of table display_style
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `display_style`;
-
-CREATE TABLE `display_style` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `style` varchar(45) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-LOCK TABLES `display_style` WRITE;
-/*!40000 ALTER TABLE `display_style` DISABLE KEYS */;
-
-INSERT INTO `display_style` (`id`, `style`)
-VALUES
-	(1,'single'),
-	(2,'double');
-
-/*!40000 ALTER TABLE `display_style` ENABLE KEYS */;
 UNLOCK TABLES;
 
 
@@ -1820,101 +1822,35 @@ VALUES
 UNLOCK TABLES;
 
 
-# Dump of table offers
+# Dump of table promotion
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `offers`;
+DROP TABLE IF EXISTS `promotion`;
 
-CREATE TABLE `offers` (
+CREATE TABLE `promotion` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `provider_id` int(11) NOT NULL,
+  `venue_id` int(11) NOT NULL,
   `valid_from` datetime NOT NULL,
   `valid_to` datetime NOT NULL,
   `details` text NOT NULL,
   `terms` text NOT NULL,
   `code` varchar(100) NOT NULL,
   `template` text NOT NULL,
-  `offer_type` int(11) NOT NULL,
-  `competition_id` int(11) NOT NULL,
   `upper_limit` int(11) NOT NULL,
+  `is_active` tinyint(4) DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`),
-  KEY `provider_id -> provider` (`provider_id`),
-  KEY `offer_type` (`offer_type`),
-  CONSTRAINT `offers_ibfk_2` FOREIGN KEY (`offer_type`) REFERENCES `offers_type` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `offers_ibfk_1` FOREIGN KEY (`provider_id`) REFERENCES `offers_provider` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `provider_id -> provider` (`venue_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+LOCK TABLES `promotion` WRITE;
+/*!40000 ALTER TABLE `promotion` DISABLE KEYS */;
 
-
-# Dump of table offers_provider
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `offers_provider`;
-
-CREATE TABLE `offers_provider` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `provider` int(11) NOT NULL,
-  `address_line_1` varchar(100) NOT NULL,
-  `address_line_2` varchar(100) NOT NULL,
-  `address_line_3` varchar(100) NOT NULL,
-  `city` varchar(100) NOT NULL,
-  `postcode` varchar(10) NOT NULL,
-  `lat` varchar(20) NOT NULL,
-  `lon` varchar(20) NOT NULL,
-  `phone` varchar(15) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `website` varchar(200) NOT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  `added_by` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `id` (`id`),
-  KEY `added_by` (`added_by`),
-  CONSTRAINT `offers_provider_ibfk_1` FOREIGN KEY (`added_by`) REFERENCES `authors` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-
-
-# Dump of table offers_redeemed
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `offers_redeemed`;
-
-CREATE TABLE `offers_redeemed` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `voucher_id` int(11) NOT NULL,
-  `requested_at` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `id` (`id`),
-  KEY `user_id ->user` (`user_id`),
-  CONSTRAINT `offers_redeemed_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-
-
-# Dump of table offers_type
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `offers_type`;
-
-CREATE TABLE `offers_type` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-LOCK TABLES `offers_type` WRITE;
-/*!40000 ALTER TABLE `offers_type` DISABLE KEYS */;
-
-INSERT INTO `offers_type` (`id`, `name`)
+INSERT INTO `promotion` (`id`, `venue_id`, `valid_from`, `valid_to`, `details`, `terms`, `code`, `template`, `upper_limit`, `is_active`)
 VALUES
-	(1,'offer'),
-	(2,'competition');
+	(2,14,'2014-08-11 10:11:51','2015-08-11 11:30:00','This is an offer for a free 12\" pizza.','Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.','X3D90ZKRMZ','<!DOCTYPE html>\n<html>\n<body>\n\n<h1>Here\'s Your Promotional Code</h1>\n\n<p>{{ code goes here }}</p>\n\n</body>\n</html>',100,1);
 
-/*!40000 ALTER TABLE `offers_type` ENABLE KEYS */;
+/*!40000 ALTER TABLE `promotion` ENABLE KEYS */;
 UNLOCK TABLES;
 
 
@@ -2197,6 +2133,15 @@ CREATE TABLE `user` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+
+INSERT INTO `user` (`id`, `access_key`, `first_name`, `last_name`, `email`, `password`, `originating_ip`, `last_login`, `last_login_ip`, `is_active`, `is_deleted`, `created_at`, `updated_at`)
+VALUES
+	(1,'D5F0DDA4AD8B974','David','Scholes','paul.schneider@yepyep.co.uk','$2y$10$W.YdCOo20jINJgSh2fW5x.glIgxe096sRzni5h/tqx.yqRws51n5a',NULL,NULL,NULL,NULL,NULL,'2014-08-11 12:50:15','2014-08-11 12:50:15');
+
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table user_article
@@ -2280,6 +2225,36 @@ CREATE TABLE `user_profile` (
   CONSTRAINT `user->age` FOREIGN KEY (`age_group_id`) REFERENCES `age_group` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+
+
+# Dump of table user_redeemed_promotion
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `user_redeemed_promotion`;
+
+CREATE TABLE `user_redeemed_promotion` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `promotion_id` int(11) NOT NULL,
+  `requested_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`),
+  KEY `user_id ->user` (`user_id`),
+  CONSTRAINT `user_redeemed_promotion_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+LOCK TABLES `user_redeemed_promotion` WRITE;
+/*!40000 ALTER TABLE `user_redeemed_promotion` DISABLE KEYS */;
+
+INSERT INTO `user_redeemed_promotion` (`id`, `user_id`, `promotion_id`, `requested_at`)
+VALUES
+	(1,1,2,'2014-08-11 14:09:39'),
+	(2,1,2,'2014-08-11 14:13:16'),
+	(3,1,2,'2014-08-11 14:24:15'),
+	(4,1,2,'2014-08-11 14:24:22');
+
+/*!40000 ALTER TABLE `user_redeemed_promotion` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table venue
