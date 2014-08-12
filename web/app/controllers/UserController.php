@@ -2,6 +2,21 @@
 
 Class UserController extends BaseController {	
 
+	/**
+	 * get a user and their profile
+	 * 
+	 * @return $response
+	 */
+	public function getUser()
+	{
+		return App::make( 'UserProfileResponseMaker' )->get();
+	}
+
+	/**
+	 * Change a user password either by direct request as a forgotten reminder
+	 * 
+	 * @return $response
+	 */
 	public function changeUserPassword()
 	{
 		if( Input::get('forgotten') )
@@ -14,11 +29,21 @@ Class UserController extends BaseController {
 		}
 	}
 
+	/**
+	 * Create or update a user profile
+	 * 
+	 * @return $response
+	 */
 	public function profile()
 	{
 		return App::make( 'UserProfileResponseMaker' )->make(Input::all());
 	}
 
+	/**
+	 * Update user content preferences 
+	 * 
+	 * @return $response
+	 */
 	public function preferences()
 	{
 		return App::make( 'UserPreferencesResponseMaker' )->make(Input::all());

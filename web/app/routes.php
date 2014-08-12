@@ -61,7 +61,8 @@ Route::group(['prefix' => 'v1'], function(){
     Route::get('search', 'SearchController@search');
 
     # User
-
+    
+    Route::get('user', 'UserController@getUser');
     Route::post('user/password', 'UserController@changeUserPassword');
     Route::post('user/profile', 'UserController@profile');
     Route::post('user/preferences', 'UserController@preferences');
