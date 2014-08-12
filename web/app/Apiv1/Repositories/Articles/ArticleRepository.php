@@ -87,7 +87,7 @@ Class ArticleRepository extends BaseModel {
         # if its a promotional channel then we also want to get the promotion data
         if( isPromotionType($channel) )
         {
-            $query->with('promotion');
+            $query->with('promotion', 'competition.questions.answers');
         }
 
         $query->where('article_location.sub_channel_id', getSubChannelId($channel));

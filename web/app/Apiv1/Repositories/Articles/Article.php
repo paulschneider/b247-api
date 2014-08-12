@@ -74,4 +74,9 @@ class Article extends BaseModel {
     {
         return $this->belongsToMany('Apiv1\Repositories\Promotions\Promotion', 'article_promotion', 'article_id', 'promotion_id');
     }
+
+    public function competition()
+    {
+        return $this->belongsToMany('Apiv1\Repositories\Promotions\Competition', 'article_competition', 'article_id', 'competition_id')->active();
+    }
 }
