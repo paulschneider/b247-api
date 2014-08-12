@@ -33,4 +33,14 @@ Class UserController extends BaseController {
     {
         return App::make('Apiv1\Factory\ArticlePromotionRedemptionResponseMaker')->redeem(Input::all());
     }
+
+    /**
+     * Enter a user in to a competition
+     * 
+     * @return mixed $response
+     */
+    public function enterCompetition()
+    {
+        return App::make('Apiv1\Factory\CompetitionUserEntryResponseMaker')->enterUser(Input::all());
+    }
 }

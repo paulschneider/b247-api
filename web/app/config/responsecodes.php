@@ -53,6 +53,10 @@ return [
 		'code' => 424,
 		'message' => "Request failed to satisfy endpoint requirements."
 	],
+	'tooManyRequests' => [
+		'code' => 429,
+		'message' => "Request quota met or has been exceeded for this resource."
+	],
 	'notAcceptable' => [
 		'code' => 442,
 		'message' => "Invalid query parameter combination."
