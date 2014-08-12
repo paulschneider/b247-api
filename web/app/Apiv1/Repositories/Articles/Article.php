@@ -52,12 +52,12 @@ class Article extends BaseModel {
 
     public function event()
     {
-        return $this->belongsTo('Apiv1\Repositories\Events\Event', 'event_id')->orderBy('event.show_date', 'asc');
+        return $this->belongsTo('Apiv1\Repositories\Events\Event', 'event_id');
     }
 
     public function venue()
     {
-        return $this->belongsTo('Apiv1\Repositories\Venues\Venue', 'venue_id');   
+        return $this->belongsToMany('Apiv1\Repositories\Venues\Venue', 'article_venue', 'article_id');   
     }
 
     public function video()

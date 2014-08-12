@@ -6,8 +6,6 @@ Class Venue extends BaseModel {
 
     protected $table = 'venue';
 
-    public $is_active = true;
-
     public function events()
     {
         return $this->hasMany('Apiv1\Repositories\Events\Event');
