@@ -47,31 +47,15 @@ class ArticlePromotionRedemptionResponseMaker {
 	 */
 	public function redeem($form)
 	{
-		$userResponder = App::make( 'UserResponder' );
-
-		# check to see if we have the accessKey header param. This is a helper function.
-		if( ! userAccessKeyPresent() )
+		# check that we have everything need to proceed including required params and auth creds. If all 
+		# successful then the response is a user object
+		if( isApiResponse($response = App::make('UserResponder')->verify($this->requiredFields, $form)) )
 		{
-			return apiErrorResponse(  'unauthorised', ['errorReason' => Lang::get('api.accessKeyNotProvided')] );
+			return $response;
 		}
 
-		$accessKey = getAccessKey();
-
-		// check to make sure we have all the fields required to complete the process
-		if( isApiResponse( $result = $userResponder->parameterCheck($this->requiredFields, $form) ) )
-		{
-			// not all of the required fields were supplied
-			return $result;
-		}
-
-		// okay we have everything we need. Now get the user
-		if( isApiResponse( $result = $userResponder->getUserProfile($accessKey) ) )
-		{
-			// we couldn't find the user with the accessKey provided
-			return $result;
-		}
-
-		$user = $result;
+		# we get the user back if everything went okay
+		$user = $response;
 
 		if( isApiResponse( $result = self::isValidPromotion($form['code']) ) )
 		{
