@@ -99,7 +99,7 @@ class ArticlePromotionRedemptionResponseMaker {
 	{
 		# grab the promotion from the database
 		$promotion = $this->repo->get($code);
-		
+
 		# no promotion was found with the supplied code
 		if($promotion->isEmpty())
 		{
@@ -110,7 +110,8 @@ class ArticlePromotionRedemptionResponseMaker {
 		$promotion = $promotion->first();
 
 		# check to see if its currently active. We do this here rather than the DB so we can report back to the caller
-		if(! $promotion->is_active)
+		# also check to see if the usage cap has been reached.
+		if(! $promotion->is_active || $promotion->usage->count() == $promotion->upper_limit)
 		{
 			return apiErrorResponse(  'locked', ['errorReason' => Lang::get('api.promotionIsInactive')] );
 		}

@@ -10,4 +10,9 @@ class Promotion extends BaseModel
     {
     	$this->belongsTo('Apiv1\Repositories\Articles\Article', 'article_promo', 'promo_id', 'id');
     }
+
+    public function usage()
+    {
+    	return $this->hasMany('Apiv1\Repositories\Promotions\UserRedeemedPromotion', 'promotion_id');
+    }
 }

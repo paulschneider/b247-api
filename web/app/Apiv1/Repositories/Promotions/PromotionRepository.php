@@ -14,7 +14,7 @@ Class PromotionRepository extends BaseModel {
 	 */
 	public function get($promotionalCode)
 	{
-		return Promotion::where('code', $promotionalCode)->get();
+		return Promotion::where('promotion.code', $promotionalCode)->with('usage')->get();
 	}
 
 	/**
@@ -36,5 +36,14 @@ Class PromotionRepository extends BaseModel {
 
 		# do the insert quietly
 		DB::table('user_redeemed_promotion')->insert($data);
+
+		# now check to see if we have reached the usage limit for this promotion
+		$usageCount = DB::table('user_redeemed_promotion')->where('promotion_id', $promotion->id)->count();
+
+		# if we've reached the usage limit then set the promotion to inactive so it can't be used anymore
+		if( $usageCount == $promotion->upper_limit )
+		{
+			DB::table('promotion')->where('id', $promotion->id)->update([ 'is_active' => false, 'updated_at' => getDateTime() ]);
+		}
 	}
 }
