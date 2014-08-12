@@ -76,20 +76,28 @@ Class ArticleTransformer extends Transformer {
                 $response['media'] = App::make( 'Apiv1\Transformers\MediaTransformer' )->transform($article);
             }   
 
-            // If there is an event then transform that as well
+            # If there is an event then transform that as well
 
             if( isset($article['event']['id']) ) { 
                 $response['event'] = App::make( 'EventTransformer' )->transform( $article, $options );
             }
 
-            // venues can be attached to articles without an event (ref directory type article)
-            //  
+            # venues can be attached to articles without an event (ref directory type article)
+
             elseif (isset($article['venue']['id'])) {
                 $response['venue'] = App::make( 'VenueTransformer' )->transform( $article['venue'] );                
             }    
 
+            # if there is a promotion attached to this article then transform that to
+
             if(isset($article['promotion'][0])) {
                 $response['promotion'] = App::make( 'Apiv1\Transformers\PromotionTransformer' )->transformCollection( $article );                
+            }  
+
+            # if there is a competition attached to this article then transform that to
+
+            if(isset($article['competition'][0])) {
+                $response['competition'] = App::make( 'Apiv1\Transformers\CompetitionTransformer' )->transformCollection( $article );                
             }       
 
             // remove anything that only the desktop version needs

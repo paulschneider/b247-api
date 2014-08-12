@@ -23,4 +23,14 @@ Class UserController extends BaseController {
 	{
 		return App::make( 'UserPreferencesResponseMaker' )->make(Input::all());
 	}
+
+	/**
+     * Redeem an article promotional code
+     * 
+     * @return mixed $response
+     */
+    public function redeemPromotion()
+    {
+        return App::make('Apiv1\Factory\ArticlePromotionRedemptionResponseMaker')->redeem(Input::all());
+    }
 }

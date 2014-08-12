@@ -10,7 +10,7 @@ $I = new ApiTester($scenario);
 $I->am('a registered user');
 $I->wantTo('redeem a promotion code');
 $I->seeInDatabase('promotion', ['code' => $code]);
-$I->sendPOST('promotion/redeem', ['code' => $code, 'accessKey' => $accessKey]);
+$I->sendPOST('user/promotion/redeem', ['code' => $code, 'accessKey' => $accessKey]);
 $I->seeResponseCodeIs(202);
 $I->seeResponseIsJson();
 $I->seeResponseContains('{"success"');

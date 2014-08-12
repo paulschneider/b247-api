@@ -50,7 +50,7 @@ Route::group(['prefix' => 'v1'], function(){
 
     # Promotion
 
-    Route::post('promotion/redeem', 'ArticleController@redeemArticlePromotion');
+    
 
     # Registration
 
@@ -65,6 +65,8 @@ Route::group(['prefix' => 'v1'], function(){
     Route::post('user/password', 'UserController@changeUserPassword');
     Route::post('user/profile', 'UserController@profile');
     Route::post('user/preferences', 'UserController@preferences');
+    Route::post('user/promotion/redeem', 'UserController@redeemPromotion');
+    Route::post('user/competition/enter', 'UserController@enterCompetition');
         
     # Homepage
 

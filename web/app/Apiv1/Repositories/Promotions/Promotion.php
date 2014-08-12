@@ -8,7 +8,7 @@ class Promotion extends BaseModel
 
     public function article()
     {
-    	$this->belongsTo('Apiv1\Repositories\Articles\Article', 'article_promo', 'promo_id', 'id');
+    	$this->belongsTo('Apiv1\Repositories\Articles\Article', 'article_promotion', 'promotion_id', 'id');
     }
 
     public function usage()
