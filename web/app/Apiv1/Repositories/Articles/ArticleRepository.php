@@ -71,8 +71,8 @@ Class ArticleRepository extends BaseModel {
      */
     public function getCategoryArticle($channel, $category, $article)
     {       
-        $query = Article::select('article.*', 'article_id AS id')->with('location', 'asset', 'gallery', 'event.venue', 'event.showTime' ,'venue', 'video', 'author');
 
+        $query = Article::select('article.*', 'article_id AS id')->with('location', 'asset', 'gallery', 'event.venue', 'event.showTime' ,'venue', 'video', 'author');
         $query->join('article_location', 'article_location.article_id', '=', 'article.id');
 
         # If the identifier passed through is an integer then grab the row by the ID

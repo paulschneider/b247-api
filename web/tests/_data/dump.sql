@@ -7,7 +7,7 @@
 #
 # Host: 127.0.01 (MySQL 5.6.17)
 # Database: b247-com
-# Generation Time: 2014-08-12 08:37:31 +0000
+# Generation Time: 2014-08-13 13:33:26 +0000
 # ************************************************************
 
 
@@ -95,7 +95,7 @@ VALUES
 	(7,NULL,2,'Nick Gargan: Suspended police chief faces data protection questions','nick-gargan-suspended-police-chief-faces-data-protection-questions','IPCC said it had uncovered evidence Mr Gargan may have sent â??emails concerning police businessâ?¦ to individuals unconnected to the forceâ?','<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">The chief constable of Avon and Somerset police, currently being investigated over allegations of inappropriate behaviour towards female officers and staff, is to be interviewed on suspicion of data protection offences.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">Nick Gargan was suspended in May after police and crime commissioner Sue Mountstevens referred the allegations to the Independent Police Complaints Commission (IPCC).</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">She said she had decided to suspend Mr Gargan to &ldquo;protect the integrity of the investigation&rdquo;.</p>','<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">On Friday, IPCC deputy chair Rachel Cerfontyne said the IPCC had uncovered evidence Mr Gargan may have sent &ldquo;emails concerning police business, some of which contained personal data, to individuals unconnected to the force&rdquo;.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">&ldquo;Mr Gargan has now been served with a notice informing him that this aspect of his conduct is subject to a criminal investigation,&rdquo; she added.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">The IPCC said investigators had spoken to more than 50 individuals from the force who have &ldquo;provided information and intelligence&rdquo;.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">The investigation into whether he abused his position by making inappropriate advances to junior female members of staff is continuing, it added.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">Speaking on behalf of Mr Gargan, a spokesman for the Chief Police Officers&rsquo; Staff Association said Mr Gargan denied the allegations and would &ldquo;continue to cooperate&rdquo; with the investigation.</p>','BS4 3EN','51.4426688','-2.5683698999999933',NULL,NULL,1,0,1,NULL,NULL,NULL,'2014-07-30 00:00:01','2014-07-30 15:36:31','2014-07-30 03:46:01'),
 	(8,NULL,2,'Bristol tobacco dealers freedom up in smoke after raids','bristol-tobacco-dealers-freedom-up-in-smoke-after-raids','A Bristol man has been jailed for eight months after council officers discovered an illegal stash of 750,000 cigarettes and 250kg of tobacco','<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">A Bristol man has been jailed for eight months after council officers discovered an illegal stash of three quarters of a million cigarettes and quarter of a tonne of tobacco.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">Hardi Mohamed&rsquo;s business Healthy Foods (Bristol) Ltd was raided by Bristol Trading Standards in June 2013.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">In shops and lock-ups based in Horfield, Fishponds and Redfield, they found 746,620 individual counterfeit cigarettes &ndash; the equivalent of more than 37,000 packets of 20 &ndash; and 250kg of hand rolling tobacco.</p>','<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">Mr Mohamed was sentenced to prison and fined a total of &pound;38,000, as well as being ordered to pay &pound;23,620 in costs to Bristol City Council. Investigations into the supply chain are continuing.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">Bristol City Council Trading Standards Manager Jonathan Martin said: &ldquo;Mr Mohamed was shown to have a significant operation between three shops under his control. The large seizure of illicit tobacco and alcohol and this subsequent sentencing has dealt a hammer blow to the supply chain in Bristol of these damaging goods.&rdquo;</p>','BS4 3EN','51.4582875579374','-2.602959667456048',NULL,NULL,1,0,1,NULL,NULL,NULL,'2014-07-30 00:00:01','2014-07-30 15:46:10','2014-07-30 03:51:26'),
 	(9,NULL,2,'IPCC questions more police in Bijan Ebrahimi murder probe','ipcc-questions-more-police-in-bijan-ebrahimi-murder-probe','Some 16 police officers and civilian staff are under investigation. Nine of this group are officers, three are under investigation for criminal offenc','<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">The Independent Police Complaints Commission (IPCC) has said it is questioning more police officers in its investigation into the death of Bijan Ebrahimi in Bristol last year.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">Mr Ebrahimi was set on fire by his neighbours in July 2013, who wrongly accused him of being a paedophile and taking indecent images of children.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">He was murdered three days after he was arrested by police following complaints that he had been taking pictures of children near his home.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">Lee James, 24, of Capgrave Crescent, Brislington, who admitted murder, was jailed for a minimum of 18 years.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">Stephen Norley, 25, who admitted assisting an offender, was given a four-year jail term at Bristol Crown Court, in November.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">The IPCC has been investigating the role of police in the run-up to Mr Ebrahimi&rsquo;s murder and, on Friday, said it had issued four more investigation notices to Avon and Somerset police officers and carried out further criminal interviews with two officers and one PCSO.</p>','<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">A total of 16 police officers and civilian staff are presently under investigation. Nine of this group are officers, of which three are currently under investigation for suspected criminal offences.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">IPCC Commissioner Jan Williams said: &ldquo;These are further steps in an intricate and complex investigation in to how Avon and Somerset Police dealt with Mr Ebrahimi before his shocking murder. As this investigation unfolds it is imperative that we address all the evidence emerging &ndash; so that we get to the truth of what happened.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">&ldquo;This is what the public rightly expects of us and we continue to update all interested parties, so that progress and lines of enquiry are clear.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">&ldquo;We are carrying out a thorough and robust independent inquiry into police contact with Mr Ebrahimi as swiftly as we can. We are following where the evidence leads, and the number of officers and staff under scrutiny gives some indication of the scale of an investigation which is looking at police contact with Mr Ebrahimi going back several years.&rdquo;</p>','BS4 3EN','51.45112070911004','-2.6430425989746027',NULL,NULL,1,0,1,NULL,NULL,NULL,'2014-07-30 00:00:01','2014-07-30 15:52:19','2014-07-30 03:57:20'),
-	(10,NULL,2,'Arrest made in Walkabout bar rape investigation','arrest-made-in-walkabout-bar-rape-investigation','A 20-year-old man has been arrested after a woman was seriously sexually assaulted at the Walkabout bar in Bristol last month','<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">A 20-year-old man has been arrested after a woman was seriously sexually assaulted at the Walkabout bar in Bristol last month.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">The man was arrested yesterday morning on suspicion of rape and was taken into custody for questioning.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">The arrest followed a renewed witness appeal last Friday, in which CCTV images of a man sitting on a bench in the Broadmead area on Saturday evening were released.</p>','<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">A 24-year-old woman was assaulted in a toilet cubicle in Walkabout, Corn Street, in the early hours of Sunday, May 25, while on a night out with friends.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">Anyone with information on the crime should still call police on 101, or the Crimestoppers charity, anonymously, on 0800 555111.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\"><a class=\"hide_desktop\" href=\"b247://category/1/articles?subChannel=4\" rel=\"nofollow\">Here</a><a class=\"hide_tablet hide_mobile\" href=\"http://www.bristol247.com/category/crime\">Here</a></p>','BS4 3EN','51.4426688','-2.5683698999999933',NULL,NULL,1,0,1,NULL,NULL,NULL,'2014-07-30 00:00:01','2014-07-30 15:57:38','2014-07-30 04:13:02'),
+	(10,NULL,2,'Arrest made in Walkabout bar rape investigation','arrest-made-in-walkabout-bar-rape-investigation','A 20-year-old man has been arrested after a woman was seriously sexually assaulted at the Walkabout bar in Bristol last month','<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">A 20-year-old man has been arrested after a woman was seriously sexually assaulted at the Walkabout bar in Bristol last month.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">The man was arrested yesterday morning on suspicion of rape and was taken into custody for questioning.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">The arrest followed a renewed witness appeal last Friday, in which CCTV images of a man sitting on a bench in the Broadmead area on Saturday evening were released.</p>','<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">A 24-year-old woman was assaulted in a toilet cubicle in Walkabout, Corn Street, in the early hours of Sunday, May 25, while on a night out with friends.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">Anyone with information on the crime should still call police on 101, or the Crimestoppers charity, anonymously, on 0800 555111.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\"><a class=\"hide_desktop\" href=\"b247://category/1/articles?subChannel=4\" rel=\"nofollow\">Here</a><a class=\"hide_tablet hide_mobile\" href=\"http://www.bristol247.com/category/crime\">Here</a></p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">&nbsp;</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">&nbsp;</p>','BS2 0EF','51.45888004928771','-2.5708510893798575',NULL,NULL,1,0,1,NULL,NULL,NULL,'2014-07-30 00:00:01','2014-07-30 15:57:38','2014-08-11 09:08:53'),
 	(11,NULL,2,'Bristol police ready for World Cup domestic violence','bristol-police-ready-for-world-cup-domestic-violence','Research reveals the risk of domestic abuse rises by 26% when England win or draw during the tournament, with a 38% increase reported when the team lo','<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">Police in Bristol have said they are ready to deal with an expected surge in the rate of domestic abuse during the World Cup which starts tonight.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">Research by a team at Lancaster University reveals the risk of domestic abuse rises by 26% when England win or draw during the tournament, with a 38% increase reported when the team lost.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">Criminologist Dr Stuart Kirby, a former police officer, monitored police reports of domestic violence during the last three World Cups in 2002, 2006 and 2010, and found a general rise in the number of reports of domestic violence throughout the tournaments.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">Avon and Somerset police are now urging people at the receiving end of domestic violence to contact them, as part of a wider campaign ahead of the World Cup to encourage responsible drinking.</p>','<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">Cases of drink-related violence, anti-social behaviour and criminal damage all increased during previous tournaments.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">With some matches during Brazil 2014 being shown late at night, police are also warning fans not to drive the next morning if they have been drinking the night before and may still be over the limit.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">But it is for victims of domestic violence, who are often scared of reporting abuse in the home, that officers are particularly keen to contact.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">&ldquo;Our big objective is about building trust with people who have the courage to report domestic violence,&rdquo; DCI Simon Crisp told Bristol24-7 yesterday.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">&ldquo;Our number one priority is always the personal safety of people reporting abuse and their children. Part of the process is about investigation and prosecution, but main focus is working with the victim to work out what is the best way to move forward for them.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">&ldquo;We are getting better at understanding what is involved in coming forward for victims.Everyone is different, some people don&rsquo;t feel able to go through with the criminal justice system and we are led by victims&rsquo; views on this.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">&ldquo;We don&rsquo;t want people to think if they ring us that their partner will automatically be arrested and they will have to move away from family and friends.&rdquo;</p>','BS4 3EN','51.4426688','-2.5683698999999933',NULL,NULL,1,0,1,NULL,NULL,NULL,'2014-07-30 00:00:01','2014-07-30 16:15:26','2014-07-30 04:17:47'),
 	(12,NULL,2,'Police warn on courier fraudsters threat to elderly','police-warn-on-courier-fraudsters-threat-to-elderly','Police launch campaign against a team of fraudsters who have swindled at least Â£100,000 from mainly elderly victims across the South West','<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">Police in Bristol have launched a campaign against a team of fraudsters who have swindled at least &pound;100,000 from mainly elderly victims across the South West in the last two months.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">More than 200 people have fallen victim to the scam, with one victim in the Avon and Somerset area losing &pound;34,000 and about nine out of 10 people contacted aged 61 years or over.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">DCI Will White said: &ldquo;We really don&rsquo;t know the extent of this extremely worrying problem. It is possible that the thousands of pounds which have been demanded and lost and the sums that we have been prevented from being surrendered may only be the tip of the iceberg.&rdquo;</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">The fraudsters contact potential victims by telephone and encourage them to withdraw large sums of cash, which they are then asked to send to London by taxi or via a courier, who will collect the money from their home.</p>','<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">They claim the money is potential evidence for an investigation and is needed so that it can be forensically examined.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">Another scam involves someone also claiming to be a police officer based in London, who informs the victim that two people have been arrested in the capital. When arrested they had in their possession bank cards which contained details of the victim. The victim is asked to recall the bogus officer.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">Because the fraudster does not replace his phone, the unsuspecting victim speaks to him and is encouraged to provide private banking details and may also be asked to withdraw cash.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">DCI White added: &ldquo;The police and the banks will never ask you for banking details or PIN numbers on the phone. Similarly, they would never send a so-called &lsquo;courier&rsquo; to collect bank cards or money.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">&ldquo;In recent incidents the victims did the right thing when they became suspicious of callers. They hung up the phone and called the police. They waited until they could hear a dialling tone or used a different phone to call us, ensuring that the scammers weren&rsquo;t still connected to the line.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">&ldquo;The more we talk about this scam and the more people who are made aware of it, the less likely that they are to become victims. We need people to spread the word. If you have elderly and vulnerable relatives, neighbours, colleagues and friends warn them to be vigilant and on their guard for telephone calls of this kind.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">&ldquo;We are also appealing to taxi owners to be vigilant, especially if asked to courier small packages to London for elderly people.&rdquo;</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">Avon and Somerset Police have arrested two men from London in connection with courier fraud. They have been released on police bail, pending further enquiries.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">Three men from London, aged 23, 22, and 18, have already been arrested in Gloucestershire in connection with courier fraud. Two of them admitted offences and have been released on court bail to await sentencing.</p>','BS4 3EN','51.4426688','-2.5683698999999933',NULL,NULL,1,NULL,NULL,NULL,NULL,NULL,'2014-07-30 00:00:01','2014-07-30 16:17:56','2014-07-30 04:20:18'),
 	(13,NULL,2,'Bristol bomb hoax: Police appeal to taxi drivers for information','bristol-bomb-hoax-police-appeal-to-taxi-drivers-for-information','A 42-year-old man was arrested on suspicion of a bomb hoax (placing with intent) and was released on bail yesterday','<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">Police in Bristol are making an appeal to taxi drivers in the city to help them with their investigation into a bomb hoax in Fishponds at the weekend.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">Hundreds of residents living around Cassell Road were evacuated from their homes early on Saturday after a car doused in fuel was found by officers.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">The Explosive Ordnance Disposal (EOD) team was called in and a 200m exclusion zone was set up. The bomb squad team carried out a number of controlled explosions on the car.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">Ch Supt Geoff Spicer said at the weekend he believed it was an &ldquo;isolated incident&rdquo; and could be &ldquo;linked to an ongoing dispute&rdquo;.</p>','<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">A 42-year-old man was arrested on suspicion of a bomb hoax (placing with intent) and was released on bail yesterday.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">As the investigation continues, police now want to speak to cab drivers in the following locations on Saturday who in the early hours of Saturday:</p>\r\n<ul style=\"padding: 0px 0px 0px 35px; margin: 20px 0px; list-style-position: initial; list-style-image: initial; font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">\r\n<li style=\"padding: 0px; margin: 0px 0px 5px; list-style: disc;\">Dropped off or picked anyone up in the Blackhorse Road area of Downend/Emersons Green;</li>\r\n<li style=\"padding: 0px; margin: 0px 0px 5px; list-style: disc;\">Dropped off or picked anyone up in the Cassell Road area;</li>\r\n<li style=\"padding: 0px; margin: 0px 0px 5px; list-style: disc;\">Dropped off or picked anyone up in the City Road area of St Pauls at around 3.50am on Saturday;</li>\r\n<li style=\"padding: 0px; margin: 0px 0px 5px; list-style: disc;\">Dropped off or picked anyone up anywhere in the Bristol area who smelt of petrol, or who may have been carrying a petrol canister.</li>\r\n</ul>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">Det Con John Shanahan said: &ldquo;An examination of the car did not find any trace of explosives, but it had been doused in fuel. If any taxi drivers think they can help, I would urge them to call South Gloucestershire CID [on 101] as soon as possible.&rdquo;</p>','BS4 3EN','51.4426688','-2.5683698999999933',NULL,NULL,1,NULL,NULL,NULL,NULL,NULL,'2014-07-30 00:00:01','2014-07-30 16:20:23','2014-07-30 04:22:10'),
@@ -182,7 +182,7 @@ VALUES
 	(226,NULL,2,'The Greenbank pub Bristol','the_greenbank_pub_bristol','Here at the Greenbank, it\'s all about the community.','<div>COMMUNITY PUB / GOOD FOOD / SPECIALIST ALES</div>\r\n<div>\r\n<p>Here at the Greenbank, it\'s all about the community.</p>\r\n<p>About providing the best possible service for the neighbourhood. Whether that\'s serving up a cracking Sunday Roast, a decent pint, glass of wine, great band or space for local groups.</p>\r\n<p>Hope to see you soon. xx</p>\r\n</div>\r\n<div>\r\n<p>Check out our programme of events. It\'s all taking off here at the Greenbank</p>\r\n</div>\r\n<div>\r\n<p>Open: Sun - Thurs 11am - 12midnight (last orders 11.30pm); Fri-Sat 11am - 1am (last orders 12.30pm)</p>\r\n</div>','<p>3</p>',NULL,NULL,NULL,NULL,NULL,1,1,0,0,NULL,NULL,'2014-07-08 00:00:01','0000-00-00 00:00:00','0000-00-00 00:00:00'),
 	(231,11,2,'Abba Mania','abba_mania','It is 40 years since ABBA won Eurovision and now itâ??s your chance to thank ABBA for the music!','<p>It is 40 years since ABBA won Eurovision and now it&rsquo;s your chance to thank ABBA for the music!</p>\r\n<p>ABBA Mania&nbsp;is now accepted as the world&rsquo;s number one touring ABBA tribute production.</p>\r\n<p>Featuring a special concert presentation, which celebrates the music of ABBA in a respectful and enjoyable way, reviving special memories of when ABBA ruled the airwaves....&nbsp;<a id=\"overview_readmore_link\" href=\"http://www.atgtickets.com/shows/abba-mania/bristol-hippodrome/#overview_tab\">Read more&nbsp;&gt;&gt;</a></p>\r\n<p>Running time:&nbsp;2h 20m</p>','','BS4 3EN','51.4426688','-2.5683698999999933',NULL,NULL,1,0,0,0,NULL,NULL,'2014-08-21 00:00:01','0000-00-00 00:00:00','2014-08-07 05:48:14'),
 	(232,12,2,'Chas & Dave','chas_dave','Chas & Dave began writing and performing songs together in 1972','<p>Chas &amp; Dave began writing and performing songs together in 1972, having been friends since the early sixties. Now celebrating their 50th anniversary by recording their first original album in 27 years which is a mixture of vintage rock \'n\' roll songs and new renditions of their own rockney classics. The album also features special guest stars such as Jools Holland, Buddy Holly\'s drummer Jerry Allison and Hugh Laurie...</p>\r\n<p>&nbsp;</p>','','BS4 3EN','51.4426688','-2.5683698999999933',NULL,NULL,1,0,0,0,NULL,NULL,'2014-08-22 00:00:01','0000-00-00 00:00:00','2014-08-07 05:47:58'),
-	(233,3,2,'Cary Grant Comes Home... for the weekend','cary_grant_comes_home_for_the_weekend','Gala screening of Arsenic and Old Lace, one of Cary Grantâ??s most memorable roles','<p>Gala screening of&nbsp;Arsenic and Old Lace, one of Cary Grant&rsquo;s most memorable roles, on the big screen in the very theatre where young Bristolian Archie Leach decided to be an actor.</p>\r\n<p>Newly wed drama critic Mortimer Brewster (Cary Grant) tries to embark on his honeymoon, but his plans are scuppered by his ditzy old aunts bumping off elderly gentlemen with their lethal elderberry wine.</p>\r\n<p><a href=\"http://www.atgtickets.com/shows/cary-grant-comes-home-for-the-weekend/bristol-hippodrome/\">Tickets for the Evening Gala of&nbsp;North by Northwest&nbsp;are also available&nbsp;here</a></p>\r\n<p>Double Bill offer:&nbsp;Book both screenings for &pound;26 (plus booking fees over the phone). To get this double bill offer you need to book via the box office or over the phone.</p>','','BS4 3EN','51.4426688','-2.5683698999999933',NULL,NULL,1,0,0,0,NULL,NULL,'2014-08-27 00:00:01','0000-00-00 00:00:00','2014-08-07 07:20:50'),
+	(233,3,2,'Cary Grant Comes Home... for the weekend','cary_grant_comes_home_for_the_weekend','Gala screening of Arsenic and Old Lace, one of Cary Grantâ??s most memorable roles','<p>Gala screening of&nbsp;Arsenic and Old Lace, one of Cary Grant&rsquo;s most memorable roles, on the big screen in the very theatre where young Bristolian Archie Leach decided to be an actor.</p>\r\n<p>Newly wed drama critic Mortimer Brewster (Cary Grant) tries to embark on his honeymoon, but his plans are scuppered by his ditzy old aunts bumping off elderly gentlemen with their lethal elderberry wine.</p>\r\n<p><a href=\"http://www.atgtickets.com/shows/cary-grant-comes-home-for-the-weekend/bristol-hippodrome/\">Tickets for the Evening Gala of&nbsp;North by Northwest&nbsp;are also available&nbsp;here</a></p>\r\n<p>Double Bill offer:&nbsp;Book both screenings for &pound;26 (plus booking fees over the phone). To get this double bill offer you need to book via the box office or over the phone.</p>','','BS4 3EN','51.4426688','-2.5683698999999933',NULL,NULL,1,0,0,0,NULL,NULL,'2014-08-27 00:00:01','0000-00-00 00:00:00','0000-00-00 00:00:00'),
 	(234,13,2,'The Curious Incident of the Dog in the Night-Time','the_curious_incident_of_the_dog_in_the_nighttime','Winner of seven 2013 Olivier Awards, this highly- acclaimed National Theatre production','<p>Winner of seven 2013 Olivier Awards, this highly- acclaimed National Theatre production, embarks on its first ever nationwide tour from December 2014.</p>\r\n<p>Christopher, fifteen years old, has an extraordinary brain &ndash; exceptional at maths while ill-equipped to interpret everyday life. When he falls under suspicion of killing Mrs Shears&rsquo; dog, it takes him on a journey that upturns his world&hellip;</p>','','BS4 3EN','51.4426688','-2.5683698999999933',NULL,NULL,1,0,0,0,NULL,NULL,'2014-08-20 00:00:01','2014-05-00 04:40:00','2014-08-07 05:45:42'),
 	(236,7,2,'Barnum','barnum','This exhilarating musical follows the irrepressible imagination and dreams of Phineas ','<p>This exhilarating musical follows the irrepressible imagination and dreams of Phineas T Barnum, America&rsquo;s Greatest Showman.</p>\r\n<p>Barnum is a&nbsp;&lsquo;big, sharp, witty, breathtaking, and emotional&rsquo;&nbsp;(The Observer) show starringBrian Conley&nbsp;(Oliver!,&nbsp;Hairspray,&nbsp;Jolson) andLinzi Hateley&nbsp;(Mary Poppins,&nbsp;Mamma Mia!,Chicago,&nbsp;Les Mis&eacute;rables)....&nbsp;<a id=\"overview_readmore_link\" href=\"http://www.atgtickets.com/shows/barnum/bristol-hippodrome/#overview_tab\">Read more&nbsp;&gt;&gt;</a></p>\r\n<p>Running time:&nbsp;<a href=\"http://www.atgtickets.com/shows/barnum/bristol-hippodrome/\">TBC</a></p>','','BS4 3EN','51.4426688','-2.5683698999999933',NULL,NULL,1,0,0,0,NULL,NULL,'2014-08-25 00:00:01','0000-00-00 00:00:00','2014-08-07 07:20:30'),
 	(237,9,2,'An Evening of Burlesque','an_evening_of_burlesque','Come and enjoy Britainâ??s biggest burlesque extravaganza â?? we dare you!','<p>Come and enjoy Britain&rsquo;s biggest burlesque extravaganza &ndash; we dare you!</p>\r\n<p>Arriving direct from London&rsquo;s West End, a fresh cast of burlesque all-stars are unveiled for 2014. It&rsquo;s flushed with success &ndash; following a thrilling 100-date UK tour combined with overseas adventures in Milan, Zurich, St Petersburg, Minsk, Leipzig, Verona, Dresden, Riga, Padova, Dessau.</p>\r\n<p>Join this all-new riotous romp into the bizarre world of burlesque and cutting-edge variety....<a id=\"overview_readmore_link\" href=\"http://www.atgtickets.com/shows/an-evening-of-burlesque-2/bristol-hippodrome/#overview_tab\">Read more&nbsp;&gt;&gt;</a></p>','','BS4 3EN','51.4426688','-2.5683698999999933',NULL,NULL,1,2,0,0,NULL,NULL,'2014-08-23 00:00:01','2014-05-00 10:44:00','2014-08-07 05:49:04'),
@@ -224,7 +224,12 @@ VALUES
 	(378,NULL,6,'Test article without images','test-article-without-images','Sub heading for article without images','<p style=\"text-align: justify; line-height: 14px; margin: 0px 0px 14px; padding: 0px; font-family: Arial, Helvetica, sans;\">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse dapibus tincidunt rhoncus. Ut dapibus vulputate urna vel pellentesque. Nullam accumsan, libero vitae consequat adipiscing, odio nisl ultricies tortor, in cursus lacus tortor non arcu. Praesent at sem rutrum, placerat enim sit amet, hendrerit risus. Aenean tincidunt neque sed massa congue imperdiet. Donec eget blandit ligula, et laoreet nunc. Aenean scelerisque elit dui. Nam condimentum, justo id tincidunt fringilla, sapien lectus varius nulla, eu vulputate lectus ante in eros. Sed sodales tortor sed quam bibendum viverra. Mauris semper mi sed leo tincidunt accumsan. Mauris a rhoncus massa. Maecenas nec odio vitae dui sollicitudin tristique non et libero.</p>\r\n<p style=\"text-align: justify; line-height: 14px; margin: 0px 0px 14px; padding: 0px; font-family: Arial, Helvetica, sans;\">Aliquam erat volutpat. Phasellus hendrerit, urna dapibus dignissim pharetra, mauris velit aliquam risus, nec venenatis lectus metus quis odio. Cras velit est, sodales et vestibulum eget, ullamcorper non nisl. Ut dictum suscipit mauris, eu vehicula leo consectetur eget. Cras justo velit, posuere eu velit in, tempor sagittis neque. Duis mi lorem, convallis sed dignissim id, posuere vitae elit. Maecenas nec tellus eget magna tincidunt sagittis.</p>','<p style=\"text-align: justify; line-height: 14px; margin: 0px 0px 14px; padding: 0px; font-family: Arial, Helvetica, sans;\">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse dapibus tincidunt rhoncus. Ut dapibus vulputate urna vel pellentesque. Nullam accumsan, libero vitae consequat adipiscing, odio nisl ultricies tortor, in cursus lacus tortor non arcu. Praesent at sem rutrum, placerat enim sit amet, hendrerit risus. Aenean tincidunt neque sed massa congue imperdiet. Donec eget blandit ligula, et laoreet nunc. Aenean scelerisque elit dui. Nam condimentum, justo id tincidunt fringilla, sapien lectus varius nulla, eu vulputate lectus ante in eros. Sed sodales tortor sed quam bibendum viverra. Mauris semper mi sed leo tincidunt accumsan. Mauris a rhoncus massa. Maecenas nec odio vitae dui sollicitudin tristique non et libero.</p>\r\n<p style=\"text-align: justify; line-height: 14px; margin: 0px 0px 14px; padding: 0px; font-family: Arial, Helvetica, sans;\">Aliquam erat volutpat. Phasellus hendrerit, urna dapibus dignissim pharetra, mauris velit aliquam risus, nec venenatis lectus metus quis odio. Cras velit est, sodales et vestibulum eget, ullamcorper non nisl. Ut dictum suscipit mauris, eu vehicula leo consectetur eget. Cras justo velit, posuere eu velit in, tempor sagittis neque. Duis mi lorem, convallis sed dignissim id, posuere vitae elit. Maecenas nec tellus eget magna tincidunt sagittis.</p>\r\n<p>&nbsp;</p>','BS4 3EN','51.4426688','-2.5683698999999933',NULL,NULL,1,NULL,NULL,NULL,NULL,NULL,'2014-08-08 12:24:11','2014-08-08 12:22:16','0000-00-00 00:00:00'),
 	(379,NULL,6,'Some of Kev\'s news','some-of-kevs-news','Sub heading for Kev\'s news','<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse dapibus tincidunt rhoncus. Ut dapibus vulputate urna vel pellentesque. Nullam accumsan, libero vitae consequat adipiscing, odio nisl ultricies tortor, in cursus lacus tortor non arcu. Praesent at sem rutrum, placerat enim sit amet, hendrerit risus. Aenean tincidunt neque sed massa congue imperdiet. Donec eget blandit ligula, et laoreet nunc. Aenean scelerisque elit dui. Nam condimentum, justo id tincidunt fringilla, sapien lectus varius nulla, eu vulputate lectus ante in eros. Sed sodales tortor sed quam bibendum viverra. Mauris semper mi sed leo tincidunt accumsan. Mauris a rhoncus massa. Maecenas nec odio vitae dui sollicitudin tristique non et libero.</p>\r\n<p>Aliquam erat volutpat. Phasellus hendrerit, urna dapibus dignissim pharetra, mauris velit aliquam risus, nec venenatis lectus metus quis odio. Cras velit est, sodales et vestibulum eget, ullamcorper non nisl. Ut dictum suscipit mauris, eu vehicula leo consectetur eget. Cras justo velit, posuere eu velit in, tempor sagittis neque. Duis mi lorem, convallis sed dignissim id, posuere vitae elit. Maecenas nec tellus eget magna tincidunt sagittis.</p>\r\n<p>&nbsp;</p>\r\n<p>&nbsp;</p>','<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse dapibus tincidunt rhoncus. Ut dapibus vulputate urna vel pellentesque. Nullam accumsan, libero vitae consequat adipiscing, odio nisl ultricies tortor, in cursus lacus tortor non arcu. Praesent at sem rutrum, placerat enim sit amet, hendrerit risus. Aenean tincidunt neque sed massa congue imperdiet. Donec eget blandit ligula, et laoreet nunc. Aenean scelerisque elit dui. Nam condimentum, justo id tincidunt fringilla, sapien lectus varius nulla, eu vulputate lectus ante in eros. Sed sodales tortor sed quam bibendum viverra. Mauris semper mi sed leo tincidunt accumsan. Mauris a rhoncus massa. Maecenas nec odio vitae dui sollicitudin tristique non et libero.</p>\r\n<p>Aliquam erat volutpat. Phasellus hendrerit, urna dapibus dignissim pharetra, mauris velit aliquam risus, nec venenatis lectus metus quis odio. Cras velit est, sodales et vestibulum eget, ullamcorper non nisl. Ut dictum suscipit mauris, eu vehicula leo consectetur eget. Cras justo velit, posuere eu velit in, tempor sagittis neque. Duis mi lorem, convallis sed dignissim id, posuere vitae elit. Maecenas nec tellus eget magna tincidunt sagittis.</p>','BS4 3EN','51.4426688','-2.5683698999999933',NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,'2014-08-08 13:00:42','0000-00-00 00:00:00'),
 	(380,49,6,'Test event for Kevin','test_event_for_kevin','Lots of parties!','<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse dapibus tincidunt rhoncus. Ut dapibus vulputate urna vel pellentesque. Nullam accumsan, libero vitae consequat adipiscing, odio nisl ultricies tortor, in cursus lacus tortor non arcu. Praesent at sem rutrum, placerat enim sit amet, hendrerit risus. Aenean tincidunt neque sed massa congue imperdiet. Donec eget blandit ligula, et laoreet nunc. Aenean scelerisque elit dui. Nam condimentum, justo id tincidunt fringilla, sapien lectus varius nulla, eu vulputate lectus ante in eros. Sed sodales tortor sed quam bibendum viverra. Mauris semper mi sed leo tincidunt accumsan. Mauris a rhoncus massa. Maecenas nec odio vitae dui sollicitudin tristique non et libero.</p>\r\n<p>Aliquam erat volutpat. Phasellus hendrerit, urna dapibus dignissim pharetra, mauris velit aliquam risus, nec venenatis lectus metus quis odio. Cras velit est, sodales et vestibulum eget, ullamcorper non nisl. Ut dictum suscipit mauris, eu vehicula leo consectetur eget. Cras justo velit, posuere eu velit in, tempor sagittis neque. Duis mi lorem, convallis sed dignissim id, posuere vitae elit. Maecenas nec tellus eget magna tincidunt sagittis.</p>\r\n<p>&nbsp;</p>','<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse dapibus tincidunt rhoncus. Ut dapibus vulputate urna vel pellentesque. Nullam accumsan, libero vitae consequat adipiscing, odio nisl ultricies tortor, in cursus lacus tortor non arcu. Praesent at sem rutrum, placerat enim sit amet, hendrerit risus. Aenean tincidunt neque sed massa congue imperdiet. Donec eget blandit ligula, et laoreet nunc. Aenean scelerisque elit dui. Nam condimentum, justo id tincidunt fringilla, sapien lectus varius nulla, eu vulputate lectus ante in eros. Sed sodales tortor sed quam bibendum viverra. Mauris semper mi sed leo tincidunt accumsan. Mauris a rhoncus massa. Maecenas nec odio vitae dui sollicitudin tristique non et libero.</p>\r\n<p>Aliquam erat volutpat. Phasellus hendrerit, urna dapibus dignissim pharetra, mauris velit aliquam risus, nec venenatis lectus metus quis odio. Cras velit est, sodales et vestibulum eget, ullamcorper non nisl. Ut dictum suscipit mauris, eu vehicula leo consectetur eget. Cras justo velit, posuere eu velit in, tempor sagittis neque. Duis mi lorem, convallis sed dignissim id, posuere vitae elit. Maecenas nec tellus eget magna tincidunt sagittis.</p>\r\n<p>&nbsp;</p>','BS4 3EN','51.45315114582281','-2.598109692335129',NULL,NULL,1,NULL,NULL,NULL,NULL,NULL,'0000-00-00 00:00:00','2014-08-08 14:04:00','2014-08-08 02:23:12'),
-	(381,NULL,6,'Kev\'s house','kevs_house','Not an open invitation to Kev\'s house','<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse dapibus tincidunt rhoncus. Ut dapibus vulputate urna vel pellentesque. Nullam accumsan, libero vitae consequat adipiscing, odio nisl ultricies tortor, in cursus lacus tortor non arcu. Praesent at sem rutrum, placerat enim sit amet, hendrerit risus. Aenean tincidunt neque sed massa congue imperdiet. Donec eget blandit ligula, et laoreet nunc. Aenean scelerisque elit dui. Nam condimentum, justo id tincidunt fringilla, sapien lectus varius nulla, eu vulputate lectus ante in eros. Sed sodales tortor sed quam bibendum viverra. Mauris semper mi sed leo tincidunt accumsan. Mauris a rhoncus massa. Maecenas nec odio vitae dui sollicitudin tristique non et libero.</p>\r\n<p>Aliquam erat volutpat. Phasellus hendrerit, urna dapibus dignissim pharetra, mauris velit aliquam risus, nec venenatis lectus metus quis odio. Cras velit est, sodales et vestibulum eget, ullamcorper non nisl. Ut dictum suscipit mauris, eu vehicula leo consectetur eget. Cras justo velit, posuere eu velit in, tempor sagittis neque. Duis mi lorem, convallis sed dignissim id, posuere vitae elit. Maecenas nec tellus eget magna tincidunt sagittis.</p>\r\n<p>&nbsp;</p>','<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse dapibus tincidunt rhoncus. Ut dapibus vulputate urna vel pellentesque. Nullam accumsan, libero vitae consequat adipiscing, odio nisl ultricies tortor, in cursus lacus tortor non arcu. Praesent at sem rutrum, placerat enim sit amet, hendrerit risus. Aenean tincidunt neque sed massa congue imperdiet. Donec eget blandit ligula, et laoreet nunc. Aenean scelerisque elit dui. Nam condimentum, justo id tincidunt fringilla, sapien lectus varius nulla, eu vulputate lectus ante in eros. Sed sodales tortor sed quam bibendum viverra. Mauris semper mi sed leo tincidunt accumsan. Mauris a rhoncus massa. Maecenas nec odio vitae dui sollicitudin tristique non et libero.</p>\r\n<p>Aliquam erat volutpat. Phasellus hendrerit, urna dapibus dignissim pharetra, mauris velit aliquam risus, nec venenatis lectus metus quis odio. Cras velit est, sodales et vestibulum eget, ullamcorper non nisl. Ut dictum suscipit mauris, eu vehicula leo consectetur eget. Cras justo velit, posuere eu velit in, tempor sagittis neque. Duis mi lorem, convallis sed dignissim id, posuere vitae elit. Maecenas nec tellus eget magna tincidunt sagittis.</p>\r\n<p>&nbsp;</p>',NULL,NULL,NULL,NULL,NULL,1,0,0,NULL,NULL,NULL,'0000-00-00 00:00:00','2014-08-08 14:35:00','2014-08-08 02:40:42');
+	(381,NULL,6,'Kev\'s house','kevs_house','Not an open invitation to Kev\'s house','<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse dapibus tincidunt rhoncus. Ut dapibus vulputate urna vel pellentesque. Nullam accumsan, libero vitae consequat adipiscing, odio nisl ultricies tortor, in cursus lacus tortor non arcu. Praesent at sem rutrum, placerat enim sit amet, hendrerit risus. Aenean tincidunt neque sed massa congue imperdiet. Donec eget blandit ligula, et laoreet nunc. Aenean scelerisque elit dui. Nam condimentum, justo id tincidunt fringilla, sapien lectus varius nulla, eu vulputate lectus ante in eros. Sed sodales tortor sed quam bibendum viverra. Mauris semper mi sed leo tincidunt accumsan. Mauris a rhoncus massa. Maecenas nec odio vitae dui sollicitudin tristique non et libero.</p>\r\n<p>Aliquam erat volutpat. Phasellus hendrerit, urna dapibus dignissim pharetra, mauris velit aliquam risus, nec venenatis lectus metus quis odio. Cras velit est, sodales et vestibulum eget, ullamcorper non nisl. Ut dictum suscipit mauris, eu vehicula leo consectetur eget. Cras justo velit, posuere eu velit in, tempor sagittis neque. Duis mi lorem, convallis sed dignissim id, posuere vitae elit. Maecenas nec tellus eget magna tincidunt sagittis.</p>\r\n<p>&nbsp;</p>','<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse dapibus tincidunt rhoncus. Ut dapibus vulputate urna vel pellentesque. Nullam accumsan, libero vitae consequat adipiscing, odio nisl ultricies tortor, in cursus lacus tortor non arcu. Praesent at sem rutrum, placerat enim sit amet, hendrerit risus. Aenean tincidunt neque sed massa congue imperdiet. Donec eget blandit ligula, et laoreet nunc. Aenean scelerisque elit dui. Nam condimentum, justo id tincidunt fringilla, sapien lectus varius nulla, eu vulputate lectus ante in eros. Sed sodales tortor sed quam bibendum viverra. Mauris semper mi sed leo tincidunt accumsan. Mauris a rhoncus massa. Maecenas nec odio vitae dui sollicitudin tristique non et libero.</p>\r\n<p>Aliquam erat volutpat. Phasellus hendrerit, urna dapibus dignissim pharetra, mauris velit aliquam risus, nec venenatis lectus metus quis odio. Cras velit est, sodales et vestibulum eget, ullamcorper non nisl. Ut dictum suscipit mauris, eu vehicula leo consectetur eget. Cras justo velit, posuere eu velit in, tempor sagittis neque. Duis mi lorem, convallis sed dignissim id, posuere vitae elit. Maecenas nec tellus eget magna tincidunt sagittis.</p>\r\n<p>&nbsp;</p>',NULL,NULL,NULL,NULL,NULL,1,0,0,NULL,NULL,NULL,'0000-00-00 00:00:00','2014-08-08 14:35:00','0000-00-00 00:00:00'),
+	(382,51,2,'Wicked','wicked','Winner of 90 international awards, Wicked is coming to Bristol','<p>Winner of 90 international awards,&nbsp;Wicked&nbsp;has been casting its magical spell over audiences across the world for a decade and continues to break records at London&rsquo;s Apollo Victoria Theatre, where it is already the 15th longest-running West End musical of all time.</p>','<p>In a brilliantly witty re-imagining of the stories and characters created by L. Frank Baum inThe Wonderful Wizard of Oz, Wicked tells the incredible untold story of an unlikely but profound friendship between two sorcery students. Their extraordinary adventures in Oz will ultimately see them fulfil their destinies as Glinda The Good and the Wicked Witch of the West...</p>',NULL,NULL,NULL,NULL,NULL,1,1,0,NULL,NULL,NULL,'2014-08-18 00:00:01','2014-08-11 09:39:19','2014-08-11 10:07:59'),
+	(383,NULL,6,'','','','','','BS4 3EN','51.4426688','-2.5683698999999933',NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,'2014-08-11 14:37:31','0000-00-00 00:00:00'),
+	(384,NULL,6,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,'2014-08-11 15:20:00','2014-08-11 15:20:00'),
+	(385,NULL,6,'Bristol RPZ: Scheme for St Pauls and Bower Ashton to start','bristol-rpz-scheme-for-st-pauls-and-bower-ashton-to-start','Scheme for Bower Ashton will go live on Sept 29, while St Pauls will be rolled out Oct 20','<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">Two new areas of Bristol have been named as the latest areas to get residents parking zones (RPZ) schemes implemented.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">The RPZ scheme for Bower Ashton will go live on September 29, while St Pauls will be rolled out on October 20, Bristol City Council (BCC) announced on Friday.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">The St Pauls scheme will operate Monday to Friday from 9am to 5pm with operating conditions mirroring those operating in Redland and Cotham North, a BCC spokesman said.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">Currently, in both Redland and Cotham North, visitors can park for up to 30 minutes free of charge using a pay and display ticket or pay &pound;1 an hour to park for up to three hours.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">St Pauls residents will receive 50 free visitor permits every year and buy up to another 50 for &pound;1 each.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">Meanwhile, those living in the small, self-contained Bower Ashton RPZ area haven been given different parking regulations to live under.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">The area experiences specific parking pressures from Ashton Court Estate, Ashton Park School, the UWE campus as well as matchday parking from nearby Bristol City Football Club.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">Most roads within the area will be included in a Permit Parking Area in operation 24 hours a day, seven days a week. There will also be some mixed-use parking bays on Kennel Lodge Road.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">Residents will receive 70 free visitor permits per year and can buy another 70 for &pound;1 each.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">&nbsp;</p>','<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">St Pauls and Bower Ashton are the sixth and seventh RPZ areas to be approved in the current programme of 12 areas. More details are due to be posted on the&nbsp;<a style=\"color: #cd1613; outline: none; text-decoration: none; font-weight: bold;\" href=\"http://www.bristol247.com/2014/08/11/bristol-rpz-scheme-for-st-pauls-and-bower-ashton-to-start-90390/www.bristol.gov.uk/rps\" target=\"_blank\">BCC website</a>&nbsp;soon.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">Mayor of Bristol, George Ferguson, said the two schemes were &ldquo;further evidence that we are taking a very flexible approach to designing these schemes deferring to local characteristics and demand&rdquo;.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">He added that he had received &ldquo;very positive reactions from those living in the four new RPZ areas that are now up and running&rdquo;.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">But the mayor has not yet announced whether he will attend a council committee to answer questions over the implementation of the scheme as a whole.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">Last week, it emerged the Place Scrutiny Commission had issued a summons for him to appear at their next meeting on September 19 to answer questions.</p>\r\n<p>&nbsp;</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\">Notably, the councillors &ndash; chaired by vocal critic of the mayor Cllr Christian Martin &ndash; want to know why a report delivered by a cross-party working group into the design and implementation of the RPZ scheme has been in their opinion ignored.</p>\r\n<p style=\"font-family: \'palatino linotype\', palatino, serif; font-size: 14px; line-height: 21px;\"><a class=\"hide_desktop\" href=\"b247://articles?subchannel=4&amp;category=1&amp;article=10\" rel=\"nofollow\">A story should go here...</a><a class=\"hide_tablet hide_mobile\" href=\"http://www.bristol247.com/channel/arrest-made-in-walkabout-bar-rape-investigation\">A story should go here...</a></p>','BS4 3EN','51.44036832606594','-2.6378069269775324',NULL,NULL,1,1,0,NULL,NULL,NULL,'2014-08-11 09:23:39','2014-08-11 21:09:04','2014-08-11 10:02:27'),
+	(386,52,6,'Kevin\'s listing','kevins_listing','Sub heading for Kevin\'s listing','<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque purus nunc, consectetur eu suscipit sagittis, tempus ac justo. Sed laoreet tortor id enim euismod lobortis. Vestibulum tristique dolor vel imperdiet imperdiet. Aenean iaculis, risus ut lacinia blandit, sapien ligula molestie dui, nec adipiscing nibh sem eget tortor. Duis commodo ipsum sollicitudin metus dignissim, id fringilla neque congue. Suspendisse nec mattis ante. Nulla elit risus, ullamcorper nec vehicula et, tincidunt vitae enim. Aliquam consectetur in massa non convallis. Sed varius ultricies justo in aliquet. Phasellus et quam a massa molestie pulvinar in sed sem. Aliquam ut volutpat purus, eget consequat massa. Aliquam eu dui pulvinar, consectetur est sed, mollis augue. Fusce eu erat mauris. Aliquam accumsan, nisl ac facilisis pharetra, ligula mauris cursus justo, nec tincidunt mauris ligula vel tortor. Fusce vitae euismod urna, non placerat nisi.</p>\r\n<p>Aenean nec elit eget lorem eleifend interdum et nec risus. Donec sit amet sollicitudin odio. Etiam sed eros at erat iaculis rhoncus id a nulla. Nullam hendrerit nec lectus in rutrum. Ut et congue odio, sed ornare purus. Aliquam erat volutpat. Vivamus dignissim turpis ut blandit dictum. Aliquam dapibus, nisi et bibendum luctus, sapien dolor pulvinar tortor, at sodales lectus erat eget nulla. Cras eget nisi auctor, pellentesque nibh vitae, cursus lorem. Pellentesque eget risus eu diam accumsan laoreet.</p>\r\n<p>&nbsp;</p>','<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque purus nunc, consectetur eu suscipit sagittis, tempus ac justo. Sed laoreet tortor id enim euismod lobortis. Vestibulum tristique dolor vel imperdiet imperdiet. Aenean iaculis, risus ut lacinia blandit, sapien ligula molestie dui, nec adipiscing nibh sem eget tortor. Duis commodo ipsum sollicitudin metus dignissim, id fringilla neque congue. Suspendisse nec mattis ante. Nulla elit risus, ullamcorper nec vehicula et, tincidunt vitae enim. Aliquam consectetur in massa non convallis. Sed varius ultricies justo in aliquet. Phasellus et quam a massa molestie pulvinar in sed sem. Aliquam ut volutpat purus, eget consequat massa. Aliquam eu dui pulvinar, consectetur est sed, mollis augue. Fusce eu erat mauris. Aliquam accumsan, nisl ac facilisis pharetra, ligula mauris cursus justo, nec tincidunt mauris ligula vel tortor. Fusce vitae euismod urna, non placerat nisi.</p>\r\n<p>Aenean nec elit eget lorem eleifend interdum et nec risus. Donec sit amet sollicitudin odio. Etiam sed eros at erat iaculis rhoncus id a nulla. Nullam hendrerit nec lectus in rutrum. Ut et congue odio, sed ornare purus. Aliquam erat volutpat. Vivamus dignissim turpis ut blandit dictum. Aliquam dapibus, nisi et bibendum luctus, sapien dolor pulvinar tortor, at sodales lectus erat eget nulla. Cras eget nisi auctor, pellentesque nibh vitae, cursus lorem. Pellentesque eget risus eu diam accumsan laoreet.</p>\r\n<p>&nbsp;</p>',NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,NULL,'0000-00-00 00:00:00','2014-08-12 12:11:56','2014-08-12 12:22:19');
 
 /*!40000 ALTER TABLE `article` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -525,7 +530,15 @@ VALUES
 	(279,381,362),
 	(280,381,363),
 	(281,381,364),
-	(282,381,365);
+	(282,381,365),
+	(283,382,366),
+	(284,385,367),
+	(285,385,368),
+	(286,386,369),
+	(287,386,370),
+	(288,386,371),
+	(289,386,372),
+	(290,386,373);
 
 /*!40000 ALTER TABLE `article_asset` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -687,10 +700,31 @@ VALUES
 	(173,6,378),
 	(174,6,379),
 	(175,6,380),
-	(176,6,381);
+	(176,6,381),
+	(177,2,382),
+	(178,6,383),
+	(179,6,384),
+	(180,6,385),
+	(181,6,386);
 
 /*!40000 ALTER TABLE `article_author` ENABLE KEYS */;
 UNLOCK TABLES;
+
+
+# Dump of table article_competition
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `article_competition`;
+
+CREATE TABLE `article_competition` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `article_id` int(11) DEFAULT NULL,
+  `competition_id` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 
 
 # Dump of table article_location
@@ -852,7 +886,10 @@ VALUES
 	(131,375,1,4,2),
 	(132,378,1,5,4),
 	(133,380,2,6,5),
-	(134,381,3,7,6);
+	(134,381,3,7,6),
+	(135,382,2,6,5),
+	(136,385,1,4,2),
+	(137,386,2,6,5);
 
 /*!40000 ALTER TABLE `article_location` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -872,15 +909,6 @@ CREATE TABLE `article_promotion` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-LOCK TABLES `article_promotion` WRITE;
-/*!40000 ALTER TABLE `article_promotion` DISABLE KEYS */;
-
-INSERT INTO `article_promotion` (`id`, `article_id`, `promotion_id`, `created_at`, `updated_at`)
-VALUES
-	(1,318,2,'2014-08-11 10:15:06','2014-08-11 10:15:06');
-
-/*!40000 ALTER TABLE `article_promotion` ENABLE KEYS */;
-UNLOCK TABLES;
 
 
 # Dump of table article_related
@@ -992,7 +1020,10 @@ VALUES
 	(52,178,67),
 	(53,172,68),
 	(54,9,69),
-	(55,1,70);
+	(55,375,70),
+	(56,382,71),
+	(57,10,72),
+	(58,385,73);
 
 /*!40000 ALTER TABLE `article_video` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -1116,7 +1147,7 @@ VALUES
 	(111,'food-q-c-800-450-4-1406735754.jpg','alt','title',800,450,35032,'0000-00-00 00:00:00',NULL,3),
 	(112,'food-q-c-800-450-5-1406735770.jpg','alt','title',800,450,40086,'0000-00-00 00:00:00',NULL,3),
 	(113,'food-q-c-800-450-6-1406735788.jpg','alt','title',800,450,56426,'0000-00-00 00:00:00',NULL,3),
-	(114,'food-q-c-800-450-7-1406735958.jpg','alt','title',800,450,42694,'0000-00-00 00:00:00',NULL,1),
+	(114,'','test 2','test 2',800,450,0,'0000-00-00 00:00:00','0000-00-00 00:00:00',1),
 	(115,'food-q-c-800-450-8-1406735969.jpg','alt','title',800,450,31923,'0000-00-00 00:00:00',NULL,2),
 	(116,'food-q-c-800-450-9-1406736298.jpg','alt','title',800,450,32227,'0000-00-00 00:00:00',NULL,2),
 	(118,'football_news-arsene-wenger-arsenal-1406736728.jpg','alt','title',800,450,117046,'0000-00-00 00:00:00',NULL,2),
@@ -1365,7 +1396,15 @@ VALUES
 	(362,'carouselle-image-3-1407508719.jpg','alt','top 3',800,450,144075,'0000-00-00 00:00:00',NULL,2),
 	(363,'gallery-image-1-1407508777.jpg','alt','Bottom 1',800,450,143984,'0000-00-00 00:00:00',NULL,3),
 	(364,'gallery-image-2-1407508797.jpg','alt','bottom 2',800,450,144068,'0000-00-00 00:00:00',NULL,3),
-	(365,'gallery-image-3-1407508809.jpg','alt','Bottom 3',800,450,144075,'0000-00-00 00:00:00',NULL,3);
+	(365,'gallery-image-3-1407508809.jpg','alt','Bottom 3',800,450,144075,'0000-00-00 00:00:00',NULL,3),
+	(366,'wicked-1407750141.jpg','Witches','wicked show',800,450,75713,'0000-00-00 00:00:00',NULL,1),
+	(367,'test-1407791674.jpg','hero1','hero1',800,450,138809,'0000-00-00 00:00:00',NULL,1),
+	(368,'','balloon1','balloon1',800,450,66410,'0000-00-00 00:00:00',NULL,2),
+	(369,'article-hero-image-1407845625.jpg','alt text','Hero image',800,450,143571,'0000-00-00 00:00:00',NULL,1),
+	(370,'carouselle-image-1-1407845649.jpg','alt','Top image 1',800,450,144006,'0000-00-00 00:00:00',NULL,2),
+	(371,'gallery-image-2-1407845675.jpg','alt gallery 1','Top image 2',800,450,144068,'0000-00-00 00:00:00',NULL,2),
+	(372,'gallery-image-1-1407845701.jpg','alt','bottom 1',800,450,143984,'0000-00-00 00:00:00',NULL,3),
+	(373,'gallery-image-3-1407845756.jpg','alt','bottom 3',800,450,144075,'0000-00-00 00:00:00',NULL,3);
 
 /*!40000 ALTER TABLE `asset` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -1424,12 +1463,14 @@ LOCK TABLES `category` WRITE;
 INSERT INTO `category` (`id`, `icon_img_id`, `name`, `sef_name`, `colour`, `is_active`, `is_deleted`, `created_at`, `updated_at`)
 VALUES
 	(1,NULL,'Crime','crime',NULL,1,NULL,'2014-07-30 14:40:55','2014-07-30 14:40:55'),
-	(2,NULL,'Media','media',NULL,0,NULL,'2014-07-30 14:42:48','2014-07-30 14:42:48'),
-	(3,NULL,'Health','health',NULL,0,NULL,'2014-07-30 14:43:05','2014-07-30 14:43:05'),
-	(4,NULL,'Environment','environment',NULL,0,NULL,'2014-07-30 14:43:17','2014-07-30 14:43:17'),
-	(5,NULL,'Comedy','comedy',NULL,0,NULL,'2014-07-30 14:43:59','2014-07-30 14:43:59'),
-	(6,NULL,'Italian','italian',NULL,0,NULL,'2014-07-30 14:44:05','2014-07-30 14:44:05'),
-	(7,NULL,'Indian','indian',NULL,0,NULL,'2014-07-30 14:44:10','2014-07-30 14:44:10');
+	(2,NULL,'Media','media',NULL,1,NULL,'2014-07-30 14:42:48','2014-07-30 14:42:48'),
+	(3,NULL,'Health','health',NULL,1,NULL,'2014-07-30 14:43:05','2014-07-30 14:43:05'),
+	(4,NULL,'Environment','environment',NULL,1,NULL,'2014-07-30 14:43:17','2014-07-30 14:43:17'),
+	(5,NULL,'Comedy','comedy',NULL,1,NULL,'2014-07-30 14:43:59','2014-07-30 14:43:59'),
+	(6,NULL,'Italian','italian',NULL,1,NULL,'2014-07-30 14:44:05','2014-07-30 14:44:05'),
+	(7,NULL,'Indian','indian',NULL,1,NULL,'2014-07-30 14:44:10','2014-07-30 14:44:10'),
+	(9,NULL,'Politics','politics',NULL,1,NULL,'2014-08-11 22:04:47','2014-08-11 22:04:47'),
+	(10,NULL,'George Ferguson','george_ferguson',NULL,1,NULL,'2014-08-11 22:06:09','2014-08-11 22:06:09');
 
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -1471,7 +1512,7 @@ VALUES
 	(6,2,2,NULL,'Theatre','theatre',NULL,NULL,1,0,'2014-07-30 00:00:00','2014-07-30 00:00:00'),
 	(7,3,3,NULL,'Guide','guide',NULL,NULL,1,0,'2014-07-30 00:00:00','2014-07-30 00:00:00'),
 	(8,4,3,NULL,'Offers and Competitions ','offers-competitions ',NULL,NULL,0,0,'2014-07-30 00:00:00','2014-07-30 00:00:00'),
-	(10,1,1,NULL,'Kevin\'s news','kevins_news',NULL,NULL,1,NULL,'0000-00-00 00:00:00',NULL);
+	(10,1,1,NULL,'Kevin\'s news','kevins_news',NULL,NULL,0,NULL,'0000-00-00 00:00:00',NULL);
 
 /*!40000 ALTER TABLE `channel` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -1504,60 +1545,62 @@ VALUES
 	(4,5,3),
 	(5,8,7),
 	(6,7,6),
-	(7,6,5);
+	(7,6,5),
+	(12,4,9),
+	(13,4,10);
 
 /*!40000 ALTER TABLE `channel_category` ENABLE KEYS */;
 UNLOCK TABLES;
 
 
-# Dump of table competition_answers
+# Dump of table competition
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `competition_answers`;
+DROP TABLE IF EXISTS `competition`;
 
-CREATE TABLE `competition_answers` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `offer_id` int(11) NOT NULL,
-  `answer` varchar(10) NOT NULL,
-  `created_at` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `id` (`id`)
+CREATE TABLE `competition` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(150) DEFAULT NULL,
+  `valid_from` datetime DEFAULT NULL,
+  `valid_to` datetime DEFAULT NULL,
+  `terms` text,
+  `is_active` tinyint(4) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
 
-# Dump of table competition_options
+# Dump of table competition_answer
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `competition_options`;
+DROP TABLE IF EXISTS `competition_answer`;
 
-CREATE TABLE `competition_options` (
+CREATE TABLE `competition_answer` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `comp_question_id` int(11) NOT NULL,
-  `option` varchar(255) NOT NULL,
-  `is_correct` int(1) NOT NULL,
+  `competition_id` int(11) NOT NULL,
+  `answer` varchar(255) NOT NULL DEFAULT '',
+  `is_correct_answer` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`),
-  KEY `comp_ques_id -> question` (`comp_question_id`),
-  CONSTRAINT `competition_options_ibfk_1` FOREIGN KEY (`comp_question_id`) REFERENCES `competition_questions` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `comp_ques_id -> question` (`competition_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
 
-# Dump of table competition_questions
+# Dump of table competition_question
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `competition_questions`;
+DROP TABLE IF EXISTS `competition_question`;
 
-CREATE TABLE `competition_questions` (
+CREATE TABLE `competition_question` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `offer_id` int(11) NOT NULL,
+  `competition_id` int(11) NOT NULL,
   `question` text NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`),
-  KEY `offer_id` (`offer_id`),
-  CONSTRAINT `competition_questions_ibfk_1` FOREIGN KEY (`offer_id`) REFERENCES `promotion` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `offer_id` (`competition_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -1659,7 +1702,9 @@ VALUES
 	(46,9,'Madame Butterfly','madame-butterfly','http://www.tobaccofactorytheatres.com/shows/detail/puccinis_madame_butterfly',1,NULL,'2014-07-14 10:21:44','2014-07-14 10:21:44'),
 	(47,9,'John Shuttleworth','john-shuttleworth','http://www.tobaccofactorytheatres.com/shows/detail/john_shuttleworth_a_wee_ken_to_remember',1,NULL,'2014-07-14 10:22:04','2014-07-14 10:22:04'),
 	(48,1,'Scooby Doo: The Mystery of the Pyramid Overview','scooby_doo_the_mystery_of_the_pyramid_overview','http://www.atgtickets.com/shows/scooby-doo/bristol-hippodrome/#overview_tab',1,NULL,'0000-00-00 00:00:00','0000-00-00 00:00:00'),
-	(49,1,'Kevins test event','kevins_test_event','http://www.atgtickets.com/venues/bristol-hippodrome/',1,NULL,'0000-00-00 00:00:00','0000-00-00 00:00:00');
+	(49,1,'Kevins test event','kevins_test_event','http://www.atgtickets.com/venues/bristol-hippodrome/',1,NULL,'0000-00-00 00:00:00','0000-00-00 00:00:00'),
+	(51,1,'Wicked','wicked','http://www.atgtickets.com/shows/wicked/bristol-hippodrome/',1,NULL,'0000-00-00 00:00:00','0000-00-00 00:00:00'),
+	(52,1,'Kevins new test event','kevins_new_test_event','http://www.atgtickets.com/venues/bristol-hippodrome/',1,NULL,'2014-08-12 12:19:38','2014-08-12 12:19:38');
 
 /*!40000 ALTER TABLE `event` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -1711,7 +1756,7 @@ VALUES
 	(21,24,'2014-07-13 19:30:00','2014-07-13 20:30:00',19.00,1),
 	(22,25,'2014-07-14 19:30:00','2014-07-14 20:30:00',22.40,1),
 	(23,26,'2014-07-15 19:30:00','2014-07-15 20:30:00',38.90,1),
-	(24,27,'2014-08-08 20:00:00','2014-08-08 21:00:00',0.00,1),
+	(24,27,'2014-08-08 20:00:00','2014-08-08 21:00:00',14.99,1),
 	(25,28,'2014-08-07 19:30:00','2014-08-07 20:30:00',10.00,1),
 	(26,29,'2014-08-09 20:00:00','2014-08-09 21:00:00',10.00,1),
 	(27,30,'2014-08-01 20:00:00','2014-08-01 21:00:00',10.00,1),
@@ -1770,9 +1815,13 @@ VALUES
 	(80,17,'2014-08-08 19:30:00','2014-08-08 20:30:00',10.00,1),
 	(81,26,'2014-08-09 14:30:00','2014-08-09 15:30:00',38.90,21),
 	(82,48,'2014-08-08 21:10:00','2014-08-07 23:00:00',21.40,1),
-	(83,49,'2014-08-11 17:00:00','2014-08-11 19:30:00',0.00,1),
-	(84,49,'2014-08-12 17:30:00','2014-08-12 19:30:00',0.00,1),
-	(85,49,'2014-08-13 19:30:00','2014-08-13 21:30:00',0.00,1);
+	(83,49,'2014-08-11 17:00:00','2014-08-11 19:30:00',14.00,1),
+	(84,49,'2014-08-12 17:30:00','2014-08-12 19:30:00',11.00,1),
+	(85,49,'2014-08-13 19:30:00','2014-08-13 21:30:00',13.00,1),
+	(86,3,'2014-08-25 15:30:00','2014-08-25 16:45:00',14.00,1),
+	(87,3,'2014-08-26 16:40:00','2014-08-26 17:45:00',10.00,1),
+	(88,3,'2014-08-27 17:30:00','2014-08-27 18:45:00',9.00,1),
+	(89,51,'2014-08-18 19:30:00','2014-08-18 21:00:00',20.00,1);
 
 /*!40000 ALTER TABLE `event_showtimes` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -1826,15 +1875,6 @@ CREATE TABLE `promotion` (
   KEY `provider_id -> provider` (`venue_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-LOCK TABLES `promotion` WRITE;
-/*!40000 ALTER TABLE `promotion` DISABLE KEYS */;
-
-INSERT INTO `promotion` (`id`, `venue_id`, `valid_from`, `valid_to`, `details`, `terms`, `code`, `template`, `upper_limit`, `is_active`)
-VALUES
-	(2,14,'2014-08-11 10:11:51','2014-08-11 11:30:00','This is an offer for a free 12\" pizza.','Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.','X3D90ZKRMZ','<!DOCTYPE html>\n<html>\n<body>\n\n<h1>Here\'s Your Promotional Code</h1>\n\n<p>{{ code goes here }}</p>\n\n</body>\n</html>',100,1);
-
-/*!40000 ALTER TABLE `promotion` ENABLE KEYS */;
-UNLOCK TABLES;
 
 
 # Dump of table search
@@ -1852,29 +1892,6 @@ CREATE TABLE `search` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-LOCK TABLES `search` WRITE;
-/*!40000 ALTER TABLE `search` DISABLE KEYS */;
-
-INSERT INTO `search` (`id`, `term`, `count`, `max_results`, `created_at`, `updated_at`)
-VALUES
-	(1,'Bristol',79,28,'2014-07-31 16:16:50','2014-08-08 17:28:29'),
-	(2,'nvnerovenv',1,0,'2014-08-04 12:47:17','2014-08-04 12:47:17'),
-	(3,'nerngnrevner',1,0,'2014-08-04 12:48:45','2014-08-04 12:48:45'),
-	(4,'mkkkmkmk',3,0,'2014-08-04 12:52:34','2014-08-04 12:53:11'),
-	(5,'vherigviern',1,0,'2014-08-04 12:54:44','2014-08-04 12:54:44'),
-	(6,'nv',1,3,'2014-08-04 12:54:51','2014-08-04 12:54:51'),
-	(7,'fish',1,1,'2014-08-04 15:44:46','2014-08-04 15:44:46'),
-	(8,'search',1,0,'2014-08-04 16:05:34','2014-08-04 16:05:34'),
-	(9,'Giigfg',1,0,'2014-08-05 11:35:55','2014-08-05 11:35:55'),
-	(10,'Hchxxgv',1,0,'2014-08-05 11:40:27','2014-08-05 11:40:27'),
-	(11,'Hdhdjd',2,0,'2014-08-05 11:51:39','2014-08-05 11:52:18'),
-	(12,'design',1,1,'2014-08-05 21:19:11','2014-08-05 21:19:11'),
-	(13,'hippo',1,1,'2014-08-08 16:19:17','2014-08-08 16:19:17'),
-	(14,'scoo',1,1,'2014-08-08 16:23:08','2014-08-08 16:23:08'),
-	(15,'kev',1,3,'2014-08-08 16:25:13','2014-08-08 16:25:13');
-
-/*!40000 ALTER TABLE `search` ENABLE KEYS */;
-UNLOCK TABLES;
 
 
 # Dump of table sponsor
@@ -2121,7 +2138,16 @@ LOCK TABLES `user` WRITE;
 
 INSERT INTO `user` (`id`, `access_key`, `first_name`, `last_name`, `email`, `password`, `originating_ip`, `last_login`, `last_login_ip`, `is_active`, `is_deleted`, `created_at`, `updated_at`)
 VALUES
-	(1,'D5F0DDA4AD8B974','David','Scholes','paul.schneider@yepyep.co.uk','$2y$10$W.YdCOo20jINJgSh2fW5x.glIgxe096sRzni5h/tqx.yqRws51n5a',NULL,NULL,NULL,NULL,NULL,'2014-08-11 12:50:15','2014-08-11 12:50:15');
+	(2,'B0368EF69C3EC9B','Foo','Bar','ben+1407768068@calvium.com','$2y$10$ZR4xXsRR0HBYc03nx8k7veH42IBSRijUjlp.MC68g48vehVvxvrhC',NULL,NULL,NULL,NULL,NULL,'2014-08-11 15:41:08','2014-08-11 15:41:08'),
+	(3,'E965DB3028A93A5','Foo','Bar','ben+1407768099@calvium.com','$2y$10$XNnQkYzfRYE77m/n0GusHu9VW.BfCz2O6d806jdQ11ps/kx1Oy7pm',NULL,NULL,NULL,NULL,NULL,'2014-08-11 15:41:38','2014-08-11 15:41:38'),
+	(4,'BDB9DE94BA81613','Foo','Bar','ben+1407768153@calvium.com','$2y$10$h.NQv1d7MUcHRL6NnncyXeyV4sIXLcH7CMYBEYFIdGiRLamLPIOFS',NULL,NULL,NULL,NULL,NULL,'2014-08-11 15:42:33','2014-08-11 15:42:33'),
+	(5,'49E850DF453570E','Foo','Bar','ben+1407768174@calvium.com','$2y$10$lBfU0fYI3Wb31xQo/Y/H2.S0zotAhhaDq7BdSthkVyOo6Nro34C9C',NULL,NULL,NULL,NULL,NULL,'2014-08-11 15:42:53','2014-08-11 15:42:53'),
+	(6,'A2334637304BF91','Foo','Bar','ben+1407768214@calvium.com','$2y$10$m99FzCX.Et8O0VihawRgdOHWhhqF6nVSgprdKftAupjxm0Gbhyiwa',NULL,NULL,NULL,NULL,NULL,'2014-08-11 15:43:33','2014-08-11 15:43:33'),
+	(7,'8DFEC14A5C2D659','David','Scholes','david@yepyep.co.uk','$2y$10$hSWW0Ts4zj51kqH1rvsCqeHzvh7sdCRIM7/LMARzVu3Rz9.xNAN/G',NULL,NULL,NULL,NULL,NULL,'2014-08-13 10:37:14','2014-08-13 10:37:14'),
+	(8,'B1931152F2D30C4','David','Scholes','p.schneider1@yahoo.co.uk','$2y$10$1De66OSEp9rsRq9gIq3oMu1PaAEmEcAI5k8rxhkTTBujB3Ed3/ZPa',NULL,NULL,NULL,NULL,NULL,'2014-08-13 10:38:27','2014-08-13 10:38:27'),
+	(9,'74B01323819DFDF','Pablo','Carrillo','pablo+1@gmail.com','$2y$10$oCv1B7ISBIIf.s2zPXo0.u3m7Hs2CGudmRYjdq7uv1tXaY41QCBJK',NULL,NULL,NULL,NULL,NULL,'2014-08-13 10:42:21','2014-08-13 10:42:21'),
+	(10,'386AC28784616EE','Pablo','Carrillo','pablo+2@calvium.com','$2y$10$MSKLjk3nB4dxg472UgD7R.RgkJF.FlPJpVrPvT5jgQWBYGsyi1uTi',NULL,NULL,NULL,NULL,NULL,'2014-08-13 11:19:25','2014-08-13 11:19:25'),
+	(11,'1F48422C5DEB48C','Pablo','Carrillo','pablo+3@calvium.com','$2y$10$8FIyYI6W6Hrhl87W2R.l.ukjivSlHDaHeyTVwYZ4jwmqrv2M0CVTm',NULL,NULL,NULL,NULL,NULL,'2014-08-13 11:22:04','2014-08-13 11:22:04');
 
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -2141,6 +2167,23 @@ CREATE TABLE `user_article` (
   KEY `article -> user_idx` (`user_id`),
   CONSTRAINT `user -> article` FOREIGN KEY (`article_id`) REFERENCES `article` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `article -> user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
+# Dump of table user_competition_answer
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `user_competition_answer`;
+
+CREATE TABLE `user_competition_answer` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `competition_id` int(11) NOT NULL,
+  `competition_answer_id` int(11) NOT NULL,
+  `created_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -2226,18 +2269,6 @@ CREATE TABLE `user_redeemed_promotion` (
   CONSTRAINT `user_redeemed_promotion_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-LOCK TABLES `user_redeemed_promotion` WRITE;
-/*!40000 ALTER TABLE `user_redeemed_promotion` DISABLE KEYS */;
-
-INSERT INTO `user_redeemed_promotion` (`id`, `user_id`, `promotion_id`, `requested_at`)
-VALUES
-	(1,1,2,'2014-08-11 14:09:39'),
-	(2,1,2,'2014-08-11 14:13:16'),
-	(3,1,2,'2014-08-11 14:24:15'),
-	(4,1,2,'2014-08-11 14:24:22');
-
-/*!40000 ALTER TABLE `user_redeemed_promotion` ENABLE KEYS */;
-UNLOCK TABLES;
 
 
 # Dump of table venue
@@ -2299,7 +2330,8 @@ VALUES
 	(26,'The Richmond, Clifton','the_richmond_clifton','33 Gordon Road','Clifton','Bristol','BS8 1AW','','51.4558455','-2.6122146000000157',NULL,'https://www.facebook.com/richmond.clifton','https://twitter.com/richmondclifton','0117 923 7542','0000-00-00 00:00:00','0000-00-00 00:00:00',0,NULL,0,'www.therichmondclifton.co.uk'),
 	(27,'Kevin\'s party','kevins_party','The Paintworks','The Bath Road','Bristol','BS4 3EN','kevin@kevinbroadley.com','51.4426688','-2.5683698999999933',NULL,'','','011797311150','0000-00-00 00:00:00','0000-00-00 00:00:00',0,NULL,0,'http://www.wildfirecomms.co.uk/'),
 	(28,'V-shed','vshed','Canons Road','','Bristol','BS1 5UH',NULL,'51.4506834','-2.5984598000000005',NULL,NULL,NULL,'0117 943 1200','0000-00-00 00:00:00',NULL,1,NULL,0,'http://visitbristol.co.uk/'),
-	(32,'The palace','the_palace','Penthouse','Tom level','','BS43LG','test@kevin.com','51.4348693','-2.552232799999956',NULL,'','','011797111111','2014-08-08 14:35:00','0000-00-00 00:00:00',0,NULL,0,'http://www.atgtickets.com/venues/bristol-hippodrome/');
+	(32,'The Palace','the_palace','Penthouse','Top level','','BS43LG','test@kevin.com','51.4348693','-2.552232799999956',NULL,'','','011797111111','2014-08-08 14:35:00','0000-00-00 00:00:00',0,NULL,0,'http://www.atgtickets.com/venues/bristol-hippodrome/'),
+	(33,'',NULL,'','',NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2014-08-11 15:20:00','2014-08-11 15:20:00',0,NULL,0,'');
 
 /*!40000 ALTER TABLE `venue` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -2352,7 +2384,10 @@ VALUES
 	(67,'//www.youtube.com/embed/wf2omN4WLSQ','<iframe src=\"//www.youtube.com/embed/wf2omN4WLSQ\" frameborder=\"0\" allowfullscreen></iframe>',0,'0000-00-00 00:00:00'),
 	(68,'//www.youtube.com/embed/wf2omN4WLSQ','<iframe src=\"//www.youtube.com/embed/wf2omN4WLSQ\" frameborder=\"0\" allowfullscreen></iframe>',0,'0000-00-00 00:00:00'),
 	(69,'//www.youtube.com/embed/0xihXAzral0','<iframe src=\"//www.youtube.com/embed/0xihXAzral0\" frameborder=\"0\" allowfullscreen></iframe>',0,'0000-00-00 00:00:00'),
-	(70,'http://vimeo.com/102550866','<iframe src=\"http://vimeo.com/102550866\" frameborder=\"0\" allowfullscreen></iframe>',0,'0000-00-00 00:00:00');
+	(70,'http://vimeo.com/102550866','<iframe src=\"http://vimeo.com/102550866\" frameborder=\"0\" allowfullscreen></iframe>',0,'0000-00-00 00:00:00'),
+	(71,'//www.youtube.com/embed/CFf22EBv_Oo','<iframe src=\"//www.youtube.com/embed/CFf22EBv_Oo\" frameborder=\"0\" allowfullscreen></iframe>',0,'0000-00-00 00:00:00'),
+	(72,'http://www.bristol247.com/wp-content/uploads/2014/08/RPS-St-Pauls.jpg','<iframe src=\"http://www.bristol247.com/wp-content/uploads/2014/08/RPS-St-Pauls.jpg\" frameborder=\"0\" allowfullscreen></iframe>',0,'0000-00-00 00:00:00'),
+	(73,'http://youtu.be/enUJB5RS6NE','<iframe src=\"http://youtu.be/enUJB5RS6NE\" frameborder=\"0\" allowfullscreen></iframe>',0,'0000-00-00 00:00:00');
 
 /*!40000 ALTER TABLE `video` ENABLE KEYS */;
 UNLOCK TABLES;
