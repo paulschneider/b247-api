@@ -2,7 +2,7 @@
 
 use Apiv1\Repositories\Models\BaseModel;
 
-Class UserInactiveChannel extends BaseModel {
+Class InactiveChannel extends BaseModel {
 
 	protected $table = "user_inactive_channel";
 	

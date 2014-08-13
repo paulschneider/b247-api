@@ -59,29 +59,4 @@ Class SubChannel extends BaseModel
     {
         return $this->belongsTo('Apiv1\Repositories\Models\DisplayType', 'display_type');
     }
-
-    public static function getWithArticles($channel)
-    {
-        $channels = static::with('articles.location')->with('articles.asset')->where('parent_channel', $channel)->get()->toArray();
-
-        foreach($channels AS $key => $channel)
-        {
-            if( isset($channel['articles']) )
-            {
-                $articles = [];
-
-                foreach($channel['articles'] AS $article)
-                {
-                    if( ! $article['is_featured'] and ! $article['is_picked'] )
-                    {
-                        $articles[] = $article;
-                    }
-                }
-
-                $channels[$key]['articles'] = $articles;
-            }
-        }
-
-        return $channels;
-    }
 }

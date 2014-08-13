@@ -53,9 +53,14 @@ class User extends BaseModel implements UserInterface, RemindableInterface {
 		return $this->hasOne('Apiv1\Repositories\Users\UserProfile', 'user_id');
 	}
 
-	public function Channels()
+	public function inactiveChannels()
 	{
-		return $this->belongsToMany('Apiv1\Repositories\Channels\Channel', 'user_channel');
+		return $this->hasMany('Apiv1\Repositories\Users\InactiveChannel', 'user_id');
+	}
+
+	public function inactiveCategories()
+	{
+		return $this->hasMany('Apiv1\Repositories\Users\InactiveCategory', 'user_id');
 	}
 
 	/**

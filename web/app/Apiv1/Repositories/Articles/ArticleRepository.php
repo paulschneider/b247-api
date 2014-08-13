@@ -107,21 +107,17 @@ Class ArticleRepository extends BaseModel {
     {
         $query = Article::with('location', 'asset', 'event.venue', 'venue');
 
-        if( is_numeric($identifier) )
-        {
+        if( is_numeric($identifier) ) {
             $query->where('article.id', '=', $identifier);
         }
-        else
-        {
+        else {
             $query->where('article.sef_name', '=', $identifier);
         }
 
-        if( ! $result = $query->first() )
-        {
+        if( ! $result = $query->first() ) {
             return false;
         }
-        else
-        {
+        else {
             return $result->toArray();    
         }        
     }
@@ -232,13 +228,11 @@ Class ArticleRepository extends BaseModel {
         if( !$ignoreChannel ) 
         {
             # if its a sub-channel then grab it by the sub-channel ID
-            if ( $isASubChannel )
-            {
+            if ( $isASubChannel ) {
                 $query->where('sub_channel_id', $channel);
             }
             # otherwise use the channel_id field
-            else
-            { 
+            else { 
                 $query->where('channel_id', $channel);
             }           
         }       

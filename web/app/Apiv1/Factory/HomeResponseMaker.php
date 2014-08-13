@@ -8,22 +8,27 @@ Class HomeResponseMaker {
 	protected $channelFeed;
 	protected $homeChannels;
 	protected $channels;
-	protected $response;
 	protected $channelRepository;
 	protected $sponsorResponder;
+	protected $userInactiveChannels = [];
 
 	public function __construct()
 	{
 		$this->homeChannels = Config::get('global.homeChannels'); // channels to show on the homepage
 		$this->channelRepository = App::make( 'ChannelRepository' );
 		$this->sponsorResponder = App::make('SponsorResponder');
+
+		# see if we have a user accessKey present. If so we might want to show a different view of the homepage
+        if( ! isApiResponse($user = App::make('UserResponder')->verify()) ) {
+        	$this->userInactiveChannels = $user->inactive_channels;	
+        }        
 	}
 
 	public function getChannels()
 	{
 		$this->channels = $this->channelRepository->getChannels();
 
-		return App::make( 'ChannelTransformer' )->transformCollection($this->channels);
+		return App::make( 'ChannelTransformer' )->transformCollection($this->channels, $this->userInactiveChannels);
 	}
 
 	public function getFeatured()
@@ -46,15 +51,29 @@ Class HomeResponseMaker {
 
 	/**
 	 * Get a channel feed object containing formatted articles organised by channel
+	 * 
 	 * @return array
 	 */
 	public function getChannelFeed()
 	{
+        # create and initialise a channel feed
         $channelFeed = App::make('ChannelFeed');	
-        $channelFeed->initialise($this->homeChannels);
+        $channelFeed->initialise($this->homeChannels, $this->userInactiveChannels);
 
-		$response = $channelFeed->make($this->sponsorResponder);
+        # construct the channel feed
+       	$response = $channelFeed->make($this->sponsorResponder);
+
+       	# grab any sponsors that were used when creating the channel feed
 		$this->sponsorResponder->setAllocatedSponsors($response['sponsors']);
+
+		# add the whats on content to the beginning of the channelFeed
+		$whatsOn = $this->getWhatsOn();
+
+		# whats on is handled slightly differently. Check the use hasn't disabled it then add it to
+		# the response array
+		if( ! in_array($whatsOn['id'], $this->userInactiveChannels) ) {
+			array_unshift($response['channelFeed'], $whatsOn);
+		}
 
 		return $response['channelFeed'];
 	}
@@ -68,27 +87,31 @@ Class HomeResponseMaker {
 		return $response['channel'];
 	}
 
+	/**
+	 * From the various methods in this class create a response object for the homepage
+	 * 
+	 * @return mixed 
+	 */
 	public function make()
 	{ 
-		if( isApiResponse( $result = $this->getChannels() ) )
-		{
+		# try and find the channels. If not, return the response returned by the call
+		if( isApiResponse( $result = $this->getChannels() ) ) {
 			return $result;
 		}
 
-		// get 3 related adverts and set them as allocated
+		# get 3 related adverts and set them as allocated
 		$adverts = $this->sponsorResponder->getChannelSponsors(3, $this->homeChannels); 
 		$this->sponsorResponder->setAllocatedSponsors($adverts);
 
-		$this->response = [
+		# the main response array
+		$response = [
 			'channels' => $this->getChannels(),
             'adverts' => $adverts,
             'features' => $this->getFeatured(),
             'picks' => $this->getPicked(),
             'channelFeed' => $this->getChannelFeed(),
-        ];
+        ];        
 
-		array_unshift($this->response['channelFeed'], $this->getWhatsOn());
-
-		return $this->response;
+		return apiSuccessResponse( 'ok', $response ); 
 	}
 }

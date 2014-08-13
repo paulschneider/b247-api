@@ -1,7 +1,6 @@
 <?php namespace Apiv1\Responders;
 
 use App;
-use Api\Factory\ApiResponseMaker;
 
 Class CategoryDirectoryResponder {
 
@@ -13,7 +12,7 @@ Class CategoryDirectoryResponder {
 
 		$retainedArticles = [];
 
-		// work out which articles to keep based on the map result set
+		# work out which articles to keep based on the map result set
 		foreach( $articles AS $article )
 		{
 			if( in_array($article['id'], $map->ids) )

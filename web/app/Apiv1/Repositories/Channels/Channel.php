@@ -8,18 +8,7 @@ Class Channel extends BaseModel {
 
     protected $fillable = [ 'icon_img_id', 'name', 'sef_name', 'colour', 'created_at', 'updated_at' ];
 
-    protected $hidden = [ 'is_active', 'is_deleted', 'created_at', 'updated_at', 'content_type' ];
-
-    /**
-    * Form validation rules for a new channel
-    *
-    * @var array
-    */
-    protected static $rules = [
-
-        'name' => 'required'
-
-    ];
+    protected $hidden = [ 'created_at', 'updated_at', 'content_type' ];
 
     /**
     * create the relationship with channel_category

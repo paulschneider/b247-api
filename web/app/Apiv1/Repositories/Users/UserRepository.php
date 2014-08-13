@@ -1,6 +1,7 @@
 <?php namespace Apiv1\Repositories\Users;
 
 use DB;
+use Hash;
 
 Class UserRepository
 {
@@ -22,7 +23,7 @@ Class UserRepository
 
     public function makeHash($password)
     {
-        return \Hash::make($password);
+        return Hash::make($password);
     }
 
     public function getUserChannels($accessKey)
@@ -56,19 +57,6 @@ Class UserRepository
         return $user;
     }
 
-    public function getUserInactiveChannels( $userId )
-    {
-        $result = UserInactiveChannel::select('channel_id AS id')->where('user_id', $userId)->get();
-
-        $hidden = [];
-
-        $hidden[] = $result->map(function( $channel ){
-             return (int) $channel->id;
-        });
-
-        return $hidden[0]->toArray();
-    }
-
     public function authenticate($email)
     {
         return User::select('id', 'first_name', 'last_name', 'email', 'password', 'access_key')->with('profile')->where('email', $email)->first();
@@ -98,7 +86,7 @@ Class UserRepository
     {
         $password = $this->generatePassword();
 
-        $result = \DB::table('user')->where('email', $email)->update([ 
+        $result = DB::table('user')->where('email', $email)->update([ 
             'password' => $password['encrypted'],
             'access_key' => $this->generateAccessKey()
         ]);
@@ -118,7 +106,38 @@ Class UserRepository
 
     public function getProfile($accessKey)
     {
-        return User::with('profile')->where('access_key', $accessKey)->first();
+        $result = User::with('profile', 'inactiveChannels', 'inactiveCategories')->where('access_key', $accessKey)->get();
+
+        # if we didn't get anything go back
+        if( ! $result ) {
+            return;
+        }
+
+        // grab the user from the collection
+        $user = $result->first();
+
+        # otherwise format the inactive content into something more usable
+        $channels = [];
+        $categories = [];
+
+        foreach($user->inactive_channels AS $inactive)
+        {
+            $channels[] = $inactive['channel_id'];
+        }
+
+        foreach($user->inactive_categories AS $inactive)
+        {
+            $categories[] = [
+                'sub_channel' => $inactive['sub_channel_id'],
+                'category' => $inactive['category_id'],
+            ];
+        }
+
+        # set the results back against the user
+        $user->inactive_channels = $channels;
+        $user->inactive_categories = $categories;
+
+        return $user;
     }
 
     public function getUserProfile($user)

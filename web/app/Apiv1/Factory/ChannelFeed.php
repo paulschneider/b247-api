@@ -77,6 +77,5 @@ Class ChannelFeed {
             'channelFeed' => $channelFeed,
              'sponsors' => $allocatedSponsors
         ];
-
     }
 }

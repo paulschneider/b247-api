@@ -1,5 +1,7 @@
 <?php namespace Apiv1\Transformers;
 
+use App;
+
 class ChannelTransformer extends Transformer {
 
     /**
@@ -29,8 +31,6 @@ class ChannelTransformer extends Transformer {
      */
     public function transform( $channel, $inactiveUserChannels = [] )
     { 
-        $categoryTransformer = \App::make('CategoryTransformer');
-
         $response = [
             'id' => $channel['id'],
             'name' => $channel['name'],
@@ -42,8 +42,7 @@ class ChannelTransformer extends Transformer {
         ];
 
         // we use this transformer to transform the channelFeed as well. so this might be a sub-channel that contains parent data
-        if( isset($channel['parent']) )
-        {
+        if( isset($channel['parent']) ) {
             $response['path'] = makePath( [ $channel['parent']['sef_name'], $channel['sef_name'] ] );
         }
 
@@ -75,7 +74,7 @@ class ChannelTransformer extends Transformer {
                     {
                         $pathToCategory = makePath( [ $channel['sef_name'], $subChannel['sef_name'], $category['sef_name'] ] );
 
-                        $cat = $categoryTransformer->transform($category);
+                        $cat = App::make('CategoryTransformer')->transform($category);
 
                         $cat['path'] = $pathToCategory;
 
@@ -98,11 +97,5 @@ class ChannelTransformer extends Transformer {
         }
 
         return $response;
-    }
-
-    public function getArticles( $articles , $options = [] )
-    {
-        $articleTransformer = \App::make('ArticleTransformer');
-        return $articleTransformer->transformCollection($articles);
     }
 }
