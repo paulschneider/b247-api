@@ -32,4 +32,4 @@ foreach($required AS $key => $a)
 	$I->checkThatTheRequiredObjectsAreThere($key, $article);
 }
 
-include './tests/api/article/CheckMainArticleStructure.php';
+include './tests/api/system/article/CheckMainArticleStructure.php';

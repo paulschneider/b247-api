@@ -155,7 +155,7 @@ Class ChannelRepository extends BaseModel {
 
         # if there is a parent element and that parent channel is inactive then return 
         # nothing as the top level channel has been turned off
-        if( $result->parent->id && ! $result->parent->is_active ) {
+        if( isset($result->parent->id) && ! $result->parent->is_active ) {
             return false;
         }
 
