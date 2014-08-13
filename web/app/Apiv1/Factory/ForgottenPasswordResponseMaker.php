@@ -3,7 +3,7 @@
 use App;
 use Lang;
 
-Class ForgottenPasswordResponseMaker extends ApiResponseMaker implements ApiResponseMakerInterface {
+Class ForgottenPasswordResponseMaker {
 
 	private $validator;
 	private $form;
@@ -12,10 +12,17 @@ Class ForgottenPasswordResponseMaker extends ApiResponseMaker implements ApiResp
 	private $requiredFields = ['email'];
 	private $newPassword;
 
+	/**
+	 * @var $passwordNotifier
+	 */
+	protected $passwordNotifier;
+
 	public function __construct()
 	{
 		$this->validator = App::make('PasswordValidator');
 		$this->userResponder = App::make( 'UserResponder' );
+
+		$this->passwordNotifier = App::make('Apiv1\Mail\Notifications\ForgottenPasswordEmail');
 	}
 
 	public function make($form)
@@ -38,7 +45,7 @@ Class ForgottenPasswordResponseMaker extends ApiResponseMaker implements ApiResp
 		}
 
 		// send out the forgotten password email
-		$mailClient = App::make('MailClient')->request('Apiv1\Mail\ForgottenPasswordEmail', ['email' => $this->form['email'], 'password' => $this->newPassword]);
+		$this->passwordNotifier->notify( ['email' => $this->form['email'], 'password' => $this->newPassword] );
 
 		return apiSuccessResponse( 'accepted', [ 'additionalResponse' => 'Password sent to user email address.' ] );
 	}

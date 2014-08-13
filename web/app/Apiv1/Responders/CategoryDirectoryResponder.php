@@ -1,21 +1,18 @@
 <?php namespace Apiv1\Responders;
 
-use Api\Factory\ApiResponseMaker;
+use App;
 
 Class CategoryDirectoryResponder {
 
-	public function make( $categoryId, $subChannelId )
+	public function make( $articles, $categoryId, $subChannelId )
 	{
-		$patternMaker = \App::make('PatternMaker');
-		$categoryResponder = \App::make('CategoryResponder');
-		$articleTransformer = \App::make('ArticleTransformer');
+		## Use a provided array of articles to create map objects with lat and lons for each article so they can be output onto a map
 
-		$articles = $categoryResponder->getCategoryArticles($categoryId, $subChannelId);
-		$map = $categoryResponder->getCategoryMap($categoryId, $subChannelId);
+		$map = App::make('CategoryResponder')->getCategoryMap($categoryId, $subChannelId);
 
 		$retainedArticles = [];
 
-		// work out which articles to keep based on the map result set
+		# work out which articles to keep based on the map result set
 		foreach( $articles AS $article )
 		{
 			if( in_array($article['id'], $map->ids) )
@@ -24,12 +21,10 @@ Class CategoryDirectoryResponder {
 			}
 		}
 
-		$articles = $retainedArticles;
-
 		return [
 			'map' => $map->objects,
-			'articles' => $articles,
-			'totalArticles' => count($articles)
+			'articles' => $retainedArticles,
+			'totalArticles' => count($retainedArticles)
 		];
 	}
 }

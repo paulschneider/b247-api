@@ -24,7 +24,7 @@ Class ChannelRepository extends BaseModel {
     */
     public function getChannels()
     {
-        return Channel::where('parent_channel', null)->with('subChannel.category', 'subChannel.display')->active()->get()->toArray();
+        return Channel::with('subChannel.category', 'subChannel.display')->whereNull('parent_channel')->active()->get()->toArray();
     }
 
     /**
@@ -137,72 +137,29 @@ Class ChannelRepository extends BaseModel {
     {
         $query = Channel::with('subChannel.category', 'parent', 'category', 'display', 'subChannel.display');
 
-        if( is_numeric($identifier) )
-        {
+        # if an integer was passed through then grab the channel by its ID
+        if( is_numeric($identifier) ) {
             $query->where('id', $identifier);
         }
-        else
-        {
+         # then grab the channel by its sef_name field
+        else {
             $query->where('sef_name', $identifier);
         }
 
-        $result = $query->get()->first();
+        $result = $query->active()->get()->first();
 
-        if( is_null($result) or $result->count() == 0)
-        {
+        # if we didn't find anything then say so.
+        if( ! $result) {
             return false;
         }
 
+        # if there is a parent element and that parent channel is inactive then return 
+        # nothing as the top level channel has been turned off
+        if( isset($result->parent->id) && ! $result->parent->is_active ) {
+            return false;
+        }
+
+        # finally, return an array representation of the channel
         return $result->toArray();
-    }
-
-    /**
-    * store or update an existing channel
-    *
-    * @var array
-    */
-    public function storeChannel($form)
-    {
-        if( !empty($form['id']) )
-        {
-            $channel = Channel::find($form['id']);
-        }
-        else
-        {
-            $channel = new Channel();
-        }
-
-        $channel->name = $form['name'];
-        $channel->sef_name = safename($form['name']);
-        $channel->display_type = $form['type'];
-        $channel->parent_channel = $form['parent_channel'] != 0 ? $form['parent_channel'] : null;
-        $channel->colour = $form['colour'];
-        $channel->secondary_colour = $form['sec_colour'];
-        $channel->is_active = isset($form['is_active']) ? $form['is_active'] : false;
-
-        \DB::table('channel_category')->where('channel_id', $channel->id)->delete();
-
-        if( isset($form['category']) and $form['id'] )
-        {
-            $data = [];
-
-            foreach($form['category'] AS $cat)
-            {
-                $row = [
-                    'channel_id' => $form['id']
-                    ,'category_id' => $cat
-                ];
-
-                $data[] = $row;
-            }
-
-            ChannelCategory::insert($data);
-        }
-
-        // save the channel to the database
-
-        $channel->save();
-
-        return $channel;
     }
 }

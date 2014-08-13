@@ -25,6 +25,10 @@ return [
 		'code' => 401,
 		'message' => "Required security credentials could not be validated or were not provided."
 	],	
+	'forbidden' => [
+		'code' => 403,
+		'message' => "Use of this resource is not allowed."
+	],	
 	'notFound' => [
 		'code' => 404,
 		'message' => "The requested content item or resource could not be found."
@@ -41,9 +45,17 @@ return [
 		'code' => 422,
 		'message' => "The request could not be processed due to errors."
 	],
+	'locked' => [
+		'code' => 423,
+		'message' => "Resource use has been locked."
+	],
 	'failedDependency' => [
 		'code' => 424,
 		'message' => "Request failed to satisfy endpoint requirements."
+	],
+	'tooManyRequests' => [
+		'code' => 429,
+		'message' => "Request quota met or has been exceeded for this resource."
 	],
 	'notAcceptable' => [
 		'code' => 442,

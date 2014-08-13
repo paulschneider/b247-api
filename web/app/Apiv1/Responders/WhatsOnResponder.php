@@ -1,34 +1,50 @@
 <?php namespace Apiv1\Responders;
 
 use App;
+use Config;
 
 class WhatsOnResponder {
 
-	protected $channel = 2;
+	/**
+	 * Whats on channel ID
+	 * @var int $channel
+	 */
+	protected $channel;
 
-	public function get( $sponsors, $caller, $allChannelsList)
+	public function __construct()
 	{
-		$articleRepository = App::make('ArticleRepository');
-		$patternMaker = App::make('PatternMaker');
-		$articleTransformer = App::make('ArticleTransformer');
-		$sponsorTransformer = App::make('SponsorTransformer');
-		$channelTransformer = App::make('ChannelTransformer');
+		$this->channel = Config::get('global.whatsOnChannelId');
+	}
 
-		$articles = $articleRepository->getArticlesWithEvents(null, $this->channel);
+	/**
+	 * return a formatted and populated whats on channel array
+	 * 
+	 * @param  SponsorResponder $sponsorResponder
+	 * @param  array $channelList
+	 */
+	public function get(SponsorResponder $sponsorResponder, $channelList)
+	{
+		// get a list of articles for this channel
+		$articles = App::make('ArticleRepository')->getArticlesWithEvents(null, $this->channel);
+			
+		// turn the articles into something nice
+		$transformedArticles = App::make('ArticleTransformer')->transformCollection($articles);
 
-		$sponsors = $sponsorTransformer->transformCollection( $sponsors );
-        $articles = $articleTransformer->transformCollection( $articles );
+		// get some adds from the sponsorResponder object
+		$ads = $sponsorResponder->getUnassignedSponsors();
 
-        $response = $patternMaker->make( [ 'articles' => $articles, 'sponsors' => $sponsors ] );
-        $articles = $response->articles;
+		// use the patternMaker to create a pattern
+        $response = App::make('PatternMaker')->setPattern(1)->make( [ 'articles' => $transformedArticles, 'sponsors' => $ads ] );
 
-        // let the calling function know which sponsors have been used up so we don't repeat them on the channel
-        $caller->setAllocatedSponsors($response->sponsors);
+        // turn this channel into the API format
+        $channel = App::make('ChannelTransformer')->transform( getChannel($channelList, $this->channel) );  
 
-        $channel = $channelTransformer->transform( getChannel($allChannelsList, $this->channel) );
-       	
-        $channel['articles'] = $articles;
+        // assign the articles to a position in the channel array     
+        $channel['articles'] = $response->articles;
 
-       	return $channel;
+       	return [
+       		'channel' => $channel, // the channel and its content 
+       		'sponsors' => $response->sponsors // the sponsors allocated as part of this process
+       	];
 	}      
 }

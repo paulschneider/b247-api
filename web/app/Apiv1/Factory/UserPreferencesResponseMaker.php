@@ -3,7 +3,7 @@
 use Lang;
 use App;
 
-Class UserPreferencesResponseMaker extends ApiResponseMaker implements ApiResponseMakerInterface {
+Class UserPreferencesResponseMaker {
 
 	protected $requiredFields = ['channels'];
 

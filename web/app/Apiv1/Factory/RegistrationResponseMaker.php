@@ -3,15 +3,36 @@
 use App;
 use Lang;
 use Apiv1\Validators\RegistrationValidator;
+use Apiv1\Mail\Newsletters\NewsletterList;
+use Apiv1\Mail\Notifications\NewAccountRegistrationEmail;
 
-Class RegistrationResponseMaker extends ApiResponseMaker implements ApiResponseMakerInterface {
+Class RegistrationResponseMaker {
 
+	/**
+	 * @var array $form
+	 */
 	public $form;
+
+	/**
+	 * @var User $user
+	 */
 	public $user;
 
-	public function __construct(RegistrationValidator $validator)
+	/**
+	 * @var NewsletterList $newsLetter
+	 */
+	protected $newsLetter;
+
+	/**
+	 * @var NewAccountRegistrationEmail $registrationEmail
+	 */
+	protected $registrationEmail;
+
+	public function __construct(RegistrationValidator $validator, NewsletterList $newsletterList, NewAccountRegistrationEmail $registrationEmail)
 	{
 		$this->validator = $validator;
+		$this->newsletter = $newsletterList;
+		$this->registration = $registrationEmail;
 	}
 
 	public function validate()
@@ -50,8 +71,11 @@ Class RegistrationResponseMaker extends ApiResponseMaker implements ApiResponseM
 			'user' => App::make( 'UserTransformer' )->transform($this->user)			
 		];
 
-		// send out welcome email
-		$mailClient = App::make('MailClient')->request('Apiv1\Mail\RegistrationEmail', ['user' => $response['user'], 'plainPassword' => $this->user->plain_pass] );
+		// register the user to receive the newsletter
+		 $this->newsletter->subscribeTo('daily-digest', $response['user']['email']);
+
+		 // send out welcome email
+		$this->registration->notify( ['user' => $response['user'], 'plainPassword' => $this->user->plain_pass] );
 
 		return $response;
 	}

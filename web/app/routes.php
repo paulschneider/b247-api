@@ -48,6 +48,10 @@ Route::group(['prefix' => 'v1'], function(){
 
     Route::post('login', 'SessionsController@login');
 
+    # Promotion
+
+    
+
     # Registration
 
     Route::post('register', 'RegisterController@createSubscriber');
@@ -57,13 +61,20 @@ Route::group(['prefix' => 'v1'], function(){
     Route::get('search', 'SearchController@search');
 
     # User
-
+    
+    Route::get('user', 'UserController@getUser');
     Route::post('user/password', 'UserController@changeUserPassword');
     Route::post('user/profile', 'UserController@profile');
     Route::post('user/preferences', 'UserController@preferences');
+    Route::post('user/promotion/redeem', 'UserController@redeemPromotion');
+    Route::post('user/competition/enter', 'UserController@enterCompetition');
         
     # Homepage
 
     Route::get('/', 'HomeController@index');
     Route::get('/home', 'HomeController@index');
+
+    # Mail
+
+    Route::get('mail/confirm-subscription', 'MailController@verifyUserIsSubscribed');
 });

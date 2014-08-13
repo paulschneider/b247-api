@@ -5,28 +5,25 @@ use Config;
 
 class HomePickedResponder {
 
-	public function get( $caller )
+	public function get( SponsorResponder $sponsorResponder )
 	{
-		$articleRepository = App::make('ArticleRepository');
-		$sponsorRepository = App::make('SponsorRepository');
-		$patternMaker = App::make('PatternMaker');
+        // get is_picked = true articles from any channel or sub-channel
+        $picks = App::make('ArticleRepository')->getArticles( 
+            'picks', 
+            Config::get('constants.channelFeed_limit'), 
+            null, // channel
+            false, //isASubChannel
+            true // ignoreChannel
+        );
 
-		$articleTransformer = App::make('ArticleTransformer');
-		$sponsorTransformer = App::make('SponsorTransformer');
+        $ads = $sponsorResponder->getUnassignedSponsors();
 
-        $picks = $articleRepository->getArticles( 'picks', Config::get('constants.channelFeed_limit'), null, false, true );
+        $articles = App::make('ArticleTransformer')->transformCollection( $picks );
+        $response = App::make('PatternMaker')->setPattern(1)->make( [ 'articles' => $articles, 'sponsors' => $ads ] );
 
-        $ads = $sponsorRepository->getWhereNotInCollection( $caller->getAllocatedSponsors(), 30 )->toArray();
-
-        $articles = $articleTransformer->transformCollection( $picks );
-        $sponsors = $sponsorTransformer->transformCollection( $ads );
-
-        $response = $patternMaker->make( [ 'articles' => $articles, 'sponsors' => $sponsors ] );
-        $articles = $response->articles;
-
-     	// let the calling function know which sponsors have been used up so we don't repeat them on the channel
-        $caller->setAllocatedSponsors($response->sponsors);
-
-        return $articles;
+        return [
+            'articles' => $response->articles,
+            'sponsors' => $response->sponsors
+        ];
 	}      
 }

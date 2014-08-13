@@ -23,7 +23,7 @@ Class SubChannel extends BaseModel
     *
     * @var string
     */
-    protected $hidden = [ 'created_at', 'updated_at' ];
+    protected $hidden = [ 'is_active', 'is_deleted', 'created_at', 'updated_at' ];
 
     /**
      * Relate categories to their parent sub-channels
@@ -32,7 +32,7 @@ Class SubChannel extends BaseModel
      */
     public function category()
     {
-        return $this->belongsToMany('Apiv1\Repositories\Categories\Category', 'channel_category', 'channel_id')->alive()->active();
+        return $this->belongsToMany('Apiv1\Repositories\Categories\Category', 'channel_category', 'channel_id');
     }
 
     /**

@@ -1,9 +1,8 @@
 <?php namespace Apiv1\Repositories\Sponsors;
 
-use Apiv1\Repositories\Sponsors\SponsorPlacement;
 use Apiv1\Repositories\Sponsors\Sponsor;
-use Apiv1\Repositories\Channels\Channel;
 use Apiv1\Repositories\Models\BaseModel;
+use Config;
 
 Class SponsorRepository extends BaseModel {
 
@@ -12,22 +11,60 @@ Class SponsorRepository extends BaseModel {
     *
     * @return array
     */
-    public function getSponsors($list = [], $limit = 3)
+    public function getChannelSponsors($limit = 3, array $channelList, $subChannel = false, $allocated = [], $type)
     {
-        $query = Sponsor::with('asset')->alive()->take($limit);
+        $query = Sponsor::select('sponsor.*')
+            ->join('sponsor_location', 'sponsor_location.sponsor_id', '=', 'sponsor.id')
+            ->with('location', 'asset');            
 
-        //check to see if there are any ID's we don't want to return
-        if( count($list) > 0 )
-        {
-            $query->whereNotIn('id', $list);
+        // if we passed a list of channel then only get sponsors for those channels
+        if( count($channelList) > 0)
+        {            
+            if( ! $subChannel) {
+                $query->whereIn('sponsor_location.channel_id', $channelList);
+            }
+            else {
+                $query->whereIn('sponsor_location.sub_channel_id', $channelList);   
+            }    
         }
 
-        return $query->orderBy(\DB::raw('RAND()'))->get();
-    }
+        $query->where('sponsor.sponsor_type', $type);
+        
+        // if a list of sponsors has been passed then only get sponsors thats aren't in that list
+        if( is_array($allocated) && count($allocated) > 0 ) {
+            $query->whereNotIn('sponsor.id', $allocated);    
+        }      
 
-    public function getRandomSponsors($limit = 999)
+        $result = $query->take($limit)->orderBy(\DB::raw('RAND()'))->get();       
+
+        return $result->toArray();
+    }
+    /**
+     * get a list of sponsors assigned to a specified sub-channel/category combination
+     * @param  int $limit
+     * @param  int $channelId
+     * @param  int $categoryId
+     * @param array $allocated
+     * @param int $type // from the sponsor_type DB table
+     * @return mixed
+     */
+    public function getCategorySponsors($limit, $channelId, $categoryId, $allocated = [], $type)
     {
-        return Sponsor::with('asset')->alive()->take($limit)->orderBy(\DB::raw('RAND()'))->get();
+        $query = Sponsor::select('sponsor.*')
+            ->join('sponsor_location', 'sponsor_location.sponsor_id', '=', 'sponsor.id')
+            ->with('location', 'asset')
+            ->where('sub_channel_id', $channelId)
+            ->where('category_id', $categoryId)
+            ->where('sponsor.sponsor_type', $type); 
+            
+       // if a list of sponsors has been passed then only get sponsors thats aren't in that list
+        if( is_array($allocated) && count($allocated) > 0 ) {
+            $query->whereNotIn('sponsor_id', $allocated);    
+        }
+
+        $result = $query->take($limit)->orderBy(\DB::raw('RAND()'))->get();       
+
+        return $result->toArray();
     }
 
     /**
@@ -39,67 +76,4 @@ Class SponsorRepository extends BaseModel {
     {
         return static::getSponsors($listOfAllocatedSponsorIds, $limit);
     }
-
-    /**
-    * get a specified sponsors by their ID
-    *
-    * @return array
-    */
-    public function getSponsorById($id)
-    {
-        return Sponsor::findOrFail($id);
-    }
-
-    /**
-    * get a full list of sponsor records
-    *
-    * @return array
-    */
-    public function getAscendingList()
-    {
-        return Sponsor::createdDescending()->get();
-    }
-
-    /**
-    * get a key value list of sponsors
-    *
-    * @return array
-    */
-    public function getSimpleSponsors()
-    {
-        return Sponsor::active()->alive()->createdDescending()->lists('title', 'id');
-    }
-
-    /**
-    * create or update a sponsor record
-    *
-    * @return Sponsor
-    */
-    public function storeSponsor($form)
-    {
-        if( !empty($form['id']) )
-        {
-            $sponsor = Sponsor::find($form['id']);
-        }
-        else
-        {
-            $sponsor = new Sponsor();
-        }
-
-        $sponsor->title = $form['title'];
-        $sponsor->url = $form['url'];
-        $sponsor->is_active = isset($form['is_active']) ? $form['is_active'] : false;
-
-        $sponsor->save();
-
-        return $sponsor;
-    }
-
-    public function assignChannelSponsors($channel, $sponsors)
-    {
-        // 1 - content_type::type = channel
-
-        return SponsorPlacement::place(1, $channel->id, $sponsors);
-    }
-
 }

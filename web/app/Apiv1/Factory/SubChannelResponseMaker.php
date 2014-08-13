@@ -1,16 +1,23 @@
 <?php namespace Apiv1\Factory;
 
+use App;
 use Apiv1\Repositories\Channels\Toolbox;
 
-Class SubChannelResponseMaker extends ApiResponseMaker implements ApiResponseMakerInterface {
+Class SubChannelResponseMaker {
 
 	protected $response;
 	protected $channel;
+	protected $channelRepository;
+	protected $sponsorResponder;
+
+	public function __construct()
+	{
+		$this->sponsorResponder = App::make('SponsorResponder');
+	}
 
 	public function getChannel($identifier)
 	{
-		$channelRepository = \App::make( 'ChannelRepository' );
-		$channelTransformer = \App::make( 'ChannelTransformer' );
+		$channelRepository = App::make( 'ChannelRepository' );
 
 		if( ! $channel = $channelRepository->getChannelByIdentifier( $identifier ) )
 		{
@@ -22,32 +29,43 @@ Class SubChannelResponseMaker extends ApiResponseMaker implements ApiResponseMak
 		}
 
 		$parentChannel = $channelRepository->getChannelBySubChannel( $channel );		
-		$channel = $channelTransformer->transform( Toolbox::filterSubChannels( $parentChannel, $channel ) );
+		$channel = App::make( 'ChannelTransformer' )->transform( Toolbox::filterSubChannels( $parentChannel, $channel ) );
 
 		$this->channel = $channel;
 	}
 
 	public function getChannelContent()
 	{
-		$channelResponder = \App::make( 'ChannelResponder' );
-
-		$articles = $channelResponder->getArticles( $this->channel );
-		$sponsors = $this->getRandomSponsors( null );
-
+		// if its a channel of type - article
 		if( isArticleType( $this->channel ) )
 		{
-			return $channelArticleResponse = \App::make('ChannelArticleResponder')->make( $articles, $sponsors );
+			$articles = App::make( 'ChannelResponder' )->getArticles( $this->channel );
+
+			$response = App::make('ChannelArticleResponder')->make( $articles, $this->sponsorResponder );
 		}
+		// if its a channel of type - directory
 		else if( isDirectoryType( $this->channel ) )
 		{
-			return $channelDirectoryResponder = \App::make('ChannelDirectoryResponder')->make( $this->channel, $articles, $sponsors );
+			$articles = App::make( 'ChannelResponder' )->getArticles( $this->channel );
+
+			$response = App::make('ChannelDirectoryResponder')->make( $this->channel, $articles, $this->sponsorResponder );
 		}
+		// if its a channel of type - listing
 		else if( isListingType( $this->channel ) )
-		{
-			return \App::make('ChannelListingResponder')->make( $this->channel );
+		{		
+			$response = App::make('ChannelListingResponder')->make( $this->channel );
 		}
 
-		return $channelResponder->make( $this->channel, $articles, $sponsors );
+		// if there were sponsors in the response we need to do something with them or they'll be returned by the API
+		if(isset($response['sponsors']))
+		{
+			$this->sponsorResponder->setAllocatedSponsors($response['sponsors']);	
+
+			// we dont want to return this so get rid of it
+			unset($response['sponsors']);
+		}
+
+		return $response;
 	}
 
 	public function make( $identifier )
@@ -57,11 +75,16 @@ Class SubChannelResponseMaker extends ApiResponseMaker implements ApiResponseMak
 			return $result;
 		}
 
+		// get 3 related adverts and set them as allocated
+		$adverts = $this->sponsorResponder->getChannelSponsors(3, [getSubChannelId($this->channel)], true); 
+		$this->sponsorResponder->setAllocatedSponsors($adverts);
+
 		$this->response = [
 			'channel' => $this->channel,
-			'adverts' => $this->getSponsors()
+			'adverts' => $adverts
 		];
 
+		// getChannelContent returns an array of content based on the channel type. Go through it and add them into the main response array
 		foreach( $this->getChannelContent($this->channel) AS $key => $item)
 		{
 			$this->response[$key] = $item;

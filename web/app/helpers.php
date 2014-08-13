@@ -1,5 +1,53 @@
 <?php
 
+function anExternalUrl($string)
+{
+    $protocols = [ 'http://', 'https://' ];
+
+    foreach($protocols AS $protocol)
+    {
+        if(strpos($string, $protocol) !== false)
+        {
+            return true;
+        }
+    }    
+}
+
+function getDay($dayNumber)
+{
+    $days = [
+        0 => [ 'full' => 'Sunday', 'short' => 'Sun' ],
+        1 => [ 'full' => 'Monday', 'short' => 'Mon' ],
+        2 => [ 'full' => 'Tuesday', 'short' => 'Tue' ],
+        3 => [ 'full' => 'Wednesday', 'short' => 'Wed' ],
+        4 => [ 'full' => 'Thursday', 'short' => 'Thur' ],
+        5 => [ 'full' => 'Friday', 'short' => 'Fri' ],
+        6 => [ 'full' => 'Saturday', 'short' => 'Sat' ],
+    ];
+
+    return $days[$dayNumber];
+}
+
+function getMonth($monthNumber)
+{
+    $months = [
+        0 => [ 'full' => 'January', 'short' => 'Jan' ],
+        1 => [ 'full' => 'February', 'short' => 'Feb' ],
+        2 => [ 'full' => 'March', 'short' => 'Mar' ],
+        3 => [ 'full' => 'April', 'short' => 'Apr' ],
+        4 => [ 'full' => 'May', 'short' => 'May' ],
+        5 => [ 'full' => 'June', 'short' => 'Jun' ],
+        6 => [ 'full' => 'July', 'short' => 'Jul' ],
+        7 => [ 'full' => 'August', 'short' => 'Aug' ],
+        8 => [ 'full' => 'September', 'short' => 'Sept' ],
+        9 => [ 'full' => 'October', 'short' => 'Oct' ],
+        10 => [ 'full' => 'November', 'short' => 'Nov' ],
+        11 => [ 'full' => 'December', 'short' => 'Dec' ],
+    ];
+
+    return $months[$monthNumber];
+}
+
 // insert a new array item after a given associative array key
 function insertInto($thisArray, $after, $withThisContent, $withThisArrayKey)
 {
@@ -118,6 +166,15 @@ function isListingType($channel)
     
     return in_array($type, [
         Config::get('constants.displayType_listing')
+    ]) ? true : false;
+}
+
+function isPromotionType($channel)
+{
+    $type = getSubChannelType($channel);
+    
+    return in_array($type, [
+        Config::get('constants.displayType_promotion')
     ]) ? true : false;
 }
 

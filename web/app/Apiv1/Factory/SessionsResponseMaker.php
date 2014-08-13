@@ -1,6 +1,10 @@
 <?php namespace Apiv1\Factory;
 
-Class SessionsResponseMaker extends ApiResponseMaker implements ApiResponseMakerInterface {
+use App;
+use Hash;
+use Lang;
+
+Class SessionsResponseMaker {
 
 	private $validator;
 	private $form;
@@ -8,7 +12,7 @@ Class SessionsResponseMaker extends ApiResponseMaker implements ApiResponseMaker
 
 	public function __construct()
 	{
-		$this->validator = \App::make( 'SessionsValidator' );
+		$this->validator = App::make( 'SessionsValidator' );
 	}
 
 	public function make($form)
@@ -45,16 +49,16 @@ Class SessionsResponseMaker extends ApiResponseMaker implements ApiResponseMaker
 
 	public function authenticate()
 	{
-		if( ! $user = \App::make( 'UserRepository' )->authenticate($this->form['email']) ) 
+		if( ! $user = App::make( 'UserRepository' )->authenticate($this->form['email']) ) 
 		{
 			return apiErrorResponse( 'notFound' );
 		}
 
-		if (! \Hash::check($this->form['password'], $user->password))
+		if (! Hash::check($this->form['password'], $user->password))
 		{	
-			return apiErrorResponse( 'unauthorised', [ 'errorReason' => \Lang::get('api.userAccountPasswordMismatch') ]  );					
+			return apiErrorResponse( 'unauthorised', [ 'errorReason' => Lang::get('api.userAccountPasswordMismatch') ]  );					
 		}
 
-		$this->user = \App::make('UserTransformer')->transform( $user->toArray() );
+		$this->user = App::make('UserTransformer')->transform( $user->toArray() );
 	}
 }

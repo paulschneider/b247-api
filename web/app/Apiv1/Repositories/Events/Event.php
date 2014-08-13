@@ -8,26 +8,14 @@ Class Event extends BaseModel {
 
     public $is_active = true;
 
-    /**
-    * Form validation rules for a new event
-    *
-    * @var array
-    */
-    protected static $rules = [
-
-        'title' => 'required'
-        ,'venue_id' => 'required'
-        ,'sef_name' => 'required'
-        ,'show_date' => 'required'
-        ,'show_time' => 'required'
-        ,'price' => 'required'
-        ,'url' => 'required'
-
-    ];
-
     public function venue()
     {
         return $this->belongsTo('Apiv1\Repositories\Venues\Venue', 'venue_id');
+    }
+
+    public function showTime()
+    {
+        return $this->hasMany('Apiv1\Repositories\Events\ShowTime', 'event_id');
     }
 
     public function article()

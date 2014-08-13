@@ -1,18 +1,18 @@
 <?php
 
 $form = [
-		'accessKey' => 'F566FC61250A250',
+		'accessKey' => 'CDC42A2E03C028C',
 		'channels' => [	
 			0 => [
-				'id' => 48,
+				'id' => 1,
 				'isEnabled' => false,
 				'subChannels' => [
 					0 => [
-						'id' => 55,
+						'id' => 6,
 						'isEnabled' => true,
 						'categories' => [
 							0 => [
-								'id' => 14,
+								'id' => 7,
 								'isEnabled' => false
 							]						
 						]
@@ -20,25 +20,25 @@ $form = [
 				]
 			],
 			1 => [
-				'id' => 50,
+				'id' => 3,
 				'isEnabled' => true,
 				'subChannels' => [
 					0 => [
-						'id' => 60,
+						'id' => 7,
 						'isEnabled' => true,
 						'categories' => [
 							0 => [
-								'id' => 19,
+								'id' => 5,
 								'isEnabled' => false
 							]						
 						],
 					],					
 					1 => [
-						'id' => 55,
+						'id' => 8,
 						'isEnabled' => true,
 						'categories' => [
 							0 => [
-								'id' => 20,
+								'id' => 7,
 								'isEnabled' => false
 							]						
 						]

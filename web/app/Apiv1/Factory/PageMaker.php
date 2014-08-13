@@ -1,22 +1,25 @@
 <?php namespace Apiv1\Factory;
 
+use Input;
+use stdClass;
+
 Class PageMaker {
 
 	public static function make($items = [], $page = 1, $limit = 20)
 	{
-		if( \Input::get('page') )
+		if( Input::get('page') )
 		{
-			$page = \Input::get('page');
+			$page = Input::get('page');
 		} 
 
-		if( \Input::get('size') )
+		if( Input::get('size') )
 		{
-			$limit = \Input::get('size');
+			$limit = Input::get('size');
 		}
 
 		$counter = 0;
-		$pagination = new \stdClass();
-		$pagination->meta = new \stdClass();
+		$pagination = new stdClass();
+		$pagination->meta = new stdClass();
 		$pagination->meta->totalItems	= count($items);
 		$pagination->meta->perPage = (int) $limit;
 		$pagination->meta->hasPages = (bool) false;

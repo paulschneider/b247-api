@@ -3,18 +3,17 @@
 use App;
 use Lang;
 
-Class ArticleResponseMaker extends ApiResponseMaker implements ApiResponseMakerInterface {
+Class ArticleResponseMaker {
 
 	var $category;
 	var $channel; // sub-channel
 	var $article;
-	var $articleRepository;
 	var $articleTransformer;
+	var $articleRepository;
 
 	public function __construct()
 	{
 		$this->articleRepository = App::make( 'ArticleRepository' );
-		$this->articleTransformer = App::make( 'ArticleTransformer' );
 		$this->articleTransformer = App::make( 'ArticleTransformer' );
 		$this->articleTemplateTransformer = App::make( 'ArticleTemplateTransformer' );
 	}
@@ -25,18 +24,13 @@ Class ArticleResponseMaker extends ApiResponseMaker implements ApiResponseMakerI
 		$this->category = $input['category'];
 		$this->article = $input['article'];
 
-		if( isApiResponse( $result = $this->getChannel()) )
-		{
+		# Get the details of the channel. Return an API response if not found
+		if( isApiResponse( $result = $this->getChannel()) ) {
 			return $result;
 		}
 
-		if( isApiResponse( $result = $this->getAdverts() ) )
-		{
-			return $result;
-		}	
-
-		if( isApiResponse( $result = $this->getArticle() ) )
-		{
+		# Get the article. Return an API response if not found
+		if( isApiResponse( $result = $this->getArticle() ) ) {
 			return $result;
 		}
 
@@ -82,7 +76,7 @@ Class ArticleResponseMaker extends ApiResponseMaker implements ApiResponseMakerI
 
 	public function getArticle()
 	{		
-		if( ! $this->article = $this->articleRepository->getCategoryArticle( $this->channel, $this->category, $this->article ))
+		if( ! $this->article = App::make('Apiv1\Responders\ArticleResponder')->getArticle($this->channel, $this->category, $this->article))
 		{
 			return apiErrorResponse('notFound', [ 'errorReason' => Lang::get('api.articleCouldNotBeLocated') ]);
 		}
@@ -97,12 +91,16 @@ Class ArticleResponseMaker extends ApiResponseMaker implements ApiResponseMakerI
 
 	public function getAdverts()
 	{
-		return $this->getSponsors();
+		$sponsorResponder = App::make('SponsorResponder');
+		$sponsorResponder->channel = $this->channel;
+		$sponsorResponder->category = $this->category;
+
+		return $sponsorResponder->getCategorySponsors(3);
 	}
 
 	public function nextPreviousArticles()
 	{
-		$articles = $this->articleRepository->getNextAndPreviousArticles($this->article);
+		$articles = App::make( 'ArticleRepository' )->getNextAndPreviousArticles($this->article);
 		
 		$articleNavigationTransformer = App::make('ArticleNavigationTransformer');	
 

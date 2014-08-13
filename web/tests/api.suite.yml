@@ -7,6 +7,7 @@ modules:
             cleanup: true
             dump: 'tests/_data/dump.sql'
         PhpBrowser: 
-            url: http://local.b247-api/
+            url: http://api.b247-co-uk/
         REST:
-            url: http://local.b247-api/v1/
+            url: http://api.b247-co-uk/v1/
+

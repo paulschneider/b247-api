@@ -2,7 +2,7 @@
 
 use App;
 
-Class AppNavResponseMaker extends ApiResponseMaker implements ApiResponseMakerInterface {
+Class AppNavResponseMaker {
 
 	var $channels;
 
