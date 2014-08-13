@@ -41,7 +41,7 @@ Class UserProfileResponseMaker {
 	{
 		# check that we have everything need to proceed including required params and auth creds. If all 
 		# successful then the response is a user object
-		if( isApiResponse($response = App::make('UserResponder')->verify([], [])) )
+		if( isApiResponse($response = App::make('UserResponder')->verify()) )
 		{
 			return $response;
 		}

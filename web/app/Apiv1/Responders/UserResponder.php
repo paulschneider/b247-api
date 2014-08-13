@@ -86,7 +86,7 @@ Class UserResponder {
 	 * @return mixed                 [$user on success, API response on failure]
 	 * 
 	 */
-	public function verify($requiredFields, $form)
+	public function verify($requiredFields = [], $form = [])
 	{
 		# check to see if we have the accessKey header param. This is a helper function.
 		if( ! userAccessKeyPresent() )
