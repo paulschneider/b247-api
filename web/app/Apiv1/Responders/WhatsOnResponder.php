@@ -21,12 +21,16 @@ class WhatsOnResponder {
 	 * 
 	 * @param  SponsorResponder $sponsorResponder
 	 * @param  array $channelList
+	 * @param  User $user
+	 * @return mixed
 	 */
-	public function get(SponsorResponder $sponsorResponder, $channelList)
+	public function get(SponsorResponder $sponsorResponder, $channelList, $user)
 	{
+		$limit = Config::get('constants.channelFeed_limit');
+
 		// get a list of articles for this channel
-		$articles = App::make('ArticleRepository')->getArticlesWithEvents(null, $this->channel);
-			
+		$articles = App::make('ArticleRepository')->getArticles('listing', $limit, $this->channel, false, false, $user);
+
 		// turn the articles into something nice
 		$transformedArticles = App::make('ArticleTransformer')->transformCollection($articles);
 
@@ -37,7 +41,7 @@ class WhatsOnResponder {
         $response = App::make('PatternMaker')->setPattern(1)->make( [ 'articles' => $transformedArticles, 'sponsors' => $ads ] );
 
         // turn this channel into the API format
-        $channel = App::make('ChannelTransformer')->transform( getChannel($channelList, $this->channel) );  
+        $channel = App::make('ChannelTransformer')->transform( getChannel($channelList, $this->channel), $user );  
 
         // assign the articles to a position in the channel array     
         $channel['articles'] = $response->articles;

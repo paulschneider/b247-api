@@ -10,11 +10,11 @@ $required = AppArticleStructure::get();
 $I = new ApiTester($scenario);
 $I->am('An API client');
 $I->wantTo('Retrieve the details of an article thats going to be sent to populate a HTML template');
-$I->seeInDatabase('article', ['id' => 1]);
-$I->seeInDatabase('channel', ['id' => 4]);
-$I->seeInDatabase('category', ['id' => 1]);
+$I->seeInDatabase('article', ['id' => 180]);
+$I->seeInDatabase('channel', ['id' => 5]);
+$I->seeInDatabase('category', ['id' => 4]);
 
-$I->sendGET	('articles?subchannel=4&category=1&article=1&dataOnly=true');
+$I->sendGET	('articles?subchannel=5&category=4&article=180&dataOnly=true');
 
 $I->seeResponseCodeIs(200);
 $I->seeResponseIsJson();

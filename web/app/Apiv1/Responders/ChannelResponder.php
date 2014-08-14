@@ -6,34 +6,32 @@ use App;
 
 Class ChannelResponder {
 
-	public function getChannel( $identifier )
+	public function getChannel( $identifier, $user )
 	{
 		$channelRepository = App::make( 'ChannelRepository' );
-		$channelTransformer = App::make( 'ChannelTransformer' );
-
 		$channel = $channelRepository->getChannelByIdentifier( $identifier );
 
 		$parentChannel = $channelRepository->getChannelBySubChannel( $channel );		
-		$channel = $channelTransformer->transform( Toolbox::filterSubChannels( $parentChannel, $channel ) );
+		$channel = App::make( 'ChannelTransformer' )->transform( Toolbox::filterSubChannels( $parentChannel, $channel ), $user );
 
 		return $channel;
 	}
 
-	public function getArticles($channel)
+	public function getArticles($channel, $user)
 	{	
 		$type = getSubChannelType( $channel );
 		$subChannelId = getSubChannelId($channel);		
 
-		$articles = App::make('ArticleRepository')->getArticles( $type, 25, $subChannelId, true ); 
+		$articles = App::make('ArticleRepository')->getArticles( $type, 25, $subChannelId, true, false, $user ); 
 
         return App::make('ArticleTransformer')->transformCollection($articles);
-	}
+    }
 
-	public function getArticlesInRange($channel, $range, $time)
+	public function getArticlesInRange($channel, $range, $time, $user)
 	{
 		$subChannelId = getSubChannelId($channel);
 
-		$articles = App::make('ArticleRepository')->getChannelListing( $subChannelId, 20, $range, $time );
+		$articles = App::make('ArticleRepository')->getChannelListing( $subChannelId, 20, $range, $time, $user );
 
 		if( $range == "week" )
         {
