@@ -38,14 +38,15 @@ class EventTransformer extends Transformer {
 
         $response = [
             'details' => [
-                'id' => $event['id']
-                ,'title' => $event['title']
-                ,'sefName' => $event['sef_name']
-                ,'showDate' => $performances['summary']['nextPerformance']['start']
-                ,'showTime' => $performances['summary']['nextPerformance']['time']
-                ,'price' => $performances['summary']['nextPerformance']['price']
-                ,'url' => $event['url']
-                ,'performances' => $performances
+                'id' => $event['id'],
+                'title' => $event['title'],
+                'sefName' => $event['sef_name'],
+                'showDate' => $performances['summary']['nextPerformance']['start'],
+                'showTime' => $performances['summary']['nextPerformance']['time'],
+                'epoch' => strtotime($performances['summary']['nextPerformance']['start'] .' ' . $performances['summary']['nextPerformance']['time']),
+                'price' => $performances['summary']['nextPerformance']['price'],
+                'url' => $event['url'],
+                'performances' => $performances
             ]
             ,'venue' => App::make( 'VenueTransformer' )->transform( $venue )
         ];
