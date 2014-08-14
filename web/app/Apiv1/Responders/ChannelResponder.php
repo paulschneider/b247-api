@@ -21,9 +21,12 @@ Class ChannelResponder {
 
 	public function getArticles($channel)
 	{	
+        # the channel type (article, listing, directory, promotion)
 		$type = getSubChannelType( $channel );
-		$subChannelId = getSubChannelId($channel);		
 
+        #grab the sub-channel ID from the main channel array
+		$subChannelId = getSubChannelId($channel);		
+        
 		$articles = App::make('ArticleRepository')->getArticles( $type, 25, $subChannelId, true ); 
 
         return App::make('ArticleTransformer')->transformCollection($articles);
