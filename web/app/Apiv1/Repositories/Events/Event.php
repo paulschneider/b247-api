@@ -15,7 +15,7 @@ Class Event extends BaseModel {
 
     public function showTime()
     {
-        return $this->hasMany('Apiv1\Repositories\Events\ShowTime', 'event_id');
+        return $this->hasMany('Apiv1\Repositories\Events\ShowTime', 'event_id')->orderBy('showtime', 'desc');
     }
 
     public function article()

@@ -11,11 +11,22 @@ Class ArticleResponseMaker {
 	var $articleTransformer;
 	var $articleRepository;
 
+	/**
+	 * User object
+	 * @var Apiv1\Repositories\Users\User
+	 */
+	protected $user = null;
+
 	public function __construct()
 	{
 		$this->articleRepository = App::make( 'ArticleRepository' );
 		$this->articleTransformer = App::make( 'ArticleTransformer' );
 		$this->articleTemplateTransformer = App::make( 'ArticleTemplateTransformer' );
+
+		# see if we have an user accessKey present. If so we might want to show a different view of the homepage
+        if( ! isApiResponse($user = App::make('UserResponder')->verify()) ) {
+        	$this->user = $user;	
+        }  
 	}
 
 	public function make($input)
@@ -48,17 +59,19 @@ Class ArticleResponseMaker {
 
 	public function getChannel()
 	{
-		if( isApiResponse($result = App::make( 'CategoryResponseMaker' )->getCategory( $this->category )))
-		{
+		# see if we can grab the category by the provided identifier
+		if( isApiResponse($result = App::make( 'CategoryResponseMaker' )->getCategory( $this->category ))) {
 			return $result;
 		}
 
+		# set the class category as the result of the previous call 
 		$this->category = $result;
 
-		$this->channel = App::make( 'ChannelResponder' )->getChannel( $this->channel );
+		# grab the channel
+		$this->channel = App::make( 'ChannelResponder' )->getChannel( $this->channel, $this->user );
 
-		if( ! categoryBelongsToChannel( $this->channel, $this->category ) )
-		{
+		# if we're trying to access a channel/category combination that is invalid then return an error
+		if( ! categoryBelongsToChannel( $this->channel, $this->category ) ) {
 			return apiErrorResponse( 'notAcceptable' );
 		}
 

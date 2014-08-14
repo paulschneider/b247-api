@@ -109,7 +109,7 @@ class ShowTimeTransformer extends Transformer {
        }
         else
         {        
-            if( isset($this->times[0]) ) {
+            if(isset($this->times[0])) {
                 $this->performance = $this->times[0];    
             }            
         }        

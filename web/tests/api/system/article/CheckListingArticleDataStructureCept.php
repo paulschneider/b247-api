@@ -1,20 +1,24 @@
 <?php
 
-# article/CheckAppArticleDataSupplyCept.php
+# article/CheckListingArticleDataStructureCept.php
 
-require_once('./tests/api/variables/AppArticleStructure.php');
+require_once('./tests/api/variables/ListingArticleStructure.php');
+
+$articleId = 231;
+$channelId = 6;
+$categoryId = 5;
 
 // get all of the default params required for an article
-$required = AppArticleStructure::get();
+$required = ListingArticleStructure::get();
 
 $I = new ApiTester($scenario);
 $I->am('An API client');
 $I->wantTo('Retrieve the details of an article thats going to be sent to populate a HTML template');
-$I->seeInDatabase('article', ['id' => 1]);
-$I->seeInDatabase('channel', ['id' => 4]);
-$I->seeInDatabase('category', ['id' => 1]);
+$I->seeInDatabase('article', ['id' => $articleId]);
+$I->seeInDatabase('channel', ['id' => $channelId]);
+$I->seeInDatabase('category', ['id' => $categoryId]);
 
-$I->sendGET	('articles?subchannel=4&category=1&article=1&dataOnly=true');
+$I->sendGET	("articles?subchannel=$channelId&category={$categoryId}&article={$articleId}&dataOnly=true");
 
 $I->seeResponseCodeIs(200);
 $I->seeResponseIsJson();
@@ -24,7 +28,7 @@ $dataResponse = $I->grabDataFromJsonResponse('success.data.article');
 
 $I->assertIsArray($dataResponse);
 
-function check($responseItem, $requiredItem, $I)
+function checkListing($responseItem, $requiredItem, $I)
 {
     foreach($requiredItem AS $key => $required)
     {
@@ -35,7 +39,7 @@ function check($responseItem, $requiredItem, $I)
 
         if(is_array($responseItem[$key]))
         {
-            check($responseItem[$key], $requiredItem[$key], $I);
+            checkListing($responseItem[$key], $requiredItem[$key], $I);
         }
     }
 }
@@ -50,6 +54,6 @@ foreach($required AS $key => $req)
 
     if(is_array($dataResponse[$key]))
     {
-        check($dataResponse[$key], $required[$key], $I);
+        checkListing($dataResponse[$key], $required[$key], $I);
     }
 }

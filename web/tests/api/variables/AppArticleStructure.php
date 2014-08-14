@@ -55,10 +55,7 @@ Class AppArticleStructure {
 			"source" => "",
 			"embed" => "",
 		],
-		"gallery" => [
-			"top" => [],
-			"bottom" => []
-		]
+		"gallery" => []
 	];
 
 	public static function get()

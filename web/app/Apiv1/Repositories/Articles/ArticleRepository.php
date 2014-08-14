@@ -7,6 +7,8 @@ use Apiv1\Repositories\Search\Search;
 use Apiv1\Repositories\Models\BaseModel;
 use Carbon\Carbon;
 use Config;
+use App;
+use DB;
 
 Class ArticleRepository extends BaseModel {
 
@@ -125,14 +127,14 @@ Class ArticleRepository extends BaseModel {
     /**
      * For a channel of type listing get articles based on the ranges passed
      * 
-     * @param  [type]  $channel   [description]
-     * @param  integer $limit     [description]
-     * @param  [type]  $range     [description]
-     * @param  [type]  $timestamp [description]
-     * @return [type]             [description]
+     * @param  array $channel
+     * @param  integer $limit     the number of results to return
+     * @param  string  $range     the range of articles. Either a 'week' or a 'day'. Determines the type of result set
+     * @param  int $timestamp     the period in time we want to grab articles for
      * 
+     * @return array $result
      */
-    public function getChannelListing( $channel, $limit = 1000, $range, $timestamp )
+    public function getChannelListing( $channel, $limit = 1000, $range, $timestamp, $user )
     {
         $dateStamp = convertTimestamp( 'Y-m-d', $timestamp);
 
@@ -143,21 +145,53 @@ Class ArticleRepository extends BaseModel {
         ->join('event_showtimes', 'event_showtimes.event_id', '=', 'article.event_id')
         ->where('sub_channel_id', $channel);
 
+        // grab a weeks worth of articles from a specified point in time
         if( $range == "week" )
         { 
-
             $dateArray = explode('-', $dateStamp);  
             $query->where('event_showtimes.showtime', '>=', $dateStamp.' 00:00:01');
             $query->where('event_showtimes.showtime', '<=', Carbon::create($dateArray[0], $dateArray[1], $dateArray[2], '23', '59', '59')->addDays(6));
 
             $query->where('article.is_picked', '=', true);
         }
+        # or just grab a days worth
         elseif ( $range == "day" )
         {
             $query->where('event_showtimes.showtime', '>=', $dateStamp.' 00:00:01');
             $query->where('event_showtimes.showtime', '<=', $dateStamp.' 23:59:59');
         }
 
+        # if we have a user object we only want to grab content that they want to see
+        if( ! is_null($user))    
+        {
+            # don't get any articles from channels they have disabled
+            if( count($user->inactive_channels) > 0 ) {
+                $query->whereNotIn('channel_id', $user->inactive_channels);    
+            }
+
+            # don't get any articles from categories they have disabled. Note that categories can be used in multiple
+            # channels so the sub_channel_id is needed to distinguish one from the other
+            if( count($user->inactive_categories) > 0 ) 
+            {
+                $cats = [];
+                $chans = [];
+
+                # go through the user disabled list and grab separate lists of categories and channels
+                foreach($user->inactive_categories AS $key => $cat)
+                {
+                    $cats[] = $key;
+                    $chans[] = $cat['subchannel'];
+                }
+
+                # grab a list of row ids from article_location which include both a category_id and a sub_channel_id that have been disabled by the user
+                $excludeIds = DB::table('article_location')->select('id')->whereIn('category_id', $cats)->whereIn('sub_channel_id', $chans)->lists('id');
+
+                # now grab everything else not in the $excludedIds list. This is the content th user wants to see.
+                $query->whereNotIn('article_location.id', $excludeIds);
+            }            
+        }
+
+        # order them by the earliest show time and pull them out of the DB
         $result = $query->orderBy('event_showtimes.showtime', 'asc')->get();
 
         $articles = [];
@@ -218,14 +252,18 @@ Class ArticleRepository extends BaseModel {
      * @return mixed                 [an array of articles or boolean false on nothing]
      * 
      */
-    public function getArticles($type = 'article', $limit = 20, $channel = null, $isASubChannel = false, $ignoreChannel = false)
+    public function getArticles($type = 'article', $limit = 20, $channel = null, $isASubChannel = false, $ignoreChannel = false, $user = null)
     {
+        # flag to indicate whether a sort order has been given to the query 
+        # (this can be done in a couple of places, hence the flag)
+        $sorted = false;
+
         $query = ArticleLocation::with('article.event.venue', 'article.venue', 'article.event.showTime', 'article.asset', 'article.location')->select(
             'article.title', 'article_location.article_id'
         )->join('article', 'article.id', '=', 'article_location.article_id');
 
         # on the homepage we don't care which channel the featured or picked articles come from
-        if( !$ignoreChannel ) 
+        if( ! $ignoreChannel ) 
         {
             # if its a sub-channel then grab it by the sub-channel ID
             if ( $isASubChannel ) {
@@ -235,20 +273,63 @@ Class ArticleRepository extends BaseModel {
             else { 
                 $query->where('channel_id', $channel);
             }           
-        }       
+        }   
+
+        # if we have a user object we only want to grab content that they want to see
+        if( ! is_null($user))    
+        {
+            # don't get any articles from channels they have disabled
+            if( count($user->inactive_channels) > 0 ) {
+                $query->whereNotIn('channel_id', $user->inactive_channels);    
+            }
+
+            # don't get any articles from categories they have disabled. Note that categories can be used in multiple
+            # channels so the sub_channel_id is needed to distinguish one from the other
+            if( count($user->inactive_categories) > 0 ) 
+            {
+                $cats = [];
+                $chans = [];
+
+                # go through the user disabled list and grab separate lists of categories and channels
+                foreach($user->inactive_categories AS $key => $cat)
+                {
+                    $cats[] = $key;
+                    $chans[] = $cat['subchannel'];
+                }
+
+                # grab a list of row ids from article_location which include both a category_id and a sub_channel_id that have been disabled by the user
+                $excludeIds = DB::table('article_location')->select('id')->whereIn('category_id', $cats)->whereIn('sub_channel_id', $chans)->lists('id');
+
+                # now grab everything else not in the $excludedIds list. This is the content th user wants to see.
+                $query->whereNotIn('article_location.id', $excludeIds);
+            }            
+        }
            
         switch($type)
         {
+            # if we only want picked articles
             case 'picks' :
                 $query->where('article.is_picked', '=', true)->where('article.is_featured', '=', false);
             break;
+            # if its a listing we want to filter by the event attached to the article
+            case 'listing' :                
+                $query->join('event_showtimes', 'event_showtimes.event_id', '=', 'article.event_id')->distinct('event_showtimes.event_id')->orderBy('event_showtimes.showtime', 'asc');
+                $sorted = true;
+            # if its a directory type article or we want featured articles
             case Config::get('constants.displayType_directory') :
             case 'featured' :
                 $query->where('article.is_featured', '=', true);
             break;
         }
 
-        $result = $query->orderBy('article.created_at', 'desc')->take($limit)->get();
+        # by default ensure we only get approved articles
+        $query->whereNotNull('article.is_approved')->take($limit);
+
+        # and by default order all articles by their publication date
+        $query->orderBy('article.published', 'desc');
+
+        # and...... go 
+        $result = $query->get();        
 
         $articles = [];
         
@@ -259,24 +340,6 @@ Class ArticleRepository extends BaseModel {
         }
 
         return $articles;
-    }
-
-    public function getArticlesWhereNotInCollection( $articles = [], $type = 1, $limit = 100 )
-    {
-        return Article::with('location', 'asset', 'event.venue')->whereNotIn( 'id', $articles )->orderBy('article.created_at', 'desc')->take($limit)->get();        
-    }
-
-    public function getArticlesWithEvents($type, $channel)
-    {
-        $limit = Config::get('constants.channelFeed_limit');
-
-        $query = Article::with('asset')->with(['location' => function($query) use($channel) {
-                $query->where('article_location.channel_id', $channel);
-        }])->with(['event' => function($query) {
-                $query->orderBy('event.show_date', 'asc')->alive()->active();
-        }])->with('event.venue', 'event.showTime');
-
-        return $query->whereNotNull('article.event_id')->take($limit)->get()->toArray();
     }
 
     public function countArticlesInCategory($categoryId, $channelId)

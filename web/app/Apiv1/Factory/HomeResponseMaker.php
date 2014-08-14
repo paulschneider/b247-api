@@ -10,7 +10,12 @@ Class HomeResponseMaker {
 	protected $channels;
 	protected $channelRepository;
 	protected $sponsorResponder;
-	protected $userInactiveChannels = [];
+
+	/**
+	 * User object
+	 * @var Apiv1\Repositories\Users\User
+	 */
+	protected $user = null;
 
 	public function __construct()
 	{
@@ -18,9 +23,9 @@ Class HomeResponseMaker {
 		$this->channelRepository = App::make( 'ChannelRepository' );
 		$this->sponsorResponder = App::make('SponsorResponder');
 
-		# see if we have a user accessKey present. If so we might want to show a different view of the homepage
+		# see if we have an user accessKey present. If so we might want to show a different view of the homepage
         if( ! isApiResponse($user = App::make('UserResponder')->verify()) ) {
-        	$this->userInactiveChannels = $user->inactive_channels;	
+        	$this->user = $user;	
         }        
 	}
 
@@ -28,12 +33,12 @@ Class HomeResponseMaker {
 	{
 		$this->channels = $this->channelRepository->getChannels();
 
-		return App::make( 'ChannelTransformer' )->transformCollection($this->channels, $this->userInactiveChannels);
+		return App::make( 'ChannelTransformer' )->transformCollection($this->channels, $this->user);
 	}
 
 	public function getFeatured()
 	{
-		return App::make('HomeFeaturedResponder')->get();
+		return App::make('HomeFeaturedResponder')->get($this->user);
 	}
 
 	/**
@@ -42,8 +47,7 @@ Class HomeResponseMaker {
 	 */
 	public function getPicked()
 	{
-		$response = App::make('HomePickedResponder')->get($this->sponsorResponder);
-
+		$response = App::make('HomePickedResponder')->get($this->sponsorResponder, $this->user);
 		$this->sponsorResponder->setAllocatedSponsors($response['sponsors']);
 
 		return $response['articles'];
@@ -58,7 +62,7 @@ Class HomeResponseMaker {
 	{
         # create and initialise a channel feed
         $channelFeed = App::make('ChannelFeed');	
-        $channelFeed->initialise($this->homeChannels, $this->userInactiveChannels);
+        $channelFeed->initialise($this->homeChannels, $this->user);
 
         # construct the channel feed
        	$response = $channelFeed->make($this->sponsorResponder);
@@ -71,7 +75,7 @@ Class HomeResponseMaker {
 
 		# whats on is handled slightly differently. Check the use hasn't disabled it then add it to
 		# the response array
-		if( ! in_array($whatsOn['id'], $this->userInactiveChannels) ) {
+		if( is_null($this->user) || ! in_array($whatsOn['id'], $this->user->inactive_channels) ) {
 			array_unshift($response['channelFeed'], $whatsOn);
 		}
 
@@ -80,7 +84,7 @@ Class HomeResponseMaker {
 
 	public function getWhatsOn()
 	{
-		$response = App::make('WhatsOnResponder')->get( $this->sponsorResponder, $this->channels );
+		$response = App::make('WhatsOnResponder')->get( $this->sponsorResponder, $this->channels, $this->user );
 
 		$this->sponsorResponder->setAllocatedSponsors($response['sponsors']);
 

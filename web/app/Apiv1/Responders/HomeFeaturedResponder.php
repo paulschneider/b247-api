@@ -4,9 +4,9 @@ use App;
 
 class HomeFeaturedResponder {
 
-	public function get()
+	public function get($user)
 	{
-        $articles = App::make('ArticleRepository')->getArticles( 'featured', 5, null, false, true );
+        $articles = App::make('ArticleRepository')->getArticles( 'featured', 5, null, false, true, $user );
 
         return App::make('ArticleTransformer')->transformCollection( $articles );
 	}      

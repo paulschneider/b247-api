@@ -6,37 +6,37 @@ use App;
 
 Class ChannelResponder {
 
-	public function getChannel( $identifier )
+	public function getChannel( $identifier, $user )
 	{
 		$channelRepository = App::make( 'ChannelRepository' );
-		$channelTransformer = App::make( 'ChannelTransformer' );
-
 		$channel = $channelRepository->getChannelByIdentifier( $identifier );
 
 		$parentChannel = $channelRepository->getChannelBySubChannel( $channel );		
-		$channel = $channelTransformer->transform( Toolbox::filterSubChannels( $parentChannel, $channel ) );
+		$channel = App::make( 'ChannelTransformer' )->transform( Toolbox::filterSubChannels( $parentChannel, $channel ), $user );
 
 		return $channel;
 	}
 
-	public function getArticles($channel)
+	public function getArticles($channel, $user)
 	{	
         # the channel type (article, listing, directory, promotion)
 		$type = getSubChannelType( $channel );
 
         #grab the sub-channel ID from the main channel array
 		$subChannelId = getSubChannelId($channel);		
-        
-		$articles = App::make('ArticleRepository')->getArticles( $type, 25, $subChannelId, true ); 
 
+        # get some articles
+		$articles = App::make('ArticleRepository')->getArticles( $type, 25, $subChannelId, true, false, $user ); 
+
+        # transform the response into the API required format
         return App::make('ArticleTransformer')->transformCollection($articles);
-	}
+    }
 
-	public function getArticlesInRange($channel, $range, $time)
+	public function getArticlesInRange($channel, $range, $time, $user)
 	{
 		$subChannelId = getSubChannelId($channel);
 
-		$articles = App::make('ArticleRepository')->getChannelListing( $subChannelId, 20, $range, $time );
+		$articles = App::make('ArticleRepository')->getChannelListing( $subChannelId, 20, $range, $time, $user );
 
 		if( $range == "week" )
         {

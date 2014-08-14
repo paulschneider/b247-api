@@ -56,12 +56,10 @@ Class ChannelRepository extends BaseModel {
     {
         $query = Channel::with('category', 'display');
 
-        if( is_numeric( $identifier ) )
-        {
+        if( is_numeric( $identifier ) ) {
             $query->where('id', $identifier);
         }
-        else
-        {
+        else {
             $query->where('sef_name', $identifier);
         }
 
