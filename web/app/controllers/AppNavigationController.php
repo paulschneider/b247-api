@@ -1,6 +1,6 @@
 <?php
 
-Class AppNavigationController extends ApiController {
+Class AppNavigationController extends ApiController {	
 
 	public function index()
 	{
