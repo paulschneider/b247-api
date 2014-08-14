@@ -17,10 +17,10 @@ Class ChannelDirectoryResponder {
 		# in each category. This is **NOT** the number of articles returned to the page
 		$sortedCategories = Toolbox::getCategoryArticleCategories( $categories );
 
-		// create the desired pattern
+		# create the desired pattern
 		$response = App::make( 'PatternMaker' )->setPattern( 1 )->make( [ 'articles'=> $articles, 'sponsors' => $sponsorResponder->getUnassignedSponsors() ] );
 
-		// return all the data requested
+		# return all the data requested
 		return [
 			'articles' => $response->articles,
 			'categories' => $sortedCategories,

@@ -43,9 +43,10 @@ Class SubChannelResponseMaker {
 
 			$response = App::make('ChannelArticleResponder')->make( $articles, $this->sponsorResponder );
 		}
-		// if its a channel of type - directory
+		# if its a channel of type - directory
 		else if( isDirectoryType( $this->channel ) )
 		{
+			# this will return an array of articles that are is_featured = true only
 			$articles = App::make( 'ChannelResponder' )->getArticles( $this->channel );
 
 			$response = App::make('ChannelDirectoryResponder')->make( $this->channel, $articles, $this->sponsorResponder );
