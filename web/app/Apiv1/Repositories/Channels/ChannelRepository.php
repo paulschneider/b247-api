@@ -45,8 +45,6 @@ Class ChannelRepository extends BaseModel {
     public function getChannelCategories($channelId)
     {
         $result = Channel::with('category', 'parent')->where('id', $channelId)->get();
-
-        sd('ChannelRepository::getChannelCategories()');
     }
 
     /**
