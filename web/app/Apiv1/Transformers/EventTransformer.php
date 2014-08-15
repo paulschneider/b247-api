@@ -34,17 +34,32 @@ class EventTransformer extends Transformer {
         $event = $article['event'];
         unset($article['event']['venue']);        
 
-        $performances = App::make( 'Apiv1\Transformers\ShowTimeTransformer' )->transformCollection($article['event']['show_time'], $options);
+        if( ! isset($article['event']['cinema']) ) {
+            $performances = App::make( 'Apiv1\Transformers\ShowTimeTransformer' )->transformCollection($article['event']['show_time'], $options);    
+
+            $showDate = $performances['summary']['nextPerformance']['start'];
+            $showTime = $performances['summary']['nextPerformance']['time'];
+            $epoch = strtotime($performances['summary']['nextPerformance']['start'] .' ' . $performances['summary']['nextPerformance']['time']);
+            $price = $performances['summary']['nextPerformance']['price'];
+        }
+        else {
+            $performances = App::make('Apiv1\Transformers\CinemaListingTransformer')->transform($article, $options);
+
+            $showDate = $performances['summary']['startTime']['day'];
+            $showTime = $performances['summary']['startTime']['time'];
+            $epoch = $performances['summary']['startTime']['epoch'];
+            $price = $performances['summary']['price'];
+        }        
 
         $response = [
             'details' => [
                 'id' => $event['id'],
                 'title' => $event['title'],
                 'sefName' => $event['sef_name'],
-                'showDate' => $performances['summary']['nextPerformance']['start'],
-                'showTime' => $performances['summary']['nextPerformance']['time'],
-                'epoch' => strtotime($performances['summary']['nextPerformance']['start'] .' ' . $performances['summary']['nextPerformance']['time']),
-                'price' => $performances['summary']['nextPerformance']['price'],
+                'showDate' => $showDate,
+                'showTime' => $showTime,
+                'epoch' => $epoch,
+                'price' => $price,
                 'url' => $event['url'],
                 'performances' => $performances
             ]

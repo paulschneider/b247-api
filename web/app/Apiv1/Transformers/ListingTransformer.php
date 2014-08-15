@@ -151,14 +151,12 @@ Class ListingTransformer extends Transformer {
             $article = App::make('ArticleTransformer')->transform($article, [ 'showBody' => false, 'eventDay' => $day ] );
 
             // initialise the picks array for the day
-            if( ! isset($response[ $day ]['picks']) )
-            {
+            if( ! isset($response[ $day ]['picks']) ) {
                 $response[ $day ]['picks'] = [];
             }
 
             // initialise the articles array for the day
-            if( ! isset($response[ $day ]['articles']) )
-            {
+            if( ! isset($response[ $day ]['articles']) ) {
                 $response[ $day ]['articles'] = [];
             }
 

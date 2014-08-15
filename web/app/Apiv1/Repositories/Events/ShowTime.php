@@ -10,4 +10,9 @@ Class ShowTime extends BaseModel {
     {
         return $this->hasMany('Apiv1\Repositories\Events\Event');
     }
+
+    public function venue()
+    {
+    	return $this->hasOne('Apiv1\Repositories\Venues\Venue', 'id', 'venue_id');
+    }
 }

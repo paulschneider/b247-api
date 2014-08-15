@@ -45,15 +45,15 @@ Class SubChannelResponseMaker {
 
 	public function getChannelContent()
 	{
-		$articles = App::make( 'ChannelResponder' )->getArticles( $this->channel, $this->user );
-
 		# if its a channel of type - article
 		if( isArticleType( $this->channel ) ) {		
+			$articles = App::make( 'ChannelResponder' )->getArticles( $this->channel, $this->user );
 			$response = App::make('ChannelArticleResponder')->make( $articles, $this->sponsorResponder );
 		}
 		
 		# if its a channel of type - directory
 		else if( isDirectoryType( $this->channel ) ) {
+			$articles = App::make( 'ChannelResponder' )->getArticles( $this->channel, $this->user );
 			$response = App::make('ChannelDirectoryResponder')->make( $this->channel, $articles, $this->sponsorResponder );
 		}
 
