@@ -2,6 +2,7 @@
 
 use Config;
 use stdClass;
+use Carbon\Carbon;
 
 class ShowTimeTransformer extends Transformer {
 
@@ -76,7 +77,7 @@ class ShowTimeTransformer extends Transformer {
          ### grab the passed through event day. We need this to work out which performance is happening today
         ### out of the list of performances we will transform
         
-        $this->eventDay = isset($options['eventDay']) ? $options['eventDay'] : $this->getFirstFromList($this->times);
+        $this->eventDay = isset($options['eventDay']) ? $options['eventDay'] : null;
 
         // now create a summary object
         $response = [
@@ -84,110 +85,11 @@ class ShowTimeTransformer extends Transformer {
                 'isMultiDate' => count($this->times) > 1 ? true : false,
                 'firstPerformance' => $this->getFirstPerformance(),
                 'nextPerformance' => $this->getNextPerformance(),
-                'lastPerformance' => $this->setLastPerformance(),
+                'lastPerformance' => $this->getLastPerformance(),
             ],
-            'times' => $this->times
         ];
 
-        $this->setThisPerformance();
-
         return $response;
-    }
-
-    /**
-     * Work out which is the current performance using the performance date
-     *
-     * @return array
-     */
-    public function setThisPerformance()
-    {     
-       if( count($this->times) > 1 )
-       {         
-            foreach( $this->times AS $key => $performance )
-            {   
-                $this->getPerformance($performance);
-            }        
-       }
-        else
-        {        
-            if(isset($this->times[0])) {
-                $this->performance = $this->times[0];    
-            }            
-        }        
-
-        return $this->first = $this->setPerformance();
-    }
-
-    /**
-     * Calculate which is the earliest performance based on the timestamp of the performance
-     *
-     * @param array $performance
-     * @return null
-     */
-    public function getPerformance($performance)
-    {    
-        ## on the current event day find the first performance time
-        if(strtotime($this->eventDay) == strtotime($performance['start']['day']))
-        {
-            # set the earliest performance to the first that we get if nothing has been set before
-            if( is_null($this->performance) ) {
-                $this->performance = $performance;
-            }
-           # compare the start time of the incoming performance with that stored. If its earlier then store the new one
-            else if((int) $performance['start']['epoch'] < (int) $this->performance['start']['epoch']) {                
-                $this->performance = $performance;    
-            }
-        }
-    }
-
-    /**
-     * Work out which is the last performance using the performance date
-     *
-     * @return array
-     */
-    public function setLastPerformance()
-    {
-        foreach( $this->times AS $key => $performance )
-        {   
-            $this->getLastPerformance($performance);
-        } 
-
-        return $this->last = $this->setPerformance();
-    }
-
-    /**
-     * Create and set the parameters of a performance object
-     *
-     * @return stdClass
-     */
-    public function setPerformance($type="")
-    {
-        $event = [];
-
-        $event['start'] = $this->performance['start']['day'];
-        $event['time'] = $this->performance['start']['time'];
-        $event['epoch'] = $this->performance['start']['epoch'];
-        $event['price'] = $this->performance['price'];
-
-        return $event;
-    }
-
-    public function getFirstFromList($days)
-    {   
-        $tmp = null;
-
-        foreach($days AS $day)
-        {
-            if(is_null($tmp)) {
-                $tmp = $day;
-            }
-            else if($day['start']['epoch'] < $tmp['start']['epoch']) 
-            {   
-                $tmp = $day;
-            }
-        }
-
-        return $tmp['start']['day'];
     }
 
     /**
@@ -197,85 +99,56 @@ class ShowTimeTransformer extends Transformer {
      */
     public function getFirstPerformance()
     {
-        $tmp = null;
+        $tmp = 0;
 
         foreach( $this->times AS $key => $performance )
         {              
-            if(is_null($tmp)) {
+            if($tmp == 0) {
                 $tmp = $performance;
             }
             else if($performance['start']['epoch'] < $tmp['start']['epoch']) {
                 $tmp = $performance;   
             }
         } 
-
-        $this->performance = $tmp;
-
-        return $this->setPerformance();
+       
+        return $tmp;
     }
 
-    /**
-     * Using the current eventDay, work out which performance out of the list of several is happening "today"
-     * 
-     * @return null
-     */
-    public function getNextPerformance($time = null)
+    public function getNextPerformance()
     {
-        if(is_null($time)) {
-            $time = strtotime(date('Y-m-d', time()));
-        }        
+        $tmp = 0;
 
-        // we are going over events in the future so do that
-        if(strtotime($this->eventDay) > $time)
-        {           
-            return $this->getNextDaysPerformance();
-        }
+        $eventDay = strtotime($this->eventDay . ' 00:00:01');
 
-        # other wise see which is the next event today
-        foreach( $this->times AS $key => $performance )
-        {    
-            if($performance['start']['epoch'] >= time() && $performance['start']['day'] == date('Y-m-d') )
-            {
-                $this->performance = $performance;    
-
-                break;            
-            }
-        } 
-
-        return $this->setPerformance();
-    }
-
-    /** 
-     * grab the first performance time that occurs in the times array for the given day
-     * 
-     * @return array [first instance of a performance on a chosen day]
-     */
-    public function getNextDaysPerformance()
-    { 
-        # go through our times array and find the first performance on the chosen event day        
-        foreach( $this->times AS $key => $performance )
-        {    
-            if( $performance['start']['day'] == $this->eventDay)
-            {   
-                $this->performance = $performance;    
-                
-                return $this->setPerformance('next');            
-            }
-        } 
-    }
-
-    /**
-     * Work out which is the last in the list of performances for this event
-     * 
-     * @param  array $performance
-     * @return null
-     */
-    public function getLastPerformance($performance)
-    {
-        if($performance['start']['epoch'] > $this->performance['start']['epoch']) 
+        foreach($this->times AS $time)
         {
-            $this->performance = $performance;   
+            if($time['start']['epoch'] > $eventDay  )
+            {
+                return $time;
+            }
         }
+    }
+
+    /**
+     * Work out which is the last performance using the performance date
+     *
+     * @return array
+     */
+    public function getLastPerformance()
+    {
+        $tmp = 0;
+
+        $eventDay = strtotime($this->eventDay . ' 00:00:01');
+
+        foreach( $this->times AS $key => $time )
+        {   
+            if($time['start']['epoch'] > $eventDay)
+            {
+                $tmp = $time;
+            }            
+        } 
+
+        return $tmp;
     }
 
     /**

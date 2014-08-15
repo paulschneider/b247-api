@@ -53,7 +53,7 @@ Class ListingTransformer extends Transformer {
             $this->days[$date]['articles'] = null;
 
             // now grab the articles for the given day
-            $this->days[$date]['articles'] = $this->getArticlesForAGivenDay($articles, $date, $options);
+            $this->getArticlesForAGivenDay($articles, $date, $options);
         }        
 
         // once we're done reset the array keys for the category listing
@@ -75,13 +75,13 @@ Class ListingTransformer extends Transformer {
         $categoryCounter = [];       
 
         foreach( $articles AS $article )
-        {
-            // grab the article location before it gets transformed (and removed)
+        {    
+            # grab the article location before it gets transformed (and removed)
             $location = $article['location'][0];
 
             $article = App::make('ArticleTransformer')->transform($article, [ 'showBody' => false, 'eventDay' => $day ]);
 
-            // if a limit has been passed through for each day then only add that number of articles to the return for that day
+            # if a limit has been passed through for each day then only add that number of articles to the return for that day
 
             if( count($this->days[ $day ]['articles']) < $this->articlesToShowEachDay && $article['event']['details']['showDate'] == $day )
             {              
@@ -95,7 +95,7 @@ Class ListingTransformer extends Transformer {
                     'numberOfArticles' => count($categoryCounter[ $day ][$location['categoryId']]),
                 ];
 
-                return $article;
+                $this->days[$day]['articles'][] = $article;
             }
         }
     }
@@ -155,26 +155,23 @@ Class ListingTransformer extends Transformer {
                 $response[ $day ]['picks'] = [];
             }
 
-            // initialise the articles array for the day
+            # initialise the articles array for the day
             if( ! isset($response[ $day ]['articles']) ) {
                 $response[ $day ]['articles'] = [];
             }
 
-            // we want to separate out the first few picks articles into a separate array. Do this until we reach the currently set limit
-            if( $articleIsPicked && count($response[ $day ]['picks']) < $highlightsToShow )
-            {
+            # we want to separate out the first few picks articles into a separate array. Do this until we reach the currently set limit
+            if( $articleIsPicked && count($response[ $day ]['picks']) < $highlightsToShow ) {
                 $response[ $day ]['picks'][] = $article;
             }
-            // otherwise pipe the article into the main articles array
-            else
-            {
+            # otherwise pipe the article into the main articles array, as long as it has a showDate!
+            else if( ! is_null($article['event']['details']['showDate']) ) {
                 $response[ $day ]['articles'][] = $article;    
             }
         }
-        
-        // once we're done reset the array keys for the category listing
-        foreach( $response AS $key => $item )
-        {
+
+        # once we're done reset the array keys for the category listing
+        foreach( $response AS $key => $item ) {
             $response[$key]['categories'] = array_values($item['categories']);
         }
 

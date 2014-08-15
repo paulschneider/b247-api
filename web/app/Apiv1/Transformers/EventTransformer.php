@@ -29,20 +29,22 @@ class EventTransformer extends Transformer {
      * @return array
      */
     public function transform( $article, $options = [] )
-    {        
+    {      
         $venue = $article['event']['venue'];
         $event = $article['event'];
         unset($article['event']['venue']);        
 
-        if( ! isset($article['event']['cinema']) ) {
+        if( empty($article['event']['cinema']) ) 
+        {
             $performances = App::make( 'Apiv1\Transformers\ShowTimeTransformer' )->transformCollection($article['event']['show_time'], $options);    
 
-            $showDate = $performances['summary']['nextPerformance']['start'];
-            $showTime = $performances['summary']['nextPerformance']['time'];
-            $epoch = strtotime($performances['summary']['nextPerformance']['start'] .' ' . $performances['summary']['nextPerformance']['time']);
+            $showDate = $performances['summary']['nextPerformance']['start']['day'];
+            $showTime = $performances['summary']['nextPerformance']['start']['time'];
+            $epoch = strtotime($performances['summary']['nextPerformance']['start']['day'] .' ' . $performances['summary']['nextPerformance']['start']['time']);
             $price = $performances['summary']['nextPerformance']['price'];
         }
-        else {
+        else 
+        {
             $performances = App::make('Apiv1\Transformers\CinemaListingTransformer')->transform($article, $options);
 
             $showDate = $performances['summary']['startTime']['day'];

@@ -149,16 +149,27 @@ Class ArticleRepository extends BaseModel {
         if( $range == "week" )
         { 
             $dateArray = explode('-', $dateStamp);  
+
+            # if the show time (start) is greater than or equal to the provided period in time
             $query->where('event_showtimes.showtime', '>=', $dateStamp.' 00:00:01');
-            $query->where('event_showtimes.showtime', '<=', Carbon::create($dateArray[0], $dateArray[1], $dateArray[2], '23', '59', '59')->addDays(6));
+
+            # and the end the show time (start) is less than or equal to the provided period in time plus 6 days
+            $query->where('event_showtimes.showtime', '<=', Carbon::create($dateArray[0], $dateArray[1], $dateArray[2], '23', '59', '59')->addDays(6), 'or');
+
+            # or the show end time is greater than the provided period in time
+            # (listings can range from one date to another e.g 01 June - 30 June) so we need to get
+            # events that might be in this range even if the showtime (start) is not necessarily
+            # on the specified day)
+            $query->where('event_showtimes.showend', '>', $dateStamp.' 00:00:01');
 
             $query->where('article.is_picked', '=', true);
         }
         # or just grab a days worth
         elseif ( $range == "day" )
         {
-            $query->where('event_showtimes.showtime', '>=', $dateStamp.' 00:00:01');
-            $query->where('event_showtimes.showtime', '<=', $dateStamp.' 23:59:59');
+            $query->where('event_showtimes.showtime', '>=', $dateStamp.' 00:00:01');            
+            $query->where('event_showtimes.showtime', '<=', $dateStamp.' 23:59:59', 'or');
+            $query->where('event_showtimes.showend', '>', $dateStamp.' 00:00:01');
         }
 
         # if we have a user object we only want to grab content that they want to see
