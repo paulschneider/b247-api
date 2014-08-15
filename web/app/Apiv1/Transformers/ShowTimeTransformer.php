@@ -75,6 +75,7 @@ class ShowTimeTransformer extends Transformer {
 
          ### grab the passed through event day. We need this to work out which performance is happening today
         ### out of the list of performances we will transform
+        
         $this->eventDay = isset($options['eventDay']) ? $options['eventDay'] : $this->getFirstFromList($this->times);
 
         // now create a summary object
@@ -174,6 +175,7 @@ class ShowTimeTransformer extends Transformer {
     public function getFirstFromList($days)
     {   
         $tmp = null;
+
         foreach($days AS $day)
         {
             if(is_null($tmp)) {

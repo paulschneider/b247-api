@@ -138,7 +138,7 @@ Class ArticleRepository extends BaseModel {
     {
         $dateStamp = convertTimestamp( 'Y-m-d', $timestamp);
 
-        $query = ArticleLocation::with('article.event.venue', 'article.event.showTime', 'article.asset', 'article.location')->select(
+        $query = ArticleLocation::with('article.event.venue', 'article.event.cinema', 'article.event.showTime.venue', 'article.asset', 'article.location')->select(
             'article.title', 'article_location.article_id'
         )
         ->join('article', 'article.id', '=', 'article_location.article_id')
@@ -197,7 +197,7 @@ Class ArticleRepository extends BaseModel {
         $articles = [];
         $articleIds = [];
 
-        // they come out of this query slightly differently to how the articleTransformer needs them. sort that out !
+        # they come out of this query slightly differently to how the articleTransformer needs them. sort that out !
         foreach( $result->toArray() AS $item )
         {
             $articleId = $item['article']['id'];
@@ -248,7 +248,7 @@ Class ArticleRepository extends BaseModel {
      * @param  integer $limit         [total article results to return]
      * @param  [type]  $channel       [unique identifier for the channel or sub-channel]
      * @param  boolean $isASubChannel [whether the $channel ID is for a subChannel]
-     * @param  boolean $ignoreChannel [sometimes we dont care what type of channel to return so ignore it]
+     * @param  boolean $ignoreChannel [sometimes we don't care what type of channel to return so ignore it]
      * @return mixed                 [an array of articles or boolean false on nothing]
      * 
      */

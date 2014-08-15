@@ -11,15 +11,15 @@ Class Event extends BaseModel {
     public function venue()
     {
         return $this->belongsTo('Apiv1\Repositories\Venues\Venue', 'venue_id');
-    }
-
+    }   
+   
     public function showTime()
     {
         return $this->hasMany('Apiv1\Repositories\Events\ShowTime', 'event_id')->orderBy('showtime', 'desc');
     }
 
-    public function article()
+    public function cinema()
     {
-        return $this->hasMany('Apiv1\Repositories\Articles\Article', 'event_id')->active()->notFeatured()->notPicked()->alive();
+        return $this->hasOne('Apiv1\Repositories\Events\Cinema', 'event_id');
     }
 }
