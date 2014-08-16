@@ -74,9 +74,11 @@ Class ChannelFeed {
                 {
                     $allocatedSponsors[] = $sponsor;    
                 }                
-
+  
                 # add the channel to channel feed
-                $channelFeed[] = $channel;
+                if( ! is_null($channel['id'])) {
+                    $channelFeed[] = $channel;
+                }                
             }
         }
 

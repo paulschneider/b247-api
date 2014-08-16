@@ -98,7 +98,7 @@ Class ChannelRepository extends BaseModel {
     */
     public function getChildren( $channelId )
     {
-        $result = Channel::select('id')->where('parent_channel', $channelId)->get();
+        $result = Channel::select('id')->where('parent_channel', $channelId)->active()->get();
 
         $keys = [];
 
