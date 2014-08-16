@@ -38,7 +38,7 @@ class WhatsOnResponder {
 		$ads = $sponsorResponder->getUnassignedSponsors();
 
 		// use the patternMaker to create a pattern
-        $response = App::make('PatternMaker')->setPattern(1)->make( [ 'articles' => $transformedArticles, 'sponsors' => $ads ] );
+        $response = App::make('PatternMaker')->setPattern(2)->make( [ 'articles' => $transformedArticles, 'sponsors' => $ads ] );
 
         // turn this channel into the API format
         $channel = App::make('ChannelTransformer')->transform( getChannel($channelList, $this->channel), $user );  
