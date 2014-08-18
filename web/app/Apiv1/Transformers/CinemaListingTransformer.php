@@ -31,17 +31,13 @@ Class CinemaListingTransformer extends Transformer {
         # grab the main event so we can get some info out of it for the overview response
         $primary = $venues->primary;
 
-        if(!isset($primary['startTime']))
-        {
-            sd($article);
-        }
-
         $response['summary'] = [
             'isMovie' => true,
+            'isMultiDate' => $this->checkIsMultiDate($primary),
             'certificate' => $listingData['certificate'],
             'director' => $listingData['director'],
             'duration' => $listingData['duration'],
-            'startTime' => $primary['startTime'],
+            'show' => $primary,
             'price' => $primary['price']
         ];  
 
@@ -111,6 +107,7 @@ Class CinemaListingTransformer extends Transformer {
             }
 
             $show = [
+                # when is the performance taking place
                 'startTime' => [
                     'epoch' => strtotime($performance['showtime']),
                     'readable' => $this->dateFormatter($performance['showtime']),
@@ -118,6 +115,14 @@ Class CinemaListingTransformer extends Transformer {
                     'time' => date('H:i', strtotime($performance['showtime']))
                 ],
                 'price' => number_format( $performance['price'], 2 ),
+                # showRunEnd is the last date on which a multi-date performance will end
+                'showRunEnd' => [
+                    'epoch' => strtotime($performance['showend']),
+                    'readable' => $this->dateFormatter($performance['showend']),
+                    'day' => date('Y-m-d', strtotime($performance['showend'])),
+                    'time' => date('H:i', strtotime($performance['showend'])),
+                ],
+                # where is the performance taking place
                 'venue' => $venueTransformer->transform($performance['venue'])
             ];
 
@@ -183,5 +188,15 @@ Class CinemaListingTransformer extends Transformer {
     public function dateFormatter($dateTime)
     {
         return date('Y-m-d H:i', strtotime($dateTime));
+    }
+
+    public function checkIsMultiDate($event)
+    {
+        if(strtotime($event['startTime']['day']) < strtotime($event['showRunEnd']['day']) )
+        {
+            return true;
+        }
+
+        return false;
     }
 }

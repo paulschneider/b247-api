@@ -36,20 +36,30 @@ class EventTransformer extends Transformer {
 
         if( empty($article['event']['cinema']) ) 
         {
-            $performances = App::make( 'Apiv1\Transformers\ShowTimeTransformer' )->transformCollection($article['event']['show_time'], $options);    
+            $performances = App::make( 'Apiv1\Transformers\ShowTimeTransformer' )->transformCollection($article, $options);    
 
-            $showDate = $performances['summary']['nextPerformance']['start']['day'];
-            $showTime = $performances['summary']['nextPerformance']['start']['time'];
-            $epoch = strtotime($performances['summary']['nextPerformance']['start']['day'] .' ' . $performances['summary']['nextPerformance']['start']['time']);
-            $price = $performances['summary']['nextPerformance']['price'];
+            # work out which performance to use as the primary data source
+            # if its multi-date use the next available performance
+            if(isset($performances['summary']['nextPerformance'])) {
+                $performance = $performances['summary']['nextPerformance'];
+            }
+            # if its single date then just use that one
+            else {
+                $performance = $performances['summary']['firstPerformance'];   
+            }
+
+            $showDate = $performance['start']['day'];
+            $showTime = $performance['start']['time'];
+            $epoch = strtotime($performance['start']['day'] .' ' . $performance['start']['time']);
+            $price = $performance['price'];
         }
         else 
         {
             $performances = App::make('Apiv1\Transformers\CinemaListingTransformer')->transform($article, $options);
 
-            $showDate = $performances['summary']['startTime']['day'];
-            $showTime = $performances['summary']['startTime']['time'];
-            $epoch = $performances['summary']['startTime']['epoch'];
+            $showDate = $performances['summary']['show']['startTime']['day'];
+            $showTime = $performances['summary']['show']['startTime']['time'];
+            $epoch = $performances['summary']['show']['startTime']['epoch'];
             $price = $performances['summary']['price'];
         }        
 

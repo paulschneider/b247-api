@@ -12,6 +12,8 @@ use DB;
 
 Class ArticleRepository extends BaseModel {
 
+    public $articleData = ['event.venue', 'asset', 'event.showTime', 'event.showTime.venue', 'event.cinema', 'venue'];
+
     public function getArticlesByCategory($categoryId, $channelId)
     {
         $result = Article::select('article.*')
@@ -21,7 +23,7 @@ Class ArticleRepository extends BaseModel {
         ->with(['location' => function($query) use($channelId, $categoryId) {
                 $query->where('article_location.sub_channel_id', $channelId)->where('article_location.category_id', $categoryId);
          }])
-        ->with('event.venue', 'asset')
+        ->with($this->articleData)
         ->get();
 
         return $result->toArray();
@@ -74,7 +76,7 @@ Class ArticleRepository extends BaseModel {
     public function getCategoryArticle($channel, $category, $article)
     {       
 
-        $query = Article::select('article.*', 'article_id AS id')->with('location', 'asset', 'gallery', 'event.venue', 'event.showTime' ,'venue', 'video', 'author');
+        $query = Article::select('article.*', 'article_id AS id')->with('location', 'asset', 'gallery', 'event.venue', 'event.showTime', 'event.showTime.venue', 'event.cinema', 'venue', 'video', 'author');
         $query->join('article_location', 'article_location.article_id', '=', 'article.id');
 
         # If the identifier passed through is an integer then grab the row by the ID
@@ -87,8 +89,7 @@ Class ArticleRepository extends BaseModel {
         }
 
         # if its a promotional channel then we also want to get the promotion data
-        if( isPromotionType($channel) )
-        {
+        if( isPromotionType($channel) ) {
             $query->with('promotion', 'competition.questions.answers');
         }
 
@@ -154,13 +155,13 @@ Class ArticleRepository extends BaseModel {
             $query->where('event_showtimes.showtime', '>=', $dateStamp.' 00:00:01');
 
             # and the end the show time (start) is less than or equal to the provided period in time plus 6 days
-            $query->where('event_showtimes.showtime', '<=', Carbon::create($dateArray[0], $dateArray[1], $dateArray[2], '23', '59', '59')->addDays(6), 'or');
+            $query->where('event_showtimes.showtime', '<=', Carbon::create($dateArray[0], $dateArray[1], $dateArray[2], '23', '59', '59')->addDays(6));
 
             # or the show end time is greater than the provided period in time
             # (listings can range from one date to another e.g 01 June - 30 June) so we need to get
             # events that might be in this range even if the showtime (start) is not necessarily
             # on the specified day)
-            $query->where('event_showtimes.showend', '>', $dateStamp.' 00:00:01');
+            $query->where('event_showtimes.showend', '>', Carbon::now());
 
             $query->where('article.is_picked', '=', true);
         }
@@ -168,8 +169,8 @@ Class ArticleRepository extends BaseModel {
         elseif ( $range == "day" )
         {
             $query->where('event_showtimes.showtime', '>=', $dateStamp.' 00:00:01');            
-            $query->where('event_showtimes.showtime', '<=', $dateStamp.' 23:59:59', 'or');
-            $query->where('event_showtimes.showend', '>', $dateStamp.' 00:00:01');
+            $query->where('event_showtimes.showtime', '<=', $dateStamp.' 23:59:59');
+            $query->where('event_showtimes.showend', '>', Carbon::now());
         }
 
         # if we have a user object we only want to grab content that they want to see
@@ -242,8 +243,7 @@ Class ArticleRepository extends BaseModel {
         $articles = [];
         
         // they come out of this query slightly differently to how the articleTransformer needs them. sort that out !
-        foreach( $result->toArray() AS $item )
-        {
+        foreach( $result->toArray() AS $item ) {
             $articles[] = $item['article'];
         }
         

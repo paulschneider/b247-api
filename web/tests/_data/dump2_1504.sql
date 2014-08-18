@@ -7,7 +7,7 @@
 #
 # Host: 127.0.01 (MySQL 5.6.17)
 # Database: b247-com
-# Generation Time: 2014-08-15 15:07:14 +0000
+# Generation Time: 2014-08-18 14:04:43 +0000
 # ************************************************************
 
 
@@ -1632,6 +1632,19 @@ VALUES
 UNLOCK TABLES;
 
 
+# Dump of table district
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `district`;
+
+CREATE TABLE `district` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(75) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
 # Dump of table event
 # ------------------------------------------------------------
 
@@ -1847,7 +1860,7 @@ VALUES
 	(86,3,'2014-08-25 15:30:00','2014-08-25 16:45:00',14.00,1),
 	(87,3,'2014-08-26 16:40:00','2014-08-26 17:45:00',10.00,1),
 	(88,3,'2014-08-27 17:30:00','2014-08-27 18:45:00',9.00,1),
-	(89,51,'2014-08-18 19:30:00','2014-08-18 21:00:00',20.00,1),
+	(89,53,'2014-08-18 19:30:00','2014-08-18 21:00:00',20.00,1),
 	(90,53,'2014-08-15 19:30:00','2014-08-31 19:30:00',6.99,2),
 	(91,53,'2014-08-15 18:30:00','2014-08-31 19:30:00',6.99,4),
 	(92,53,'2014-08-15 19:30:00','2014-08-31 19:30:00',6.99,3),
@@ -2258,6 +2271,24 @@ CREATE TABLE `user_inactive_channel` (
   KEY `user -> channel _idx` (`channel_id`),
   CONSTRAINT `channel -> user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `user -> channel ` FOREIGN KEY (`channel_id`) REFERENCES `channel` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
+# Dump of table user_inactive_district
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `user_inactive_district`;
+
+CREATE TABLE `user_inactive_district` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `district_id` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `uidist -> user` (`user_id`),
+  KEY `uidistrict -> district` (`district_id`),
+  CONSTRAINT `uidistrict -> district` FOREIGN KEY (`district_id`) REFERENCES `district` (`id`),
+  CONSTRAINT `uidist -> user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 

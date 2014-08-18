@@ -61,30 +61,7 @@ Class ListingArticleStructure {
 				"epoch" => 1,
 				"price" => "",
 				"url" => "",
-				"performances" => [
-					"summary" => [
-						"isMultiDate" => true,
-						"firstPerformance" => [
-							"start" => "",
-							"time" => "",
-							"epoch" => 0,
-							"price" => ""
-						],
-						"nextPerformance" => [
-							"start" => "",
-							"time" => "",
-							"epoch" => 0,
-							"price" => ""
-						],
-						"lastPerformance" => [
-							"start" => "",
-							"time" => "",
-							"epoch" => 0,
-							"price" => ""
-						],
-					],
-					"times" => []
-				]
+				"performances" => []
 			],
 			"venue" => [
 				"id" => "",

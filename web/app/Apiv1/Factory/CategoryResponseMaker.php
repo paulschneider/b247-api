@@ -80,22 +80,22 @@ Class CategoryResponseMaker {
 		$categoryId = $this->category['id'];
 		$subChannelId = getSubChannelId($this->channel);
 
-		$articles = App::make('CategoryResponder')->getCategoryArticles($categoryId, $subChannelId);
+		$articles = App::make('CategoryResponder')->getCategoryArticles($categoryId, $subChannelId, $this->user);
 
 		# ARTICLE type articles
 		if( isArticleType( $this->channel ) )
 		{
-			$response = App::make('CategoryArticleResponder')->make($this->sponsorResponder, $articles);
+			$response = App::make('CategoryArticleResponder')->make($this->sponsorResponder, $articles, $this->user);
 		}
 		# DIRECTORY type articles
 		else if( isDirectoryType( $this->channel ) )
 		{
-			$response = App::make('CategoryDirectoryResponder')->make($articles, $categoryId, $subChannelId);
+			$response = App::make('CategoryDirectoryResponder')->make($articles, $categoryId, $subChannelId, $this->user);
 		}
 		# LISTING type articles
 		else if( isListingType( $this->channel ) )
 		{
-			$response = App::make('CategoryListingResponder')->make( $categoryId, $subChannelId );
+			$response = App::make('CategoryListingResponder')->make( $categoryId, $subChannelId, $this->user );
 		}
 
 		# if there were sponsors in the response we need to do something with them or they'll be returned by the API

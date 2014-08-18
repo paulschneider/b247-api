@@ -46,9 +46,9 @@ Class CategoryResponder {
 		return $articles;
 	}
 
-	public function getArticlesInRange($subChannelId, $category, $range, $time)
+	public function getArticlesInRange($subChannelId, $category, $range, $time, $user)
 	{
-		$channelArticles = App::make('ArticleRepository')->getChannelListing( $subChannelId, 20, $range, $time );
+		$channelArticles = App::make('ArticleRepository')->getChannelListing( $subChannelId, 20, $range, $time, $user );
 
 		$articles = [];
 
@@ -67,7 +67,7 @@ Class CategoryResponder {
 		}
 		else
 		{
-			return App::make('ListingTransformer')->transform($articles);
+			return App::make('ListingTransformer')->transform($articles, ['day' => date('Y-m-d', $time)]);
 		}
 	}
 }
