@@ -92,8 +92,7 @@ class ShowTimeTransformer extends Transformer {
         $this->sort($this->times);
 
          ### grab the passed through event day. We need this to work out which performance is happening today
-        ### out of the list of performances we will transform
-        
+        ### out of the list of performances we will transform     
         $this->eventDay = isset($options['eventDay']) ? $options['eventDay'] : null;
 
         # now create a summary object
@@ -106,10 +105,22 @@ class ShowTimeTransformer extends Transformer {
 
         if(count($this->times) > 1) {
             $response['summary']['isMultiDate'] = true;
-            $response['summary']['lastPerformance'] = $this->getLastPerformance();
+            $response['summary']['nextPerformance'] = $this->getNextPerformance();
+            $response['summary']['lastPerformance'] = $this->getLastPerformance();           
         }
 
         return $response;
+    }
+
+    public function getNextPerformance()
+    {
+        foreach($this->times AS $time)
+        {
+            if(strtotime($time['start']['day']) == strtotime($this->eventDay))
+            {
+                return $time;
+            }
+        }
     }
 
     /**
