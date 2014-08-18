@@ -79,7 +79,7 @@ Class ArticleResponseMaker {
 		if( ! categoryBelongsToChannel( $this->channel, $this->category ) ) {
 			return apiErrorResponse( 'notAcceptable' );
 		}
-sd($this->channel);
+
 		// remove all other categories except the one requested
 		foreach( $this->channel['subChannels'][0]['categories'] AS $key => $category )
 		{

@@ -11,8 +11,7 @@ Class ChannelResponder {
 		$channelRepository = App::make( 'ChannelRepository' );
 
         # try and find the channel. If not, return an error
-        if( ! $channel = $channelRepository->getChannelByIdentifier( $identifier ))
-        {
+        if( ! $channel = $channelRepository->getChannelByIdentifier( $identifier )) {
             return apiErrorResponse( 'notFound' );
         }
 
