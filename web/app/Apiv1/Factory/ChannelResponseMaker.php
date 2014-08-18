@@ -46,11 +46,11 @@ Class ChannelResponseMaker {
 		$channel = $this->channelRepository->getChannelByIdentifier( $identifier );
 
 		if( ! $channel ) {
-			// we couldn't find the channel
+			# we couldn't find the channel
 			return apiErrorResponse('notFound');
 		}
 		elseif( aSubChannel( $channel ) ) {
-			// its a sub channel so report an error (as we're trying to get a top level channel)
+			# its a sub channel so report an error (as we're trying to get a top level channel)
 			return apiErrorResponse('failedDependency');	
 		}
 

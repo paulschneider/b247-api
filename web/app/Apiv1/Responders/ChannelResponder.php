@@ -9,7 +9,12 @@ Class ChannelResponder {
 	public function getChannel( $identifier, $user )
 	{
 		$channelRepository = App::make( 'ChannelRepository' );
-		$channel = $channelRepository->getChannelByIdentifier( $identifier );
+
+        # try and find the channel. If not, return an error
+        if( ! $channel = $channelRepository->getChannelByIdentifier( $identifier ))
+        {
+            return apiErrorResponse( 'notFound' );
+        }
 
 		$parentChannel = $channelRepository->getChannelBySubChannel( $channel );		
 		$channel = App::make( 'ChannelTransformer' )->transform( Toolbox::filterSubChannels( $parentChannel, $channel ), $user );

@@ -68,13 +68,18 @@ Class ArticleResponseMaker {
 		$this->category = $result;
 
 		# grab the channel
-		$this->channel = App::make( 'ChannelResponder' )->getChannel( $this->channel, $this->user );
+		if( isApiResponse($response = App::make( 'ChannelResponder' )->getChannel( $this->channel, $this->user )) )
+		{
+			return $response;
+		}
+
+		$this->channel = $response;
 
 		# if we're trying to access a channel/category combination that is invalid then return an error
 		if( ! categoryBelongsToChannel( $this->channel, $this->category ) ) {
 			return apiErrorResponse( 'notAcceptable' );
 		}
-
+sd($this->channel);
 		// remove all other categories except the one requested
 		foreach( $this->channel['subChannels'][0]['categories'] AS $key => $category )
 		{
