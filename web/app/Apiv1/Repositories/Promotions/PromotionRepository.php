@@ -18,6 +18,25 @@ Class PromotionRepository extends BaseModel {
 	}
 
 	/**
+	 * Check to see if a user has already requested a voucher code
+	 * 
+	 * @param  Apiv1\Repositories\Users\User $user
+	 * @param  Apiv1\Repositories\Promotions\Promotion $promotion
+	 * @return boolean [true on already redeemed | false on un-redeemed]
+	 */
+	public function isUserRedeemed($user, $promotion)
+	{
+		$result = UserRedeemedPromotion::where('user_id', $user->id)->where('promotion_id', $promotion->id)->get();
+
+		if($result->isEmpty()) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+
+	/**
 	 * Record a user promotion redemption in the database
 	 * 
 	 * @param  Apiv1\Repositories\Users\User $user

@@ -5,9 +5,9 @@
 # http://www.sequelpro.com/
 # http://code.google.com/p/sequel-pro/
 #
-# Host: 127.0.01 (MySQL 5.6.17)
-# Database: b247-com
-# Generation Time: 2014-08-18 08:16:04 +0000
+# Host: 81.27.85.121 (MySQL 5.5.37-cll)
+# Database: wfcycle_b247_com
+# Generation Time: 2014-08-19 10:52:03 +0000
 # ************************************************************
 
 
@@ -1487,6 +1487,7 @@ CREATE TABLE `channel` (
   `parent_channel` int(11) DEFAULT NULL,
   `icon_img_id` int(11) DEFAULT NULL,
   `name` varchar(100) NOT NULL,
+  `description` mediumtext,
   `sef_name` varchar(100) NOT NULL,
   `colour` varchar(45) DEFAULT NULL,
   `secondary_colour` varchar(45) DEFAULT NULL,
@@ -1502,17 +1503,17 @@ CREATE TABLE `channel` (
 LOCK TABLES `channel` WRITE;
 /*!40000 ALTER TABLE `channel` DISABLE KEYS */;
 
-INSERT INTO `channel` (`id`, `display_type`, `parent_channel`, `icon_img_id`, `name`, `sef_name`, `colour`, `secondary_colour`, `is_active`, `is_deleted`, `created_at`, `updated_at`)
+INSERT INTO `channel` (`id`, `display_type`, `parent_channel`, `icon_img_id`, `name`, `description`, `sef_name`, `colour`, `secondary_colour`, `is_active`, `is_deleted`, `created_at`, `updated_at`)
 VALUES
-	(1,1,NULL,NULL,'News and Comment','news-comment','#33b9f8','#222c5c',1,0,'2014-06-09 08:59:10','2014-06-09 08:59:10'),
-	(2,2,NULL,NULL,'Whats On','whats-on','#56cd6c','#295e4e',1,0,'2014-06-09 08:59:10','2014-06-09 08:59:10'),
-	(3,1,NULL,NULL,'Food and Drink','food-drink','#d6ab29','#7b473a',1,0,'2014-06-09 08:59:10','2014-06-09 08:59:10'),
-	(4,1,1,NULL,'Daily','daily',NULL,NULL,1,0,'2014-07-30 00:00:00','2014-06-25 00:00:00'),
-	(5,1,1,NULL,'Features','features',NULL,NULL,1,0,'2014-07-30 00:00:00','2014-07-30 00:00:00'),
-	(6,2,2,NULL,'Theatre','theatre',NULL,NULL,1,0,'2014-07-30 00:00:00','2014-07-30 00:00:00'),
-	(7,3,3,NULL,'Guide','guide',NULL,NULL,1,0,'2014-07-30 00:00:00','2014-07-30 00:00:00'),
-	(8,4,3,NULL,'Offers and Competitions ','offers-competitions ',NULL,NULL,0,0,'2014-07-30 00:00:00','2014-07-30 00:00:00'),
-	(10,1,1,NULL,'Kevin\'s news','kevins_news',NULL,NULL,0,NULL,'0000-00-00 00:00:00',NULL);
+	(1,1,NULL,NULL,'News and Comment','Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.','news-comment','#33b9f8','#222c5c',1,0,'2014-06-09 08:59:10','2014-06-09 08:59:10'),
+	(2,2,NULL,NULL,'Whats On','Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.','whats-on','#56cd6c','#295e4e',1,0,'2014-06-09 08:59:10','2014-06-09 08:59:10'),
+	(3,1,NULL,NULL,'Food and Drink','Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.','food-drink','#d6ab29','#7b473a',1,0,'2014-06-09 08:59:10','2014-06-09 08:59:10'),
+	(4,1,1,NULL,'Daily','Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.','daily',NULL,NULL,1,0,'2014-07-30 00:00:00','2014-06-25 00:00:00'),
+	(5,1,1,NULL,'Features','Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.','features',NULL,NULL,1,0,'2014-07-30 00:00:00','2014-07-30 00:00:00'),
+	(6,2,2,NULL,'Theatre','Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.','theatre',NULL,NULL,1,0,'2014-07-30 00:00:00','2014-07-30 00:00:00'),
+	(7,3,3,NULL,'Guide','Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.','guide',NULL,NULL,1,0,'2014-07-30 00:00:00','2014-07-30 00:00:00'),
+	(8,4,3,NULL,'Offers and Competitions ','Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.','offers-competitions ',NULL,NULL,0,0,'2014-07-30 00:00:00','2014-07-30 00:00:00'),
+	(10,1,1,NULL,'Kevin\'s news','Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.','kevins_news',NULL,NULL,0,NULL,'0000-00-00 00:00:00',NULL);
 
 /*!40000 ALTER TABLE `channel` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -2195,7 +2196,8 @@ VALUES
 	(8,'B1931152F2D30C4','David','Scholes','p.schneider1@yahoo.co.uk','$2y$10$1De66OSEp9rsRq9gIq3oMu1PaAEmEcAI5k8rxhkTTBujB3Ed3/ZPa',NULL,NULL,NULL,NULL,NULL,'2014-08-13 10:38:27','2014-08-13 10:38:27'),
 	(9,'74B01323819DFDF','Pablo','Carrillo','pablo+1@gmail.com','$2y$10$oCv1B7ISBIIf.s2zPXo0.u3m7Hs2CGudmRYjdq7uv1tXaY41QCBJK',NULL,NULL,NULL,NULL,NULL,'2014-08-13 10:42:21','2014-08-13 10:42:21'),
 	(10,'386AC28784616EE','Pablo','Carrillo','pablo+2@calvium.com','$2y$10$MSKLjk3nB4dxg472UgD7R.RgkJF.FlPJpVrPvT5jgQWBYGsyi1uTi',NULL,NULL,NULL,NULL,NULL,'2014-08-13 11:19:25','2014-08-13 11:19:25'),
-	(11,'1F48422C5DEB48C','Pablo','Carrillo','pablo+3@calvium.com','$2y$10$8FIyYI6W6Hrhl87W2R.l.ukjivSlHDaHeyTVwYZ4jwmqrv2M0CVTm',NULL,NULL,NULL,NULL,NULL,'2014-08-13 11:22:04','2014-08-13 11:22:04');
+	(11,'1F48422C5DEB48C','Pablo','Carrillo','pablo+3@calvium.com','$2y$10$8FIyYI6W6Hrhl87W2R.l.ukjivSlHDaHeyTVwYZ4jwmqrv2M0CVTm',NULL,NULL,NULL,NULL,NULL,'2014-08-13 11:22:04','2014-08-13 11:22:04'),
+	(12,'0CEE6625FF24201','Pablo','Carrillo','pablo@calvium.com','$2y$10$5a4GiWh0EmABmJTyinm3MuUoa0xrSjv93l.h7j.CWAsWAEyJ//TzC',NULL,NULL,NULL,NULL,NULL,'2014-08-18 18:23:14','2014-08-18 18:23:14');
 
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;

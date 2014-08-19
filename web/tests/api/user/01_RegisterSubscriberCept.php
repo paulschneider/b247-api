@@ -2,7 +2,7 @@
 
 # user/RegisterSubscriberCept.php
 
-$testEmail = "p.schneider1@yahoo.co.uk";
+$testEmail = "schneidey2503@hotmail.com";
 $newsletterList = 'daily-digest';
 
 $I = new ApiTester($scenario);

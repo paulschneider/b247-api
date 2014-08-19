@@ -7,7 +7,7 @@
 #
 # Host: 127.0.01 (MySQL 5.6.17)
 # Database: b247-com
-# Generation Time: 2014-08-18 14:43:58 +0000
+# Generation Time: 2014-08-19 10:48:15 +0000
 # ************************************************************
 
 
@@ -909,6 +909,15 @@ CREATE TABLE `article_promotion` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+LOCK TABLES `article_promotion` WRITE;
+/*!40000 ALTER TABLE `article_promotion` DISABLE KEYS */;
+
+INSERT INTO `article_promotion` (`id`, `article_id`, `promotion_id`, `created_at`, `updated_at`)
+VALUES
+	(1,318,1,'2014-08-19 10:12:44',NULL);
+
+/*!40000 ALTER TABLE `article_promotion` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table article_related
@@ -1486,7 +1495,8 @@ CREATE TABLE `channel` (
   `display_type` int(11) NOT NULL,
   `parent_channel` int(11) DEFAULT NULL,
   `icon_img_id` int(11) DEFAULT NULL,
-  `name` varchar(100) NOT NULL,
+  `name` varchar(100) DEFAULT '',
+  `description` mediumtext,
   `sef_name` varchar(100) NOT NULL,
   `colour` varchar(45) DEFAULT NULL,
   `secondary_colour` varchar(45) DEFAULT NULL,
@@ -1502,17 +1512,17 @@ CREATE TABLE `channel` (
 LOCK TABLES `channel` WRITE;
 /*!40000 ALTER TABLE `channel` DISABLE KEYS */;
 
-INSERT INTO `channel` (`id`, `display_type`, `parent_channel`, `icon_img_id`, `name`, `sef_name`, `colour`, `secondary_colour`, `is_active`, `is_deleted`, `created_at`, `updated_at`)
+INSERT INTO `channel` (`id`, `display_type`, `parent_channel`, `icon_img_id`, `name`, `description`, `sef_name`, `colour`, `secondary_colour`, `is_active`, `is_deleted`, `created_at`, `updated_at`)
 VALUES
-	(1,1,NULL,NULL,'News and Comment','news-comment','#33b9f8','#222c5c',1,0,'2014-06-09 08:59:10','2014-06-09 08:59:10'),
-	(2,2,NULL,NULL,'Whats On','whats-on','#56cd6c','#295e4e',1,0,'2014-06-09 08:59:10','2014-06-09 08:59:10'),
-	(3,1,NULL,NULL,'Food and Drink','food-drink','#d6ab29','#7b473a',1,0,'2014-06-09 08:59:10','2014-06-09 08:59:10'),
-	(4,1,1,NULL,'Daily','daily',NULL,NULL,1,0,'2014-07-30 00:00:00','2014-06-25 00:00:00'),
-	(5,1,1,NULL,'Features','features',NULL,NULL,1,0,'2014-07-30 00:00:00','2014-07-30 00:00:00'),
-	(6,2,2,NULL,'Theatre','theatre',NULL,NULL,1,0,'2014-07-30 00:00:00','2014-07-30 00:00:00'),
-	(7,3,3,NULL,'Guide','guide',NULL,NULL,1,0,'2014-07-30 00:00:00','2014-07-30 00:00:00'),
-	(8,4,3,NULL,'Offers and Competitions ','offers-competitions ',NULL,NULL,0,0,'2014-07-30 00:00:00','2014-07-30 00:00:00'),
-	(10,1,1,NULL,'Kevin\'s news','kevins_news',NULL,NULL,0,NULL,'0000-00-00 00:00:00',NULL);
+	(1,1,NULL,NULL,'News and Comment','Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.','news-comment','#33b9f8','#222c5c',1,0,'2014-06-09 08:59:10','2014-06-09 08:59:10'),
+	(2,2,NULL,NULL,'Whats On','Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.','whats-on','#56cd6c','#295e4e',1,0,'2014-06-09 08:59:10','2014-06-09 08:59:10'),
+	(3,1,NULL,NULL,'Food and Drink','Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.','food-drink','#d6ab29','#7b473a',1,0,'2014-06-09 08:59:10','2014-06-09 08:59:10'),
+	(4,1,1,NULL,'Daily','Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.','daily',NULL,NULL,1,0,'2014-07-30 00:00:00','2014-06-25 00:00:00'),
+	(5,1,1,NULL,'Features','Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.','features',NULL,NULL,1,0,'2014-07-30 00:00:00','2014-07-30 00:00:00'),
+	(6,2,2,NULL,'Theatre','Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.','theatre',NULL,NULL,1,0,'2014-07-30 00:00:00','2014-07-30 00:00:00'),
+	(7,3,3,NULL,'Guide','Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.','guide',NULL,NULL,1,0,'2014-07-30 00:00:00','2014-07-30 00:00:00'),
+	(8,4,3,NULL,'Offers and Competitions ','Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.','offers-competitions ',NULL,NULL,1,0,'2014-07-30 00:00:00','2014-07-30 00:00:00'),
+	(10,1,1,NULL,'Kevin\'s news','Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.','kevins_news',NULL,NULL,0,NULL,'0000-00-00 00:00:00',NULL);
 
 /*!40000 ALTER TABLE `channel` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -1731,10 +1741,10 @@ DROP TABLE IF EXISTS `event_cinema`;
 
 CREATE TABLE `event_cinema` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `event_id` int(11) NOT NULL,
-  `certificate` varchar(10) NOT NULL DEFAULT '',
-  `director` varchar(150) NOT NULL DEFAULT '',
-  `duration` int(11) NOT NULL,
+  `event_id` int(11) DEFAULT NULL,
+  `certificate` varchar(10) DEFAULT NULL,
+  `director` varchar(150) DEFAULT NULL,
+  `duration` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -1917,12 +1927,21 @@ CREATE TABLE `promotion` (
   `code` varchar(100) NOT NULL,
   `template` text NOT NULL,
   `upper_limit` int(11) NOT NULL,
-  `is_active` tinyint(4) DEFAULT '1',
+  `is_active` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`),
   KEY `provider_id -> provider` (`venue_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+LOCK TABLES `promotion` WRITE;
+/*!40000 ALTER TABLE `promotion` DISABLE KEYS */;
+
+INSERT INTO `promotion` (`id`, `venue_id`, `valid_from`, `valid_to`, `details`, `terms`, `code`, `template`, `upper_limit`, `is_active`)
+VALUES
+	(1,26,'2014-08-19 00:00:00','2014-09-19 00:00:00','Get a free Pastie and be happy','Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.','ZTDNKFTVGI','<h1>Hello</h1>',100,1);
+
+/*!40000 ALTER TABLE `promotion` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table search
@@ -2335,6 +2354,17 @@ CREATE TABLE `user_redeemed_promotion` (
   CONSTRAINT `user_redeemed_promotion_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+LOCK TABLES `user_redeemed_promotion` WRITE;
+/*!40000 ALTER TABLE `user_redeemed_promotion` DISABLE KEYS */;
+
+INSERT INTO `user_redeemed_promotion` (`id`, `user_id`, `promotion_id`, `requested_at`)
+VALUES
+	(1,8,1,'2014-08-19 11:07:46'),
+	(2,8,1,'2014-08-19 11:12:43'),
+	(3,8,1,'2014-08-19 11:13:26');
+
+/*!40000 ALTER TABLE `user_redeemed_promotion` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table venue
