@@ -72,7 +72,7 @@ class Article extends BaseModel {
 
     public function promotion()
     {
-        return $this->belongsToMany('Apiv1\Repositories\Promotions\Promotion', 'article_promotion', 'article_id', 'promotion_id');
+        return $this->belongsToMany('Apiv1\Repositories\Promotions\Promotion', 'article_promotion', 'article_id', 'promotion_id')->active();
     }
 
     public function competition()

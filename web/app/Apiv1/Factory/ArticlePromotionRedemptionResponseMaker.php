@@ -57,8 +57,7 @@ class ArticlePromotionRedemptionResponseMaker {
 		# we get the user back if everything went okay
 		$user = $response;
 
-		if( isApiResponse( $result = self::isValidPromotion($form['code']) ) )
-		{
+		if( isApiResponse( $result = self::isValidPromotion($form['code']) ) ) {
 			return $result;
 		}
 
@@ -111,6 +110,10 @@ class ArticlePromotionRedemptionResponseMaker {
         {
             return apiErrorResponse( 'forbidden', ['errorReason' => Lang::get('api.promotionOutOfRange')] );
         }
+
+        # finally, ensure that this user has not redeemed the voucher previously. We prevent multiple
+        # usage because some of the codes might have limits on the number of times they can be used
+        
 		
 		# send it back
         return $promotion;
