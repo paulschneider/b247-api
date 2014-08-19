@@ -21,18 +21,15 @@ Class ListingTransformer extends Transformer {
         
         $this->articlesToShowEachDay = 100;           
 
-        if( isset($options['perDayLimit']) )
-        {
+        if( isset($options['perDayLimit']) ) {
             $this->articlesToShowEachDay = $options['perDayLimit'];
         }
 
         // grab the days array. This is an empty array with the keys set to the coming seven days
-        if( isset($options['days']) )
-        {
+        if( isset($options['days']) ) {
             $days = $options['days'];
         }
-        else
-        {
+        else {
             sd('The required DAYS array has not been provided to ListingTransformer::transformCollection()');
         }
 
@@ -117,6 +114,18 @@ Class ListingTransformer extends Transformer {
         $highlightsToShow = 3;   
         $categoryCounter = [];
 
+        # always provide some meta data about what we're doing
+        $response[ $day ]['publication'] = [
+            'date' => $day
+            ,'day' => date('D', strtotime($day))
+            ,'fullDay' => date('l', strtotime($day))
+            ,'iso8601Date' => date('c', strtotime($day))
+            ,'epoch' => strtotime($day)
+        ];
+
+        $response[ $day ]['categories'] = [];
+        $response[ $day ]['articles'] = [];
+
         foreach( $articles AS $article )
         {
             // we'll check for this later once the article has been transformed
@@ -126,15 +135,7 @@ Class ListingTransformer extends Transformer {
             $location = $article['location'][0];
 
             // we need to build up a count of articles in each category. this does that
-            $categoryCounter[ $day ][$location['categoryId']][] = $location['categoryId'];
-
-            $response[ $day ]['publication'] = [
-                'date' => $day
-                ,'day' => date('D', strtotime($day))
-                ,'fullDay' => date('l', strtotime($day))
-                ,'iso8601Date' => date('c', strtotime($day))
-                ,'epoch' => strtotime($day)
-            ];
+            $categoryCounter[ $day ][$location['categoryId']][] = $location['categoryId'];            
 
             $response[ $day ]['categories'][$location['categoryId']] = [
                 'id' => $location['categoryId']
