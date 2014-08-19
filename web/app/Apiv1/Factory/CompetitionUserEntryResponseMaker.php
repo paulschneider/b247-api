@@ -38,8 +38,7 @@ Class CompetitionUserEntryResponseMaker {
 	{	
 		# check that we have everything need to proceed including required params and auth creds. If all 
 		# successful then the response is a user object
-		if( isApiResponse($response = App::make('UserResponder')->verify($this->requiredFields, $form)) )
-		{
+		if( isApiResponse($response = App::make('UserResponder')->verify($this->requiredFields, $form)) ) {
 			return $response;
 		}
 
@@ -47,8 +46,7 @@ Class CompetitionUserEntryResponseMaker {
 		$user = $response;		
 		
 		# validate the supplied competition to ensure its still running and open to new entrants
-		if( isApiResponse($response = $this->validateCompetition($form['competitionId'], $user)) )
-		{
+		if( isApiResponse($response = $this->validateCompetition($form['competitionId'], $user)) ) {
 			return $response;
 		}
 
@@ -75,8 +73,7 @@ Class CompetitionUserEntryResponseMaker {
 		$competition = $this->repo->get($competitionId);
 
 		# no competition was found with the supplied ID
-		if($competition->isEmpty())
-		{
+		if($competition->isEmpty()) {
 			return apiErrorResponse( 'notFound', ['errorReason' => Lang::get('api.competitionNotFound')] );
 		}
 
@@ -84,8 +81,7 @@ Class CompetitionUserEntryResponseMaker {
 		$competition = $competition->first();
 
 		# check to see if its currently active. We do this here rather than the DB so we can report back to the caller
-		if(! $competition->is_active)
-		{
+		if(! $competition->is_active) {
 			return apiErrorResponse(  'locked', ['errorReason' => Lang::get('api.competitionIsInactive')] );
 		}
 
@@ -103,8 +99,7 @@ Class CompetitionUserEntryResponseMaker {
         }
 
         # finally check the entrant hasn't entered this competition before
-        if( $entered = $this->repo->checkEntrant($user, $competition) )
-        {
+        if( $entered = $this->repo->checkEntrant($user, $competition) ) {
         	return apiErrorResponse( 'tooManyRequests', ['errorReason' => Lang::get('api.competitionAlreadyEntered')] );	
         }
 
