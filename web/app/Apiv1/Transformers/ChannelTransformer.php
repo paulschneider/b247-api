@@ -57,6 +57,7 @@ class ChannelTransformer extends Transformer {
         $response = [
             'id' => $channel['id'],
             'name' => $channel['name'],
+            'description' => $channel['description'],
             'sefName' => $channel['sef_name'],
             'colour' => $channel['colour'],
             'secondaryColour' => $channel['secondary_colour'],
@@ -80,6 +81,7 @@ class ChannelTransformer extends Transformer {
                 $sub = [
                     'id' => $subChannel['id'],
                     'name' => $subChannel['name'],
+                    'description' => $subChannel['description'],
                     'sefName' => $subChannel['sef_name'],
                     'path' => $pathToChannel,
                     'displayType' => [
