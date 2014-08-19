@@ -75,33 +75,30 @@ Class ArticleRepository extends BaseModel {
      */
     public function getCategoryArticle($channel, $category, $article)
     {       
-
-        $query = Article::select('article.*', 'article_id AS id')->with('location', 'asset', 'gallery', 'event.venue', 'event.showTime', 'event.showTime.venue', 'event.cinema', 'venue', 'video', 'author');
+        $query = Article::select('article.*', 'article_location.article_id AS id')->with('location', 'asset', 'gallery', 'event.venue', 'event.showTime', 'event.showTime.venue', 'event.cinema', 'venue', 'video', 'author');
         $query->join('article_location', 'article_location.article_id', '=', 'article.id');
+
+        # if its a promotional channel then we also want to get the promotion data
+        if( isPromotionType($channel) ) {
+            $query->with('promotion', 'competition.questions.answers');    
+        }
 
         # If the identifier passed through is an integer then grab the row by the ID
         if( is_numeric($article) ) {
             $query->where('article.id', '=', $article);
         }
-        # if its a string then try and fine it by the sef_name field
+        # if its a string then try and find it by the sef_name field
         else {
             $query->where('article.sef_name', '=', $article);
-        }
-
-        # if its a promotional channel then we also want to get the promotion data
-        if( isPromotionType($channel) ) {
-            $query->with('promotion', 'competition.questions.answers');
         }
 
         $query->where('article_location.sub_channel_id', getSubChannelId($channel));
         $query->where('article_location.category_id', $category['id']);
 
-        if( ! $result = $query->first() )
-        {
+        if( ! $result = $query->first() ) {
             return false;
         }
-        else
-        {
+        else {
             return $result;    
         }   
     }

@@ -109,7 +109,7 @@ Class UserRepository
         $result = User::with('profile', 'inactiveChannels', 'inactiveCategories')->where('access_key', $accessKey)->get();
 
         # if we didn't get anything go back
-        if( ! $result ) {
+        if( $result->isEmpty() ) {
             return;
         }
 
@@ -120,11 +120,14 @@ Class UserRepository
         $channels = [];
         $categories = [];
 
-        foreach($user->inactive_channels AS $inactive)
+        if(is_array($user->inactive_channels) && count($user->inactive_channels) > 0)
         {
-            $channels[] = $inactive['channel_id'];
+            foreach($user->inactive_channels AS $inactive)
+            {
+                $channels[] = $inactive['channel_id'];
+            }    
         }
-
+        
         foreach($user->inactive_categories AS $inactive)
         {
             $categories[$inactive['category_id']] = [
