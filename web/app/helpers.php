@@ -240,7 +240,7 @@ function makePath( $paths = [] )
     $str = "/";
     foreach($paths AS $path)
     {
-        $str .= $path.'/';
+        $str .= trim($path).'/';
     }
 
     return $str;

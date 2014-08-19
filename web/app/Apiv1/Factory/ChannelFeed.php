@@ -10,8 +10,9 @@ Class ChannelFeed {
     protected $subChannels;
     protected $channelTransformer;
     protected $articleRepository;
-    protected $inactiveUserChannels;
+    protected $inactiveUserChannels = [];
     protected $isASubChannel;
+    protected $user = null;
 
     public function __construct()
     {
@@ -22,12 +23,17 @@ Class ChannelFeed {
         $this->patternMaker = App::make('PatternMaker');
     }
 
-    public function initialise( $content = [], $inactiveUserChannels = [], $isASubChannel = false )
+    public function initialise( $content = [], $user = null, $isASubChannel = false )
     {
         $this->channels = App::make('ChannelRepository')->getAllChannels();
-        $this->content = $content;
-        $this->inactiveUserChannels = $inactiveUserChannels;
+        $this->content = $content;        
         $this->isASubChannel = $isASubChannel;
+
+        # if we have an authenticated user then see if they have any channels they don't want to see
+        if( !is_null($user) ) {
+            $this->user = $user;
+            $this->inactiveUserChannels = $this->user->inactive_channels;
+        }
     }
 
     /**
@@ -42,34 +48,37 @@ Class ChannelFeed {
 
         foreach( $this->content AS $channel )
         {
-             // make sure the channel isn't in the users disabled list
+            # make sure the channel isn't in the users disabled list
             if( ! in_array($channel, $this->inactiveUserChannels) )
             {
-                // get the articles for this channel
+                # get the articles for this channel
                 $articles = $this->articleRepository->getArticles( null, Config::get('constants.channelFeed_limit'), $channel, $this->isASubChannel );
 
-                // transform the articles and the sponsors into the API format 
+                # transform the articles and the sponsors into the API format 
                 $articles = $this->articleTransformer->transformCollection($articles);
 
+                # grab some sponsors we haven't yet used
                 $sponsors = $sponsorResponder->getUnassignedSponsors( [$channel], $this->isASubChannel );
 
-                // create the pattern to repeat for this channel
-                $response = $this->patternMaker->setPattern(1)->make( [ 'articles' => $articles, 'sponsors' => $sponsors ] );
+                # create the pattern to repeat for this channel
+                $response = $this->patternMaker->setPattern(2)->make( [ 'articles' => $articles, 'sponsors' => $sponsors ], "home" );
 
-                // grab the channel details for this channel and transform it
-                $channel = $this->channelTransformer->transform( getChannel($this->channels, $channel) );
+                # grab the channel details for this channel and transform it. We pass in a user so we can see what they have enabled (or disabled)
+                $channel = $this->channelTransformer->transform( getChannel($this->channels, $channel), $this->user );
 
-                // grab the articles from the patternMaker which are now mixed in with the ads 
+                # grab the articles from the patternMaker which are now mixed in with the ads 
                 $channel['articles'] = $response->articles;
 
-                // add the now allocated sponsors to the allocated list
+                # add the now allocated sponsors to the allocated list
                 foreach($response->sponsors AS $sponsor)
                 {
                     $allocatedSponsors[] = $sponsor;    
                 }                
-
-                // add the channel to channel feed
-                $channelFeed[] = $channel;
+  
+                # add the channel to channel feed
+                if( ! is_null($channel['id'])) {
+                    $channelFeed[] = $channel;
+                }                
             }
         }
 

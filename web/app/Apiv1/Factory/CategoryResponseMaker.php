@@ -10,20 +10,33 @@ Class CategoryResponseMaker {
 	protected $channel;
 	protected $sponsorResponder;
 
+	/**
+	 * User object
+	 * @var Apiv1\Repositories\Users\User
+	 */
+	protected $user = null;
+
 	public function __construct()
 	{
 		$this->sponsorResponder = App::make('SponsorResponder');
+
+		# see if we have an user accessKey present. If so we might want to show a different view of the homepage
+        if( ! isApiResponse($user = App::make('UserResponder')->verify()) ) {
+        	$this->user = $user;	
+        }  
 	}
 
 	public function getCategory($categoryIdentifier)
-	{
-		if( ! $category = App::make( 'CategoryRepository' )->getCategoryByIdentifier( $categoryIdentifier ) )
-        {
+	{	
+		# try and find the category by the supplied identifier
+		if( ! $category = App::make( 'CategoryRepository' )->getCategoryByIdentifier( $categoryIdentifier ) ) {
         	return apiErrorResponse('notFound');
         }
 
+        # transform the category into the API required format
         $this->category = App::make( 'CategoryTransformer' )->transform($category->toArray());
 
+        # send it back
         return $this->category;
 	}
 
@@ -31,25 +44,25 @@ Class CategoryResponseMaker {
 	{
 		$channelRepository = App::make( 'ChannelRepository' );
 
-		if( ! $channel = $channelRepository->getChannelByIdentifier( $identifier ) )
-        {
+		# if we can't find the channel by the supplied identifier then we can't go any further
+		if( ! $channel = $channelRepository->getChannelByIdentifier( $identifier ) ) {
         	return apiErrorResponse('notFound');
         }
 
-		if( ! aSubChannel($channel) )
-		{
+        # if its not a sub-channel identifier then reject the request
+		if( ! aSubChannel($channel) ) {
 			return apiErrorResponse('expectationFailed');
 		}
-
-		if( ! categoryBelongsToChannel( $channel, $this->category['id'] ) )
-		{
+ 	
+ 		# make sure the requested category/channel combination is valid
+		if( ! categoryBelongsToChannel( $channel, $this->category['id'] ) ) {
 			return apiErrorResponse('failedDependency', [ 'ErrorReason' => "Supplied channel is not a sub-channel." ]);	
 		}
 
 		$parentChannel = $channelRepository->getChannelBySubChannel( $channel );		
-		$this->channel = App::make( 'ChannelTransformer' )->transform( Toolbox::filterSubChannels( $parentChannel, $channel ) );
+		$this->channel = App::make( 'ChannelTransformer' )->transform( Toolbox::filterSubChannels( $parentChannel, $channel ), $this->user );
 
-		// remove all other categories except the one requested
+		# remove all other categories except the one requested
 		foreach( $this->channel['subChannels'][0]['categories'] AS $key => $category )
 		{
 			if( $category['id'] == $this->category['id'] )
@@ -67,30 +80,30 @@ Class CategoryResponseMaker {
 		$categoryId = $this->category['id'];
 		$subChannelId = getSubChannelId($this->channel);
 
-		$articles = App::make('CategoryResponder')->getCategoryArticles($categoryId, $subChannelId);
+		$articles = App::make('CategoryResponder')->getCategoryArticles($categoryId, $subChannelId, $this->user);
 
-		// ARTICLE type articles
+		# ARTICLE type articles
 		if( isArticleType( $this->channel ) )
 		{
-			$response = App::make('CategoryArticleResponder')->make($this->sponsorResponder, $articles);
+			$response = App::make('CategoryArticleResponder')->make($this->sponsorResponder, $articles, $this->user);
 		}
-		// DIRECTORY type articles
+		# DIRECTORY type articles
 		else if( isDirectoryType( $this->channel ) )
 		{
-			$response = App::make('CategoryDirectoryResponder')->make($articles, $categoryId, $subChannelId);
+			$response = App::make('CategoryDirectoryResponder')->make($articles, $categoryId, $subChannelId, $this->user);
 		}
-		// LISTING type articles
+		# LISTING type articles
 		else if( isListingType( $this->channel ) )
 		{
-			$response = App::make('CategoryListingResponder')->make( $categoryId, $subChannelId );
+			$response = App::make('CategoryListingResponder')->make( $categoryId, $subChannelId, $this->user );
 		}
 
-		// if there were sponsors in the response we need to do something with them or they'll be returned by the API
+		# if there were sponsors in the response we need to do something with them or they'll be returned by the API
 		if(isset($response['sponsors']))
 		{
 			$this->sponsorResponder->setAllocatedSponsors($response['sponsors']);	
 
-			// we dont want to return this so get rid of it
+			# we dont want to return this so get rid of it
 			unset($response['sponsors']);
 		}		
 

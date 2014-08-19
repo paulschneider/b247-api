@@ -35,7 +35,7 @@ Class SponsorRepository extends BaseModel {
             $query->whereNotIn('sponsor.id', $allocated);    
         }      
 
-        $result = $query->take($limit)->orderBy(\DB::raw('RAND()'))->get();       
+        $result = $query->take($limit)->orderBy(\DB::raw('RAND()'))->active()->get();       
 
         return $result->toArray();
     }
@@ -62,7 +62,7 @@ Class SponsorRepository extends BaseModel {
             $query->whereNotIn('sponsor_id', $allocated);    
         }
 
-        $result = $query->take($limit)->orderBy(\DB::raw('RAND()'))->get();       
+        $result = $query->take($limit)->orderBy(\DB::raw('RAND()'))->active()->get();       
 
         return $result->toArray();
     }

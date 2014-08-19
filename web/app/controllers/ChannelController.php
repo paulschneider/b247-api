@@ -8,17 +8,7 @@ Class ChannelController extends ApiController {
     */
     public function getChannel($identifier)
     {
-        if( is_null($identifier) )
-        {
-            return apiErrorResponse('insufficientArguments');
-        }
-
-        if( isApiResponse( $response = App::make('ChannelResponseMaker')->make( $identifier ) ))
-        {
-            return $response;
-        } 
-
-        return apiSuccessResponse( 'ok', $response );
+        return App::make('ChannelResponseMaker')->make( $identifier );
     }
 
     /**

@@ -127,8 +127,8 @@ Class UserRepository
 
         foreach($user->inactive_categories AS $inactive)
         {
-            $categories[] = [
-                'sub_channel' => $inactive['sub_channel_id'],
+            $categories[$inactive['category_id']] = [
+                'subchannel' => $inactive['sub_channel_id'],
                 'category' => $inactive['category_id'],
             ];
         }

@@ -29,23 +29,51 @@ class EventTransformer extends Transformer {
      * @return array
      */
     public function transform( $article, $options = [] )
-    {        
+    {      
         $venue = $article['event']['venue'];
         $event = $article['event'];
         unset($article['event']['venue']);        
 
-        $performances = App::make( 'Apiv1\Transformers\ShowTimeTransformer' )->transformCollection($article['event']['show_time'], $options);
+        if( empty($article['event']['cinema']) ) 
+        {
+            $performances = App::make( 'Apiv1\Transformers\ShowTimeTransformer' )->transformCollection($article, $options);    
+
+            # work out which performance to use as the primary data source
+            # if its multi-date use the next available performance
+            if(isset($performances['summary']['nextPerformance'])) {
+                $performance = $performances['summary']['nextPerformance'];
+            }
+            # if its single date then just use that one
+            else {
+                $performance = $performances['summary']['firstPerformance'];   
+            }
+
+            $showDate = $performance['start']['day'];
+            $showTime = $performance['start']['time'];
+            $epoch = strtotime($performance['start']['day'] .' ' . $performance['start']['time']);
+            $price = $performance['price'];
+        }
+        else 
+        {
+            $performances = App::make('Apiv1\Transformers\CinemaListingTransformer')->transform($article, $options);
+
+            $showDate = $performances['summary']['show']['startTime']['day'];
+            $showTime = $performances['summary']['show']['startTime']['time'];
+            $epoch = $performances['summary']['show']['startTime']['epoch'];
+            $price = $performances['summary']['price'];
+        }        
 
         $response = [
             'details' => [
-                'id' => $event['id']
-                ,'title' => $event['title']
-                ,'sefName' => $event['sef_name']
-                ,'showDate' => $performances['summary']['nextPerformance']['start']
-                ,'showTime' => $performances['summary']['nextPerformance']['time']
-                ,'price' => $performances['summary']['nextPerformance']['price']
-                ,'url' => $event['url']
-                ,'performances' => $performances
+                'id' => $event['id'],
+                'title' => $event['title'],
+                'sefName' => $event['sef_name'],
+                'showDate' => $showDate,
+                'showTime' => $showTime,
+                'epoch' => $epoch,
+                'price' => $price,
+                'url' => $event['url'],
+                'performances' => $performances
             ]
             ,'venue' => App::make( 'VenueTransformer' )->transform( $venue )
         ];

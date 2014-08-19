@@ -21,18 +21,15 @@ Class ListingTransformer extends Transformer {
         
         $this->articlesToShowEachDay = 100;           
 
-        if( isset($options['perDayLimit']) )
-        {
+        if( isset($options['perDayLimit']) ) {
             $this->articlesToShowEachDay = $options['perDayLimit'];
         }
 
         // grab the days array. This is an empty array with the keys set to the coming seven days
-        if( isset($options['days']) )
-        {
+        if( isset($options['days']) ) {
             $days = $options['days'];
         }
-        else
-        {
+        else {
             sd('The required DAYS array has not been provided to ListingTransformer::transformCollection()');
         }
 
@@ -53,7 +50,7 @@ Class ListingTransformer extends Transformer {
             $this->days[$date]['articles'] = null;
 
             // now grab the articles for the given day
-            $this->days[$date]['articles'] = $this->getArticlesForAGivenDay($articles, $date, $options);
+            $this->getArticlesForAGivenDay($articles, $date, $options);
         }        
 
         // once we're done reset the array keys for the category listing
@@ -75,13 +72,13 @@ Class ListingTransformer extends Transformer {
         $categoryCounter = [];       
 
         foreach( $articles AS $article )
-        {
-            // grab the article location before it gets transformed (and removed)
+        {    
+            # grab the article location before it gets transformed (and removed)
             $location = $article['location'][0];
 
             $article = App::make('ArticleTransformer')->transform($article, [ 'showBody' => false, 'eventDay' => $day ]);
 
-            // if a limit has been passed through for each day then only add that number of articles to the return for that day
+            # if a limit has been passed through for each day then only add that number of articles to the return for that day
 
             if( count($this->days[ $day ]['articles']) < $this->articlesToShowEachDay && $article['event']['details']['showDate'] == $day )
             {              
@@ -95,7 +92,7 @@ Class ListingTransformer extends Transformer {
                     'numberOfArticles' => count($categoryCounter[ $day ][$location['categoryId']]),
                 ];
 
-                return $article;
+                $this->days[$day]['articles'][] = $article;
             }
         }
     }
@@ -117,6 +114,18 @@ Class ListingTransformer extends Transformer {
         $highlightsToShow = 3;   
         $categoryCounter = [];
 
+        # always provide some meta data about what we're doing
+        $response[ $day ]['publication'] = [
+            'date' => $day
+            ,'day' => date('D', strtotime($day))
+            ,'fullDay' => date('l', strtotime($day))
+            ,'iso8601Date' => date('c', strtotime($day))
+            ,'epoch' => strtotime($day)
+        ];
+
+        $response[ $day ]['categories'] = [];
+        $response[ $day ]['articles'] = [];
+
         foreach( $articles AS $article )
         {
             // we'll check for this later once the article has been transformed
@@ -126,15 +135,7 @@ Class ListingTransformer extends Transformer {
             $location = $article['location'][0];
 
             // we need to build up a count of articles in each category. this does that
-            $categoryCounter[ $day ][$location['categoryId']][] = $location['categoryId'];
-
-            $response[ $day ]['publication'] = [
-                'date' => $day
-                ,'day' => date('D', strtotime($day))
-                ,'fullDay' => date('l', strtotime($day))
-                ,'iso8601Date' => date('c', strtotime($day))
-                ,'epoch' => strtotime($day)
-            ];
+            $categoryCounter[ $day ][$location['categoryId']][] = $location['categoryId'];            
 
             $response[ $day ]['categories'][$location['categoryId']] = [
                 'id' => $location['categoryId']
@@ -151,32 +152,27 @@ Class ListingTransformer extends Transformer {
             $article = App::make('ArticleTransformer')->transform($article, [ 'showBody' => false, 'eventDay' => $day ] );
 
             // initialise the picks array for the day
-            if( ! isset($response[ $day ]['picks']) )
-            {
+            if( ! isset($response[ $day ]['picks']) ) {
                 $response[ $day ]['picks'] = [];
             }
 
-            // initialise the articles array for the day
-            if( ! isset($response[ $day ]['articles']) )
-            {
+            # initialise the articles array for the day
+            if( ! isset($response[ $day ]['articles']) ) {
                 $response[ $day ]['articles'] = [];
             }
 
-            // we want to separate out the first few picks articles into a separate array. Do this until we reach the currently set limit
-            if( $articleIsPicked && count($response[ $day ]['picks']) < $highlightsToShow )
-            {
+            # we want to separate out the first few picks articles into a separate array. Do this until we reach the currently set limit
+            if( $articleIsPicked && count($response[ $day ]['picks']) < $highlightsToShow ) {
                 $response[ $day ]['picks'][] = $article;
             }
-            // otherwise pipe the article into the main articles array
-            else
-            {
+            # otherwise pipe the article into the main articles array, as long as it has a showDate!
+            else if( ! is_null($article['event']['details']['showDate']) ) {
                 $response[ $day ]['articles'][] = $article;    
             }
         }
-        
-        // once we're done reset the array keys for the category listing
-        foreach( $response AS $key => $item )
-        {
+
+        # once we're done reset the array keys for the category listing
+        foreach( $response AS $key => $item ) {
             $response[$key]['categories'] = array_values($item['categories']);
         }
 

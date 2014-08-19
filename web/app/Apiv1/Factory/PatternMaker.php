@@ -26,6 +26,14 @@ Class PatternMaker
 
             12 => 1,     // [1, advert]
             13 => "doubleAd",
+        ],
+        2 => [
+            0 => 1,
+            1 => 1,
+            2 => 1,
+            3 => "singleAd",
+            4 => 1,
+            5 => 1,
         ]
     ];
 
@@ -43,6 +51,8 @@ Class PatternMaker
     {
         $this->activePattern = $pattern;
 
+        $this->pattern = $this->patterns[ $this->activePattern ];
+
         return $this;
     }
 
@@ -58,7 +68,12 @@ Class PatternMaker
         return $this->activePattern;
     }
 
-    public function make( array $content )
+    public function getTotalPatterns()
+    {
+        return count($this->pattern);
+    }
+
+    public function make( array $content, $type = "" )
     {
         $counter = 0;
         $patternCounter = 0;

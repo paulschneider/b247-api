@@ -5,18 +5,26 @@ use App;
 class ChannelTransformer extends Transformer {
 
     /**
+     * Authenticated user object (if auth'd)
+     * 
+     * @var Apiv1\Repositories\Users\User $user
+     */
+    private $user;
+
+    /**
      * Transform a result set into the API required format
      *
      * @param sponsors
      * @return array
      */
-    public function transformCollection( $channels, $inactiveUserChannels = [] )
+    public function transformCollection( $channels, $user )
     {
-        $response = [];
+        # our main transformation response array
+        $response = [];     
 
         foreach( $channels AS $channel )
         {
-            $response[] = $this->transform( $channel, $inactiveUserChannels );
+            $response[] = $this->transform( $channel, $user );
         }
 
         // return the cleaned item to the caller
@@ -29,11 +37,27 @@ class ChannelTransformer extends Transformer {
      * @param sponsors
      * @return array
      */
-    public function transform( $channel, $inactiveUserChannels = [] )
+    public function transform( $channel, $user )
     { 
+        # init an array where we can store any inactive channels the user may have opted out of
+        $inactiveUserChannels = [];
+
+        # initialise the category transformer
+        $categoryTransformer = App::make('CategoryTransformer');
+
+        # if we have a user object and there might be content we don't want to show, make that available to the class
+        if( ! is_null($user) ) {
+            # this could contain a list of channels the user has opted out of 
+            $inactiveUserChannels = $user->inactive_channels;            
+        }
+
+        # create the content filer so we can work out what the user wants to see, if we have a user
+        $contentFilter = App::make('Apiv1\Tools\ContentFilter')->setUser($user);        
+
         $response = [
             'id' => $channel['id'],
             'name' => $channel['name'],
+            'description' => $channel['description'],
             'sefName' => $channel['sef_name'],
             'colour' => $channel['colour'],
             'secondaryColour' => $channel['secondary_colour'],
@@ -57,6 +81,7 @@ class ChannelTransformer extends Transformer {
                 $sub = [
                     'id' => $subChannel['id'],
                     'name' => $subChannel['name'],
+                    'description' => $subChannel['description'],
                     'sefName' => $subChannel['sef_name'],
                     'path' => $pathToChannel,
                     'displayType' => [
@@ -72,12 +97,19 @@ class ChannelTransformer extends Transformer {
 
                     foreach( $subChannel['category'] AS $category )
                     {
+                        # create a web path for this category
                         $pathToCategory = makePath( [ $channel['sef_name'], $subChannel['sef_name'], $category['sef_name'] ] );
 
-                        $cat = App::make('CategoryTransformer')->transform($category);
+                        # user the category transformer to turn the category into the API response version
+                        $cat = $categoryTransformer->transform($category);
 
+                        # add the web path to the now transformed category array
                         $cat['path'] = $pathToCategory;
 
+                        #work out whether the category is enabled within the user preferences
+                        $cat['isEnabled'] = $contentFilter->isCategoryUserEnabled($category['id'], $subChannel['id']);
+
+                        # and store it in the list of categories for this channel
                         $categories[] = $cat;
                     }
 

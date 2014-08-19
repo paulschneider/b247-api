@@ -7,7 +7,7 @@
 #
 # Host: 127.0.01 (MySQL 5.6.17)
 # Database: b247-com
-# Generation Time: 2014-08-18 08:16:04 +0000
+# Generation Time: 2014-08-18 14:43:58 +0000
 # ************************************************************
 
 
@@ -1731,10 +1731,10 @@ DROP TABLE IF EXISTS `event_cinema`;
 
 CREATE TABLE `event_cinema` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `event_id` int(11) DEFAULT NULL,
-  `certificate` varchar(10) DEFAULT NULL,
-  `director` varchar(150) DEFAULT NULL,
-  `duration` int(11) DEFAULT NULL,
+  `event_id` int(11) NOT NULL,
+  `certificate` varchar(10) NOT NULL DEFAULT '',
+  `director` varchar(150) NOT NULL DEFAULT '',
+  `duration` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

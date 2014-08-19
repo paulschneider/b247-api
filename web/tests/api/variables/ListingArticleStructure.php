@@ -1,6 +1,6 @@
 <?php
 
-Class AppArticleStructure {
+Class ListingArticleStructure {
 
 	public static $body = [
 	 	'id' => "",
@@ -51,10 +51,32 @@ Class AppArticleStructure {
 			"width" => "",
 			"height" => "",
 		],
-		"video" => [
-			"source" => "",
-			"embed" => "",
-		],
+		"event" => [
+			"details" => [
+				"id" => 1,
+				"title" => "",
+				"sefName" => "",
+				"showDate" => "",
+				"showTime" => "",
+				"epoch" => 1,
+				"price" => "",
+				"url" => "",
+				"performances" => []
+			],
+			"venue" => [
+				"id" => "",
+				"name" => "",
+				"sefName" => "",
+				"address1" => "",
+				"address2" => "",
+				"address3" => "",
+				"postcode" => "",
+				"email" => "",
+				"facebook" => "",
+				"twitter" => "",
+				"phone" => "",
+			],
+		],		
 		"gallery" => []
 	];
 
