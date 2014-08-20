@@ -40,6 +40,7 @@ Class ArticleTransformer extends Transformer {
                 ,'subHeading' => $article['sub_heading']
                 ,'path' => isDesktop() ? makePath( [ $articleLocation['channelSefName'], $articleLocation['subChannelSefName'], $articleLocation['categorySefName'], $article['sef_name'] ] ) : makeArticleLink($articleLocation['subChannelId'], $articleLocation['categoryId'], $article['id'])
                 ,'isAdvert' => false
+                ,'isPromoted' => isset($article['is_promoted']) ? $article['is_promoted'] : false
                 ,'published' => dateFormat($article['published'])
                 ,'displayType' => [
                     'id' => $articleLocation['displayTypeId']

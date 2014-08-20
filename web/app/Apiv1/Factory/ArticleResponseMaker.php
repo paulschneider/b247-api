@@ -104,7 +104,7 @@ Class ArticleResponseMaker {
 
 	public function getRelatedArticles($article)
 	{
-		return $this->articleTransformer->transformCollection($this->articleRepository->getRelatedArticles($article), ['ignorePlatform' => true]);
+		return $this->articleTransformer->transformCollection($this->articleRepository->getRelatedArticles($article, $this->user), ['ignorePlatform' => true]);
 	}
 
 	public function getAdverts()

@@ -103,23 +103,128 @@ Class ArticleRepository extends BaseModel {
         }   
     }
 
-    public function getArticle($identifier)
+    // public function getArticle($identifier)
+    // {
+    //     $query = Article::with('location', 'asset', 'event.venue', 'venue');
+
+    //     if( is_numeric($identifier) ) {
+    //         $query->where('article.id', '=', $identifier);
+    //     }
+    //     else {
+    //         $query->where('article.sef_name', '=', $identifier);
+    //     }
+
+    //     if( ! $result = $query->first() ) {
+    //         return false;
+    //     }
+    //     else {
+    //         return $result->toArray();    
+    //     }        
+    // }
+    
+    /**
+     * Get a list of articles for a range of criteria
+     * 
+     * @param  string  $type          [what type of article do we want to return ]
+     * @param  integer $limit         [total article results to return]
+     * @param  [type]  $channel       [unique identifier for the channel or sub-channel]
+     * @param  boolean $isASubChannel [whether the $channel ID is for a subChannel]
+     * @param  boolean $ignoreChannel [sometimes we don't care what type of channel to return so ignore it]
+     * @return mixed                 [an array of articles or boolean false on nothing]
+     * 
+     */
+    public function getArticles($type = 'article', $limit = 20, $channel = null, $isASubChannel = false, $ignoreChannel = false, $user = null)
     {
-        $query = Article::with('location', 'asset', 'event.venue', 'venue');
+        # flag to indicate whether a sort order has been given to the query 
+        # (this can be done in a couple of places, hence the flag)
+        $sorted = false;
 
-        if( is_numeric($identifier) ) {
-            $query->where('article.id', '=', $identifier);
+        $query = ArticleLocation::with('article.event.venue', 'article.venue', 'article.event.showTime', 'article.asset', 'article.location')->select(
+            'article.title', 'article_location.article_id'
+        )->join('article', 'article.id', '=', 'article_location.article_id');
+
+        # on the homepage we don't care which channel the featured or picked articles come from
+        if( ! $ignoreChannel ) 
+        {
+            # if its a sub-channel then grab it by the sub-channel ID
+            if ( $isASubChannel ) {
+                $query->where('sub_channel_id', $channel);
+            }
+            # otherwise use the channel_id field
+            else { 
+                $query->where('channel_id', $channel);
+            }           
+        }   
+
+        # if we have a user object we only want to grab content that they want to see
+        if( ! is_null($user))    
+        {
+            # don't get any articles from channels they have disabled
+            if( count($user->inactive_channels) > 0 ) {
+                $query->whereNotIn('channel_id', $user->inactive_channels);    
+            }
+
+            # don't get any articles from categories they have disabled. Note that categories can be used in multiple
+            # channels so the sub_channel_id is needed to distinguish one from the other
+            if( count($user->inactive_categories) > 0 ) 
+            {
+                $cats = [];
+                $chans = [];
+
+                # go through the user disabled list and grab separate lists of categories and channels
+                foreach($user->inactive_categories AS $key => $cat)
+                {
+                    $cats[] = $key;
+                    $chans[] = $cat['subchannel'];
+                }
+
+                # grab a list of row ids from article_location which include both a category_id and a sub_channel_id that have been disabled by the user
+                $excludeIds = DB::table('article_location')->select('id')->whereIn('category_id', $cats)->whereIn('sub_channel_id', $chans)->lists('id');
+
+                # now grab everything else not in the $excludedIds list. This is the content th user wants to see.
+                $query->whereNotIn('article_location.id', $excludeIds);
+            }    
         }
-        else {
-            $query->where('article.sef_name', '=', $identifier);
+           
+        switch($type)
+        {
+            # if we only want picked articles
+            case 'picks' :
+                $query->where('article.is_picked', '=', true)->where('article.is_featured', '=', false);
+            break;
+            # if its a listing we want to filter by the event attached to the article
+            case 'listing' :                
+                $query->join('event_showtimes', 'event_showtimes.event_id', '=', 'article.event_id')->distinct('event_showtimes.event_id')->orderBy('event_showtimes.showtime', 'asc');
+                $sorted = true;
+            # if its a directory type article or we want featured articles
+            case Config::get('constants.displayType_directory') :
+            case 'featured' :
+                $query->where('article.is_featured', '=', true);
+            break;
         }
 
-        if( ! $result = $query->first() ) {
-            return false;
+        # by default ensure we only get approved articles
+        $query->whereNotNull('article.is_approved')->take($limit);
+
+        # and by default order all articles by their publication date
+        $query->orderBy('article.published', 'desc');
+
+        # and...... go 
+        $result = $query->get();        
+
+        $articles = [];
+        
+        # they come out of this query slightly differently to how the articleTransformer needs them. sort that out !
+        foreach( $result->toArray() AS $item )
+        {
+            $articles[] = $item['article'];
         }
-        else {
-            return $result->toArray();    
-        }        
+
+        # ... finally, we want to apply a filter to promote some of these articles based on the user' district
+        # preferences. 
+        $articles = App::make('Apiv1\Tools\UserDistrictOrganiser')->promoteDistricts($user, $articles);
+
+        return $articles;
     }
 
     /**
@@ -211,6 +316,10 @@ Class ArticleRepository extends BaseModel {
             $articleIds[] = $articleId;
         }
 
+        # ... finally, we want to apply a filter to promote some of these articles based on the user' district
+        # preferences. 
+        $articles = App::make('Apiv1\Tools\UserDistrictOrganiser')->promoteDistricts($user, $articles);
+
         return $articles;
     }
 
@@ -238,107 +347,6 @@ Class ArticleRepository extends BaseModel {
         }
         
         Search::record($searchTerm, count($articles));
-
-        return $articles;
-    }
-
-    /**
-     * Get a list of articles for a range of criteria
-     * 
-     * @param  string  $type          [what type of article do we want to return ]
-     * @param  integer $limit         [total article results to return]
-     * @param  [type]  $channel       [unique identifier for the channel or sub-channel]
-     * @param  boolean $isASubChannel [whether the $channel ID is for a subChannel]
-     * @param  boolean $ignoreChannel [sometimes we don't care what type of channel to return so ignore it]
-     * @return mixed                 [an array of articles or boolean false on nothing]
-     * 
-     */
-    public function getArticles($type = 'article', $limit = 20, $channel = null, $isASubChannel = false, $ignoreChannel = false, $user = null)
-    {
-        # flag to indicate whether a sort order has been given to the query 
-        # (this can be done in a couple of places, hence the flag)
-        $sorted = false;
-
-        $query = ArticleLocation::with('article.event.venue', 'article.venue', 'article.event.showTime', 'article.asset', 'article.location')->select(
-            'article.title', 'article_location.article_id'
-        )->join('article', 'article.id', '=', 'article_location.article_id');
-
-        # on the homepage we don't care which channel the featured or picked articles come from
-        if( ! $ignoreChannel ) 
-        {
-            # if its a sub-channel then grab it by the sub-channel ID
-            if ( $isASubChannel ) {
-                $query->where('sub_channel_id', $channel);
-            }
-            # otherwise use the channel_id field
-            else { 
-                $query->where('channel_id', $channel);
-            }           
-        }   
-
-        # if we have a user object we only want to grab content that they want to see
-        if( ! is_null($user))    
-        {
-            # don't get any articles from channels they have disabled
-            if( count($user->inactive_channels) > 0 ) {
-                $query->whereNotIn('channel_id', $user->inactive_channels);    
-            }
-
-            # don't get any articles from categories they have disabled. Note that categories can be used in multiple
-            # channels so the sub_channel_id is needed to distinguish one from the other
-            if( count($user->inactive_categories) > 0 ) 
-            {
-                $cats = [];
-                $chans = [];
-
-                # go through the user disabled list and grab separate lists of categories and channels
-                foreach($user->inactive_categories AS $key => $cat)
-                {
-                    $cats[] = $key;
-                    $chans[] = $cat['subchannel'];
-                }
-
-                # grab a list of row ids from article_location which include both a category_id and a sub_channel_id that have been disabled by the user
-                $excludeIds = DB::table('article_location')->select('id')->whereIn('category_id', $cats)->whereIn('sub_channel_id', $chans)->lists('id');
-
-                # now grab everything else not in the $excludedIds list. This is the content th user wants to see.
-                $query->whereNotIn('article_location.id', $excludeIds);
-            }            
-        }
-           
-        switch($type)
-        {
-            # if we only want picked articles
-            case 'picks' :
-                $query->where('article.is_picked', '=', true)->where('article.is_featured', '=', false);
-            break;
-            # if its a listing we want to filter by the event attached to the article
-            case 'listing' :                
-                $query->join('event_showtimes', 'event_showtimes.event_id', '=', 'article.event_id')->distinct('event_showtimes.event_id')->orderBy('event_showtimes.showtime', 'asc');
-                $sorted = true;
-            # if its a directory type article or we want featured articles
-            case Config::get('constants.displayType_directory') :
-            case 'featured' :
-                $query->where('article.is_featured', '=', true);
-            break;
-        }
-
-        # by default ensure we only get approved articles
-        $query->whereNotNull('article.is_approved')->take($limit);
-
-        # and by default order all articles by their publication date
-        $query->orderBy('article.published', 'desc');
-
-        # and...... go 
-        $result = $query->get();        
-
-        $articles = [];
-        
-        # they come out of this query slightly differently to how the articleTransformer needs them. sort that out !
-        foreach( $result->toArray() AS $item )
-        {
-            $articles[] = $item['article'];
-        }
 
         return $articles;
     }
@@ -398,7 +406,7 @@ Class ArticleRepository extends BaseModel {
         return $articles;
     }
 
-    public function getRelatedArticles($article)
+    public function getRelatedArticles($article, $user)
     {
         $articleLocation = $article->location->first();
 
@@ -416,6 +424,10 @@ Class ArticleRepository extends BaseModel {
         {
             $articles[] = $item['article'];
         }
+
+        # ... finally, we want to apply a filter to promote some of these articles based on the user' district
+        # preferences. 
+        $articles = App::make('Apiv1\Tools\UserDistrictOrganiser')->promoteDistricts($user, $articles);
 
         return $articles;
     }
