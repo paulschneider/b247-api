@@ -20,4 +20,5 @@ return [
 	"competitionOutOfRange" => "This competition has either expired is not yet available.",
 	"competitionAlreadyEntered" => "User has already entered this competition. Nothing to do.",
 	"userSuccessfullyEnterIntoCompetition" => "The user was successfully entered into the competition",
+	"invalidDistrictPreferenceRequest" => "There was a problem with the request. Please refer to the documentation for this endpoint."
 ];
