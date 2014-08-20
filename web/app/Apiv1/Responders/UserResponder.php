@@ -59,11 +59,10 @@ Class UserResponder {
 
 	public function getUserProfile($accessKey)
 	{
-		if( ! $user = App::make( 'UserRepository' )->getProfile($accessKey) )
-		{
+		if( ! $user = App::make( 'UserRepository' )->getProfile($accessKey) ) {
 			return apiErrorResponse(  'notFound', [ 'errorReason' => Lang::get('api.noAccountWithThatAccessKey'), 'accessKey' => $accessKey ] ); 	
 		}
-		
+
 		return $user;
 	}
 
