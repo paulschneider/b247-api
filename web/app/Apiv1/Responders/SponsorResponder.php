@@ -49,7 +49,12 @@ Class SponsorResponder {
 		$sponsors = $sponsorRepository->getCategorySponsors($limit, $subChannelId, $this->category['id'], $this->getAllocatedSponsors(), Config::get('global.sponsorLETTERBOX'));
 
 		# we also now want to retrieve a random full page article which will be displayed periodically within the app
-		$sponsors[] = $sponsorRepository->getCategorySponsors(1, $subChannelId, $this->category['id'], $this->getAllocatedSponsors(), Config::get('global.sponsorFULLPAGE'))[0];
+		$fullPageAd = $sponsorRepository->getCategorySponsors(1, $subChannelId, $this->category['id'], $this->getAllocatedSponsors(), Config::get('global.sponsorFULLPAGE'));
+
+		# if we managed to find a fullpage advert then push it into the sponsors array
+		if(isset($fullPageAd[0])) {
+			$sponsors[] = $fullPageAd[0];
+		}
 
 		# transform them in to the API format 
 		$transformedSponsors = App::make('SponsorTransformer')->transformCollection($sponsors);
