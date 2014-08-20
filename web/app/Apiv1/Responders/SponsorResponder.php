@@ -35,7 +35,9 @@ Class SponsorResponder {
 	 */
 	public function getCategorySponsors($limit)
 	{
-		// grab the subChannelId from this channel (helper function)
+		$sponsorRepository = App::make('SponsorRepository');
+
+		# grab the subChannelId from this channel (helper function)
 		$subChannelId = getSubChannelId($this->channel);
 
 		// grab some sponsors and filter them by the requested category
@@ -44,12 +46,15 @@ Class SponsorResponder {
 		# $this->category['id'] = which category of this sub-channel do we want to get ads for
 		# $this->getAllocatedSponsors() = provide an array of sponsors already used on the page. Helps to provide unique sponsors as we wont get these ones back
 		# Config::get('global.sponsorLETTERBOX') = which type of sponsor do we want to get back, in this case page wide letterbox ads
-		$sponsors = App::make('SponsorRepository')->getCategorySponsors($limit, $subChannelId, $this->category['id'], $this->getAllocatedSponsors(), Config::get('global.sponsorLETTERBOX'));
+		$sponsors = $sponsorRepository->getCategorySponsors($limit, $subChannelId, $this->category['id'], $this->getAllocatedSponsors(), Config::get('global.sponsorLETTERBOX'));
 
-		// transform them in to the API format 
+		# we also now want to retrieve a random full page article which will be displayed periodically within the app
+		$sponsors[] = $sponsorRepository->getCategorySponsors(1, $subChannelId, $this->category['id'], $this->getAllocatedSponsors(), Config::get('global.sponsorFULLPAGE'))[0];
+
+		# transform them in to the API format 
 		$transformedSponsors = App::make('SponsorTransformer')->transformCollection($sponsors);
 
-		// send them back
+		# send them back
 		return $transformedSponsors;
 	}
 

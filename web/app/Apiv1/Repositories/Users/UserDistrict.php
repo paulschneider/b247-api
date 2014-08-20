@@ -2,7 +2,7 @@
 
 use Apiv1\Repositories\Models\BaseModel;
 
-Class District extends BaseModel {
+Class UserDistrict extends BaseModel {
 
 	protected $table = "user_district";
 	

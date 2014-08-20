@@ -66,7 +66,7 @@ class User extends BaseModel implements UserInterface, RemindableInterface {
 
 	public function districts()
 	{
-		return $this->hasMany('Apiv1\Repositories\Users\District', 'user_id');
+		return $this->hasMany('Apiv1\Repositories\Users\UserDistrict', 'user_id');
 	}
 
 	/**

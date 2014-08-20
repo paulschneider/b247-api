@@ -3,6 +3,30 @@
 Class UserDistrictOrganiser {
 
 	/**
+	 * from a provided array of districts work out which the user has opted to promote
+	 * @param  array $data
+	 * @return array on success, boolean on nothing to do
+	 */
+	public function organise($data)
+	{
+		if(is_array($data['districts']))
+		{
+			$promoted = [];
+
+			foreach($data['districts'] AS $district)
+			{
+				if($district['isPromoted']) {
+					$promoted[] = $district['id'];
+				}
+			}
+
+			return $promoted;
+		}
+
+		return false;
+	}
+
+	/**
 	 * regardless of the order of the articles in the supplied array, work out if some of them can be promoted based
 	 * on the user district preferences
 	 * 

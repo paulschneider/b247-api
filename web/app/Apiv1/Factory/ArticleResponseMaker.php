@@ -92,10 +92,15 @@ Class ArticleResponseMaker {
 		return $this->channel;
 	}
 
+	/**
+	 * Retrieve the details of an article. All articles go through here when down to this level of the hierarchy
+	 * 
+	 * @return Apiv1\Repositories\Articles\Article
+	 */
 	public function getArticle()
 	{		
-		if( ! $this->article = App::make('Apiv1\Responders\ArticleResponder')->getArticle($this->channel, $this->category, $this->article))
-		{
+		# grab the article from the ArticleResponder
+		if( ! $this->article = App::make('Apiv1\Responders\ArticleResponder')->getArticle($this->channel, $this->category, $this->article)) {
 			return apiErrorResponse('notFound', [ 'errorReason' => Lang::get('api.articleCouldNotBeLocated') ]);
 		}
 

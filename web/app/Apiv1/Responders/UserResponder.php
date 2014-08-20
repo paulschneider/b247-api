@@ -66,13 +66,6 @@ Class UserResponder {
 		return $user;
 	}
 
-	public function setUserContentPreferences(User $user, stdClass $data)
-	{
-		App::make( 'UserRepository' )->setContentPreferences($user, $data);
-		
-		return true;
-	}
-
 	/**
 	 * Verify that we have everything we need to continue with an authenticated POST process
 	 * 
