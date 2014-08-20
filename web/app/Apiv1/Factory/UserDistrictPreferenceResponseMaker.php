@@ -5,7 +5,7 @@ use Lang;
 
 Class UserDistrictPreferenceResponseMaker {
 
-		/**
+	/**
 	 * User object
 	 * @var Apiv1\Repositories\Users\User
 	 */

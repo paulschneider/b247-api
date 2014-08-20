@@ -2,6 +2,16 @@
 
 Class UserController extends BaseController {	
 
+	public function getPreferences()
+	{
+		return App::make('Apiv1\Factory\UserPreferenceResponseMaker')->get();
+	}
+
+	public function setPreferences($data)
+	{
+		return App::make('Apiv1\Factory\UserPreferenceResponseMaker')->set($data);
+	}
+
 	/**
 	 * get a user and their profile
 	 * 

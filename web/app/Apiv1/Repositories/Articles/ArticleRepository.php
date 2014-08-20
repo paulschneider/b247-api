@@ -102,25 +102,6 @@ Class ArticleRepository extends BaseModel {
             return $result;    
         }   
     }
-
-    // public function getArticle($identifier)
-    // {
-    //     $query = Article::with('location', 'asset', 'event.venue', 'venue');
-
-    //     if( is_numeric($identifier) ) {
-    //         $query->where('article.id', '=', $identifier);
-    //     }
-    //     else {
-    //         $query->where('article.sef_name', '=', $identifier);
-    //     }
-
-    //     if( ! $result = $query->first() ) {
-    //         return false;
-    //     }
-    //     else {
-    //         return $result->toArray();    
-    //     }        
-    // }
     
     /**
      * Get a list of articles for a range of criteria
