@@ -3,7 +3,7 @@
 use App;
 use Lang;
 
-Class UserPreferenceResponseMakerTwo {
+Class UserPreferenceResponseMaker {
 
 	/**
 	 * User object
