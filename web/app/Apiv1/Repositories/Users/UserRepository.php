@@ -188,7 +188,6 @@ Class UserRepository
         }
 
         $profile->age_group_id = $form['ageGroup'];
-        $profile->nickname = $form['nickName'];
         $profile->facebook = isset( $form['facebook'] ) ? $form['facebook'] : null;
         $profile->twitter = isset( $form['twitter'] ) ? $form['twitter'] : null;
         $profile->postcode = $form['postCode'];

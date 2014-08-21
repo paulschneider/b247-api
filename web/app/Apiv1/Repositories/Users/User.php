@@ -36,7 +36,7 @@ class User extends BaseModel implements UserInterface, RemindableInterface {
 	protected $fillable = [
 
 		'access_key'
-		//, 'first_name'
+		, 'first_name'
 		, 'last_name'
 		, 'email'
 		, 'password'

@@ -24,7 +24,6 @@ class UserTransformer extends Transformer {
 
             $response['profile'] = [
                 'ageGroup' => $profile['age_group_id'],
-                'nickName' => $profile['nickname'],
                 'facebook' => $profile['facebook'],
                 'twitter' => $profile['twitter'],
                 'postCode' => $profile['postcode'],

@@ -7,7 +7,7 @@
 #
 # Host: 127.0.01 (MySQL 5.6.17)
 # Database: b247-com
-# Generation Time: 2014-08-20 09:00:45 +0000
+# Generation Time: 2014-08-21 06:51:11 +0000
 # ************************************************************
 
 
@@ -2118,7 +2118,7 @@ VALUES
 	(59,337,'59','http://www.bristol247.com/',2,'2014-08-05 00:00:01','2014-09-26 23:59:59',1,NULL,NULL,NULL,NULL,NULL,NULL,'2014-08-05 04:38:08','2014-08-05 04:38:31'),
 	(60,340,'60','http://www.bristol247.com/',2,'2014-08-05 00:00:01','2014-09-26 23:59:59',1,NULL,NULL,NULL,NULL,NULL,NULL,'2014-08-05 04:38:38','0000-00-00 00:00:00'),
 	(61,341,'61','http://www.bristol247.com/',2,'2014-08-05 00:00:01','2014-09-26 23:59:59',1,NULL,NULL,NULL,NULL,NULL,NULL,'2014-08-05 04:39:30','2014-08-05 04:39:50'),
-	(63,374,'title','http://www.bristol247.com/',1,'2014-08-19 00:00:01','2014-09-30 23:59:59',1,NULL,NULL,NULL,NULL,NULL,NULL,'2014-08-19 19:11:23','2014-08-19 19:11:23');
+	(63,374,'title','http://www.bristol247.com/',3,'2014-08-19 00:00:01','2014-09-30 23:59:59',1,NULL,NULL,NULL,NULL,NULL,NULL,'2014-08-19 19:11:23','2014-08-19 19:11:23');
 
 /*!40000 ALTER TABLE `sponsor` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -2210,7 +2210,7 @@ VALUES
 	(64,58,2,6,5),
 	(65,59,2,6,5),
 	(66,60,2,6,5),
-	(67,61,2,6,5);
+	(67,63,2,6,5);
 
 /*!40000 ALTER TABLE `sponsor_location` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -2277,7 +2277,8 @@ VALUES
 	(8,'71734DBE7DA1E18','David','Scholes','p.schneider1@yahoo.co.uk','$2y$10$TR/oOl/tiUvqYWhgnwYJUOZhCaqkMrAdGFecipso4h92v3msoh4IW',NULL,NULL,NULL,NULL,NULL,'2014-08-13 10:38:27','2014-08-13 10:38:27'),
 	(9,'74B01323819DFDF','Pablo','Carrillo','pablo+1@gmail.com','$2y$10$oCv1B7ISBIIf.s2zPXo0.u3m7Hs2CGudmRYjdq7uv1tXaY41QCBJK',NULL,NULL,NULL,NULL,NULL,'2014-08-13 10:42:21','2014-08-13 10:42:21'),
 	(10,'386AC28784616EE','Pablo','Carrillo','pablo+2@calvium.com','$2y$10$MSKLjk3nB4dxg472UgD7R.RgkJF.FlPJpVrPvT5jgQWBYGsyi1uTi',NULL,NULL,NULL,NULL,NULL,'2014-08-13 11:19:25','2014-08-13 11:19:25'),
-	(11,'1F48422C5DEB48C','Pablo','Carrillo','pablo+3@calvium.com','$2y$10$8FIyYI6W6Hrhl87W2R.l.ukjivSlHDaHeyTVwYZ4jwmqrv2M0CVTm',NULL,NULL,NULL,NULL,NULL,'2014-08-13 11:22:04','2014-08-13 11:22:04');
+	(11,'1F48422C5DEB48C','Pablo','Carrillo','pablo+3@calvium.com','$2y$10$8FIyYI6W6Hrhl87W2R.l.ukjivSlHDaHeyTVwYZ4jwmqrv2M0CVTm',NULL,NULL,NULL,NULL,NULL,'2014-08-13 11:22:04','2014-08-13 11:22:04'),
+	(12,'5BD50E82A1D2E56','Jimmy ','Smits','pauljohn.schneider+1@gmail.com','$2y$10$xAlpFb1gf/6BYprNMD/EL.YaZKrvrTsMIXxSIwc3ikpL0bv5Z6prm',NULL,NULL,NULL,NULL,NULL,'2014-08-20 15:47:00','2014-08-20 15:47:00');
 
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -2327,45 +2328,6 @@ VALUES
 UNLOCK TABLES;
 
 
-# Dump of table user_inactive_category
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `user_inactive_category`;
-
-CREATE TABLE `user_inactive_category` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `sub_channel_id` int(11) NOT NULL,
-  `category_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `user_cat -> cat_idx` (`category_id`),
-  KEY `cat -> user_idx` (`user_id`),
-  KEY `cat -> sc_idx` (`sub_channel_id`),
-  CONSTRAINT `user_cat -> cat` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `cat -> user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `cat -> sc` FOREIGN KEY (`sub_channel_id`) REFERENCES `channel` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-
-
-# Dump of table user_inactive_channel
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `user_inactive_channel`;
-
-CREATE TABLE `user_inactive_channel` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `channel_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `channel -> user_idx` (`user_id`),
-  KEY `user -> channel _idx` (`channel_id`),
-  CONSTRAINT `channel -> user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `user -> channel ` FOREIGN KEY (`channel_id`) REFERENCES `channel` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-
-
 # Dump of table user_district
 # ------------------------------------------------------------
 
@@ -2388,12 +2350,60 @@ LOCK TABLES `user_district` WRITE;
 
 INSERT INTO `user_district` (`id`, `user_id`, `district_id`, `created_at`)
 VALUES
-	(7,8,1,'2014-08-20 07:15:13'),
-	(8,8,2,'2014-08-20 07:15:13'),
-	(9,8,10,'2014-08-20 07:15:13');
+	(43,8,2,'2014-08-20 14:09:00'),
+	(44,8,1,'2014-08-20 14:09:00'),
+	(45,8,10,'2014-08-20 14:09:00');
 
 /*!40000 ALTER TABLE `user_district` ENABLE KEYS */;
 UNLOCK TABLES;
+
+
+# Dump of table user_inactive_category
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `user_inactive_category`;
+
+CREATE TABLE `user_inactive_category` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `sub_channel_id` int(11) NOT NULL,
+  `category_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_cat -> cat_idx` (`category_id`),
+  KEY `cat -> user_idx` (`user_id`),
+  KEY `cat -> sc_idx` (`sub_channel_id`),
+  CONSTRAINT `user_cat -> cat` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `cat -> user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `cat -> sc` FOREIGN KEY (`sub_channel_id`) REFERENCES `channel` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+LOCK TABLES `user_inactive_category` WRITE;
+/*!40000 ALTER TABLE `user_inactive_category` DISABLE KEYS */;
+
+INSERT INTO `user_inactive_category` (`id`, `user_id`, `sub_channel_id`, `category_id`)
+VALUES
+	(17,8,4,1);
+
+/*!40000 ALTER TABLE `user_inactive_category` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# Dump of table user_inactive_channel
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `user_inactive_channel`;
+
+CREATE TABLE `user_inactive_channel` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `channel_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `channel -> user_idx` (`user_id`),
+  KEY `user -> channel _idx` (`channel_id`),
+  CONSTRAINT `channel -> user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `user -> channel ` FOREIGN KEY (`channel_id`) REFERENCES `channel` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 
 
 # Dump of table user_profile
@@ -2420,6 +2430,15 @@ CREATE TABLE `user_profile` (
   CONSTRAINT `user->age` FOREIGN KEY (`age_group_id`) REFERENCES `age_group` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+LOCK TABLES `user_profile` WRITE;
+/*!40000 ALTER TABLE `user_profile` DISABLE KEYS */;
+
+INSERT INTO `user_profile` (`id`, `user_id`, `age_group_id`, `nickname`, `facebook`, `twitter`, `postcode`, `lat`, `lon`, `area`, `updated_at`)
+VALUES
+	(1,7,3,'Schneidey','paul.schneider','pjschneidey','bs1 5tx','51.4516198','-2.598213',NULL,'2014-08-20 15:28:48');
+
+/*!40000 ALTER TABLE `user_profile` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table user_redeemed_promotion
@@ -2447,7 +2466,8 @@ VALUES
 	(2,8,1,'2014-08-19 11:12:43'),
 	(3,8,1,'2014-08-19 11:13:26'),
 	(4,8,1,'2014-08-19 12:53:00'),
-	(5,8,1,'2014-08-19 12:56:30');
+	(5,8,1,'2014-08-19 12:56:30'),
+	(6,12,1,'2014-08-20 16:27:54');
 
 /*!40000 ALTER TABLE `user_redeemed_promotion` ENABLE KEYS */;
 UNLOCK TABLES;

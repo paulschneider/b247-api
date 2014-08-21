@@ -20,7 +20,7 @@ class UserProfile extends BaseModel
     */
     protected $fillable = [
 
-        'age_group_id', 'nickname', 'facebook', 'twitter', 'lat', 'lon', 'area', 'updated_at' 
+        'age_group_id', 'facebook', 'twitter', 'lat', 'lon', 'area', 'updated_at' 
 
     ];
 

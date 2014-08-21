@@ -9,7 +9,7 @@ Class UserProfileMaker {
 	private $userResponder;
 	private $userRepository;
 	private $user;
-	private $requiredFields = [ 'firstName', 'lastName', 'nickName', 'postCode', 'ageGroup' ];
+	private $requiredFields = [ 'firstName', 'lastName', 'postCode', 'ageGroup' ];
 
 	public function __construct()
 	{
@@ -20,29 +20,25 @@ Class UserProfileMaker {
 	public function make(array $form = array(), $accessKey)
 	{
 		// check to make sure we have all the fields required to complete the process
-		if( isApiResponse( $result = $this->userResponder->parameterCheck($this->requiredFields, $form) ) )
-		{
+		if( isApiResponse( $result = $this->userResponder->parameterCheck($this->requiredFields, $form) ) ) {
 			// not all of the required fields were supplied
 			return $result;
 		}
 
 		// check to see if the provided fields meet the validators requirements
-		if( isApiResponse( $result = $this->userResponder->validate(App::make( 'UserProfileValidator' ), $form) ) )
-		{
+		if( isApiResponse( $result = $this->userResponder->validate(App::make( 'UserProfileValidator' ), $form) ) ) {
 			// the supplied data did not meet the validation requirements
 			return $result;
 		}
 
-		if( isApiResponse( $result = $this->userResponder->getUserProfile($accessKey) ) )
-		{
+		if( isApiResponse( $result = $this->userResponder->getUserProfile($accessKey) ) ) {
 			// we didn't find a user profile with the provided accessKey
 			return $result;
 		}
 
 		$this->user = $result;
 
-		if( isApiResponse( $result = $this->store($form)) )
-		{
+		if( isApiResponse( $result = $this->store($form)) ) {
 			// we had trouble storing the profile in the DB - bad!
 			return $result;
 		}
@@ -66,8 +62,7 @@ Class UserProfileMaker {
 			}
 		}
 
-		if( ! $result = $this->userRepository->saveProfile($this->user, $form) )
-		{
+		if( ! $result = $this->userRepository->saveProfile($this->user, $form) ) {
 			return apiErrorResponse(  'serverError', [ 'errorReason' => Lang::get('api.recordCouldNotBeSaved') ] );
 		}
 

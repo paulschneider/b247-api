@@ -7,26 +7,25 @@ Class UserProfileResponseMaker {
 
 	/**
 	 * the fields required for these processes
+	 * 
 	 * @var array
 	 */
 	public $requiredFields = [];
 
 	public function make($form)
 	{
-		// check to see if we have the accessKey header param. This is a helper function.
-		if( ! userIsAuthenticated() )
-		{
+		# check to see if we have the accessKey header param. This is a helper function.
+		if( ! userIsAuthenticated() ) {
 			return apiErrorResponse(  'unauthorised', ['errorReason' => Lang::get('api.accessKeyNotProvided')] );
 		}
 
 		$accessKey = getAccessKey();				
 
-		if( isApiResponse( $result = App::make( 'UserProfileMaker' )->make($form, $accessKey) ) )
-		{
+		if( isApiResponse( $result = App::make( 'UserProfileMaker' )->make($form, $accessKey) ) ) {
 			return $result;
 		}
 		
-		// we now have an updated user record with profile
+		# we now have an updated user record with profile
 		$user = $result;
 
 		return apiSuccessResponse( 'ok', [ 'user' => App::make('UserTransformer')->transform($user) ] );
@@ -41,8 +40,7 @@ Class UserProfileResponseMaker {
 	{
 		# check that we have everything need to proceed including required params and auth creds. If all 
 		# successful then the response is a user object
-		if( isApiResponse($response = App::make('UserResponder')->verify()) )
-		{
+		if( isApiResponse($response = App::make('UserResponder')->verify()) ) {
 			return $response;
 		}
 
