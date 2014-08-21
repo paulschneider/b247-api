@@ -12,7 +12,7 @@ Class CategoryArticleResponder {
 		$metaData = $pagination->meta;
 		$articles = $pagination->items;
 
-		$response = App::make('PatternMaker')->setPattern(1)->limit($pagination->meta->perPage)->make( [ 'articles' => $articles, 'sponsors' => $sponsorResponder->getCategorySponsors(30) ] );
+		$response = App::make('PatternMaker')->setPattern(1)->limit($pagination->meta->perPage)->make( [ 'articles' => $articles, 'sponsors' => $sponsorResponder->getCategorySponsors(30)->sponsors ] );
 
 		return [
 			'articles' => $response->articles,

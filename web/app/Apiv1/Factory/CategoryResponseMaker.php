@@ -126,7 +126,7 @@ Class CategoryResponseMaker {
         $this->sponsorResponder->channel = $this->channel;
         $this->sponsorResponder->category = $this->category;
 
-		$adverts = $this->sponsorResponder->getCategorySponsors(3); 
+		$adverts = $this->sponsorResponder->getCategorySponsors(3)->sponsors; 
 		$this->sponsorResponder->setAllocatedSponsors($adverts);
 
 		$response = [

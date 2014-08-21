@@ -7,7 +7,7 @@
 #
 # Host: 127.0.01 (MySQL 5.6.17)
 # Database: b247-com
-# Generation Time: 2014-08-21 06:51:11 +0000
+# Generation Time: 2014-08-21 18:20:56 +0000
 # ************************************************************
 
 
@@ -2278,7 +2278,7 @@ VALUES
 	(9,'74B01323819DFDF','Pablo','Carrillo','pablo+1@gmail.com','$2y$10$oCv1B7ISBIIf.s2zPXo0.u3m7Hs2CGudmRYjdq7uv1tXaY41QCBJK',NULL,NULL,NULL,NULL,NULL,'2014-08-13 10:42:21','2014-08-13 10:42:21'),
 	(10,'386AC28784616EE','Pablo','Carrillo','pablo+2@calvium.com','$2y$10$MSKLjk3nB4dxg472UgD7R.RgkJF.FlPJpVrPvT5jgQWBYGsyi1uTi',NULL,NULL,NULL,NULL,NULL,'2014-08-13 11:19:25','2014-08-13 11:19:25'),
 	(11,'1F48422C5DEB48C','Pablo','Carrillo','pablo+3@calvium.com','$2y$10$8FIyYI6W6Hrhl87W2R.l.ukjivSlHDaHeyTVwYZ4jwmqrv2M0CVTm',NULL,NULL,NULL,NULL,NULL,'2014-08-13 11:22:04','2014-08-13 11:22:04'),
-	(12,'5BD50E82A1D2E56','Jimmy ','Smits','pauljohn.schneider+1@gmail.com','$2y$10$xAlpFb1gf/6BYprNMD/EL.YaZKrvrTsMIXxSIwc3ikpL0bv5Z6prm',NULL,NULL,NULL,NULL,NULL,'2014-08-20 15:47:00','2014-08-20 15:47:00');
+	(13,'656B4D33969DC5F','Paul','Schneider','pauljohn.schneider+1@gmail.com','$2y$10$YICkeoyinE0SBYlk0km7u.SHEWDy3LLfoaJysVlfjBhRPkzuBMluy',NULL,NULL,NULL,NULL,NULL,'2014-08-21 09:53:13','2014-08-21 09:53:13');
 
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -2415,7 +2415,6 @@ CREATE TABLE `user_profile` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `age_group_id` int(11) DEFAULT NULL,
-  `nickname` varchar(45) DEFAULT NULL,
   `facebook` varchar(75) DEFAULT NULL,
   `twitter` varchar(75) DEFAULT NULL,
   `postcode` varchar(15) DEFAULT NULL,
@@ -2433,9 +2432,10 @@ CREATE TABLE `user_profile` (
 LOCK TABLES `user_profile` WRITE;
 /*!40000 ALTER TABLE `user_profile` DISABLE KEYS */;
 
-INSERT INTO `user_profile` (`id`, `user_id`, `age_group_id`, `nickname`, `facebook`, `twitter`, `postcode`, `lat`, `lon`, `area`, `updated_at`)
+INSERT INTO `user_profile` (`id`, `user_id`, `age_group_id`, `facebook`, `twitter`, `postcode`, `lat`, `lon`, `area`, `updated_at`)
 VALUES
-	(1,7,3,'Schneidey','paul.schneider','pjschneidey','bs1 5tx','51.4516198','-2.598213',NULL,'2014-08-20 15:28:48');
+	(1,7,3,'paul.schneider','pjschneidey','bs1 5tx','51.4516198','-2.598213',NULL,'2014-08-20 15:28:48'),
+	(2,13,4,NULL,NULL,'CF61 2UA','51.4145885','-3.4869362',NULL,'2014-08-21 15:14:33');
 
 /*!40000 ALTER TABLE `user_profile` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -2466,8 +2466,7 @@ VALUES
 	(2,8,1,'2014-08-19 11:12:43'),
 	(3,8,1,'2014-08-19 11:13:26'),
 	(4,8,1,'2014-08-19 12:53:00'),
-	(5,8,1,'2014-08-19 12:56:30'),
-	(6,12,1,'2014-08-20 16:27:54');
+	(5,8,1,'2014-08-19 12:56:30');
 
 /*!40000 ALTER TABLE `user_redeemed_promotion` ENABLE KEYS */;
 UNLOCK TABLES;
