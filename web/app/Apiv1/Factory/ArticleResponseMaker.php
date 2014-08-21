@@ -45,9 +45,12 @@ Class ArticleResponseMaker {
 			return $result;
 		}
 
+		$ads = $this->getAdverts();
+
 		$response = [
 			'channel' => $this->channel,
-			'adverts' => $this->getAdverts(),
+			'adverts' => $ads->sponsors,
+			'fullPage' => $ads->fullPage,
 			'article' => $this->articleTemplateTransformer->transform( $this->article->toArray() ),
 			'related' => $this->getRelatedArticles($this->article),
 			'navigation' => $this->nextPreviousArticles(),

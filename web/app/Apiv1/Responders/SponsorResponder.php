@@ -2,6 +2,7 @@
 
 use App;
 use Config;
+use stdClass;
 
 Class SponsorResponder {
 
@@ -36,6 +37,7 @@ Class SponsorResponder {
 	public function getCategorySponsors($limit)
 	{
 		$sponsorRepository = App::make('SponsorRepository');
+		$sponsorTransformer = App::make('SponsorTransformer');
 
 		# grab the subChannelId from this channel (helper function)
 		$subChannelId = getSubChannelId($this->channel);
@@ -51,16 +53,20 @@ Class SponsorResponder {
 		# we also now want to retrieve a random full page article which will be displayed periodically within the app
 		$fullPageAd = $sponsorRepository->getCategorySponsors(1, $subChannelId, $this->category['id'], $this->getAllocatedSponsors(), Config::get('global.sponsorFULLPAGE'));
 
+		$response = new stdClass();
+		$response->sponsors = null;
+		$response->fullPage = null;
+
 		# if we managed to find a fullpage advert then push it into the sponsors array
 		if(isset($fullPageAd[0])) {
-			$sponsors[] = $fullPageAd[0];
+			$response->fullPage = $sponsorTransformer->transform($fullPageAd[0]);
 		}
 
 		# transform them in to the API format 
-		$transformedSponsors = App::make('SponsorTransformer')->transformCollection($sponsors);
+		$response->sponsors = $sponsorTransformer->transformCollection($sponsors);
 
-		# send them back
-		return $transformedSponsors;
+		# send the response back
+		return $response;
 	}
 
 	/**
