@@ -162,8 +162,10 @@ Class ArticleRepository extends BaseModel {
                 # grab a list of row ids from article_location which include both a category_id and a sub_channel_id that have been disabled by the user
                 $excludeIds = DB::table('article_location')->select('id')->whereIn('category_id', $cats)->whereIn('sub_channel_id', $chans)->lists('id');
 
-                # now grab everything else not in the $excludedIds list. This is the content th user wants to see.
-                $query->whereNotIn('article_location.id', $excludeIds);
+                # now grab everything else not in the $excludedIds list. This is the content the user wants to see.
+                if(is_array($excludeIds) && count($excludeIds) > 0) {
+                    $query->whereNotIn('article_location.id', $excludeIds);    
+                }           
             }    
         }
            
