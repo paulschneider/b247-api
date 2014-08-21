@@ -26,18 +26,6 @@ Class UserRepository
         return Hash::make($password);
     }
 
-    public function getUserChannels($accessKey)
-    {
-        try
-        {
-            return static::with('profile', 'channels.subChannel.category')->whereAccessKey($accessKey)->firstOrFail()->toArray();
-        }
-        catch(ModelNotFoundException $e)
-        {
-            return false;
-        }
-    }
-
     public function create(array $input)
     {
         $input['access_key'] = self::generateAccessKey();
@@ -223,17 +211,13 @@ Class UserRepository
      */
     public function setContentPreferences($user, $data)
     {
-        # if there are channels prefs then insert them
-        if( count($data->channels) > 0 )
-        {            
-            foreach( $data->channels AS $channel ) 
-            {
-                # remove all previous user prefs for the channel being affected
-                DB::table('user_inactive_channel')->where('user_id', $user->id)->where('channel_id', $channel['channel_id'])->delete();
-            }
+        # remove all previous user prefs for this user
+        DB::table('user_inactive_channel')->where('user_id', $user->id)->delete();
 
+        # insert the new prefs, if there are any
+        if(!empty($data->channels)) {
             DB::table('user_inactive_channel')->insert($data->channels);
-        }
+        }           
         
         # if there are category prefs then insert them too
         if( count($data->categories) > 0 )

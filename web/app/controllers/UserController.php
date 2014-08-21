@@ -7,9 +7,9 @@ Class UserController extends BaseController {
 		return App::make('Apiv1\Factory\UserPreferenceResponseMaker')->get();
 	}
 
-	public function setPreferences($data)
+	public function setPreferences()
 	{
-		return App::make('Apiv1\Factory\UserPreferenceResponseMaker')->set($data);
+		return App::make('Apiv1\Factory\UserPreferenceResponseMaker')->set();
 	}
 
 	/**

@@ -45,7 +45,7 @@ Class UserPreferenceResponseMaker {
 			"channels" => $this->getChannels(),
 			"districts" => $this->getDistricts()
 		];
-		return $response;
+
 		return apiSuccessResponse( 'ok', $response );
 	}
 
@@ -58,7 +58,7 @@ Class UserPreferenceResponseMaker {
 	{
 		$channels = App::make('ChannelRepository')->getChannels();
 		
-		return App::make('Apiv1\Transformers\ChannelPreferencesTransformer')->transformCollection($channels, $this->user);
+		return App::make('Apiv1\Transformers\ChannelTransformer')->transformCollection($channels, $this->user);
 	}
 
 	/**

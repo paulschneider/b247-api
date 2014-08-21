@@ -14,9 +14,9 @@ Class ChannelArticleResponder {
 		$response = App::make('PatternMaker')->setPattern(1)->limit($pagination->meta->perPage)->make( [ 'articles'=> $articles, 'sponsors' => $sponsorResponder->getUnassignedSponsors() ] );
 
 		return [
-			'articles' => $response->articles,
+			'articles' => $response->articles,			
+			'sponsors' => $response->sponsors,
 			'pagination' => $metaData,
-			'sponsors' => $response->sponsors
 		];
 	}
 
