@@ -12,7 +12,7 @@ class HomePickedResponder {
      * @param  Apiv1\Repositories\Users\User $user
      * @return mixed
      */
-	public function get( SponsorResponder $sponsorResponder, $user )
+	public function get( SponsorResponder $sponsorResponder )
 	{
         # get is_picked = true articles from any channel or sub-channel
         $picks = App::make('ArticleRepository')->getArticles( 
@@ -20,8 +20,7 @@ class HomePickedResponder {
             Config::get('constants.channelFeed_limit'), 
             null, // channel
             false, //isASubChannel
-            true, // ignoreChannel
-            $user // a user object
+            true // ignoreChannel
         );
 
         # grab some sponsors that have yet to be assigned anywhere on the current page

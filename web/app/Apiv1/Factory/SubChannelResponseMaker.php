@@ -40,7 +40,7 @@ Class SubChannelResponseMaker {
 			return apiErrorResponse('notFound');
 		}
 		elseif( ! aSubChannel($channel)) {
-			return apiErrorResponse('expectationFailed');
+			return apiErrorResponse('expectationFailed', ['errorReason' => 'Supplied channel is not a sub-channel.']);
 		}
 
 		$parentChannel = $channelRepository->getChannelBySubChannel( $channel );		
@@ -53,19 +53,19 @@ Class SubChannelResponseMaker {
 	{
 		# if its a channel of type - article
 		if( isArticleType( $this->channel ) ) {		
-			$articles = App::make( 'ChannelResponder' )->getArticles( $this->channel, $this->user );
+			$articles = App::make( 'ChannelResponder' )->getArticles( $this->channel, null );
 			$response = App::make('ChannelArticleResponder')->make( $articles, $this->sponsorResponder );
 		}
 		
 		# if its a channel of type - directory
 		else if( isDirectoryType( $this->channel ) ) {
-			$articles = App::make( 'ChannelResponder' )->getArticles( $this->channel, $this->user );
+			$articles = App::make( 'ChannelResponder' )->getArticles( $this->channel, null );
 			$response = App::make('ChannelDirectoryResponder')->make( $this->channel, $articles, $this->sponsorResponder );
 		}
 
 		# if its a channel of type - listing
 		else if( isListingType( $this->channel ) ) {		
-			$response = App::make('ChannelListingResponder')->make( $this->channel, $this->user );
+			$response = App::make('ChannelListingResponder')->make( $this->channel, null );
 		}
 
 		# if there were sponsors in the response we need to do something with them or they'll be returned by the API

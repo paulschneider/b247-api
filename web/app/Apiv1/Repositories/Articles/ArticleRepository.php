@@ -142,7 +142,8 @@ Class ArticleRepository extends BaseModel {
         {
             # don't get any articles from channels they have disabled
             if( count($user->inactive_channels) > 0 ) {
-                $query->whereNotIn('channel_id', $user->inactive_channels);    
+                $query->whereNotIn('channel_id', $user->inactive_channels, 'or');    
+                $query->whereNotIn('sub_channel_id', $user->inactive_channels);    
             }
 
             # don't get any articles from categories they have disabled. Note that categories can be used in multiple
@@ -168,7 +169,7 @@ Class ArticleRepository extends BaseModel {
                 }           
             }    
         }
-           
+       
         switch($type)
         {
             # if we only want picked articles
@@ -206,7 +207,7 @@ Class ArticleRepository extends BaseModel {
         # ... finally, we want to apply a filter to promote some of these articles based on the user' district
         # preferences. 
         $articles = App::make('Apiv1\Tools\UserDistrictOrganiser')->promoteDistricts($user, $articles);
-
+  
         return $articles;
     }
 
@@ -256,7 +257,8 @@ Class ArticleRepository extends BaseModel {
         {
             # don't get any articles from channels they have disabled
             if( count($user->inactive_channels) > 0 ) {
-                $query->whereNotIn('channel_id', $user->inactive_channels);    
+                $query->whereNotIn('channel_id', $user->inactive_channels, 'or'); 
+                $query->whereNotIn('sub_channel_id', $user->inactive_channels);    
             }
 
             # don't get any articles from categories they have disabled. Note that categories can be used in multiple

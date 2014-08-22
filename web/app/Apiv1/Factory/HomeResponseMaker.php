@@ -48,7 +48,7 @@ Class HomeResponseMaker {
 	 */
 	public function getFeatured()
 	{
-		return App::make('HomeFeaturedResponder')->get($this->user);
+		return App::make('HomeFeaturedResponder')->get();
 	}
 
 	/**
@@ -57,7 +57,7 @@ Class HomeResponseMaker {
 	 */
 	public function getPicked()
 	{
-		$response = App::make('HomePickedResponder')->get($this->sponsorResponder, $this->user);
+		$response = App::make('HomePickedResponder')->get($this->sponsorResponder);
 		$this->sponsorResponder->setAllocatedSponsors($response['sponsors']);
 
 		return $response['articles'];
