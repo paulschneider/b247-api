@@ -15,11 +15,45 @@ Class CategoryListingResponder {
 		# but that day can be varied
 		$time = Input::get('time') ? Input::get('time') : time();
 
-		$articles = App::make('CategoryResponder')->getArticlesInRange( $subChannelId, $category, $range, $time, $user );
+		$articles = $this->getArticlesInRange( $subChannelId, $category, $range, $time, $user );
 
 		return [
 			'days' => $articles,
 			'totalArticles' => count($articles)
 		];
+	}
+
+	/**
+	 * Listings are split up into ranges by day or by week. This prepares the ListingTransformer in that way
+	 * 
+	 * @param  int $subChannelId [identifier for the channel]
+	 * @param  int $category     [identifier for the category]
+	 * @param  string $range     [day || week]
+	 * @param  int $time         [epoch representing the required point in time]
+	 * @param  User $user        [an authenticated user so we can filter the content]
+	 * @return array             [articles]
+	 */
+	public function getArticlesInRange($subChannelId, $category, $range, $time, $user)
+	{
+		$channelArticles = App::make('ArticleRepository')->getChannelListing( $subChannelId, 20, $range, $time, $user );
+
+		$articles = [];
+
+		// see if the any of the articles returned by the call are in the provided range
+		foreach( $channelArticles AS $article )
+		{
+			if( $article['location'][0]['categoryId'] == $category ) {
+				$articles[] = $article;
+			}
+		}
+
+		# if its a week we need to transform a whole list of articles 
+		if( $range == "week" ) {
+			return App::make('ListingTransformer')->transformCollection($articles);
+		}
+		# otherwise its just one article
+		else {
+			return App::make('ListingTransformer')->transform($articles, ['day' => date('Y-m-d', $time)]);
+		}
 	}
 }

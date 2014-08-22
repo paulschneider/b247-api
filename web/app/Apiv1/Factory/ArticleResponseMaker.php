@@ -2,6 +2,7 @@
 
 use App;
 use Lang;
+use Config;
 
 Class ArticleResponseMaker {
 
@@ -45,9 +46,12 @@ Class ArticleResponseMaker {
 			return $result;
 		}
 
+		$ads = $this->getAdverts();
+
 		$response = [
 			'channel' => $this->channel,
-			'adverts' => $this->getAdverts(),
+			'adverts' => $ads->sponsors,
+			'fullPage' => $ads->fullPage,
 			'article' => $this->articleTemplateTransformer->transform( $this->article->toArray() ),
 			'related' => $this->getRelatedArticles($this->article),
 			'navigation' => $this->nextPreviousArticles(),
@@ -92,10 +96,15 @@ Class ArticleResponseMaker {
 		return $this->channel;
 	}
 
+	/**
+	 * Retrieve the details of an article. All articles go through here when down to this level of the hierarchy
+	 * 
+	 * @return Apiv1\Repositories\Articles\Article
+	 */
 	public function getArticle()
 	{		
-		if( ! $this->article = App::make('Apiv1\Responders\ArticleResponder')->getArticle($this->channel, $this->category, $this->article))
-		{
+		# grab the article from the ArticleResponder
+		if( ! $this->article = App::make('Apiv1\Responders\ArticleResponder')->getArticle($this->channel, $this->category, $this->article)) {
 			return apiErrorResponse('notFound', [ 'errorReason' => Lang::get('api.articleCouldNotBeLocated') ]);
 		}
 
@@ -104,16 +113,21 @@ Class ArticleResponseMaker {
 
 	public function getRelatedArticles($article)
 	{
-		return $this->articleTransformer->transformCollection($this->articleRepository->getRelatedArticles($article), ['ignorePlatform' => true]);
+		return $this->articleTransformer->transformCollection($this->articleRepository->getRelatedArticles($article, $this->user), ['ignorePlatform' => true]);
 	}
 
+	/**
+	 * get some adverts to display on the article page
+	 * 
+	 * @return stdClass [sponsors && fullPage]
+	 */
 	public function getAdverts()
 	{
 		$sponsorResponder = App::make('SponsorResponder');
 		$sponsorResponder->channel = $this->channel;
 		$sponsorResponder->category = $this->category;
 
-		return $sponsorResponder->getCategorySponsors(3);
+		return $sponsorResponder->setSponsorType(Config::get('global.sponsorMPU'))->getCategorySponsors(3);
 	}
 
 	public function nextPreviousArticles()

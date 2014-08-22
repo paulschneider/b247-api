@@ -124,7 +124,7 @@ Class ChannelResponseMaker {
 		}
 
 		# get 3 related adverts and set them as allocated
-		$adverts = $this->sponsorResponder->getChannelSponsors(3, [$this->channel['id']]); 
+		$adverts = $this->sponsorResponder->setSponsorType()->getChannelSponsors(3, [$this->channel['id']]); 
 		$this->sponsorResponder->setAllocatedSponsors($adverts);
 
 		$response = [

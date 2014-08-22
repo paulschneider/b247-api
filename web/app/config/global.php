@@ -5,6 +5,7 @@ return [
 	'homeChannels' => [1,3], // which channel id's to show on the homepage
 	'sponsorMPU' => 2, 
 	'sponsorLETTERBOX' => 1,
+	'sponsorFULLPAGE' => 3, 
 	'whatsOnChannelId' => 2,
 	'mailChimpNewsLetterTag' => 'daily-digest'
 ];

@@ -59,19 +59,11 @@ Class UserResponder {
 
 	public function getUserProfile($accessKey)
 	{
-		if( ! $user = App::make( 'UserRepository' )->getProfile($accessKey) )
-		{
+		if( ! $user = App::make( 'UserRepository' )->getProfile($accessKey) ) {
 			return apiErrorResponse(  'notFound', [ 'errorReason' => Lang::get('api.noAccountWithThatAccessKey'), 'accessKey' => $accessKey ] ); 	
 		}
-		
-		return $user;
-	}
 
-	public function setUserContentPreferences(User $user, stdClass $data)
-	{
-		App::make( 'UserRepository' )->setContentPreferences($user, $data);
-		
-		return true;
+		return $user;
 	}
 
 	/**

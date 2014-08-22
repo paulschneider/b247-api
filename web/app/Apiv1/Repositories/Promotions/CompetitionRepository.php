@@ -20,14 +20,20 @@ Class CompetitionRepository extends BaseModel {
 	/**
 	 * Check to see if a specified user has already answered a question in a competition
 	 * 
-	 * @param  Apiv1\Repositories\Competitions\Competition $competition
 	 * @param  Apiv1\Repositories\Users\User $user
+	 * @param  Apiv1\Repositories\Competitions\Competition $competition
 	 * @return mixed
 	 * 
 	 */
-	public function checkEntrant($competition, $user)
+	public function checkEntrant($user, $competition)
 	{
-		return DB::table('user_competition_answer')->where('competition_id', $competition->id)->where('user_id', $user->id)->get();
+		$result = UserCompetitionAnswer::where('competition_id', $competition->id)->where('user_id', $user->id)->get();
+
+		if($result->isEmpty()) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**

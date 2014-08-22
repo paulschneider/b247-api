@@ -2,6 +2,16 @@
 
 Class UserController extends BaseController {	
 
+	public function getPreferences()
+	{
+		return App::make('Apiv1\Factory\UserPreferenceResponseMaker')->get();
+	}
+
+	public function setPreferences()
+	{
+		return App::make('Apiv1\Factory\UserPreferenceResponseMaker')->set(Input::all());
+	}
+
 	/**
 	 * get a user and their profile
 	 * 
@@ -67,5 +77,16 @@ Class UserController extends BaseController {
     public function enterCompetition()
     {
         return App::make('Apiv1\Factory\CompetitionUserEntryResponseMaker')->enterUser(Input::all());
+    }
+
+    /**
+     * process and store a list of user district preferences. These are geographical areas the user has promoted
+     * and which affect the order of article content as produced by the API
+     * 
+     * @return API response [the result of the process]
+     */
+    public function districtPreferences()
+    {
+    	return App::make('Apiv1\Factory\UserDistrictPreferenceResponseMaker')->updateUserDistricts(Input::all());
     }
 }

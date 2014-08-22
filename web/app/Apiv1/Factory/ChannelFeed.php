@@ -58,7 +58,7 @@ Class ChannelFeed {
                 $articles = $this->articleTransformer->transformCollection($articles);
 
                 # grab some sponsors we haven't yet used
-                $sponsors = $sponsorResponder->getUnassignedSponsors( [$channel], $this->isASubChannel );
+                $sponsors = $sponsorResponder->setSponsorType(Config::get('global.sponsorMPU'))->getUnassignedSponsors( [$channel], $this->isASubChannel );
 
                 # create the pattern to repeat for this channel
                 $response = $this->patternMaker->setPattern(2)->make( [ 'articles' => $articles, 'sponsors' => $sponsors ], "home" );

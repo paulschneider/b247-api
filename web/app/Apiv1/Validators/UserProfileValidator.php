@@ -7,7 +7,6 @@ Class UserProfileValidator extends ApiValidator {
 	public $rules = [
 		'firstName' => 'required|max:75',
 		'lastName' => 'required|max:75',
-		'nickName' => 'required|max:45',
 		'postCode' => 'required|max:15|Postcode',
 		'ageGroup' => 'required|integer',
 		'facebook' => 'max:75',

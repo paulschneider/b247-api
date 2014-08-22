@@ -42,27 +42,32 @@ class ArticlePromotionRedemptionResponseMaker {
 	 * Validate, process and record the redemption of a voucher code
 	 * 
 	 * @param  array $form [input fields posted to the endpoint]
-	 * @return array       [the resulting response from this process]
+	 * @return array [the resulting response from this process]
 	 * 
 	 */
 	public function redeem($form)
 	{
 		# check that we have everything need to proceed including required params and auth creds. If all 
 		# successful then the response is a user object
-		if( isApiResponse($response = App::make('UserResponder')->verify($this->requiredFields, $form)) )
-		{
+		if( isApiResponse($response = App::make('UserResponder')->verify($this->requiredFields, $form)) ) {
 			return $response;
 		}
 
 		# we get the user back if everything went okay
 		$user = $response;
 
-		if( isApiResponse( $result = self::isValidPromotion($form['code']) ) )
-		{
+		# check to see if the supplied promotional code is valid
+		if( isApiResponse( $result = self::isValidPromotion($form['code']) ) ) {
 			return $result;
 		}
 
 		$promotion = $result;
+
+		# finally, ensure that this user has not redeemed the voucher previously. We prevent multiple
+        # usage because some of the codes might have limits on the number of times they can be used
+		if( $this->repo->isUserRedeemed($user, $promotion) ) {
+			return apiErrorResponse( 'tooManyRequests', ['furtherInfo' => Lang::get('api.promotionalCodeAlreadyRedeemed')] );
+		}
 
 		# send out the promotional code to the user
 		$this->email->notify( ['user' => $user, 'promotion' => $promotion] );
@@ -85,8 +90,7 @@ class ArticlePromotionRedemptionResponseMaker {
 		$promotion = $this->repo->get($code);
 
 		# no promotion was found with the supplied code
-		if($promotion->isEmpty())
-		{
+		if($promotion->isEmpty()) {
 			return apiErrorResponse(  'notFound', ['errorReason' => Lang::get('api.promotionNotFound')] );
 		}
 
@@ -95,8 +99,7 @@ class ArticlePromotionRedemptionResponseMaker {
 
 		# check to see if its currently active. We do this here rather than the DB so we can report back to the caller
 		# also check to see if the usage cap has been reached.
-		if(! $promotion->is_active || $promotion->usage->count() == $promotion->upper_limit)
-		{
+		if(! $promotion->is_active || $promotion->usage->count() == $promotion->upper_limit) {
 			return apiErrorResponse(  'locked', ['errorReason' => Lang::get('api.promotionIsInactive')] );
 		}
 
@@ -107,11 +110,10 @@ class ArticlePromotionRedemptionResponseMaker {
 		$today = time();
 
 		# make sure the promotion has started but not ended
-		if($validFrom > $today || $validTo < $today)
-        {
+		if($validFrom > $today || $validTo < $today) {
             return apiErrorResponse( 'forbidden', ['errorReason' => Lang::get('api.promotionOutOfRange')] );
-        }
-		
+        }    
+        
 		# send it back
         return $promotion;
 	}

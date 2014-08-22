@@ -35,7 +35,7 @@ class WhatsOnResponder {
 		$transformedArticles = App::make('ArticleTransformer')->transformCollection($articles);
 
 		// get some adds from the sponsorResponder object
-		$ads = $sponsorResponder->getUnassignedSponsors();
+		$ads = $sponsorResponder->setSponsorType(Config::get('global.sponsorMPU'))->getUnassignedSponsors();
 
 		// use the patternMaker to create a pattern
         $response = App::make('PatternMaker')->setPattern(2)->make( [ 'articles' => $transformedArticles, 'sponsors' => $ads ] );

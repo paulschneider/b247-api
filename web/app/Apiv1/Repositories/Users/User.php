@@ -40,6 +40,7 @@ class User extends BaseModel implements UserInterface, RemindableInterface {
 		, 'last_name'
 		, 'email'
 		, 'password'
+		, 'districts'
 
 	];
 
@@ -61,6 +62,11 @@ class User extends BaseModel implements UserInterface, RemindableInterface {
 	public function inactiveCategories()
 	{
 		return $this->hasMany('Apiv1\Repositories\Users\InactiveCategory', 'user_id');
+	}
+
+	public function districts()
+	{
+		return $this->hasMany('Apiv1\Repositories\Users\UserDistrict', 'user_id');
 	}
 
 	/**

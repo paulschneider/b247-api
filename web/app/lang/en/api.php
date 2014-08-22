@@ -14,9 +14,11 @@ return [
 	"promotionIsInactive" => "This promotion is not currently available for use.",
 	"promotionOutOfRange" => "This promotion has either expired is not yet available.",
 	"promotionalCodeSuccessfullyRedeemed" => "The promotional code was successfully sent.",
+	"promotionalCodeAlreadyRedeemed" => "User has already redeemed this promotional code.",
 	"competitionNotFound" => "A competition with the supplied identifier could not be located.",
 	"competitionIsInactive" => "This competition is not currently available for use.",
 	"competitionOutOfRange" => "This competition has either expired is not yet available.",
 	"competitionAlreadyEntered" => "User has already entered this competition. Nothing to do.",
 	"userSuccessfullyEnterIntoCompetition" => "The user was successfully entered into the competition",
+	"invalidDistrictPreferenceRequest" => "There was a problem with the request. Please refer to the documentation for this endpoint."
 ];
