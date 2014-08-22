@@ -120,6 +120,16 @@ Class PatternMaker
              {
                 $thisArticle = $articles[$index];
 
+                # theres a possibility we've run out of adverts to include but the pattern is asking 
+                # for one. turn this request into the article equivalent 
+                if($thisPattern == "singleAd") {
+                    $thisPattern = 1;
+                } 
+                # the same goes for double ads
+                if($thisPattern == "doubleAd") {
+                    $thisPattern = 2;
+                }  
+
                 $thisArticle['displayStyle'] = $thisPattern;
 
                 $sorted[] = $thisArticle;

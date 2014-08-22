@@ -20,7 +20,7 @@ Class UserPreferenceOrganiser {
 			foreach($preferences['channels'] AS $channel)
 			{
 				// the top level preferences are the channels
-				if( ! $channel['isEnabled'] )
+				if(isset($channel['isEnabled']) and ! $channel['isEnabled'] )
 				{
 					$channels[] = [
 						'user_id' => $user->id,
@@ -33,7 +33,7 @@ Class UserPreferenceOrganiser {
 				{
 					foreach( $channel['subChannels'] AS $subChannel )
 					{
-						if( ! $subChannel['isEnabled'] )
+						if(isset($subChannel['isEnabled']) and ! $subChannel['isEnabled'] )
 						{
 							$channels[] = [
 								'user_id' => $user->id,
@@ -46,7 +46,7 @@ Class UserPreferenceOrganiser {
 						{
 							foreach( $subChannel['categories'] AS $category )
 							{
-								if( ! $category['isEnabled'] )
+								if(isset($category['isEnabled']) and ! $category['isEnabled'] )
 								{
 									$categories[] = [
 										'user_id' => $user->id,
