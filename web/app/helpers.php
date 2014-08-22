@@ -1,5 +1,18 @@
 <?php
 
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+
+function clog($data)
+{
+    $logFile = 'console.log';
+
+    $view_log = new Logger('View Logs');
+    $view_log->pushHandler(new StreamHandler(storage_path().'/logs/'.$logFile, Logger::INFO));
+
+    $view_log->addInfo($data);  
+}
+
 function anExternalUrl($string)
 {
     $protocols = [ 'http://', 'https://' ];

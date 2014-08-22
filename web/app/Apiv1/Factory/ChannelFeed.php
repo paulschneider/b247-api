@@ -54,6 +54,9 @@ Class ChannelFeed {
                 # get the articles for this channel
                 $articles = $this->articleRepository->getArticles( null, Config::get('constants.channelFeed_limit'), $channel, $this->isASubChannel );
 
+                # if we have a user we need to filter all articles and remove any they have opted out of
+                $articles = App::make('Apiv1\Tools\ContentFilter')->setUser($this->user)->filterArticlesByUserCategory($articles);
+
                 # transform the articles and the sponsors into the API format 
                 $articles = $this->articleTransformer->transformCollection($articles);
 
