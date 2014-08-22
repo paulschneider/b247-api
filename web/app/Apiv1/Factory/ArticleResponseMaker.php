@@ -2,6 +2,7 @@
 
 use App;
 use Lang;
+use Config;
 
 Class ArticleResponseMaker {
 
@@ -115,13 +116,18 @@ Class ArticleResponseMaker {
 		return $this->articleTransformer->transformCollection($this->articleRepository->getRelatedArticles($article, $this->user), ['ignorePlatform' => true]);
 	}
 
+	/**
+	 * get some adverts to display on the article page
+	 * 
+	 * @return stdClass [sponsors && fullPage]
+	 */
 	public function getAdverts()
 	{
 		$sponsorResponder = App::make('SponsorResponder');
 		$sponsorResponder->channel = $this->channel;
 		$sponsorResponder->category = $this->category;
 
-		return $sponsorResponder->getCategorySponsors(3);
+		return $sponsorResponder->setSponsorType(Config::get('global.sponsorMPU'))->getCategorySponsors(3);
 	}
 
 	public function nextPreviousArticles()

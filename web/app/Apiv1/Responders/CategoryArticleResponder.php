@@ -1,7 +1,7 @@
 <?php namespace Apiv1\Responders;
 
 use App;
-use Api\Factory\ApiResponseMaker;
+use Config;
 
 Class CategoryArticleResponder {
 
@@ -12,7 +12,7 @@ Class CategoryArticleResponder {
 		$metaData = $pagination->meta;
 		$articles = $pagination->items;
 
-		$response = App::make('PatternMaker')->setPattern(1)->limit($pagination->meta->perPage)->make( [ 'articles' => $articles, 'sponsors' => $sponsorResponder->getCategorySponsors(30)->sponsors ] );
+		$response = App::make('PatternMaker')->setPattern(1)->limit($pagination->meta->perPage)->make( [ 'articles' => $articles, 'sponsors' => $sponsorResponder->setSponsorType(Config::get('global.sponsorMPU'))->getCategorySponsors(30)->sponsors ] );
 
 		return [
 			'articles' => $response->articles,

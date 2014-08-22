@@ -34,40 +34,21 @@ Class CategoryResponder {
 		return $map;
 	}
 
+	/**
+	 * get all of the article in a particular category
+	 * 
+	 * @param  int $categoryId [identifier for the category]
+	 * @param  int $channelId  [identifier for the channel]
+	 * @return array           [articles]
+	 */
 	public function getCategoryArticles($categoryId, $channelId)
 	{
 		$articles = App::make('ArticleRepository')->getArticlesByCategory( $categoryId, $channelId );
 
-		if( count($articles) > 0 )
-		{
+		if( count($articles) > 0 ) {
 			$articles = App::make('ArticleTransformer')->transformCollection( $articles );
 		}
 
 		return $articles;
-	}
-
-	public function getArticlesInRange($subChannelId, $category, $range, $time, $user)
-	{
-		$channelArticles = App::make('ArticleRepository')->getChannelListing( $subChannelId, 20, $range, $time, $user );
-
-		$articles = [];
-
-		// see if the any of the articles returned by the call are in the provided range
-		foreach( $channelArticles AS $article )
-		{
-			if( $article['location'][0]['categoryId'] == $category )
-			{
-				$articles[] = $article;
-			}
-		}
-
-		if( $range == "week" )
-		{
-			return App::make('ListingTransformer')->transformCollection($articles);
-		}
-		else
-		{
-			return App::make('ListingTransformer')->transform($articles, ['day' => date('Y-m-d', $time)]);
-		}
 	}
 }

@@ -7,6 +7,13 @@ use stdClass;
 Class SponsorResponder {
 
 	/**
+	 * the type of sponsor
+	 * 
+	 * @var int
+	 */
+	public $sponsorType;
+
+	/**
 	 * A list of allocated sponsors
 	 * @var array
 	 */
@@ -21,7 +28,7 @@ Class SponsorResponder {
 	 */
 	public function getChannelSponsors($limit, $channelList, $subChannel = false)
 	{
-		$sponsors = App::make('SponsorRepository')->getChannelSponsors($limit, $channelList, $subChannel, [], Config::get('global.sponsorLETTERBOX'));
+		$sponsors = App::make('SponsorRepository')->getChannelSponsors($limit, $channelList, $subChannel, [], $this->sponsorType);
 
 		// transform them in to the API format 
 		$transformedSponsors = App::make('SponsorTransformer')->transformCollection($sponsors);
@@ -47,8 +54,8 @@ Class SponsorResponder {
 		# $subChannelId = which sub-channel do we want to get the ads for
 		# $this->category['id'] = which category of this sub-channel do we want to get ads for
 		# $this->getAllocatedSponsors() = provide an array of sponsors already used on the page. Helps to provide unique sponsors as we wont get these ones back
-		# Config::get('global.sponsorLETTERBOX') = which type of sponsor do we want to get back, in this case page wide letterbox ads
-		$sponsors = $sponsorRepository->getCategorySponsors($limit, $subChannelId, $this->category['id'], $this->getAllocatedSponsors(), Config::get('global.sponsorLETTERBOX'));
+		# $this->sponsorType = which type of sponsor do we want to get back
+		$sponsors = $sponsorRepository->getCategorySponsors($limit, $subChannelId, $this->category['id'], $this->getAllocatedSponsors(), $this->sponsorType);
 
 		# we also now want to retrieve a random full page article which will be displayed periodically within the app
 		$fullPageAd = $sponsorRepository->getCategorySponsors(1, $subChannelId, $this->category['id'], $this->getAllocatedSponsors(), Config::get('global.sponsorFULLPAGE'));
@@ -101,5 +108,22 @@ Class SponsorResponder {
 			$subChannel, // is it a subChannel
 			$this->getAllocatedSponsors()
 		);
+	}
+
+	/**
+	 * set the type of sponsor we want to retrieve, such as letterbox or MPU
+	 * 
+	 * @param int $type [numerical identifier for the type of sponsor (advert) we want to retrieve]
+	 */
+	public function setSponsorType($type = null)
+	{
+		if( ! is_null($type)) {
+			$this->sponsorType = $type;
+		}
+		else {
+			$this->sponsorType = Config::get('global.sponsorLETTERBOX');
+		}
+
+		return $this;
 	}
 }

@@ -29,6 +29,11 @@ Class HomeResponseMaker {
         }        
 	}
 
+	/**
+	 * get the full channel / sub-channel / category structure
+	 * 
+	 * @return array [channel structure]
+	 */
 	public function getChannels()
 	{
 		$this->channels = $this->channelRepository->getChannels();
@@ -36,6 +41,11 @@ Class HomeResponseMaker {
 		return App::make( 'ChannelTransformer' )->transformCollection($this->channels, $this->user);
 	}
 
+	/**
+	 * get featured items for the homepage
+	 * 
+	 * @return array [featured articles]
+	 */
 	public function getFeatured()
 	{
 		return App::make('HomeFeaturedResponder')->get($this->user);
@@ -82,6 +92,11 @@ Class HomeResponseMaker {
 		return $response['channelFeed'];
 	}
 
+	/**
+	 * get the What's On section of the homepage
+	 * 
+	 * @return array [the whats on channel feed item]
+	 */
 	public function getWhatsOn()
 	{
 		$response = App::make('WhatsOnResponder')->get( $this->sponsorResponder, $this->channels, $this->user );
@@ -104,7 +119,7 @@ Class HomeResponseMaker {
 		}
 
 		# get 3 related adverts and set them as allocated
-		$adverts = $this->sponsorResponder->getChannelSponsors(3, $this->homeChannels); 
+		$adverts = $this->sponsorResponder->setSponsorType()->getChannelSponsors(3, $this->homeChannels); 
 		$this->sponsorResponder->setAllocatedSponsors($adverts);
 
 		# the main response array

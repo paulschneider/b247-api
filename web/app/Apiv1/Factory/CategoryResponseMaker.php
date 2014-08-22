@@ -83,18 +83,15 @@ Class CategoryResponseMaker {
 		$articles = App::make('CategoryResponder')->getCategoryArticles($categoryId, $subChannelId, $this->user);
 
 		# ARTICLE type articles
-		if( isArticleType( $this->channel ) )
-		{
+		if( isArticleType( $this->channel ) ) {
 			$response = App::make('CategoryArticleResponder')->make($this->sponsorResponder, $articles, $this->user);
 		}
 		# DIRECTORY type articles
-		else if( isDirectoryType( $this->channel ) )
-		{
+		else if( isDirectoryType( $this->channel ) ) {
 			$response = App::make('CategoryDirectoryResponder')->make($articles, $categoryId, $subChannelId, $this->user);
 		}
 		# LISTING type articles
-		else if( isListingType( $this->channel ) )
-		{
+		else if( isListingType( $this->channel ) ) {
 			$response = App::make('CategoryListingResponder')->make( $categoryId, $subChannelId, $this->user );
 		}
 
@@ -110,23 +107,30 @@ Class CategoryResponseMaker {
 		return $response;
 	}
 
+	/**
+	 * process the request and produce a response
+	 * 
+	 * @param  [type] $categoryIdentifier [description]
+	 * @param  [type] $channelId          [description]
+	 * @return [type]                     [description]
+	 */
 	public function make($categoryIdentifier, $channelId)
 	{
-		if( isApiResponse( $result = $this->getCategory($categoryIdentifier) ))
-        {
+		# grab the category
+		if( isApiResponse( $result = $this->getCategory($categoryIdentifier) )) {
             return $result;
         }
 
-        if( isApiResponse( $result = $this->getChannel( $channelId )) )
-        {
+        # grab the channel
+        if( isApiResponse( $result = $this->getChannel( $channelId )) ) {
         	return $result;	
         }
 
-        // get 3 related adverts and set them as allocated
+        # get 3 related adverts and set them as allocated
         $this->sponsorResponder->channel = $this->channel;
         $this->sponsorResponder->category = $this->category;
 
-		$adverts = $this->sponsorResponder->getCategorySponsors(3)->sponsors; 
+		$adverts = $this->sponsorResponder->setSponsorType()->getCategorySponsors(3)->sponsors; 
 		$this->sponsorResponder->setAllocatedSponsors($adverts);
 
 		$response = [

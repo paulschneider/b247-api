@@ -25,7 +25,7 @@ class HomePickedResponder {
         );
 
         # grab some sponsors that have yet to be assigned anywhere on the current page
-        $ads = $sponsorResponder->getUnassignedSponsors();
+        $ads = $sponsorResponder->setSponsorType(Config::get('global.sponsorMPU'))->getUnassignedSponsors();
 
         $articles = App::make('ArticleTransformer')->transformCollection( $picks );
         $response = App::make('PatternMaker')->setPattern(1)->make( [ 'articles' => $articles, 'sponsors' => $ads ] );

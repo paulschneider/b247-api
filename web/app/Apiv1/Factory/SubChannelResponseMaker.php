@@ -26,6 +26,12 @@ Class SubChannelResponseMaker {
         } 
 	}
 
+	/**
+	 * grab the specified channel by its identifier
+	 * 
+	 * @param  int | string $identifier [this can be the int ID or a string sef_name identifier]
+	 * @return array [the channel]
+	 */
 	public function getChannel($identifier)
 	{
 		$channelRepository = App::make( 'ChannelRepository' );
@@ -82,7 +88,7 @@ Class SubChannelResponseMaker {
 		}
 
 		// get 3 related adverts and set them as allocated
-		$adverts = $this->sponsorResponder->getChannelSponsors(3, [getSubChannelId($this->channel)], true); 
+		$adverts = $this->sponsorResponder->setSponsorType()->getChannelSponsors(3, [getSubChannelId($this->channel)], true); 
 		$this->sponsorResponder->setAllocatedSponsors($adverts);
 
 		$this->response = [

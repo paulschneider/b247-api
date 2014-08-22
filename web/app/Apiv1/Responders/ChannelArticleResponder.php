@@ -1,6 +1,7 @@
 <?php namespace Apiv1\Responders;
 
 use App;
+use Config;
 
 Class ChannelArticleResponder {
 
@@ -11,7 +12,7 @@ Class ChannelArticleResponder {
 		$metaData = $pagination->meta;
 		$articles = $pagination->items;
 
-		$response = App::make('PatternMaker')->setPattern(1)->limit($pagination->meta->perPage)->make( [ 'articles'=> $articles, 'sponsors' => $sponsorResponder->getUnassignedSponsors() ] );
+		$response = App::make('PatternMaker')->setPattern(1)->limit($pagination->meta->perPage)->make( [ 'articles'=> $articles, 'sponsors' => $sponsorResponder->setSponsorType(Config::get('global.sponsorMPU'))->getUnassignedSponsors() ] );
 
 		return [
 			'articles' => $response->articles,			
