@@ -1,6 +1,7 @@
 <?php namespace Apiv1\Responders;
 
 use App;
+use Config;
 use Apiv1\Repositories\Channels\Toolbox;
 
 Class ChannelDirectoryResponder {
@@ -18,7 +19,7 @@ Class ChannelDirectoryResponder {
 		$sortedCategories = Toolbox::getCategoryArticleCategories( $categories );
 
 		# create the desired pattern
-		$response = App::make( 'PatternMaker' )->setPattern( 1 )->make( [ 'articles'=> $articles, 'sponsors' => $sponsorResponder->setSponsorType(Config::get('global.sponsorMPU')->getUnassignedSponsors() ] );
+		$response = App::make( 'PatternMaker' )->setPattern( 1 )->make( [ 'articles'=> $articles, 'sponsors' => $sponsorResponder->setSponsorType(Config::get('global.sponsorMPU'))->getUnassignedSponsors() ] );
 
 		# return all the data requested
 		return [
