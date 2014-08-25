@@ -57,7 +57,7 @@ Class CompetitionUserEntryResponseMaker {
 		$this->repo->recordEntrant($user, $competition, $form['answerId']);
 
 		# if we got to here then everything went okay and the user was entered into the competition
-		return apiSuccessResponse( 'accepted', ['furtherInfo' => Lang::get('api.userSuccessfullyEnterIntoCompetition')] );
+		return apiSuccessResponse( 'accepted', ['public' => getMessage('public.userSuccessfullyEnterIntoCompetition'), 'debug' => getMessage('api.userSuccessfullyEnterIntoCompetition')] );
 	}
 
 	/**
@@ -74,7 +74,7 @@ Class CompetitionUserEntryResponseMaker {
 
 		# no competition was found with the supplied ID
 		if($competition->isEmpty()) {
-			return apiErrorResponse( 'notFound', ['errorReason' => Lang::get('api.competitionNotFound')] );
+			return apiErrorResponse( 'notFound', ['public' => getMessage('public.competitionNotFound'), 'debug' => getMessage('api.competitionNotFound')] );
 		}
 
 		# grab the competition from the array
@@ -82,7 +82,7 @@ Class CompetitionUserEntryResponseMaker {
 
 		# check to see if its currently active. We do this here rather than the DB so we can report back to the caller
 		if(! $competition->is_active) {
-			return apiErrorResponse(  'locked', ['errorReason' => Lang::get('api.competitionIsInactive')] );
+			return apiErrorResponse( 'locked', ['public' => getMessage('public.competitionIsInactive'), 'debug' => getMessage('api.competitionIsInactive')] );
 		}
 
 		# grab the validity data
@@ -95,12 +95,12 @@ Class CompetitionUserEntryResponseMaker {
 		# make sure the promotion has started but not ended
 		if($validFrom > $today || $validTo < $today)
         {
-            return apiErrorResponse( 'forbidden', ['errorReason' => Lang::get('api.competitionOutOfRange')] );
+            return apiErrorResponse( 'forbidden', ['public' => getMessage('public.competitionOutOfRange'), 'debug' => getMessage('api.competitionOutOfRange')] );
         }
 
         # finally check the entrant hasn't entered this competition before
         if( $entered = $this->repo->checkEntrant($user, $competition) ) {
-        	return apiErrorResponse( 'tooManyRequests', ['errorReason' => Lang::get('api.competitionAlreadyEntered')] );	
+        	return apiErrorResponse( 'tooManyRequests', ['public' => getMessage('public.competitionAlreadyEntered'), 'debug' => getMessage('api.competitionAlreadyEntered')] );	
         }
 
 		# send it back, its valid

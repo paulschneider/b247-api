@@ -6,6 +6,7 @@ return [
 	"userAccountPasswordMismatch" => "The provided password did not match our records.",
 	"accessKeyNotProvided" => "Required user access key not provided.",
 	"noAccountWithThatAccessKey" => "User account could not be located with the supplied access key.",
+	"invalidFormData" => "Some of the details provided did not meet our requirements.",
 	"userPreferencesUpdated" => "User content preferences successfully updated.",
 	"insufficientParametersProvidedToContinue" => "Insufficient form parameters supplied. Unable to continue.",
 	"userPreferencesAreNotAnArray" => "The supplied user preferences are not an array.",
@@ -20,5 +21,11 @@ return [
 	"competitionOutOfRange" => "This competition has either expired is not yet available.",
 	"competitionAlreadyEntered" => "User has already entered this competition. Nothing to do.",
 	"userSuccessfullyEnterIntoCompetition" => "The user was successfully entered into the competition",
-	"invalidDistrictPreferenceRequest" => "There was a problem with the request. Please refer to the documentation for this endpoint."
+	"invalidDistrictPreferenceRequest" => "There was a problem with the request. Please refer to the documentation for this endpoint.",
+	"accountWithEmailAddressNotFound" => "An account with that email address could not be found.",
+	"forgottenPasswordReminderSent" => "Password sent to user email address.",	
+	"passwordCouldNotBeUpdated" => "The user account password could not be saved.",
+	"newUserAccountCouldNotBeCreated" => "There was a problem creating a new user account.",
+	"userAccountNotFound" => "No account could be found with the supplied credentials",
+	"userProfileCouldNotBeSaved" => "User account profile could not be saved. There was a database error."
 ];

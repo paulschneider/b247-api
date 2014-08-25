@@ -29,34 +29,30 @@ Class ForgottenPasswordResponseMaker {
 	{
 		$this->form = $form;
 
-		if( isApiResponse( $result = $this->userResponder->parameterCheck($this->requiredFields, $this->form) ) )
-		{
+		if( isApiResponse($result = $this->userResponder->parameterCheck($this->requiredFields, $this->form)) ) {
 			return $result;
 		}
 
-		if( isApiResponse( $result = $this->userResponder->getUser($this->form['email']) ) )
-		{
+		if( isApiResponse($result = $this->userResponder->getUser($this->form['email'])) ) {
 			return $result;
 		}
 
-		if( isApiResponse( $result = $this->store() ) )
-		{
+		if( isApiResponse( $result = $this->store()) ) {
 			return $result;
 		}
 
-		// send out the forgotten password email
+		# send out the forgotten password email
 		$this->passwordNotifier->notify( ['email' => $this->form['email'], 'password' => $this->newPassword] );
 
-		return apiSuccessResponse( 'accepted', [ 'additionalResponse' => 'Password sent to user email address.' ] );
+		return apiSuccessResponse( 'accepted', ['public' => getMessage('public.forgottenPasswordReminderSent'), 'debug' => getMessage('api.forgottenPasswordReminderSent')] );
 	}
 
 	public function store()
 	{
 		$password = App::make( 'UserRepository' )->generateAndStore( $this->form['email'] );
 
-		if( ! $password )
-		{
-			return apiErrorResponse(  'serverError', [ 'errorReason' => Lang::get('api.recordCouldNotBeSaved') ] );
+		if( ! $password ) {
+			return apiErrorResponse(  'serverError', ['public' => getMessage('public.passwordCouldNotBeUpdated'), 'debug' => getMessage('api.passwordCouldNotBeUpdated')] );
 		}
 
 		$this->newPassword = $password;

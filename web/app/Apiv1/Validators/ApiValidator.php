@@ -38,12 +38,9 @@ Class ApiValidator {
 
 		foreach($messages AS $field => $message)
 		{
-			$errors[] = [
-				'field' => $field,
-				'message' => $message[0]
-			];
+			$errors[$field] = $message[0];
 		}
 
-		return ['errors' => $errors ];
+		return $errors;
 	}	
 }
