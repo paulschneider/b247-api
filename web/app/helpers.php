@@ -2,7 +2,6 @@
 
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
-use Lang;
 
 function getMessage($message)
 {

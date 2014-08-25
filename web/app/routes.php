@@ -4,12 +4,10 @@
 Route::group(['prefix' => 'v1'], function(){    
 
     # Article
-    if( Input::get('dataOnly') )
-    {
+    if( Input::get('dataOnly') ) {
         Route::get('articles', 'ArticleController@getWebArticle');   
     }
-    else
-    {
+    else {
         Route::get('articles', 'ArticleController@getAppArticle');
     }
 
