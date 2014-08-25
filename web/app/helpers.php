@@ -2,6 +2,12 @@
 
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use Lang;
+
+function getMessage($message)
+{
+    return Lang::get($message);
+}
 
 function clog($data)
 {

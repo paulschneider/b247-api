@@ -37,8 +37,7 @@ Class RegistrationResponseMaker {
 
 	public function validate()
 	{
-		if( ! $this->validator->run($this->form) ) 
-		{
+		if( ! $this->validator->run($this->form) )  {
 			return apiErrorResponse(  'unprocessable', $this->validator->errors() );
 		}
 		
@@ -47,9 +46,8 @@ Class RegistrationResponseMaker {
 
 	public function register()
 	{
-		if( ! $this->user = App::make( 'UserRepository' )->create($this->form) )
-		{
-			return apiErrorResponse(  'serverError', [ 'errorReason' => Lang::get('api.recordCouldNotBeSaved') ] );
+		if( ! $this->user = App::make( 'UserRepository' )->create($this->form) ) {
+			return apiErrorResponse( 'serverError', ['public' => getMessage('public.newUserAccountCouldNotBeCreated'), 'debug' => getMessage('api.newUserAccountCouldNotBeCreated')] );
 		}
 	}
 
@@ -57,13 +55,11 @@ Class RegistrationResponseMaker {
 	{
 		$this->form = $form;
 
-		if( isApiResponse( $result = $this->validate() ) )
-		{
+		if( isApiResponse($result = $this->validate()) ) {
 			return $result;
 		}
 
-		if( isApiResponse( $result = $this->register() ) )
-		{
+		if( isApiResponse($result = $this->register()) ) {
 			return $result;
 		}		
 
@@ -71,10 +67,10 @@ Class RegistrationResponseMaker {
 			'user' => App::make( 'UserTransformer' )->transform($this->user)			
 		];
 
-		// register the user to receive the newsletter
+		# register the user to receive the newsletter
 		 $this->newsletter->subscribeTo('daily-digest', $response['user']['email']);
 
-		 // send out welcome email
+		# send out welcome email
 		$this->registration->notify( ['user' => $response['user'], 'plainPassword' => $this->user->plain_pass] );
 
 		return $response;

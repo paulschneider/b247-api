@@ -39,7 +39,7 @@ Class SearchResponseMaker {
 			}	
 		}
 		
-		$result['adverts'] = App::make('SponsorResponder')->getChannelSponsors(3, Config::get('global.homeChannels')); // channels to show on the homepage;
+		$result['adverts'] = App::make('SponsorResponder')->setSponsorType()->getChannelSponsors(3, Config::get('global.homeChannels')); // channels to show on the homepage;
 		$result['searchResults'] = array_values($channels);
 		$result['resultCount'] = count($articles);
 		$result['pagination'] = $metaData;		
