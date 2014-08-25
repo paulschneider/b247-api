@@ -1,9 +1,21 @@
 <?php
 
-/** Version 1 **/
+/*
+    |--------------------------------------------------------------------------
+    | Version 1
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
 Route::group(['prefix' => 'v1'], function(){    
 
-    # Article
+    /*
+    |--------------------------------------------------------------------------
+    | Article
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
     if( Input::get('dataOnly') ) {
         Route::get('articles', 'ArticleController@getWebArticle');   
     }
@@ -11,11 +23,23 @@ Route::group(['prefix' => 'v1'], function(){
         Route::get('articles', 'ArticleController@getAppArticle');
     }
 
-    # Application Navigation
+    /*
+    |--------------------------------------------------------------------------
+    | Application Navigation
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
 
     Route::get('app/nav', 'AppNavigationController@index');
 
-    # Category
+    /*
+    |--------------------------------------------------------------------------
+    | Category
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
 
     Route::group(['prefix' => 'category'], function(){
         Route::get('/', 'CategoryController@index');
@@ -29,7 +53,13 @@ Route::group(['prefix' => 'v1'], function(){
         Route::get('{categoryId}/articles', 'CategoryController@getCategoryArticles'); // this
     });
 
-    # Channels
+    /*
+    |--------------------------------------------------------------------------
+    | Channels
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
 
     Route::group(['prefix' => 'channel'], function(){
         Route::get('{channel}', 'ChannelController@getChannel');
@@ -44,38 +74,80 @@ Route::group(['prefix' => 'v1'], function(){
         Route::get('{channel}/articles', 'ChannelController@getSubChannel'); // this
     });
 
+    /*
+    |--------------------------------------------------------------------------
+    | Log-in
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+
     Route::post('login', 'SessionsController@login');
-
-    # Promotion
-
-    
-
-    # Registration
+   
+    /*
+    |--------------------------------------------------------------------------
+    | Registration
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
 
     Route::post('register', 'RegisterController@createSubscriber');
 
-    # Search
+    /*
+    |--------------------------------------------------------------------------
+    | Search
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
 
     Route::get('search', 'SearchController@search');
 
-    # User
+    /*
+    |--------------------------------------------------------------------------
+    | User
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
     
     Route::get('user', 'UserController@getUser');
     Route::get('user/preferences', 'UserController@getPreferences');
     Route::post('user/preferences', 'UserController@setPreferences');
-
     Route::post('user/password', 'UserController@changeUserPassword');
     Route::post('user/profile', 'UserController@profile');
     Route::post('user/districts', 'UserController@districtPreferences');    
     Route::post('user/promotion/redeem', 'UserController@redeemPromotion');
     Route::post('user/competition/enter', 'UserController@enterCompetition');
         
-    # Homepage
+    /*
+    |--------------------------------------------------------------------------
+    | Homepage
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
 
     Route::get('/', 'HomeController@index');
     Route::get('/home', 'HomeController@index');
 
-    # Mail
+    /*
+    |--------------------------------------------------------------------------
+    | Mail
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
 
     Route::get('mail/confirm-subscription', 'MailController@verifyUserIsSubscribed');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Contact
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+   Route::post('contact-enquiry', [ 'as' => 'contact', 'uses' => 'MailController@newContactEnquiry']);
 });

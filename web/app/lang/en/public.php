@@ -23,5 +23,6 @@ return [
 	"userAccountNotFound" => "We could not locate an account for you. Please try again.",
 	"userAccountPasswordMismatch" => "The supplied password did not match our records.",
 	"invalidDistrictPreferenceRequest" => "We could not process your district based preferences. Try again.",
-	"userProfileCouldNotBeSaved" => "There was a problem storing the details of your account. Please try again."
+	"userProfileCouldNotBeSaved" => "There was a problem storing the details of your account. Please try again.",
+	"contactEnquirySent" => "Your enquiry has been received. We'll get back to you shortly."
 ];

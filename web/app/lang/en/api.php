@@ -27,5 +27,6 @@ return [
 	"passwordCouldNotBeUpdated" => "The user account password could not be saved.",
 	"newUserAccountCouldNotBeCreated" => "There was a problem creating a new user account.",
 	"userAccountNotFound" => "No account could be found with the supplied credentials",
-	"userProfileCouldNotBeSaved" => "User account profile could not be saved. There was a database error."
+	"userProfileCouldNotBeSaved" => "User account profile could not be saved. There was a database error.",
+	"contactEnquirySent" => "System contact enquiry successfully sent to user."
 ];
