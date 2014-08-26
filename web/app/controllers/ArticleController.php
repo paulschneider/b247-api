@@ -50,6 +50,14 @@ Class ArticleController extends ApiController {
         # the data to send to the front end. used to populate the template
         $data = $response;
 
+        # set the request headers
+        $headers = [];
+
+        # if authenticated then send through the access key
+        if(userIsAuthenticated()) {
+            $headers['accessKey'] = getAccessKey();
+        }
+
         # make a call to the front end to retrieve the populated HTML template
         $result = App::make('ApiClient')->post('app/article', [ 
             # POST params
@@ -57,9 +65,8 @@ Class ArticleController extends ApiController {
             'type' => getChannelType($response['channel']), 
         ], 
             # Header params
-        [
-            'accessKey' => getAccessKey() 
-        ]);
+            $headers
+        );
 
         $response['article'] = $this->responseMaker->getRequiredArticleData($response['article']);
         unset($response['related']);
