@@ -16,7 +16,7 @@ Class UserProfileResponseMaker {
 	{
 		# check to see if we have the accessKey header param. This is a helper function.
 		if( ! userIsAuthenticated() ) {
-			return apiErrorResponse(  'unauthorised', ['public' => getMessage('public.accessKeyNotProvided'), 'debug' => getMessage('api.accessKeyNotProvided')] );
+			return apiErrorResponse( 'unauthorised', ['public' => getMessage('public.accessKeyNotProvided'), 'debug' => getMessage('api.accessKeyNotProvided')] );
 		}
 
 		$accessKey = getAccessKey();				

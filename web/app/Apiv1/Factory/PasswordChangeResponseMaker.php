@@ -56,7 +56,7 @@ Class PasswordChangeResponseMaker {
 		$response = App::make( 'UserRepository' )->hashAndStore( $this->form['email'], $this->form['newPassword'] );
 
 		if( ! $response ) {
-			return apiErrorResponse(  'serverError', ['public' => getMessage('public.passwordCouldNotBeUpdated'), 'debug' => getMessage('api.passwordCouldNotBeUpdated')] );
+			return apiErrorResponse( 'serverError', ['public' => getMessage('public.passwordCouldNotBeUpdated'), 'debug' => getMessage('api.passwordCouldNotBeUpdated')] );
 		}
 
 		$this->user['accessKey'] = $response->accessKey;

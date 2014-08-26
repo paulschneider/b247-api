@@ -52,7 +52,7 @@ Class ForgottenPasswordResponseMaker {
 		$password = App::make( 'UserRepository' )->generateAndStore( $this->form['email'] );
 
 		if( ! $password ) {
-			return apiErrorResponse(  'serverError', ['public' => getMessage('public.passwordCouldNotBeUpdated'), 'debug' => getMessage('api.passwordCouldNotBeUpdated')] );
+			return apiErrorResponse( 'serverError', ['public' => getMessage('public.passwordCouldNotBeUpdated'), 'debug' => getMessage('api.passwordCouldNotBeUpdated')] );
 		}
 
 		$this->newPassword = $password;
