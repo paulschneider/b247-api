@@ -38,7 +38,7 @@ Class RegistrationResponseMaker {
 	public function validate()
 	{
 		if( ! $this->validator->run($this->form) )  {
-			return apiErrorResponse(  'unprocessable', $this->validator->errors() );
+			return apiErrorResponse(  'unprocessable', ['errors' => $this->validator->errors(), 'public' => getMessage('public.newUserAccountCouldNotBeCreated'), 'debug' => getMessage('api.newUserAccountCouldNotBeCreated')]);
 		}
 		
 		return true;

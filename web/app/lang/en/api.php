@@ -28,5 +28,6 @@ return [
 	"newUserAccountCouldNotBeCreated" => "There was a problem creating a new user account.",
 	"userAccountNotFound" => "No account could be found with the supplied credentials",
 	"userProfileCouldNotBeSaved" => "User account profile could not be saved. There was a database error.",
-	"contactEnquirySent" => "System contact enquiry successfully sent to user."
+	"contactEnquirySent" => "System contact enquiry successfully sent to user.",
+	"errorsWithLoginAttempt" => "Unable to authenticate. Validator did not pass user input.",
 ];

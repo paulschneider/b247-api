@@ -41,7 +41,7 @@ Class SessionsResponseMaker {
 		}
 
 		if( ! $this->validator->run($this->form)) {
-			return apiErrorResponse(  'unprocessable', ['errors' => $this->validator->errors()] );
+			return apiErrorResponse(  'unprocessable', ['errors' => $this->validator->errors(), 'public' => getMessage('public.errorsWithLoginAttempt'), 'debug' => getMessage('api.errorsWithLoginAttempt')] );
 		}
 	}
 
