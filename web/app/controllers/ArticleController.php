@@ -2,11 +2,19 @@
 
 Class ArticleController extends ApiController {
 
+    /**
+     * class constructor
+     */
     public function __construct()
     {
         $this->responseMaker = App::make('ArticleResponseMaker');
     }
 
+    /**
+     * get an article for display on the desktop version of the site
+     * 
+     * @return array
+     */
     public function getWebArticle()
     {
         if( ! Input::get('subchannel') || ! Input::get('category') || ! Input::get('article'))
@@ -22,28 +30,44 @@ Class ArticleController extends ApiController {
         return apiSuccessResponse( 'ok', $response );
     }
 
+    /**
+     * get an article for display on a mobile or tablet device
+     * 
+     * @return array
+     */
     public function getAppArticle()
     {
-        if( ! Input::get('subchannel') || ! Input::get('category') || ! Input::get('article'))
-        {
+        # if we don't have everything we need then say so
+        if( ! Input::get('subchannel') || ! Input::get('category') || ! Input::get('article')) {
             return apiErrorResponse('insufficientArguments');
         }
 
-        if( isApiResponse( $response = $this->responseMaker->make(Input::all())))
-        {
+        # if we get an API response object then something went wrong. 
+        if( isApiResponse( $response = $this->responseMaker->make(Input::all()))) {
             return $response;
         }   
 
-        // make a call to the front end to retrieve the populated HTML template
-        $result = App::make('ApiClient')->post('app/article', [ 'data' => $response, 'type' => getChannelType($response['channel']) ]);
+        # the data to send to the front end. used to populate the template
+        $data = $response;
+
+        # make a call to the front end to retrieve the populated HTML template
+        $result = App::make('ApiClient')->post('app/article', [ 
+            # POST params
+            'data' => $response, 
+            'type' => getChannelType($response['channel']), 
+        ], 
+            # Header params
+        [
+            'accessKey' => getAccessKey() 
+        ]);
 
         $response['article'] = $this->responseMaker->getRequiredArticleData($response['article']);
         unset($response['related']);
 
-        // remove all hidden chars from the returned HTML as they break the markup on the device
+        # remove hidden chars from the returned HTML as they break the markup on the device
         $response['html'] = str_replace("\n", '', $result['html']);
 
-        // return it all to the calling app
+        # ... return it all to the calling app
         return apiSuccessResponse( 'ok', $response );
     }
 
