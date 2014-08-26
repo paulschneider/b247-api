@@ -11,7 +11,7 @@ Class PageMaker {
 			$page = Input::get('page');
 		} 
 
-		if( Input::get('size') ) 
+		if( Input::get('size') ) {
 			$limit = Input::get('size');
 		}
 
