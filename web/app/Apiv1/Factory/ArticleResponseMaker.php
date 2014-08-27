@@ -127,7 +127,7 @@ Class ArticleResponseMaker {
 		$sponsorResponder->channel = $this->channel;
 		$sponsorResponder->category = $this->category;
 
-		return $sponsorResponder->setSponsorType(Config::get('global.sponsorMPU'))->getCategorySponsors(3);
+		return $sponsorResponder->setSponsorType(Config::get('global.sponsorLETTERBOX'))->getCategorySponsors(3);
 	}
 
 	public function nextPreviousArticles()
