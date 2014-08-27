@@ -10,6 +10,7 @@ Class SearchResponseMaker {
 	public function make($searchString)
 	{ 	
 		$articles = App::make( 'ArticleRepository' )->search($searchString);
+		$result['resultCount'] = count($articles);
 		$articleTransformer = App::make('ArticleTransformer');		
 		$channels = [];
 
@@ -39,10 +40,10 @@ Class SearchResponseMaker {
 			}	
 		}
 		
-		$result['adverts'] = App::make('SponsorResponder')->setSponsorType()->getChannelSponsors(3, Config::get('global.homeChannels')); // channels to show on the homepage;
-		$result['searchResults'] = array_values($channels);
-		$result['resultCount'] = count($articles);
-		$result['pagination'] = $metaData;		
+		$result['adverts'] 			= App::make('SponsorResponder')->setSponsorType()->getChannelSponsors(3, Config::get('global.homeChannels')); // channels to show on the homepage;
+		$result['searchTerm'] 		= $searchString;				
+		$result['searchResults'] 	= array_values($channels);		
+		$result['pagination'] 		= $metaData;		
 
 		return $result;
 	}

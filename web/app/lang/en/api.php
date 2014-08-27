@@ -30,4 +30,5 @@ return [
 	"userProfileCouldNotBeSaved" => "User account profile could not be saved. There was a database error.",
 	"contactEnquirySent" => "System contact enquiry successfully sent to user.",
 	"errorsWithLoginAttempt" => "Unable to authenticate. Validator did not pass user input.",
+	"userProfileSuccessfullyUpdated" => "User account profile saved",
 ];

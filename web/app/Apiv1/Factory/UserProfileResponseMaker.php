@@ -28,7 +28,7 @@ Class UserProfileResponseMaker {
 		# we now have an updated user record with profile
 		$user = $result;
 
-		return apiSuccessResponse( 'ok', [ 'user' => App::make('UserTransformer')->transform($user) ] );
+		return apiSuccessResponse( 'ok', [ 'user' => App::make('UserTransformer')->transform($user), 'public' => getMessage('public.userProfileSuccessfullyUpdated'), 'debug' => getMessage('api.userProfileSuccessfullyUpdated')] );
 	}
 
 	/**
