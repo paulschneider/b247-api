@@ -255,7 +255,8 @@ function isApiResponse($data)
 
 function makePath( $paths = [] )
 {
-    $str = "/";
+    $str = "/channel/";
+
     foreach($paths AS $path)
     {
         $str .= trim($path).'/';
