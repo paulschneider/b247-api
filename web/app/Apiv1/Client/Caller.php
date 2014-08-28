@@ -12,7 +12,12 @@ Class Caller {
 
 	public function __construct()
 	{
-		$this->client = new Client( [ 'base_url' => Config::get('api.baseUrl') ] );
+		$this->client = new Client([ 
+			'base_url' => Config::get('api.baseUrl'),
+			'defaults' => [
+				'auth' => ['b247', 'master']
+			]
+		]);
 	}
 
 	public function get($endpoint = "", $params = [], $headers = [])
