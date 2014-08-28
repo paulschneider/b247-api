@@ -15,7 +15,9 @@ Class Caller {
 		$this->client = new Client([ 
 			'base_url' => Config::get('api.baseUrl'),
 			'defaults' => [
-				'auth' => ['b247', 'master']
+				# we had a password on the site at one point and these were the 
+				# credentials to get the API through
+				'auth' => ['b247', 'master'] 
 			]
 		]);
 	}

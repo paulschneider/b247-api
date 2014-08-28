@@ -15,7 +15,14 @@ class PickedResponder {
 	public function get( SponsorResponder $sponsorResponder, $channel, $user )
 	{
         # get some articles. Pass the user so we can check the return against their preferences
-        $picks = App::make('ArticleRepository')->getArticles( 'picks', 25, $channel['id'], true, false, $user );
+        $picks = App::make('ArticleRepository')->getArticles( 
+            'picks', # what type of article
+            25, # how many do we want to get
+            $channel['id'], # which channel do we want to get them for
+            false, # indicate whether this is a sub-channel or not
+            false, # ignore that this is a specific channel and just grab articles from any channel (this is mainly done on the homepage)
+            $user # if we have an authenticated user we pass them through so we can filter the content based on the preferences
+        );
 
         # transform these articles into something the API can return
         $articles = App::make('ArticleTransformer')->transformCollection( $picks );
