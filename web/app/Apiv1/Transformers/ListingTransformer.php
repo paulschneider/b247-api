@@ -163,11 +163,11 @@ Class ListingTransformer extends Transformer {
 
             # we want to separate out the first few picks articles into a separate array. Do this until we reach the currently set limit
             # as long as it has a showDate!
-            if( $articleIsPicked && count($response[ $day ]['picks']) < $highlightsToShow && isset($article['event']['details']['showDate'])) {
+            if( $articleIsPicked && count($response[ $day ]['picks']) < $highlightsToShow && isset(is_null($article['event']['details']['showDate'])) && ! is_null($article['event']['details']['showDate'])) {
                 $response[ $day ]['picks'][] = $article;
             }
             # otherwise pipe the article into the main articles array, as long as it has a showDate!
-            else if( ! is_null($article['event']['details']['showDate']) ) {
+            else if( ! isset(is_null($article['event']['details']['showDate'])) && ! is_null($article['event']['details']['showDate']) ) {
                 $response[ $day ]['articles'][] = $article;    
             }
         }

@@ -214,19 +214,30 @@ Class CinemaListingTransformer extends Transformer {
         return false;
     }
 
+    /**
+     * go through all of the showtimes regardless of eventDay and work out which 
+     * is the very last performance
+     * @param  array $showTimes
+     * @return array [last show time]
+     */
     public function getLastPerformance($showTimes)
     {
         $times = [];
 
+        # go through each show time
         foreach($showTimes AS $showTime)        
         {
+            # convert the show start time into an epoch and set it as the array key
             $times[strtotime($showTime['showtime'])] = $showTime;
         }
 
+        # sort the array by the keys so they are in ascending order (giving us the first to last show times)
         asort($times);
 
+        # get the last item in the array. This should be the very last instance of this event
         $last = array_pop($times);
         
+        # convert the showtime into the format needed and send it back.
         return [
             'epoch' => strtotime($last['showtime']),
             'readable' => $this->dateFormatter($last['showtime']),
