@@ -38,6 +38,11 @@ class EventTransformer extends Transformer {
         {
             $performances = App::make( 'Apiv1\Transformers\ShowTimeTransformer' )->transformCollection($article, $options);    
 
+            # if we don't have any performances to work with then just return out of this process
+            if(! $performances) {
+                return false;
+            }
+
             # work out which performance to use as the primary data source
             # if its multi-date use the next available performance
             if(isset($performances['summary']['nextPerformance'])) {

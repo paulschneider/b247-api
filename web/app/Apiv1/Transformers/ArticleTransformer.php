@@ -99,7 +99,7 @@ Class ArticleTransformer extends Transformer {
                 $response['competition'] = App::make( 'Apiv1\Transformers\CompetitionTransformer' )->transformCollection( $article );                
             }       
 
-            // remove anything that only the desktop version needs
+            # remove anything that only the desktop version needs
 
             if( isMobile() && ! isset($options['ignorePlatform']) ) // but only do this when this option isn't around. This prevents content hiding when its in fact needed, namely in the case of the HTML template creation on the front end.
             {
