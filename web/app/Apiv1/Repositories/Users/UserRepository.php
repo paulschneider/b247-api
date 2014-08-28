@@ -71,7 +71,7 @@ Class UserRepository
      */
     public function getProfile($accessKey)
     {
-        $result = User::with('profile', 'inactiveChannels', 'inactiveCategories', 'districts')->where('access_key', $accessKey)->get();
+        $result = User::with('profile', 'inactiveChannels', 'inactiveCategories', 'districts', 'broadcasts')->where('access_key', $accessKey)->get();
 
         # if we didn't get anything go back
         if( $result->isEmpty() ) {
@@ -81,12 +81,19 @@ Class UserRepository
         return self::processProfile($result->first());
     }
 
+    /**
+     * to be able to check what the preferences are later on we'll create simple arrays for each preference
+     * type. 
+     * @param  User $user
+     * @return user $user
+     */
     private function processProfile($user)
     {
         # otherwise format the inactive content into something more usable
         $channels = [];
         $categories = [];
         $districts = [];
+        $broadcasts = [];
 
         foreach($user->inactive_channels AS $inactive)
         {
@@ -117,6 +124,17 @@ Class UserRepository
         # set the results back against the user
         unset($user->districts);
         $user->districts = $districts;
+
+        # these are the communication preferences for the user. If they are opted to receive various communications
+        # they go into this list
+        foreach($user->broadcasts AS $broadcast)
+        {
+            $broadcasts[] = $broadcast->communication_id;
+        }
+
+        # set the results back against the user
+        unset($user->broadcasts);
+        $user->broadcasts = $broadcasts;
         
         return $user;
     }
@@ -271,5 +289,19 @@ Class UserRepository
         }
 
         return false;
+    }
+
+    public function setBroadcastPreferences($user, $broadcasts)
+    {
+        # shortcut the table as we'll reference it a couple of times and it has a long name
+        $table = 'user_comms_preference';
+
+        # remove all previous user prefs for this user
+        DB::table($table)->where('user_id', $user->id)->delete();    
+
+        # insert the new prefs, if there are any
+        if(!empty($broadcasts)) {
+            DB::table($table)->insert($broadcasts);
+        } 
     }
 }

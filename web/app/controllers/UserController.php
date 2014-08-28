@@ -2,11 +2,18 @@
 
 Class UserController extends BaseController {	
 
+	/**
+	 * Get all preferences for an authenticated user
+	 * @return ApiResponse
+	 */
 	public function getPreferences()
 	{
 		return App::make('Apiv1\Factory\UserPreferenceResponseMaker')->get();
 	}
 
+	/**
+	 * Set the preferences for an authenticated used
+	 */
 	public function setPreferences()
 	{
 		return App::make('Apiv1\Factory\UserPreferenceResponseMaker')->set(Input::all());
