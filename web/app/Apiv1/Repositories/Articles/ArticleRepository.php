@@ -284,7 +284,7 @@ Class ArticleRepository extends BaseModel {
         }
 
         # order them by the earliest show time and pull them out of the DB
-        $result = $query->orderBy('event_showtimes.showtime', 'asc')->get();
+        $result = $query->orderBy('event_showtimes.showtime', 'asc')->active()->get();
 
         $articles = [];
         $articleIds = [];
