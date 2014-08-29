@@ -64,7 +64,9 @@ Class RegistrationResponseMaker {
 		}		
 
 		$response = [
-			'user' => App::make( 'UserTransformer' )->transform($this->user)			
+			'user' => App::make( 'UserTransformer' )->transform($this->user),
+			'public' => getMessage('public.newUserAccountCreated'),		
+			'debug' => getMessage('api.newUserAccountCreated'),
 		];
 
 		# register the user to receive the newsletter
