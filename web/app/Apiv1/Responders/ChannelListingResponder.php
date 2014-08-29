@@ -24,7 +24,7 @@ Class ChannelListingResponder {
     {
         $subChannelId = getSubChannelId($channel);
 
-        $articles = App::make('ArticleRepository')->getChannelListing( $subChannelId, 20, $range, $time, $user );
+        $articles = App::make('ArticleRepository')->getChannelListing( $subChannelId, 999, $range, $time, $user );
 
         # if we have a user we need to filter all articles and remove any they have opted out of
         if(!is_null($user)) {
@@ -56,7 +56,7 @@ Class ChannelListingResponder {
                 }
             }
 
-            return App::make('ListingTransformer')->transformCollection( $articles, [ 'perDayLimit' => 3, 'days' => $days ] );
+            return App::make('ListingTransformer')->transformCollection( $articles, [ 'perDayLimit' => 999, 'days' => $days ] );
         }
         else if( $range == "day" )
         {         

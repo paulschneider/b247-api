@@ -242,8 +242,6 @@ Class ArticleRepository extends BaseModel {
 
             # and the end the show time (start) is less than or equal to the provided period in time plus 6 days
             $query->where('event_showtimes.showtime', '<=', Carbon::create($dateArray[0], $dateArray[1], $dateArray[2], '23', '59', '59')->addDays(6));
-
-            $query->where('article.is_picked', '=', true);
         }
         # or just grab a days worth
         elseif ( $range == "day" )
