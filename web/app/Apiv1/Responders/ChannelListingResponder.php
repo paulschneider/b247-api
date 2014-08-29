@@ -28,7 +28,7 @@ Class ChannelListingResponder {
 
         # if we have a user we need to filter all articles and remove any they have opted out of
         if(!is_null($user)) {
-            $articles = App::make('Apiv1\Tools\ContentFilter')->setUser($this->user)->filterArticlesByUserCategory($articles);
+            $articles = App::make('Apiv1\Tools\ContentFilter')->setUser($user)->filterArticlesByUserCategory($articles);
         }
 
         if( $range == "week" )
