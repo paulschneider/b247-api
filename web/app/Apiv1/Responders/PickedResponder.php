@@ -1,6 +1,7 @@
 <?php namespace Apiv1\Responders;
 
 use App;
+use Config;
 
 class PickedResponder {
 
@@ -28,7 +29,7 @@ class PickedResponder {
         $articles = App::make('ArticleTransformer')->transformCollection( $picks );
 
         # get a list of sponsors not yet used on the "page"
-        $ads = $sponsorResponder->getUnassignedSponsors();
+        $ads = $sponsorResponder->setSponsorType(Config::get('global.sponsorMPU'))->getUnassignedSponsors();
 
         # turn it all into something pretty
         $response = App::make('PatternMaker')->setPattern(1)->make( [ 'articles' => $articles, 'sponsors' => $ads ] );
