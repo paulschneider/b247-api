@@ -98,9 +98,13 @@ class ArticlePromotionRedemptionResponseMaker {
 		$promotion = $promotion->first();
 
 		# check to see if its currently active. We do this here rather than the DB so we can report back to the caller
-		# also check to see if the usage cap has been reached.
-		if(! $promotion->is_active || $promotion->usage->count() == $promotion->upper_limit) {
+		if(! $promotion->is_active)) {
 			return apiErrorResponse( 'locked', ['public' => getMessage('public.promotionIsInactive'), 'debug' => getMessage('api.promotionIsInactive')] );
+		}
+
+		# check to see if the usage cap for this promotion has been reached
+		if($promotion->usage->count() == $promotion->upper_limit) {
+			return apiErrorResponse( 'locked', ['public' => getMessage('public.promotionLimitReached'), 'debug' => getMessage('api.promotionLimitReached')] );
 		}
 
 		# grab the validity data

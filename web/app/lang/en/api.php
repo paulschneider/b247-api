@@ -14,6 +14,7 @@ return [
 	"promotionNotFound" => "A promotion with the supplied code could not be located.",
 	"promotionIsInactive" => "This promotion is not currently available for use.",
 	"promotionOutOfRange" => "This promotion has either expired is not yet available.",
+	"promotionLimitReached" => "The usage cap for this promotion has been reached. It is no longer available.",
 	"promotionalCodeSuccessfullyRedeemed" => "The promotional code was successfully sent.",
 	"promotionalCodeAlreadyRedeemed" => "User has already redeemed this promotional code.",
 	"competitionNotFound" => "A competition with the supplied identifier could not be located.",
