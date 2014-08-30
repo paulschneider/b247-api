@@ -98,7 +98,7 @@ class ArticlePromotionRedemptionResponseMaker {
 		$promotion = $promotion->first();
 
 		# check to see if its currently active. We do this here rather than the DB so we can report back to the caller
-		if(! $promotion->is_active)) {
+		if(! $promotion->is_active) {
 			return apiErrorResponse( 'locked', ['public' => getMessage('public.promotionIsInactive'), 'debug' => getMessage('api.promotionIsInactive')] );
 		}
 
