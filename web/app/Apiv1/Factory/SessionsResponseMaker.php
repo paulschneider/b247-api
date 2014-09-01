@@ -36,11 +36,9 @@ Class SessionsResponseMaker {
 
 	public function validate()
 	{
-		if( ! isset($this->form['email']) || ! isset($this->form['password']) ) {
-			return apiErrorResponse( 'insufficientArguments', [ 'public' => getMessage('public.loginWithInsufficientParams'), 'debug' => getMessage('api.loginWithInsufficientParams') ] );
-		}
-
-		if( ! $this->validator->run($this->form)) {
+		# run the validator to make sure the form meets the requirements
+		if( ! $this->validator->run($this->form)) 
+		{
 			return apiErrorResponse( 'unprocessable', ['errors' => $this->validator->errors(), 'public' => getMessage('public.errorsWithLoginAttempt'), 'debug' => getMessage('api.errorsWithLoginAttempt')] );
 		}
 	}
