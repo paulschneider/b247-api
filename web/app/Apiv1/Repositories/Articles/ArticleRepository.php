@@ -221,7 +221,7 @@ Class ArticleRepository extends BaseModel {
      * 
      * @return array $result
      */
-    public function getChannelListing( $channel, $limit = 1000, $range, $timestamp, $user )
+    public function getChannelListing( $channel, $limit = 1000, $range, $timestamp, $user = null )
     {
         $dateStamp = convertTimestamp( 'Y-m-d', $timestamp);
 
@@ -253,6 +253,7 @@ Class ArticleRepository extends BaseModel {
         # if we have a user object we only want to grab content that they want to see
         if( ! is_null($user))    
         {
+
             # don't get any articles from channels they have disabled
             if( count($user->inactive_channels) > 0 ) {
                 $query->whereNotIn('channel_id', $user->inactive_channels, 'or'); 
@@ -284,20 +285,23 @@ Class ArticleRepository extends BaseModel {
         # order them by the earliest show time and pull them out of the DB
         $result = $query->orderBy('event_showtimes.showtime', 'asc')->active()->get();
 
-        $articles = [];
+        $articles = [];        
         $articleIds = [];
 
         # they come out of this query slightly differently to how the articleTransformer needs them. sort that out !
-        foreach( $result->toArray() AS $item )
+        if($result->count() > 0)
         {
-            $articleId = $item['article']['id'];
-            
-            if( ! in_array($articleId, $articleIds)) {
-                $articles[] = $item['article'];    
-            }
-            
-            $articleIds[] = $articleId;
-        }
+            foreach($result AS $item )
+            {
+                $articleId = $item->article_id;
+                
+                if( ! in_array($articleId, $articleIds)) {
+                    $articles[] = $item->article->toArray();    
+                }
+                
+                $articleIds[] = $articleId;
+            }    
+        }      
 
         # ... finally, we want to apply a filter to promote some of these articles based on the user' district
         # preferences. 
