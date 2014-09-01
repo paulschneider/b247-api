@@ -14,13 +14,26 @@ Class CinemaListingTransformer extends Transformer {
     /**
      * Transform a result set into the API required format
      *
+     * @param users
+     * @return array
+     */
+    public function transformCollection( $article, $options = [] )
+    {
+        // To do
+    }
+
+    /**
+     * Transform a result set into the API required format
+     *
      * @param user
      * @return array
      */
     public function transform( $article, $options = [] )
     {
+        # make the articles available to the class
         $this->article = $article;
 
+        # if we have an event day then make that available to the class too
         if(isset($options['eventDay'])) {
             $this->eventDay = $options['eventDay'];
         }
@@ -37,38 +50,21 @@ Class CinemaListingTransformer extends Transformer {
             return false;
         }
 
-        $this->venues = $venues;
+        # response array
         $response = [];
-
-        # grab the main event so we can get some info out of it for the overview response
-        $primary = $venues->primary;
 
         $response['summary'] = [
             'isMovie' => true,
             'isMultiDate' => $this->isMultiDate,
             'certificate' => $listingData['certificate'],
             'director' => $listingData['director'],
-            'duration' => $listingData['duration'],
-            'show' => $primary,
-            'price' => $primary['price']
+            'duration' => $listingData['duration'],            
         ];  
 
-        # grab the list of possible alternative venues
-        $response['alternativeVenues'] = $venues->alternatives;
+        $response['venues'] = $venues;
 
         return $response;
-    }
-
-    /**
-     * Transform a result set into the API required format
-     *
-     * @param users
-     * @return array
-     */
-    public function transformCollection( $article, $options = [] )
-    {
-        // To do
-    }
+    }    
 
     /**
      * sort any venue show times into the API required format
@@ -80,14 +76,18 @@ Class CinemaListingTransformer extends Transformer {
     {
         $response = new stdClass();
 
+        # get all of the show times for this particular event
         $showTimes = $event['show_time'];
 
+        # check to see whether this is a multi date performance
         $this->isMultiDate = $this->checkIsMultiDate($showTimes);
 
+        # get the last performance in the list regardless of the date. This allows
+        # for the from - range output in the front end
         $lastPerformance = $this->getLastPerformance($showTimes);
 
         # do some filtering
-        if( !is_null($this->eventDay) ) {
+        if( ! is_null($this->eventDay) ) {
            $showTimes = $this->filterByEventDay($showTimes);
         }
 
@@ -100,18 +100,15 @@ Class CinemaListingTransformer extends Transformer {
         # get the venue transformer
         $venueTransformer = App::make('Apiv1\Transformers\VenueTransformer');
 
-        $alternatives = [];
-        $primary = [];
+        # init an empty array where can keep all the performances
+        $performances = [];
 
-        # the event attached to the article is the primary event. everything else is supplemental 
-        # information we want to show. We need the primary event ID to work out which it is from the showtimes
-        # list
-        $primaryEventVenueId = $event['venue_id'];
+        $venues = [];
 
         # go through each of the show times and make them look pretty
         foreach($showTimes AS $performance)
         {
-            $show = [
+            $tmp = [
                 # when is the performance taking place
                 'startTime' => [
                     'epoch' => strtotime($performance['showtime']),
@@ -119,37 +116,27 @@ Class CinemaListingTransformer extends Transformer {
                     'day' => date('Y-m-d', strtotime($performance['showtime'])),
                     'time' => date('H:i', strtotime($performance['showtime']))
                 ],
-                'price' => number_format( $performance['price'], 2 ),
                 # showRunEnd is the last date on which a multi-date performance will end
-                'showRunEnd' => $lastPerformance,
-                # where is the performance taking place
-                'venue' => $venueTransformer->transform($performance['venue'])
-            ];
+                'showRunEnd' => $lastPerformance,                
+            ];     
 
-            # if its not the primary event ID then its an alternative venue
-            if($performance['venue_id'] != $primaryEventVenueId) {
-                
-                # the value of showRunEnd is for the primary venue only. 
-                # Not for the alternatives, so get rid of it.
-                unset($show['showRunEnd']);
+            # where is the performance taking place
+            $venue =  $venueTransformer->transform($performance['venue']);
 
-                $alternatives[$performance['venue_id']] = $show;
-            }
-            # this is the main event which we need to grab separately
-            else {
-                # we already have this info from the main event object so get shot of it
-                unset($show['venue']);
+            # attach the venue to the performance item
+            $tmp['venue'] = $venue; 
 
-                # this is the one we want
-                $primary = $show;
+            # if a performance at this venue has not been added to the list, then add it
+            if(!in_array($venue['id'], $venues)) {
+                $performances[] = $tmp;
             }           
+
+            # add this venue to the list of venues already seen and added to the performances array
+            $venues[] = $venue['id'];
         }
 
-        $response->primary = $primary;
-        $response->alternatives = array_values($alternatives);      
-
         # and.... send it back
-        return $response;
+        return $performances;
     }
 
     /**
@@ -173,13 +160,14 @@ Class CinemaListingTransformer extends Transformer {
             $endDate = strtotime(date('Y-m-d', strtotime($showTime['showend'])));
 
             # if the event show time is the same as the eventDay then we want to keep it
+            # this means get rid of anything thats not happening on the specified event day
             if($date == $this->eventDay) {
                 $kept[] = $showTime;
             }
             
-            if(strtotime($this->eventDay) < $endDate) {
-                $kept[] = $showTime;
-            }
+            // if(strtotime($this->eventDay) < $endDate) {
+            //     $kept[] = $showTime;
+            // }
         }
 
         return $kept;

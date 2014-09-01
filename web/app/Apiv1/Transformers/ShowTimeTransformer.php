@@ -1,5 +1,6 @@
 <?php namespace Apiv1\Transformers;
 
+use App;
 use Config;
 use stdClass;
 use Carbon\Carbon;
@@ -61,32 +62,25 @@ class ShowTimeTransformer extends Transformer {
         $this->article = $article;
 
         $this->times = [];       
-        
-        # which venue is this article event attached to
-        $articleVenue = $this->article['event']['venue_id'];
 
         // go through each of the show times and transform them into something usable
         foreach($article['event']['show_time'] AS $performance)
         {
-            # Only add performances for this articles venue
-            if($performance['venue_id'] == $articleVenue)
-            {
-                $this->times[] = [
-                    'start' => [
-                        'epoch' => strtotime($performance['showtime']),
-                        'readable' => $this->performanceDateFormatter($performance['showtime']),
-                        'day' => date('Y-m-d', strtotime($performance['showtime'])),
-                        'time' => date('H:i', strtotime($performance['showtime']))
-                    ],
-                    'end' => [
-                        'epoch' => strtotime($performance['showend']),
-                        'readable' => $this->performanceDateFormatter($performance['showend']),
-                        'day' => date('Y-m-d', strtotime($performance['showend'])),
-                        'time' => date('H:i', strtotime($performance['showend']))
-                    ],
-                    'price' => number_format( $performance['price'], 2 )
-                ];
-            }
+            $this->times[] = [
+                'start' => [
+                    'epoch' => strtotime($performance['showtime']),
+                    'readable' => $this->performanceDateFormatter($performance['showtime']),
+                    'day' => date('Y-m-d', strtotime($performance['showtime'])),
+                    'time' => date('H:i', strtotime($performance['showtime']))
+                ],
+                'end' => [
+                    'epoch' => strtotime($performance['showend']),
+                    'readable' => $this->performanceDateFormatter($performance['showend']),
+                    'day' => date('Y-m-d', strtotime($performance['showend'])),
+                    'time' => date('H:i', strtotime($performance['showend']))
+                ],
+                'price' => number_format( $performance['price'], 2 )
+            ];
         }
 
         $this->sort($this->times);
@@ -106,10 +100,22 @@ class ShowTimeTransformer extends Transformer {
         if(count($this->times) > 1) {
             $response['summary']['isMultiDate'] = true;
             $response['summary']['nextPerformance'] = $this->getNextPerformance();
-            $response['summary']['lastPerformance'] = $this->getLastPerformance();           
+            $response['summary']['lastPerformance'] = $this->getLastPerformance();                             
         }
 
+        # regardless of how many shows there are, add in the venue data
+        $response['summary']['venue'] = $this->getVenue();
+
+        # ... and return it all
         return $response;
+    }
+
+    public function getVenue()
+    {
+
+        $venue = $this->article['event']['show_time'][0]['venue'];
+
+        return App::make('VenueTransformer')->transform( $venue );
     }
 
     public function getNextPerformance()
