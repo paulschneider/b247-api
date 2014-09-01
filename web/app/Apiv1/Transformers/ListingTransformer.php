@@ -167,7 +167,7 @@ Class ListingTransformer extends Transformer {
                 $response[ $day ]['picks'][] = $article;
             }
             # otherwise pipe the article into the main articles array, as long as it has a showDate!
-            else if( ! isset($article['event']['details']['showDate']) && ! is_null($article['event']['details']['showDate']) ) {
+            else if( isset($article['event']['details']['showDate']) && ! is_null($article['event']['details']['showDate']) ) {
                 $response[ $day ]['articles'][] = $article;    
             }
         }
