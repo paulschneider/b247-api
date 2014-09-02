@@ -57,7 +57,7 @@ Class ArticleResponseMaker {
 			'navigation' => $this->nextPreviousArticles(),
 		];
 
-		// we return this differently to everywhere else because there is two ways of calling this class
+		# we return this differently to everywhere else because there are two ways of calling this class
 		return $response;
 	}
 
@@ -130,6 +130,12 @@ Class ArticleResponseMaker {
 		return $sponsorResponder->setSponsorType(Config::get('global.sponsorLETTERBOX'))->getCategorySponsors(3);
 	}
 
+	/**
+	 * when viewing an article there are next/previous controls to navigate through the categories
+	 * articles. This works out which should be applied to each control
+	 * 
+	 * @return array
+	 */
 	public function nextPreviousArticles()
 	{
 		$articles = App::make( 'ArticleRepository' )->getNextAndPreviousArticles($this->article);
@@ -145,5 +151,28 @@ Class ArticleResponseMaker {
 	public function getRequiredArticleData($article)
 	{
 		return $this->articleTemplateTransformer->extract($article);
+	}
+
+	/**
+	 * ignoring all article classification, retrieve an article just by an identifier
+	 * 
+	 * @param  int || string $identifier [unique identifier of the article. ID or sef_name from the article table]
+	 * @return ApiResponse
+	 */
+	public function getStaticArticle($identifier)
+	{	
+		# grab the article by its identifer
+		$article = $this->articleRepository->getArticleByIdentifier($identifier['article']);
+
+		# if we didn't get anything back then return an error
+		if( ! $article) {
+			return apiErrorResponse( 'notFound', ['public' => getMessage('public.staticArticleNotFound'), 'debug' => getMessage('api.staticArticleNotFound')] );
+		}
+
+		# if we found the article transform it into the required API response
+		$article = App::make('Apiv1\Transformers\StaticArticleTransformer')->transform($article->toArray());
+
+		# ... and return it!
+		return apiSuccessResponse('ok', [ 'article' => $article]);
 	}
 }

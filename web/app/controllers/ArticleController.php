@@ -11,6 +11,16 @@ Class ArticleController extends ApiController {
     }
 
     /**
+     * retrieve an article by its unique identifier, by-passing any channel or category assignment
+     * 
+     * @return ApiResponse
+     */
+    public function getArticle()
+    {
+        return $this->responseMaker->getStaticArticle(Input::only('article'));
+    }
+
+    /**
      * get an article for display on the desktop version of the site
      * 
      * @return array

@@ -14,6 +14,46 @@ Class ArticleRepository extends BaseModel {
 
     public $articleData = ['event.venue', 'asset', 'event.showTime', 'event.showTime.venue', 'event.cinema', 'venue'];
 
+    /**
+     * locate and return an article by its unique identifier
+     * 
+     * @param  int || string $identifier [either the ID or sef_name attribute from the article table]
+     * @return array
+     */
+    public function getArticleByIdentifier($identifier = null)
+    {
+        # if we have something to try and find the article by
+        if( ! is_null($identifier) )
+        {
+            $query = Article::active();
+
+            # if the identifier is numeric then its likely the article ID thats been supplied
+            if(is_numeric($identifier)) {
+                $query->whereId($identifier);
+            }
+            # otherwise try and use the sef_name field to find it
+            else {
+                $query->whereSefName($identifier);
+            }
+
+            # execute
+            $result = $query->first();
+
+            # ... and return
+            return $result;
+        }
+        else {
+            return false;
+        }
+    }
+
+    /** 
+     * retrieve a list of articles assigned to a particular sub-channel/category
+     * 
+     * @param  int $categoryId
+     * @param  int $channelId
+     * @return array
+     */
     public function getArticlesByCategory($categoryId, $channelId)
     {
         $result = Article::select('article.*')
@@ -29,9 +69,20 @@ Class ArticleRepository extends BaseModel {
         return $result->toArray();
     }
 
+    /**
+     * grab the map objects that are specified distance from provided lat/lon entries
+     * 
+     * @param  int $categoryId
+     * @param  int $channelId
+     * @param  float $lat
+     * @param  float $lon
+     * @param  int $distance
+     * @return array
+     */
     public function getArticleMapObjects($categoryId, $channelId, $lat, $lon, $distance)
     {
-        //https://developers.google.com/maps/articles/phpsqlsearch_v3
+        # https://developers.google.com/maps/articles/phpsqlsearch_v3
+    
         $query = \DB::select(\DB::raw("
             SELECT article.id, 
             ( 6371 * acos( cos( radians($lat) ) * cos( radians( lat ) ) * cos( radians( lon ) - radians($lon) ) + sin( radians($lat) ) * sin( radians( lat ) ) ) ) AS distance 

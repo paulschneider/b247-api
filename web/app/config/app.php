@@ -135,6 +135,7 @@ return array(
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Apiv1\Mail\Newsletters\NewsletterListServiceProvider',
 		'Apiv1\Mail\Notifications\NotificationsServiceProvider',
+		'Barryvdh\Debugbar\ServiceProvider',
 	),
 
 	/*
@@ -201,5 +202,6 @@ return array(
 		'URL'             => 'Illuminate\Support\Facades\URL',
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
+		'Debugbar' 		  => 'Barryvdh\Debugbar\Facade',
 	),
 );

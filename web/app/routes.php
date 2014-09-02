@@ -16,10 +16,20 @@ Route::group(['prefix' => 'v1'], function(){
     |
     |
     */
-    if( Input::get('dataOnly') ) {
+    # only return the data of the article. Not including the template
+    if( Input::get('dataOnly') ) 
+    {
         Route::get('articles', 'ArticleController@getWebArticle');   
     }
-    else {
+    # call to grab a static article. This only be used to grab content for pages like About Us, Privacy Policy
+    # as it returns a reduced result set of the article content
+    else if(Input::get('static')) 
+    {
+        Route::get('articles', 'ArticleController@getArticle');      
+    }
+    # get the app version of the article including the HTML template markup
+    else 
+    {
         Route::get('articles', 'ArticleController@getAppArticle');
     }
 
