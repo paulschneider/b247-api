@@ -32,5 +32,6 @@ return [
 	"contactEnquirySent" => "System contact enquiry successfully sent to user.",
 	"errorsWithLoginAttempt" => "Unable to authenticate. Validator did not pass user input.",
 	"userProfileSuccessfullyUpdated" => "User account profile saved",
-	"newUserAccountCreated" => "A new user account was successfully created. Email with password sent."
+	"newUserAccountCreated" => "A new user account was successfully created. Email with password sent.",
+	"staticArticleNotFound" => "The static article could not be located. Unknown identifier."
 ];
