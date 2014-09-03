@@ -81,11 +81,11 @@ class EventTransformer extends Transformer {
                     'sefName' => $event['sef_name'],
                     'showDate' => $performances['venues'][0]['startTime']['day'],
                     'showTime' => $performances['venues'][0]['startTime']['time'],
-                    'epoch' => $performances['venues'][0]['startTime']['epoch']
+                    'epoch' => $performances['venues'][0]['startTime']['epoch'],
                     # these two attributes (price and URL) should be removed for version two. They are not needed
                     # but left in so to not break the mobile and tablet apps
-                    ,'price' => null,
-                    ,'url' => null,
+                    'price' => null,
+                    'url' => null,
                 ]
             ];
 
