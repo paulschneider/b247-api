@@ -16,7 +16,7 @@ Class UserPreferenceResponseMaker {
 	 * list of fields that this process must have before it can be completed
 	 * @var array
 	 */
-	protected $requiredFields = ['districts', 'channels'];
+	protected $requiredFields = ['districts', 'channels', 'broadcasts'];
 
 	/**
 	 * instance of the user responder class
@@ -129,7 +129,7 @@ Class UserPreferenceResponseMaker {
 		# associate the incoming districts with the authenticated user account
 		if( ! $user = $repo->setUserDistrictPreferences($this->user, $promotedDistricts) ) 
 		{
-			return apiErrorResponse( 'notAcceptable', ['errorReason' => Lang::get('api.invalidDistrictPreferenceRequest')] );
+			return apiErrorResponse( 'notAcceptable', ['errorReason' => Lang::get('api.invalidDistrictPreferenceRequest'), 'public' => getMessage('api.invalidDistrictPreferenceRequest')] );
 		}
 
 		/*
@@ -149,6 +149,6 @@ Class UserPreferenceResponseMaker {
 		$user =  $this->userResponder->getUserProfile($user->access_key);
 
 		# otherwise it all went well and we can say as much to the caller
-		return apiSuccessResponse( 'ok', [ 'furtherInfo' => Lang::get('api.userPreferencesUpdated') ] );
+		return apiSuccessResponse( 'ok', [ 'furtherInfo' => Lang::get('api.userPreferencesUpdated'), 'public' => getMessage('public.userPreferencesSuccessfullyUpdated') ] );
 	}
 }

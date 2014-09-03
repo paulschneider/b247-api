@@ -29,5 +29,6 @@ return [
 	"errorsWithLoginAttempt" => "There was a problem trying to log you in. Please try again.",
 	"userProfileSuccessfullyUpdated" => "Your account has been successfully updated.",
 	"newUserAccountCreated" => "Thanks for registering with us at B24/7. We have sent you an email with your password for logging into our application and website.",
-	"staticArticleNotFound" => "The page you are looking for has been moved, deleted or is not currently available."
+	"staticArticleNotFound" => "The page you are looking for has been moved, deleted or is not currently available.",
+	"userPreferencesSuccessfullyUpdated" => "Your profile preferences were successfully updated",
 ];

@@ -1,10 +1,8 @@
 <?php
-use DebugBar\StandardDebugBar;
+	use DebugBar\StandardDebugBar;
 
-$debugbar = new StandardDebugBar();
-$debugbarRenderer = $debugbar->getJavascriptRenderer();
-
-$debugbar["messages"]->addMessage("hello world!");
+	$debugbar = new StandardDebugBar();
+	$debugbarRenderer = $debugbar->getJavascriptRenderer();
 ?>
 <html>
 	<head>
