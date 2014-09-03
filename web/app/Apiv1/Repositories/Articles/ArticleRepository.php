@@ -120,7 +120,7 @@ Class ArticleRepository extends BaseModel {
         # (this can be done in a couple of places, hence the flag)
         $sorted = false;
 
-        $query = ArticleLocation::with('article.event.venue', 'article.venue', 'article.event.showTime', 'article.asset', 'article.location')->select(
+        $query = ArticleLocation::with('article.event.venue', 'article.venue', 'article.event.showTime', 'article.event.showTime.venue', 'article.event.cinema', 'article.asset', 'article.location')->select(
             'article.title', 'article_location.article_id'
         )->join('article', 'article.id', '=', 'article_location.article_id');
 

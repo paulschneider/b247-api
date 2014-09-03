@@ -110,12 +110,19 @@ class ShowTimeTransformer extends Transformer {
         return $response;
     }
 
+    /**
+     * retrieve the venue for the event
+     * 
+     * @return array $venue
+     */
     public function getVenue()
     {
+        if(isset($this->article['event']['show_time'][0]['venue']))
+        {
+            $venue = $this->article['event']['show_time'][0]['venue'];
 
-        $venue = $this->article['event']['show_time'][0]['venue'];
-
-        return App::make('VenueTransformer')->transform( $venue );
+            return App::make('VenueTransformer')->transform( $venue );    
+        }        
     }
 
     public function getNextPerformance()

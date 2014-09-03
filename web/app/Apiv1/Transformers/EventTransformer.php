@@ -82,11 +82,21 @@ class EventTransformer extends Transformer {
                     'showDate' => $performances['venues'][0]['startTime']['day'],
                     'showTime' => $performances['venues'][0]['startTime']['time'],
                     'epoch' => $performances['venues'][0]['startTime']['epoch']
+                    # these two attributes (price and URL) should be removed for version two. They are not needed
+                    # but left in so to not break the mobile and tablet apps
+                    ,'price' => null,
+                    ,'url' => null,
                 ]
             ];
 
             $response['summary'] = $performances['summary'];
+
+            # for cinema events we provide a list of venues where the film is showing. 
+            # these were previously attached to a single venue with alternatives listed out
             $response['venues'] = $performances['venues'];
+
+            # thats why we keep this single venue item. It should be removed for version two
+            $response['venue'] = null;
 
             return $response;
         }    
