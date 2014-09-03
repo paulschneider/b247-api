@@ -171,7 +171,7 @@ Class ArticleRepository extends BaseModel {
         # (this can be done in a couple of places, hence the flag)
         $sorted = false;
 
-        $query = ArticleLocation::with('article.event.venue', 'article.venue', 'article.event.showTime', 'article.asset', 'article.location')->select(
+        $query = ArticleLocation::with('article.event.venue', 'article.venue', 'article.event.showTime', 'article.event.showTime.venue', 'article.event.cinema', 'article.asset', 'article.location')->select(
             'article.title', 'article_location.article_id'
         )->join('article', 'article.id', '=', 'article_location.article_id');
 
@@ -276,7 +276,7 @@ Class ArticleRepository extends BaseModel {
     {
         $dateStamp = convertTimestamp( 'Y-m-d', $timestamp);
 
-        $query = ArticleLocation::with('article.event.venue', 'article.event.cinema', 'article.event.showTime.venue', 'article.asset', 'article.location')->select(
+        $query = ArticleLocation::with('article.event.cinema', 'article.event.showTime.venue', 'article.asset', 'article.location')->select(
             'article.title', 'article_location.article_id'
         )
         ->join('article', 'article.id', '=', 'article_location.article_id')
@@ -296,7 +296,7 @@ Class ArticleRepository extends BaseModel {
         }
         # or just grab a days worth
         elseif ( $range == "day" )
-        {
+        {            
             $query->where('event_showtimes.showtime', '>=', $dateStamp.' 00:00:01');            
             $query->where('event_showtimes.showtime', '<=', $dateStamp.' 23:59:59');
         }
@@ -304,7 +304,6 @@ Class ArticleRepository extends BaseModel {
         # if we have a user object we only want to grab content that they want to see
         if( ! is_null($user))    
         {
-
             # don't get any articles from channels they have disabled
             if( count($user->inactive_channels) > 0 ) {
                 $query->whereNotIn('channel_id', $user->inactive_channels, 'or'); 
