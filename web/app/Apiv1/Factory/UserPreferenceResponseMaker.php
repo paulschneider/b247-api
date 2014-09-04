@@ -51,7 +51,7 @@ Class UserPreferenceResponseMaker {
 			"districts" => $this->getDistricts(),
 			"broadcasts" => $this->getBroadcasts()
 		];
-return $response;
+
 		return apiSuccessResponse( 'ok', $response );
 	}
 
