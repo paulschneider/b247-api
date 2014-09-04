@@ -1,5 +1,7 @@
 <?php namespace Apiv1\Tools;
 
+use stdClass;
+
 Class UserBroadCastOrganiser {
 
 	/**
@@ -12,20 +14,31 @@ Class UserBroadCastOrganiser {
 	{
 		if(is_array($data['broadcasts']))
 		{
-			$opted = [];
+			$optIns = []; $optOuts = [];
 
 			foreach($data['broadcasts'] AS $broadcast)
 			{
-				if($broadcast['isEnabled']) 
-				{
-					$opted[] = [
-						"user_id" => $user->id,
-						"communication_id" => $broadcast['id']
-					];
+				$pref = [
+					"user_id" => $user->id,
+					"communication_id" => $broadcast['id']
+				];
+
+				# the user is opting to receive the communication
+				if($broadcast['isEnabled']) {
+					$optIns[] = $pref;
+				}
+				# they've chosen not to receive it
+				else {
+					$optOuts[] = $pref;
 				}
 			}
 
-			return $opted;
+			$response = new stdClass();
+
+			$response->optIns = $optIns;
+			$response->optOuts = $optOuts;
+
+			return $response;
 		}
 
 		return false;

@@ -16,7 +16,7 @@ Class UserPreferenceResponseMaker {
 	 * list of fields that this process must have before it can be completed
 	 * @var array
 	 */
-	protected $requiredFields = ['districts', 'channels'];
+	protected $requiredFields = ['districts', 'channels', 'broadcasts'];
 
 	/**
 	 * instance of the user responder class
@@ -26,10 +26,15 @@ Class UserPreferenceResponseMaker {
 	private $userResponder;
 
 	public function __construct()
-	{
+	{		
 		$this->userResponder = App::make('UserResponder');		
 	}
 
+	/**
+	 * retrieve preferences for an authenticated user
+	 * 
+	 * @return apiResponse
+	 */
 	public function get()
 	{
 		# check that we have everything need to proceed including required params and auth creds. If all 
@@ -46,7 +51,7 @@ Class UserPreferenceResponseMaker {
 			"districts" => $this->getDistricts(),
 			"broadcasts" => $this->getBroadcasts()
 		];
-
+return $response;
 		return apiSuccessResponse( 'ok', $response );
 	}
 
@@ -138,11 +143,14 @@ Class UserPreferenceResponseMaker {
 	    |--------------------------------------------------------------------------
 	    */
 	   
-	    # work out which of the received preferences has been opted in to (i.e activated)
-	   	$optedBroadcasts = App::make('Apiv1\Tools\UserBroadCastOrganiser')->organise($data, $this->user);
+	    # work out which of the received preferences has been opted in to (i.e activated) or out of (i.e deactivated)
+	   	$opts = App::make('Apiv1\Tools\UserBroadCastOrganiser')->organise($data, $this->user);
 
 	   	# update the database with these new preferences
-		$repo->setBroadcastPreferences($this->user, $optedBroadcasts);	
+		$repo->setBroadcastPreferences($this->user, $opts->optIns);	
+
+		# update the third-party mail client (i.e MailChimp (at this time)) with the state of the new prefs
+		App::make('Apiv1\Responders\BroadcastResponder')->updateClient($this->user, $opts);
 
 		# ... and retrieve the updated user account, including these preference updates so the apps have 
 		# most up to date account info

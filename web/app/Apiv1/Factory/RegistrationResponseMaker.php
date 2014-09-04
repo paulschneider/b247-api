@@ -35,6 +35,11 @@ Class RegistrationResponseMaker {
 		$this->registration = $registrationEmail;
 	}
 
+	/**
+	 * validate the form data supplied
+	 * 
+	 * @return boolean on success || apiErrorResponse
+	 */
 	public function validate()
 	{
 		if( ! $this->validator->run($this->form) )  {
@@ -44,11 +49,24 @@ Class RegistrationResponseMaker {
 		return true;
 	}
 
+	/**
+	 * register a new user 
+	 * 
+	 * @return null
+	 */
 	public function register()
 	{
-		if( ! $this->user = App::make( 'UserRepository' )->create($this->form) ) {
+		# the repo for this process
+		$userRepository = App::make('UserRepository');
+
+		# try and create a new user
+		if( ! $this->user = $userRepository->create($this->form) ) {
 			return apiErrorResponse( 'serverError', ['public' => getMessage('public.newUserAccountCouldNotBeCreated'), 'debug' => getMessage('api.newUserAccountCouldNotBeCreated')] );
 		}
+
+		# initialise new user broadcast preferences. These are communication ID's from the communication table
+		$broadcast = ["user_id" => $this->user->id, "communication_id" => 1];
+		$userRepository->setBroadcastPreferences($this->user, $broadcast, true);
 	}
 
 	public function make($form)
