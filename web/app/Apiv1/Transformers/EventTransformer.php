@@ -96,7 +96,7 @@ class EventTransformer extends Transformer {
             $response['venues'] = $performances['venues'];
 
             # thats why we keep this single venue item. It should be removed for version two
-            $response['venue'] = null;
+            $response['venue'] = " ";
 
             return $response;
         }    
