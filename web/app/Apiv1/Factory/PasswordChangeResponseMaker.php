@@ -27,9 +27,12 @@ Class PasswordChangeResponseMaker {
 	{
 		$this->form = $form;
 
-		# check that we have everything need to proceed including required params and auth creds. If all 
+		# check that we have everything needed to proceed including required params and auth creds. If all 
 		# successful then the response is a user object
-		if( isApiResponse($result = $this->userResponder->parameterCheck($this->requiredFields, $this->form)) ){
+		
+		$validator = App::make('Apiv1\Validators\PasswordChangeValidator');
+
+		if( isApiResponse($result = $this->userResponder->validate($validator, $this->form)) ){
 			return $result;
 		}
 		
@@ -48,7 +51,8 @@ Class PasswordChangeResponseMaker {
 		# send out password updated email
 		$this->passwordNotifier->notify( ['user' => $this->user, 'password' => $this->form['newPassword']] );
 
-		return apiSuccessResponse( 'accepted', ['user' => $this->user] );
+		# send the response back
+		return apiSuccessResponse( 'accepted', ['user' => $this->user, 'public' => getMessage('public.userPasswordSuccessfullyUpdated'), 'debug' => getMessage('api.userPasswordSuccessfullyUpdated')] );
 	}
 
 	public function store()

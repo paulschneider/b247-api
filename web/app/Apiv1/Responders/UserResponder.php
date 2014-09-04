@@ -49,7 +49,7 @@ Class UserResponder {
 	 */
 	public function validate($validator, $form)
 	{
-		if( ! $validator->run( $form ) ) {
+		if(! $validator->run($form)) {
 			return apiErrorResponse(  'unprocessable', [ 'errors' => $validator->errors(), 'debug' => getMessage('api.invalidFormData'), 'public' => getMessage('public.invalidFormData') ] );
 		}
 

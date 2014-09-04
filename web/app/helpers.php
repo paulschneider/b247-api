@@ -98,7 +98,7 @@ function aRequiredParameterIsMissing($requiredFields, $form)
 {
     foreach($requiredFields AS $field)
     {
-        if( ! array_key_exists($field, $form))
+        if( ! array_key_exists($field, $form) || empty($form[$field]))
         {
             return true;
         }
