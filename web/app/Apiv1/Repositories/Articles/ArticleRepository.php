@@ -453,7 +453,7 @@ Class ArticleRepository extends BaseModel {
                 ->where('article_location.category_id', '=', $articleLocation['categoryId'])
                 ->where('article.id', '!=', $article->id)
                 ->orderBy('article.published', 'desc')
-                ->get()->take(5)->toArray();
+                ->get()->take(6)->toArray();
 
         $articles = [];
 
