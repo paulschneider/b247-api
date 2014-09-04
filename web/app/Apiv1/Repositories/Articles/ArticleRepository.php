@@ -429,7 +429,15 @@ Class ArticleRepository extends BaseModel {
         $articles = [];
 
         foreach( $result AS $item )
-        {         
+        {        
+            # store the first item in the list in case we need to use it
+            if($counter == 0)
+            {
+                $first = $item;
+            }
+
+            # if we find the article then we want to try and get the previous item, and the one after
+            # it.
             if( $item['article_id'] == $article->id)
             {
                 $articles['previous'] = isset($result[$counter-1]) ? $result[$counter-1]['article'] : null;
@@ -438,6 +446,18 @@ Class ArticleRepository extends BaseModel {
             }
 
             $counter++;
+        }
+
+        # if there isn't a previous article, likely because its the first in the list then set the previous article
+        # to be the last in the list
+        if(is_null($articles['previous'])) {
+             $articles['previous'] = $result[count($result)-1]['article'];
+        }
+    
+        # if there isn't a next article, likely because this is the last item in the list, then set the next article
+        # to be the first item in the result set
+        if(is_null($articles['next'])) {
+            $articles['next'] = $first['article'];
         }
 
         return $articles;
