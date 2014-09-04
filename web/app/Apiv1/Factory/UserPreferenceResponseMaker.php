@@ -150,7 +150,7 @@ Class UserPreferenceResponseMaker {
 		$repo->setBroadcastPreferences($this->user, $opts->optIns);	
 
 		# update the third-party mail client (i.e MailChimp (at this time)) with the state of the new prefs
-		App::make('Apiv1\Responders\BroadcastResponder')->updateClient($this->user, $opts);
+		App::make('Apiv1\Responders\BroadCastResponder')->updateClient($this->user, $opts);
 
 		# ... and retrieve the updated user account, including these preference updates so the apps have 
 		# most up to date account info
