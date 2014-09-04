@@ -45,7 +45,7 @@ Class NewsletterList implements NewsletterListInterface {
 			); 	
 		}
 		# Fail silently if the user is already registered
-		catch(Exception $e)
+		catch(\Mailchimp_Error $e)
 		{
 			$error = $e->getMessage();
 		}
@@ -57,19 +57,26 @@ Class NewsletterList implements NewsletterListInterface {
 	 */
 	public function unsubscribeFrom($listName, $email)
 	{
-		$this->mailChimp->lists->unsubscribe(
-			$this->lists[$listName], // the list to add the subscriber to
-			['email' => $email], // the email address of the subscriber
-			false, // delete_member from the list
-			false, // send a goodbye email
-			false // send a notification email to the un-subcribe email address set in the settings of this list (in mailchimp)
-		);
+		try
+		{
+			$response = $this->mailChimp->lists->unsubscribe(
+				$this->lists[$listName], // the list to remove the subscriber from
+				['email' => $email], // the email address of the subscriber
+				false, // delete_member from the list
+				false, // send a goodbye email
+				false // send a notification email to the un-subcribe email address set in the settings of this list (in mailchimp)
+			);
+		}		
+		catch(\Mailchimp_Error $e) 
+		{
+			$error = $e->getMessage();
+		}		
 	}
 
 	/**
-	 * Un-subscribe a specified user from a mail list
+	 * confirm that a user has been subscribed to a given mail list
 	 * 
-	 * @param  string $list
+	 * @param  string $listName
 	 * @param  string $email
 	 * @return null
 	 */

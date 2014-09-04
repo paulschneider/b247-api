@@ -26,22 +26,35 @@ Class UserRepository
         return Hash::make($password);
     }
 
+    /**
+     * create a new user account
+     * 
+     * @param  array  $input [form data]
+     * @return User
+     */
     public function create(array $input)
     {
+        # call the method to generate new access key for this user
         $input['access_key'] = self::generateAccessKey();
 
+        # generate a random password
         $password = self::generatePassword();
 
+        # new blank user object
         $user = new User($input);
 
+        # set the user details from the provided form data
         $user->first_name = $input['firstName'];
         $user->last_name = $input['lastName'];
         $user->password = $password['encrypted'];        
 
+        # save the user to the database
         $user->save();
 
+        # set a plain password param against the user object so we can user it later
         $user->plain_pass = $password['plain'];
 
+        # ... send the user back
         return $user;
     }
 
@@ -251,7 +264,7 @@ Class UserRepository
      * associate a list of district identifiers with a specified user account
      * 
      * @var Apiv1\Repositories\Users\User
-     * @var array [a list of district identifier (int)]
+     * @var array [a list of district identifiers (int)]
      * @return Apiv1\Repositories\Users\User $user
      */
     public function setUserDistrictPreferences($user, $districts)
@@ -289,15 +302,23 @@ Class UserRepository
         }
 
         return false;
-    }
+    }   
 
-    public function setBroadcastPreferences($user, $broadcasts)
+    /**
+     * set user communication preferences
+     * 
+     * @param User $user        [authenticated user]
+     * @param array $broadcasts [a list of communication preferences]
+     */
+    public function setBroadcastPreferences($user, $broadcasts, $newUser = false)
     {
         # shortcut the table as we'll reference it a couple of times and it has a long name
         $table = 'user_comms_preference';
 
-        # remove all previous user prefs for this user
-        DB::table($table)->where('user_id', $user->id)->delete();    
+        # remove all previous user prefs for this user, if its not a new account
+        if( ! $newUser) {
+            DB::table($table)->where('user_id', $user->id)->delete();        
+        }        
 
         # insert the new prefs, if there are any
         if(!empty($broadcasts)) {
