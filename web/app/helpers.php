@@ -224,12 +224,14 @@ function userAccessKeyPresent()
 
 function userIsAuthenticated()
 {
-    if( array_key_exists('accessKey', getallheaders()) || Input::get('accessKey'))
+    if( array_key_exists('accessKey', getallheaders()) || Input::get('accessKey') || Request::header("accessKey"))
     {
         return true;
     }
-
-    return false;
+    else
+    {
+        return false;    
+    }    
 }
 
 function getAccessKey()
