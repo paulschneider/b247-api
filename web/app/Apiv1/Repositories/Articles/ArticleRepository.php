@@ -361,6 +361,38 @@ Class ArticleRepository extends BaseModel {
     }
 
     /**
+     * retrieve a list of articles from a provided array of identifiers
+     * 
+     * @param  array $ids   [list of unique identifiers for articles to return]
+     * @return array        [a list of articles]
+     */
+    public static function getArticlesByIds(array $ids)
+    {
+        $articles = [];
+
+        # if we have some id's to work with
+        if(is_array($ids) & count($ids) > 0)
+        {   
+            $query = ArticleLocation::with('article.event.venue', 'article.event.showTime', 'article.asset', 'article.location')->select(
+                'article.title', 'article_location.article_id'
+            )
+            ->join('article', 'article.id', '=', 'article_location.article_id')
+            ->whereIn('article.id', $ids)
+            ->orderBy('article.title', 'asc');
+
+            $result = $query->get();
+
+            # they come out of this query slightly differently to how the articleTransformer needs them. 
+            # sort that out !
+            foreach( $result->toArray() AS $item ) {
+                $articles[] = $item['article'];
+            }
+        }
+ 
+        return $articles;
+    }
+
+    /**
      * Carry out a simple search of all articles by a specified term
      * 
      * @param  string $searchTerm [the string to search for]
