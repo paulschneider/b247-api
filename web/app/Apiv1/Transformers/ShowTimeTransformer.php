@@ -93,14 +93,15 @@ class ShowTimeTransformer extends Transformer {
         $response = [
             'summary' => [
                 'isMultiDate' => false,
-                'firstPerformance' => $this->getFirstPerformance()
+                'firstPerformance' => $this->getFirstPerformance(),
+                'showingToday' => $this->getTodaysPerformances()
             ],
         ];
 
-        if(count($this->times) > 1) {
-            $response['summary']['isMultiDate'] = true;
+        if(count($this->times) > 1) {            
             $response['summary']['nextPerformance'] = $this->getNextPerformance();
             $response['summary']['lastPerformance'] = $this->getLastPerformance();                             
+            $response['summary']['isMultiDate'] = $this->isMultiDate($response['summary']['firstPerformance'], $response['summary']['lastPerformance']);
         }
 
         # regardless of how many shows there are, add in the venue data
@@ -108,6 +109,26 @@ class ShowTimeTransformer extends Transformer {
 
         # ... and return it all
         return $response;
+    }
+
+    /**
+     * check to see whether this show runs across multiple days
+     * 
+     * @param  array  $firstPerformance [details of the very first performance of this show]
+     * @param  array  $lastPerformance  [details of the very last performance of this show]
+     * @return boolean
+     */
+    public function isMultiDate($firstPerformance, $lastPerformance)
+    {
+        // convert the start day of the first performance and last performance
+        // if the first day is less than the last day then its a multi-date performance
+        if(strtotime($firstPerformance['start']['day']) < strtotime($lastPerformance['start']['day']))
+        {
+            return true;
+        }
+
+        // its on the same day
+        return false;
     }
 
     /**
@@ -123,6 +144,29 @@ class ShowTimeTransformer extends Transformer {
 
             return App::make('VenueTransformer')->transform( $venue );    
         }        
+    }
+
+    public function getTodaysPerformances()
+    {
+        if(count($this->times) > 0)
+        {
+            $today = date('Y-m-d');
+             $kept = [];
+
+            foreach($this->times AS $show)
+            {
+                if($show['start']['day'] == $today)
+                {
+                    $kept[$show['start']['epoch']] = $show;
+                }
+            }
+            
+            ksort($kept);
+
+            return array_values($kept);
+        }
+
+        return null;
     }
 
     public function getNextPerformance()

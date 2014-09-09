@@ -22,7 +22,7 @@ Class ContentFilter {
 		if( ! is_null($this->user) && count($this->user->inactive_categories) > 0)
 		{		
 			# if we find a combination of catId and subChannelId then the user has opted out of this category
-			if(array_key_exists($category, $this->user->inactive_categories) && $this->user->inactive_categories[$category]['subchannel'] == $subChannel) {
+			if(array_key_exists($category, $this->user->inactive_categories)) {
 				return false;
 			}
 		}
