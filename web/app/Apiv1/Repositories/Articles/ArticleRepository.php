@@ -64,6 +64,7 @@ Class ArticleRepository extends BaseModel {
                 $query->where('article_location.sub_channel_id', $channelId)->where('article_location.category_id', $categoryId);
          }])
         ->with($this->articleData)
+        ->where('article.is_approved', true)
         ->get();
 
         return $result->toArray();
@@ -145,6 +146,7 @@ Class ArticleRepository extends BaseModel {
 
         $query->where('article_location.sub_channel_id', getSubChannelId($channel));
         $query->where('article_location.category_id', $category['id']);
+        $query->where('article.is_approved', true);
 
         if( ! $result = $query->first() ) {
             return false;
@@ -239,7 +241,7 @@ Class ArticleRepository extends BaseModel {
         }
 
         # by default ensure we only get approved articles
-        $query->whereNotNull('article.is_approved')->take($limit);
+        $query->where('article.is_approved', true)->take($limit);
 
         # and by default order all articles by their publication date
         $query->orderBy('article.published', 'desc');
@@ -281,7 +283,8 @@ Class ArticleRepository extends BaseModel {
         )
         ->join('article', 'article.id', '=', 'article_location.article_id')
         ->join('event_showtimes', 'event_showtimes.event_id', '=', 'article.event_id')
-        ->where('sub_channel_id', $channel);
+        ->where('sub_channel_id', $channel)
+        ->where('article.is_approved', true);
 
         // grab a weeks worth of articles from a specified point in time
         if( $range == "week" )
