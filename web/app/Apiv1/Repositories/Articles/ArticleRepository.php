@@ -84,7 +84,7 @@ Class ArticleRepository extends BaseModel {
     {
         # https://developers.google.com/maps/articles/phpsqlsearch_v3
     
-        $query = \DB::select(\DB::raw("
+        $query = DB::select(DB::raw("
             SELECT article.id, 
             ( 6371 * acos( cos( radians($lat) ) * cos( radians( lat ) ) * cos( radians( lon ) - radians($lon) ) + sin( radians($lat) ) * sin( radians( lat ) ) ) ) AS distance 
             FROM article 
@@ -381,7 +381,8 @@ Class ArticleRepository extends BaseModel {
             )
             ->join('article', 'article.id', '=', 'article_location.article_id')
             ->whereIn('article.id', $ids)
-            ->orderBy('article.title', 'asc');
+            ->orderBy('article.title', 'asc')
+            ->where('article.is_approved', true);
 
             $result = $query->get();
 
@@ -407,7 +408,8 @@ Class ArticleRepository extends BaseModel {
             'article.title', 'article_location.article_id'
         )
         ->join('article', 'article.id', '=', 'article_location.article_id')
-        ->where('article.title', 'LIKE', "%{$searchTerm}%");
+        ->where('article.title', 'LIKE', "%{$searchTerm}%")
+        ->where('article.is_approved', true);
 
         $result = $query->orderBy('article.title', 'asc')->get();
 
@@ -457,6 +459,7 @@ Class ArticleRepository extends BaseModel {
                 ->join('article', 'article.id', '=', 'article_location.article_id')
                 ->where('article_location.category_id', '=', $categoryId)
                 ->where('article_location.sub_channel_id', '=', $subChannelId)
+                ->where('article.is_approved', true)
                 ->orderBy('article.published', 'asc')
                 ->get()->toArray();
 
