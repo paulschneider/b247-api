@@ -93,6 +93,7 @@ class ShowTimeTransformer extends Transformer {
         $response = [
             'summary' => [
                 'isMultiDate' => false,
+                'fromPrice' => $this->getLowestPerformancePrice(),
                 'firstPerformance' => $this->getFirstPerformance(),
                 'showingToday' => $this->getTodaysPerformances()
             ],
@@ -120,8 +121,8 @@ class ShowTimeTransformer extends Transformer {
      */
     public function isMultiDate($firstPerformance, $lastPerformance)
     {
-        // convert the start day of the first performance and last performance
-        // if the first day is less than the last day then its a multi-date performance
+        # convert the start day of the first performance and last performance
+        # if the first day is less than the last day then its a multi-date performance
         if(strtotime($firstPerformance['start']['day']) < strtotime($lastPerformance['start']['day']))
         {
             return true;
@@ -271,5 +272,26 @@ class ShowTimeTransformer extends Transformer {
         ksort($sortedTimes);
 
         $this->times = array_values($sortedTimes);
+    }
+
+    /**
+     * go through each of the performances and work out which the cheapest. This will be shown
+     * on the front end as the 'from £' price
+     * 
+     * @return string [the lowest priced performance in this performance run]
+     */
+    public function getLowestPerformancePrice()
+    {
+        $tmp = 10000;
+
+        foreach($this->times AS $performance)
+        {
+            if($performance['price'] < $tmp)
+            {
+                $tmp = $performance['price'];
+            }
+        }
+
+        return $tmp == 10000 ? '0.00' : $tmp;
     }
 }

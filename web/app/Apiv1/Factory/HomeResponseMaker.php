@@ -18,10 +18,11 @@ Class HomeResponseMaker {
 	protected $user = null;
 
 	public function __construct()
-	{
-		$this->homeChannels = Config::get('global.homeChannels'); // channels to show on the homepage
+	{		
 		$this->channelRepository = App::make( 'ChannelRepository' );
 		$this->sponsorResponder = App::make('SponsorResponder');
+
+		$this->homeChannels = $this->channelRepository->getTopChannelIds(); // channels to show on the homepage
 
 		# see if we have an user accessKey present. If so we might want to show a different view of the homepage
         if( ! isApiResponse($user = App::make('UserResponder')->verify()) ) {
@@ -69,7 +70,15 @@ Class HomeResponseMaker {
 	 * @return array
 	 */
 	public function getChannelFeed()
-	{
+	{	
+		# we handle the what's on part of the channel feed differently to everything else so
+		# see if its in the channel list and remove it if so
+		if(in_array(Config::get('global.whatsOnChannelId'), $this->homeChannels))
+		{
+			$key = array_search(Config::get('global.whatsOnChannelId'), $this->homeChannels);
+			unset($this->homeChannels[$key]);
+		}
+
         # create and initialise a channel feed
         $channelFeed = App::make('ChannelFeed');	
         $channelFeed->initialise($this->homeChannels, $this->user);

@@ -110,6 +110,7 @@ Class ArticleRepository extends BaseModel {
         ->where('category_id', $categoryId)
         ->whereIn('article.id', $ids)
         ->join('article', 'article.id', '=', 'article_id')
+        ->where('article.is_approved', true)
         ->active()
         ->get();
 
@@ -511,6 +512,7 @@ Class ArticleRepository extends BaseModel {
                 ->where('article_location.category_id', '=', $articleLocation['categoryId'])
                 ->where('article.id', '!=', $article->id)
                 ->orderBy('article.published', 'desc')
+                ->where('article.is_approved', true)
                 ->get()->take(6)->toArray();
 
         $articles = [];

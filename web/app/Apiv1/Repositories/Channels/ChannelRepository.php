@@ -28,6 +28,16 @@ Class ChannelRepository extends BaseModel {
     }
 
     /**
+     * retrieve a list of channels ID' for top level channels only
+     * 
+     * @return array [a list of top level channel identifiers]
+     */
+    public function getTopChannelIds()
+    {
+        return Channel::whereNull('parent_channel')->active()->lists('id');
+    }
+
+    /**
     * get a list of channels with any associated sub-channels
     *
     * @var array

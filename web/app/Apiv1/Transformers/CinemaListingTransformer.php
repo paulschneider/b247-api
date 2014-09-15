@@ -61,7 +61,7 @@ Class CinemaListingTransformer extends Transformer {
             'duration' => $listingData['duration'],            
         ];  
 
-        $response['venues'] = $venues;
+        $response['venues'] = $this->sort($venues);
 
         return $response;
     }    
@@ -77,7 +77,9 @@ Class CinemaListingTransformer extends Transformer {
         $response = new stdClass();
 
         # get all of the show times for this particular event
-        $showTimes = $event['show_time'];
+        $showTimes = $event['show_time'];      
+
+        //$showTimes = $this->sort($showTimes);
 
         # check to see whether this is a multi date performance
         $this->isMultiDate = $this->checkIsMultiDate($showTimes);
@@ -101,9 +103,7 @@ Class CinemaListingTransformer extends Transformer {
         $venueTransformer = App::make('Apiv1\Transformers\VenueTransformer');
 
         # init an empty array where can keep all the performances
-        $performances = [];
-
-        $venues = [];
+        $performances = [];       
 
         # go through each of the show times and make them look pretty
         foreach($showTimes AS $performance)
@@ -120,23 +120,37 @@ Class CinemaListingTransformer extends Transformer {
                 'showRunEnd' => $lastPerformance,                
             ];     
 
-            # where is the performance taking place
-            $venue =  $venueTransformer->transform($performance['venue']);
-
             # attach the venue to the performance item
-            $tmp['venue'] = $venue; 
+            $tmp['venue'] = $venueTransformer->transform($performance['venue']); 
 
+            $performances[] = $tmp;     
+        }
+
+        # sort the performances by the date with the earliest start time first
+        # by sorting them we always get the earliest performance in the range, its always kept 
+        # because its the first item and we always know when the range ends because we set it above.
+        # this is all very confusing!
+        $performances = $this->sort($performances);
+
+        $venues = [];
+        $kept = [];
+
+        # go through the performances and keep unique the performances at unique venues
+        # we do this so we have a list of venues where the film is showing regardless of how
+        # many times the show plays at a venue during it performance run
+        foreach($performances AS $performance)
+        {
             # if a performance at this venue has not been added to the list, then add it
-            if(!in_array($venue['id'], $venues)) {
-                $performances[] = $tmp;
+            if(!in_array($performance['venue']['id'], $venues)) {
+                $kept[] = $performance;
             }           
 
             # add this venue to the list of venues already seen and added to the performances array
-            $venues[] = $venue['id'];
+            $venues[] = $performance['venue']['id'];
         }
 
         # and.... send it back
-        return $performances;
+        return $kept;
     }
 
     /**
@@ -232,5 +246,28 @@ Class CinemaListingTransformer extends Transformer {
             'day' => date('Y-m-d', strtotime($last['showtime'])),
             'time' => date('H:i', strtotime($last['showtime']))
         ];          
+    }
+
+    /**
+     * Sort the time array by the epoch to put them in chronological order
+     * 
+     * @param  array $times [array of time arrays as created by TransformCollection()]
+     * @return array        [chronologically sorted times array]
+     */
+    public function sort($times)
+    {
+        $sortedTimes = [];
+
+        foreach($times AS $time)
+        {
+            if( ! array_key_exists($time['startTime']['epoch'], $sortedTimes) )
+            {
+                $sortedTimes[$time['startTime']['epoch']] = $time;    
+            }
+            
+        }
+        ksort($sortedTimes);
+
+        return array_values($sortedTimes);
     }
 }

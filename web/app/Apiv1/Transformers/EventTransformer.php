@@ -59,7 +59,7 @@ class EventTransformer extends Transformer {
                     'showDate' => $performance['start']['day'],
                     'showTime' => $performance['start']['time'],
                     'epoch' => strtotime($performance['start']['day'] .' ' . $performance['start']['time']),
-                    'price' => $performance['price'],
+                    'price' => $performances['summary']['fromPrice'],
                     'url' => $event['url'],
                     'performances' => $performances
                 ]
