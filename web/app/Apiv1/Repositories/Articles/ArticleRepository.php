@@ -447,6 +447,8 @@ Class ArticleRepository extends BaseModel {
         ->join('category AS cat', 'article_location.category_id', '=', 'cat.id')
         ->join('channel AS c', 'c.id', '=', 'article_location.channel_id')
         ->join('channel AS sc', 'sc.id', '=', 'article_location.sub_channel_id')
+        ->join('article', 'article.id', '=', 'article_location.article_id')
+        ->where('article.is_approved', true)
         ->get()
         ->toArray();
     }
