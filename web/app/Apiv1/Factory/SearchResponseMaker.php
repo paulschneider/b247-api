@@ -12,6 +12,9 @@ Class SearchResponseMaker {
 		# carry out the generic search of articles by title
 		$articles = App::make( 'ArticleRepository' )->search($searchString);
 
+		# grab the top level channels
+		$tChannels = App::make( 'ChannelRepository' )->getTopChannelIds();
+
 		# carry out the search of articles by keyword
 		$articles2 = App::make('Apiv1\Repositories\Search\SearchRepository')->keywordSearch($searchString);
 
@@ -59,7 +62,7 @@ Class SearchResponseMaker {
 		}
 		
 		# the rest of the data for the search
-		$result['adverts'] 			= App::make('SponsorResponder')->setSponsorType()->getChannelSponsors(3, Config::get('global.homeChannels')); // channels to show on the homepage;
+		$result['adverts'] 			= App::make('SponsorResponder')->setSponsorType()->getChannelSponsors(3, $tChannels); // channels to show on the homepage;
 		$result['searchTerm'] 		= $searchString;				
 		$result['searchResults'] 	= array_values($channels);		
 		$result['pagination'] 		= $metaData;		
