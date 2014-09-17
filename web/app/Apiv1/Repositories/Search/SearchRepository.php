@@ -23,15 +23,15 @@ Class SearchRepository extends Eloquent {
                 $keywords[] = $term;    
             }           
         }      
-        
+
         $query = DB::table('keyword')
             ->select('article_keyword.article_id', 'keyword.id', 'keyword.keyword')
             ->join('article_keyword', 'article_keyword.keyword_id', '=', 'keyword.id')
-            ->whereIn('keyword', $terms)->get();    
+            ->whereIn('keyword', $keywords)->get();    
 
         $entries = [];
         $articles = [];
-
+        
         # work out how many article ID's were returned for this search
         foreach($query AS $term)
         {
