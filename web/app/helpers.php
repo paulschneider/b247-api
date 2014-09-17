@@ -269,7 +269,12 @@ function makePath( $paths = [] )
 
 function isChannelUserEnabled($channelId, $inactiveUserChannels)
 {
-    return in_array($channelId, $inactiveUserChannels) ? false : true;
+    if(is_array($inactiveUserChannels))
+    {
+        return in_array($channelId, $inactiveUserChannels) ? false : true;    
+    }
+    
+    return true;
 }
 
 function getChannel( $channels, $channelId )
