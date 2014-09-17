@@ -24,7 +24,21 @@ Class ChannelListingResponder {
     {
         $subChannelId = getSubChannelId($channel);
 
-        $articles = App::make('ArticleRepository')->getChannelListing( $subChannelId, 999, $range, $time, $user );
+        $result = App::make('ArticleRepository')->getChannelListing( $subChannelId, 999, $range, $time, $user );
+
+        $articles = [];
+        $articleIds = [];
+
+        # go through the result set and make sure we only have unique articles
+        foreach($result AS $article)
+        {
+            if(!in_array($article['id'], $articleIds))
+            {
+                $articles[] = $article;
+            }
+
+            $articleIds[] = $article['id'];
+        }
 
         # if we have a user we need to filter all articles and remove any they have opted out of
         if(!is_null($user)) {

@@ -49,6 +49,7 @@ Class ArticleRepository extends BaseModel {
 
     /** 
      * retrieve a list of articles assigned to a particular sub-channel/category
+     * An example endpoint request, which reaches this method: category/5/article/articles?subChannel=11
      * 
      * @param  int $categoryId
      * @param  int $channelId
@@ -128,8 +129,9 @@ Class ArticleRepository extends BaseModel {
      */
     public function getCategoryArticle($channel, $category, $article)
     {       
-        $query = Article::select('article.*', 'article_location.article_id AS id')->with('location', 'asset', 'gallery', 'event.venue', 'event.showTime', 'event.showTime.venue', 'event.cinema', 'venue', 'video', 'author');
-        $query->join('article_location', 'article_location.article_id', '=', 'article.id');
+        $query = Article::select('article.*', 'article_location.article_id AS id')
+        ->with('location', 'asset', 'gallery', 'event.venue', 'event.showTime', 'event.showTime.venue', 'event.cinema', 'venue', 'video', 'author')
+        ->join('article_location', 'article_location.article_id', '=', 'article.id');
 
         # if its a promotional channel then we also want to get the promotion data
         if( isPromotionType($channel) ) {
@@ -340,20 +342,14 @@ Class ArticleRepository extends BaseModel {
         $result = $query->orderBy('event_showtimes.showtime', 'asc')->active()->get();
 
         $articles = [];        
-        $articleIds = [];
 
         # they come out of this query slightly differently to how the articleTransformer needs them. sort that out !
         if($result->count() > 0)
         {
             foreach($result AS $item )
             {
-                $articleId = $item->article_id;
-                
-                if( ! in_array($articleId, $articleIds)) {
-                    $articles[] = $item->article->toArray();    
-                }
-                
-                $articleIds[] = $articleId;
+                $article = $item->article->toArray();
+                $articles[] = $article;
             }    
         }      
 

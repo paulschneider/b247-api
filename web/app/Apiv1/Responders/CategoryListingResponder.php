@@ -38,13 +38,20 @@ Class CategoryListingResponder {
 		$channelArticles = App::make('ArticleRepository')->getChannelListing( $subChannelId, 20, $range, $time, $user );
 
 		$articles = [];
+		$articleIds = [];
 
-		// see if the any of the articles returned by the call are in the provided range
-		foreach( $channelArticles AS $article )
+		# see if the any of the articles returned by the call are in the provided range
+		foreach($channelArticles AS $article)
 		{
-			if( $article['location'][0]['categoryId'] == $category ) {
-				$articles[] = $article;
+			foreach($article['location'] AS $location)
+			{
+				if($location['categoryId'] == $category && !in_array($article['id'], $articleIds))
+				{
+					$articles[] = $article;
+				}
 			}
+
+			$articleIds[] = $article['id'];
 		}
 
 		# if its a week we need to transform a whole list of articles 
