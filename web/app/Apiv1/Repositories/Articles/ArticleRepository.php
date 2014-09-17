@@ -252,12 +252,20 @@ Class ArticleRepository extends BaseModel {
         # and...... go 
         $result = $query->get();        
 
-        $articles = [];
-        
+        $articles = [];            
+        $ids = [];
+
         # they come out of this query slightly differently to how the articleTransformer needs them. sort that out !
         foreach( $result->toArray() AS $item )
         {
-            $articles[] = $item['article'];
+            $article = $item['article'];
+
+            if(!in_array($article['id'], $ids))
+            {
+                $articles[] = $item['article'];    
+
+                $ids[] = $article['id'];
+            }            
         }
 
         # ... finally, we want to apply a filter to promote some of these articles based on the user' district

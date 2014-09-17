@@ -98,7 +98,7 @@ class ApiController Extends BaseController {
 
         # if we're in development mode and there is a debug parameter in the address bar
         # we will show a debug page instead of the API response
-        if(Input::get('debug') && App::environment('development'))
+        if(Input::get('debug') && App::environment('development') || App::environment('cycle'))
         {
             return View::make('debug.show');
         }
@@ -129,7 +129,7 @@ class ApiController Extends BaseController {
 
         # if we're in development mode and there is a debug parameter in the address bar
         # we will show a debug page instead of the API response
-        if(Input::get('debug') && App::environment('development'))
+        if(Input::get('debug') && App::environment('development') || App::environment('cycle'))
         {
             return View::make('debug.show');
         }

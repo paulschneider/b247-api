@@ -12,6 +12,9 @@ Class SearchRepository extends Eloquent {
         # a list of words not to search for
         $ignored = ['the', 'is', 'that', 'there', 'a', 'i', 'as', 'of', 'this'];
 
+        # strip out any whitespace
+        $terms = str_replace(' ', '', $term);
+
         # make the provided term lowercase, URL safe and then explode it on the dash separators.
         $terms = explode('-', safename(strtolower($term)));
 
@@ -27,7 +30,8 @@ Class SearchRepository extends Eloquent {
         $query = DB::table('keyword')
             ->select('article_keyword.article_id', 'keyword.id', 'keyword.keyword')
             ->join('article_keyword', 'article_keyword.keyword_id', '=', 'keyword.id')
-            ->whereIn('keyword', $keywords)->get();    
+            ->whereIn('keyword', $keywords)            
+            ->get();    
 
         $entries = [];
         $articles = [];
