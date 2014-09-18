@@ -147,23 +147,53 @@ class ShowTimeTransformer extends Transformer {
         }        
     }
 
+    /**
+     * go through all of the performances for this event and get the ones that are happening "today"
+     * or if an eventDay has been provided then get the performances for that day.
+     * 
+     * @return array [extracted performance objects]
+     */
     public function getTodaysPerformances()
     {
+        # if we have some times then go ahead
         if(count($this->times) > 0)
         {
+            # work out what today is
             $today = date('Y-m-d');
-             $kept = [];
 
+            # if we find any performances we'll keep them in here
+            $kept = [];
+
+            # go through all of the times
             foreach($this->times AS $show)
             {
-                if($show['start']['day'] == $today)
+                # if we don't have an event day then we assume we need to return performances
+                # happening "today"
+                if(is_null($this->eventDay))
                 {
-                    $kept[$show['start']['epoch']] = $show;
+                    # if this performances start day is the same as today then we want to keep it
+                    if($show['start']['day'] == $today)
+                    {
+                        # so stick in the kept array
+                        $kept[$show['start']['epoch']] = $show;
+                    }    
+                }
+                # otherwise we are looking for performances on a specific day
+                else
+                {
+                    # if the performance start day is the same as the event day we want to keep it
+                    if($show['start']['day'] == $this->eventDay)
+                    {
+                        # so stick in the kept array
+                        $kept[$show['start']['epoch']] = $show;
+                    }   
                 }
             }
             
+            # sort the array so they are in ascending order
             ksort($kept);
 
+            # reset the array keys and send it back
             return array_values($kept);
         }
 
