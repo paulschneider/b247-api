@@ -9,6 +9,7 @@ Class ArticleResponseMaker {
 	var $category;
 	var $channel; // sub-channel
 	var $article;
+	var $time;
 	var $articleTransformer;
 	var $articleRepository;
 
@@ -32,9 +33,14 @@ Class ArticleResponseMaker {
 
 	public function make($input)
 	{ 	
+		# grab the input data sent through with the request
 		$this->channel = $input['subchannel'];
 		$this->category = $input['category'];
 		$this->article = $input['article'];
+
+		# listings articles send through a time so we can grab specific data about
+		# the article as a certain point. These are the only article types to do this.
+		$this->time = isset($input['time']) ? $input['time'] : null;
 
 		# Get the details of the channel. Return an API response if not found
 		if( isApiResponse( $result = $this->getChannel()) ) {
@@ -52,7 +58,7 @@ Class ArticleResponseMaker {
 			'channel' => $this->channel,
 			'adverts' => $ads->sponsors,
 			'fullPage' => $ads->fullPage,
-			'article' => $this->articleTemplateTransformer->transform( $this->article->toArray() ),
+			'article' => $this->articleTemplateTransformer->transform( $this->article->toArray(), ['eventDay' => date('Y-m-d', $this->time)] ),
 			'related' => $this->getRelatedArticles($this->article),
 			'navigation' => $this->nextPreviousArticles(),
 		];
@@ -61,6 +67,11 @@ Class ArticleResponseMaker {
 		return $response;
 	}
 
+	/**
+	 * retrieve the channel details. This is the parent channel of the article
+	 * 
+	 * @return array [details of the channel, sub-channel and categories]
+	 */
 	public function getChannel()
 	{
 		# see if we can grab the category by the provided identifier
@@ -104,7 +115,9 @@ Class ArticleResponseMaker {
 	public function getArticle()
 	{		
 		# grab the article from the ArticleResponder
-		if( ! $this->article = App::make('Apiv1\Responders\ArticleResponder')->getArticle($this->channel, $this->category, $this->article)) {
+		if( ! $this->article = App::make('Apiv1\Responders\ArticleResponder')->getArticle($this->channel, $this->category, $this->article)) 
+		{
+			# if we couldn't find it then report an error
 			return apiErrorResponse('notFound', [ 'errorReason' => Lang::get('api.articleCouldNotBeLocated') ]);
 		}
 

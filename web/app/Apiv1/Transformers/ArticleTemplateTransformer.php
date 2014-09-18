@@ -22,8 +22,18 @@ Class ArticleTemplateTransformer extends ArticleTransformer {
     {
         $video = null;
 
+        # listings article content varies dependent on the day it is being viewed.
+        # For these a timestamp is provided which is used to determine what to show
+        if(isset($options['eventDay'])) {
+            $day = $options['eventDay'];
+        }
+        # if we don't have it then its just a normal article and we don't care about the day
+        else {
+            $day = null;
+        }
+
         # ensure we always get the body and that we always ignore the platform. The platform (mobile, web) determines what is returned. Ignore that in this case
-        $options =  ['showBody' => true, 'ignorePlatform' => true];
+        $options =  ['showBody' => true, 'ignorePlatform' => true, 'eventDay' => $day];
 
         $body = $article['body'];
 

@@ -10,11 +10,14 @@ class MapObjectTransformer extends Transformer {
      */
     public function transform( $object, $options = [] )
     {
+        $location = $object['article']['location'][0];
+
         return [
             'id'  => $object['article_id'],
             'title' => $object['title'],
             'lat' => $object['lat'],
             'lon' => $object['lon'],
+            'path' => makePath( [ $location['channelSefName'], $location['subChannelSefName'], $location['categorySefName'], $object['article']['sef_name'] ] )             
         ];
     }
 

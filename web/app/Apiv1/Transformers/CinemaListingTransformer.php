@@ -260,14 +260,43 @@ Class CinemaListingTransformer extends Transformer {
 
         foreach($times AS $time)
         {
+            # if the start date/time epoch doesn't exist then add it to the array
             if( ! array_key_exists($time['startTime']['epoch'], $sortedTimes) )
             {
                 $sortedTimes[$time['startTime']['epoch']] = $time;    
             }
-            
+            # if we find that it does exist then there is a show at the same date/time.
+            # we obviously want to keep this so we need to squeeze it into the array 
+            # by incrementing the epoch by a second until we find a place for the performance.
+            # We do this because there is a potential for several shows to be on at the same date
+            # and time but at different venues
+            else {
+                # grab the start date/time epoch
+                $key = $time['startTime']['epoch'];
+                
+                # we'll never have this many but try and squeeze the performance into the array
+                # 1,000 times. Once its in then break out of the loop.
+                for($i=1; $i < 1000; $i++)
+                {
+                    # for each iteration add 1 second to the epoch
+                    $newKey = $key+$i;
+
+                    # if the key doesn't exist then we can add the performance to the list
+                    if(!array_key_exists($newKey, $sortedTimes))
+                    {
+                        $sortedTimes[$newKey] = $time;   
+                        # and get out of this loop
+                        break;
+                    }
+                }
+            }
         }
+        # sort the array keys into ascending numerical order. This gives us performances from
+        # the earliest to the last
         ksort($sortedTimes);
 
+        # and because we don't care about the array keys now they are sorted, reset them so
+        # they go back to 0, 1, 2 etc.. then return our sorted times list
         return array_values($sortedTimes);
     }
 }

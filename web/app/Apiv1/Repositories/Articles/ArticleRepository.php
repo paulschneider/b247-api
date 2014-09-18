@@ -66,6 +66,7 @@ Class ArticleRepository extends BaseModel {
          }])
         ->with($this->articleData)
         ->where('article.is_approved', true)
+        ->orderBy('article.published', 'desc')
         ->get();
 
         return $result->toArray();
@@ -107,7 +108,8 @@ Class ArticleRepository extends BaseModel {
 
         $result = ArticleLocation::select(
             'article_id', 'article.title', 'article.lat', 'article.lon'
-        )->where('sub_channel_id', $channelId)
+        )->with('article.location')
+        ->where('sub_channel_id', $channelId)
         ->where('category_id', $categoryId)
         ->whereIn('article.id', $ids)
         ->join('article', 'article.id', '=', 'article_id')
