@@ -9,7 +9,7 @@ Class ArticleResponseMaker {
 	var $category;
 	var $channel; // sub-channel
 	var $article;
-	var $time;
+	var $eventDay;
 	var $articleTransformer;
 	var $articleRepository;
 
@@ -40,7 +40,7 @@ Class ArticleResponseMaker {
 
 		# listings articles send through a time so we can grab specific data about
 		# the article as a certain point. These are the only article types to do this.
-		$this->time = isset($input['time']) ? $input['time'] : null;
+		$this->eventDay = isset($input['time']) && !empty($input['time']) ? date('Y-m-d', $input['time']) : null;
 
 		# Get the details of the channel. Return an API response if not found
 		if( isApiResponse( $result = $this->getChannel()) ) {
@@ -58,7 +58,7 @@ Class ArticleResponseMaker {
 			'channel' => $this->channel,
 			'adverts' => $ads->sponsors,
 			'fullPage' => $ads->fullPage,
-			'article' => $this->articleTemplateTransformer->transform( $this->article->toArray(), ['eventDay' => date('Y-m-d', $this->time)] ),
+			'article' => $this->articleTemplateTransformer->transform( $this->article->toArray(), ['eventDay' => $this->eventDay] ),
 			'related' => $this->getRelatedArticles($this->article),
 			'navigation' => $this->nextPreviousArticles(),
 		];
