@@ -112,8 +112,16 @@ Class ArticleTemplateTransformer extends ArticleTransformer {
     # and return a cut down article array
     public function extract($article)
     {
+        $base = Config::get('api.baseUrl');
+
+        # remove the trailing slash from the base URL
+        if(substr($base, strlen($base)-1, strlen($base)) == "/")
+        {
+            $base = substr($base, 0, strlen($base)-1);
+        }
+ 
         return [
-            'shareLink' => Config::get('api.baseUrl').$article['shareLink'],
+            'shareLink' => $base.$article['shareLink'],
             'map' => $article['mapItems'],
         ];
     }
