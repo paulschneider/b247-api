@@ -182,6 +182,11 @@ Class ArticleRepository extends BaseModel {
             'article.title', 'article_location.article_id'
         )->join('article', 'article.id', '=', 'article_location.article_id');
 
+        if($type == 'featured')
+        {
+            $query->distinct('article.id');
+        }
+
         # on the homepage we don't care which channel the featured or picked articles come from
         if( ! $ignoreChannel ) 
         {

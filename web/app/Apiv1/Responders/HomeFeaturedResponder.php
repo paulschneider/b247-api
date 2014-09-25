@@ -6,7 +6,7 @@ class HomeFeaturedResponder {
 
 	public function get()
 	{
-        $articles = App::make('ArticleRepository')->getArticles( 'featured', 5, null, false, true );
+        $articles = App::make('ArticleRepository')->getArticles( 'featured', 15, null, false, true );
 
         return App::make('ArticleTransformer')->transformCollection( $articles );
 	}      
