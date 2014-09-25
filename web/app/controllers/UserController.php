@@ -16,7 +16,23 @@ Class UserController extends BaseController {
 	 */
 	public function setPreferences()
 	{
-		return App::make('Apiv1\Factory\UserPreferenceResponseMaker')->set(Input::all());
+		# a fault with the way the website sends large arrays causes the memory limit to be exceeded.
+		# the website has been updated to send large preference arrays as json. This is handled below
+		if(isset($_POST[0]))
+		{
+			# grab the json which will be at position zero
+			$form = $_POST[0];	
+
+			# decode it back into the array and set it into a var to be passed to set() below
+			$input = json_decode($form, true);
+		}
+		else 
+		{
+			# otherwise just use the supplied array
+			$input = Input::all();
+		}
+		
+		return App::make('Apiv1\Factory\UserPreferenceResponseMaker')->set($input);
 	}
 
 	/**
