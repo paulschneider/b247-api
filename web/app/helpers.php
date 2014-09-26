@@ -347,7 +347,7 @@ function getParentChannel($channels, $channel)
 function isMobile()
 {
     // check for the existence of the header param
-    if( Request::header('BristolAPIClient') == "iphone" || Request::header('BristolAPIClient') == "android")
+    if( Request::header('BristolAPIClient') == "iphone" || Request::header('BristolAPIClient') == "android" || Request::header('BristolAPIClient') == "ipad")
     {
         return true;
     }
