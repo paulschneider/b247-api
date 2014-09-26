@@ -54,6 +54,9 @@ Class ArticleTemplateTransformer extends ArticleTransformer {
         # grab the article continued item and store it or it will be removed
         $bodyContinued = $article['body_continued'];
 
+        # grab the article comment status - this is whether to allow the comment thread at the bottom of the article template
+        $hasComments = $article['is_comments'];
+
         # we might want to show the article on a map. This helps with that.
         $mapItems = [
             'title' => $article['title'],
@@ -82,9 +85,12 @@ Class ArticleTemplateTransformer extends ArticleTransformer {
             // assign the video to the article
             $article['video'] = $video;
         }   
+      
+        # insert the indicator as to whether to show the comment thread back into the article
+        $article = insertInto($article, 'subHeading', $hasComments, 'allowComments');
 
         # insert the body into the article after the sub heading
-        $article = insertInto($article, 'subHeading', $body, 'body');
+        $article = insertInto($article, 'allowComments', $body, 'body');
 
         # insert the temp bodyContinued in to the article at the desired position
         $article = insertInto($article, 'body', $bodyContinued, 'bodyContinued');
