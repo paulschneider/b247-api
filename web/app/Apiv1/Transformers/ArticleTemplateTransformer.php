@@ -129,6 +129,7 @@ Class ArticleTemplateTransformer extends ArticleTransformer {
         return [
             'shareLink' => $base.$article['shareLink'],
             'map' => $article['mapItems'],
+            'allowComments' => $article['allowComments'],
         ];
     }
 }
