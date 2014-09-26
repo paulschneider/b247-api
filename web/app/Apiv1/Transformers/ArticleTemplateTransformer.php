@@ -55,7 +55,7 @@ Class ArticleTemplateTransformer extends ArticleTransformer {
         $bodyContinued = $article['body_continued'];
 
         # grab the article comment status - this is whether to allow the comment thread at the bottom of the article template
-        $hasComments = $article['is_comments'];
+        $hasComments = $article['is_comments'] == null ? false : $article['is_comments'];
 
         # we might want to show the article on a map. This helps with that.
         $mapItems = [
@@ -84,13 +84,10 @@ Class ArticleTemplateTransformer extends ArticleTransformer {
 
             // assign the video to the article
             $article['video'] = $video;
-        }   
-      
-        # insert the indicator as to whether to show the comment thread back into the article
-        $article = insertInto($article, 'subHeading', $hasComments, 'allowComments');
-
+        }    
+        
         # insert the body into the article after the sub heading
-        $article = insertInto($article, 'allowComments', $body, 'body');
+        $article = insertInto($article, 'subHeading', $body, 'body');
 
         # insert the temp bodyContinued in to the article at the desired position
         $article = insertInto($article, 'body', $bodyContinued, 'bodyContinued');
@@ -106,6 +103,9 @@ Class ArticleTemplateTransformer extends ArticleTransformer {
 
         # insert a list of categories against which this article has been assigned
         $article = insertInto($article, 'shareLink', $categoryAssignment, 'categoryAssignment');
+
+        # insert the indicator as to whether to show the comment thread back into the article
+        $article = insertInto($article, 'isPromoted', $hasComments, 'allowComments');
 
         # and finally add the gallery images array to the article
         $article['gallery'] = $gallery;
@@ -129,7 +129,6 @@ Class ArticleTemplateTransformer extends ArticleTransformer {
         return [
             'shareLink' => $base.$article['shareLink'],
             'map' => $article['mapItems'],
-            'allowComments' => $article['allowComments'],
         ];
     }
 }
