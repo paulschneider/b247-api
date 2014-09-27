@@ -47,6 +47,13 @@ Class NewEnquiryNotification extends Client implements NewEnquiryNotificationInt
 	*/
 	var $type = 'message';
 
+	/**
+	 * who to blind courtesy copy the email to
+	 * 
+	 * @var string
+	 */
+	var $bcc;
+
 	public function notify($data)
 	{
 		$this->setTo($data);
@@ -64,5 +71,10 @@ Class NewEnquiryNotification extends Client implements NewEnquiryNotificationInt
 	{
 		$this->toEmail = $data['email'];
 		$this->toName = $data['name'];
+
+		# if a BCC address has been configured then use that for this email request
+		if(isset($_ENV['ENQUIRY_EMAIL_BCC'])) {
+			$this->bcc = $_ENV['ENQUIRY_EMAIL_BCC'];	
+		}
 	}
 }
