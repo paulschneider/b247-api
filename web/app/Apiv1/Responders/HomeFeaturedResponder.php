@@ -10,12 +10,19 @@ class HomeFeaturedResponder {
 		if(isMobile()) {
 			$limit = 5;
 		}
-		# as we want to show a lot more
+		# else, for the web, we want to show a lot more
 		else {
 			$limit = 15;
 		}
 
-        $articles = App::make('ArticleRepository')->getArticles( 'featured', $limit, null, false, true );
+		# type, limit, channel, isASubChannel, ignoreChannel, 
+        $articles = App::make('ArticleRepository')->getArticles( 
+        	'featured',  // type of articles to get
+        	$limit,  // the number to return
+        	null, // channel identifier
+        	false, // whether the channel is a sub channel
+        	true // whether to ignore the channel identifier (we do on the homepage as we want articles for all channels) 
+        );
 
         return App::make('ArticleTransformer')->transformCollection( $articles );
 	}      
