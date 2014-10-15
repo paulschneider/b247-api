@@ -234,11 +234,11 @@ Class CinemaListingTransformer extends Transformer {
         }
 
         # sort the array by the keys so they are in ascending order (giving us the first to last show times)
-        asort($times);
+        ksort($times);
 
         # get the last item in the array. This should be the very last instance of this event
         $last = array_pop($times);
-        
+
         # convert the showtime into the format needed and send it back.
         return [
             'epoch' => strtotime($last['showtime']),

@@ -3,6 +3,15 @@
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 
+# show last query (slq)
+function slq()
+{
+    $queries = DB::getQueryLog();
+    $last_query = end($queries);
+
+    sd($last_query);
+}
+
 function getMessage($message)
 {
     return Lang::get($message);

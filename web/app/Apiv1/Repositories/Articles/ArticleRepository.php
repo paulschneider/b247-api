@@ -3,6 +3,7 @@
 use Apiv1\Repositories\Articles\ArticleLocation;
 use Apiv1\Repositories\Articles\ArticleType;
 use Apiv1\Repositories\Articles\Article;
+use Apiv1\Repositories\Events\ShowTime;
 use Apiv1\Repositories\Search\Search;
 use Apiv1\Repositories\Models\BaseModel;
 use Carbon\Carbon;
@@ -293,34 +294,43 @@ Class ArticleRepository extends BaseModel {
      * @return array $result
      */
     public function getChannelListing( $channel, $limit = 1000, $range, $timestamp, $user = null )
-    {
+    {   
+        # convert the passed in time stamp to a format we can use in the DB call
         $dateStamp = convertTimestamp( 'Y-m-d', $timestamp);
 
-        $query = ArticleLocation::with('article.event.cinema', 'article.event.showTime.venue', 'article.asset', 'article.location')->select(
-            'article.title', 'article_location.article_id'
-        )
-        ->join('article', 'article.id', '=', 'article_location.article_id')
-        ->join('event_showtimes', 'event_showtimes.event_id', '=', 'article.event_id')
-        ->where('sub_channel_id', $channel)
-        ->where('article.is_approved', true);
+        # grab the event ID 
+        $query = ShowTime::select('event_id');
 
-        // grab a weeks worth of articles from a specified point in time
+        /** We only want a subset of the show times based on the ranges passed in **/
+        
+        # grab a weeks worth of events from a specified point in time
         if( $range == "week" )
         { 
             $dateArray = explode('-', $dateStamp);  
 
             # if the show time (start) is greater than or equal to the provided period in time
-            $query->where('event_showtimes.showtime', '>=', $dateStamp.' 00:00:01');
+            $query->where('showtime', '>=', $dateStamp.' 00:00:01');
 
             # and the end the show time (start) is less than or equal to the provided period in time plus 6 days
-            $query->where('event_showtimes.showtime', '<=', Carbon::create($dateArray[0], $dateArray[1], $dateArray[2], '23', '59', '59')->addDays(6));
+            $query->where('showtime', '<=', Carbon::create($dateArray[0], $dateArray[1], $dateArray[2], '23', '59', '59')->addDays(6));
         }
         # or just grab a days worth
         elseif ( $range == "day" )
         {            
-            $query->where('event_showtimes.showtime', '>=', $dateStamp.' 00:00:01');            
-            $query->where('event_showtimes.showtime', '<=', $dateStamp.' 23:59:59');
+            $query->where('showtime', '>=', $dateStamp.' 00:00:01');            
+            $query->where('showtime', '<=', $dateStamp.' 23:59:59');
         }
+
+        # order them by the earliest show time and pull them out of the DB
+        $eventIds = $query->lists('event_id');
+
+        $query = ArticleLocation::with('article.event.cinema', 'article.event.showTime.venue', 'article.asset', 'article.location')->select(
+            'article.title', 'article_location.article_id'
+        )
+        ->join('article', 'article.id', '=', 'article_location.article_id')
+        ->where('sub_channel_id', $channel)
+        ->where('article.is_approved', true)
+        ->whereIn('article.event_id', $eventIds);
 
         # if we have a user object we only want to grab content that they want to see
         if( ! is_null($user))    
@@ -352,21 +362,18 @@ Class ArticleRepository extends BaseModel {
                 $query->whereNotIn('article_location.id', $excludeIds);
             }            
         }
-
-        # order them by the earliest show time and pull them out of the DB
-        $result = $query->orderBy('event_showtimes.showtime', 'asc')->active()->get();
-
-        $articles = [];        
+        
+        $result = $query->get();
 
         # they come out of this query slightly differently to how the articleTransformer needs them. sort that out !
         if($result->count() > 0)
         {
-            foreach($result AS $item )
+            foreach($result AS $item)
             {
                 $article = $item->article->toArray();
                 $articles[] = $article;
-            }    
-        }      
+            }
+        } 
 
         # ... finally, we want to apply a filter to promote some of these articles based on the user' district
         # preferences. 
