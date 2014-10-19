@@ -206,7 +206,7 @@ Class ArticleRepository extends BaseModel {
         {
             # don't get any articles from channels they have disabled
             if( count($user->inactive_channels) > 0 ) {
-                $query->whereNotIn('channel_id', $user->inactive_channels, 'or');    
+                $query->whereNotIn('channel_id', $user->inactive_channels);    
                 $query->whereNotIn('sub_channel_id', $user->inactive_channels);    
             }
 
@@ -427,8 +427,14 @@ Class ArticleRepository extends BaseModel {
             'article.title', 'article_location.article_id'
         )
         ->join('article', 'article.id', '=', 'article_location.article_id')
+        ->join('channel AS c1', 'c1.id', '=', 'article_location.channel_id')
+        ->join('channel AS c2', 'c2.id', '=', 'article_location.sub_channel_id')
+        ->join('category', 'category.id', '=', 'article_location.category_id')
         ->where('article.title', 'LIKE', "%{$searchTerm}%")
-        ->where('article.is_approved', true);
+        ->where('article.is_approved', true) // articles have to be approved to appear on the site
+        ->where('c1.is_active', true) // top level channels have to be active for the article to appear on the site
+        ->where('c2.is_active', true) // sub-channels have to be active for the article to appear on the site
+        ->where('category.is_active', true); // categories have to be active for the article to appear on the site
 
         $result = $query->orderBy('article.title', 'asc')->get();
 
