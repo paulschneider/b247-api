@@ -3,6 +3,7 @@
 use Apiv1\Repositories\Articles\ArticleLocation;
 use Apiv1\Repositories\Articles\ArticleType;
 use Apiv1\Repositories\Articles\Article;
+use Apiv1\Repositories\Events\Event;
 use Apiv1\Repositories\Events\ShowTime;
 use Apiv1\Repositories\Search\Search;
 use Apiv1\Repositories\Models\BaseModel;
@@ -294,43 +295,123 @@ Class ArticleRepository extends BaseModel {
      * @return array $result
      */
     public function getChannelListing( $channel, $limit = 1000, $range, $timestamp, $user = null )
-    {   
+    {          
         # convert the passed in time stamp to a format we can use in the DB call
         $dateStamp = convertTimestamp( 'Y-m-d', $timestamp);
 
-        # grab the event ID 
-        $query = ShowTime::select('event_id');
+        // # grab the event ID 
+        // $query = ShowTime::select('event_id');
 
-        /** We only want a subset of the show times based on the ranges passed in **/
+        // /** We only want a subset of the show times based on the ranges passed in **/
         
-        # grab a weeks worth of events from a specified point in time
+        // # grab a weeks worth of events from a specified point in time
+        // if( $range == "week" )
+        // { 
+        //     $dateArray = explode('-', $dateStamp);  
+
+        //     # if the show time (start) is greater than or equal to the provided period in time
+        //     $query->where('showtime', '>=', $dateStamp.' 00:00:01');
+
+        //     # and the end the show time (start) is less than or equal to the provided period in time plus 6 days
+        //     $query->where('showtime', '<=', Carbon::create($dateArray[0], $dateArray[1], $dateArray[2], '23', '59', '59')->addDays(6));
+        // }
+        // # or just grab a days worth
+        // elseif ( $range == "day" )
+        // {            
+        //     $query->where('showtime', '>=', $dateStamp.' 00:00:01');            
+        //     $query->where('showtime', '<=', $dateStamp.' 23:59:59');
+        // }
+
+        // # order them by the earliest show time and pull them out of the DB
+        // $eventIds = $query->distinct('event_id')->lists('event_id');
+
+        // $query = Article::select('*')->with('location', 'asset')
+        // ->join('article_location', 'article_location.article_id', '=', 'article.id')
+        // ->whereIn('event_id', $eventIds)
+        // ->where('article.is_approved', true)
+        // ->where('article_location.sub_channel_id', $channel)
+        // ->get();
+
+        // $articles = $query->toArray();
+
+        DB::disableQueryLog();
+
+        $query = DB::table('event_showtimes AS es')->select(
+                'es.id AS showTime_Id',
+                'es.event_id AS showTime_EventId',
+                'es.showtime AS showTime_showTime',
+                'es.showend AS showTime_showEnd',
+                'es.price AS showTime_price',
+                'es.venue_id AS showTime_venueId',
+                'ec.id AS eventCinema_id',
+                'ec.event_id AS eventCinema_eventId',
+                'ec.director AS eventCinema_director',
+                'ec.duration AS eventCinema_duration',
+                'v.id AS venue_id',
+                'v.name AS venue_name',
+                'v.sef_name AS venue_sefName',
+                'v.address_line_1 AS venue_addressLine1',
+                'v.address_line_2 AS venue_addressLine2',
+                'v.address_line_3 AS venue_addressLine3',
+                'v.postcode AS venue_postcode',
+                'v.email AS venue_email',
+                'v.lat AS venue_lat',
+                'v.lon AS venue_lon',
+                'v.area AS venue_area',
+                'v.facebook AS venue_facebook',
+                'v.twitter AS venue_twitter',
+                'v.phone AS venue_phone',
+                'v.created_at AS venue_createdAt',
+                'v.updated_at AS venue_updatedAt',
+                'v.is_active AS venue_isActive',
+                'v.is_deleted AS venue_isDeleted',
+                'v.is_directory AS venue_isDirectory',
+                'v.website AS venue_website'
+            )
+        ->leftJoin('event_cinema AS ec', 'ec.event_id', '=', 'es.event_id')
+        ->join('venue AS v', 'v.id', '=', 'es.venue_id');
+
         if( $range == "week" )
         { 
             $dateArray = explode('-', $dateStamp);  
 
             # if the show time (start) is greater than or equal to the provided period in time
-            $query->where('showtime', '>=', $dateStamp.' 00:00:01');
+            $query->where('es.showtime', '>=', $dateStamp.' 00:00:01');
 
             # and the end the show time (start) is less than or equal to the provided period in time plus 6 days
-            $query->where('showtime', '<=', Carbon::create($dateArray[0], $dateArray[1], $dateArray[2], '23', '59', '59')->addDays(6));
+            $query->where('es.showtime', '<=', Carbon::create($dateArray[0], $dateArray[1], $dateArray[2], '23', '59', '59')->addDays(6));
         }
         # or just grab a days worth
         elseif ( $range == "day" )
         {            
-            $query->where('showtime', '>=', $dateStamp.' 00:00:01');            
-            $query->where('showtime', '<=', $dateStamp.' 23:59:59');
+            $query->where('es.showtime', '>=', $dateStamp.' 00:00:01');            
+            $query->where('es.showtime', '<=', $dateStamp.' 23:59:59');
         }
 
-        # order them by the earliest show time and pull them out of the DB
-        $eventIds = $query->lists('event_id');
 
-        $query = ArticleLocation::with('article.event.cinema', 'article.event.showTime.venue', 'article.asset', 'article.location')->select(
-            'article.title', 'article_location.article_id'
-        )
-        ->join('article', 'article.id', '=', 'article_location.article_id')
-        ->where('sub_channel_id', $channel)
+        $showTimes = $query->get();
+
+        DB::enableQueryLog();
+
+        $shows = [];
+        $eventIds = [];
+
+        foreach($showTimes AS $show)
+        {
+            if(!in_array($show->showTime_EventId, $eventIds))
+            {
+                $eventIds[] = $show->showTime_EventId;
+            }
+
+            $shows[$show->showTime_EventId][] = $show;
+        }
+
+        $query = Article::select('article.*', 'al.sub_channel_id')->with('location', 'asset', 'event.cinema')
+        ->join('article_location AS al', 'al.article_id', '=', 'article.id')        
         ->where('article.is_approved', true)
-        ->whereIn('article.event_id', $eventIds);
+        ->where('al.sub_channel_id', $channel)
+        ->whereIn('article.event_id', $eventIds)
+        ->active();
 
         # if we have a user object we only want to grab content that they want to see
         if( ! is_null($user))    
@@ -362,18 +443,63 @@ Class ArticleRepository extends BaseModel {
                 $query->whereNotIn('article_location.id', $excludeIds);
             }            
         }
-        
-        $result = $query->get();
-
-        # they come out of this query slightly differently to how the articleTransformer needs them. sort that out !
-        if($result->count() > 0)
+  
+        $articles = $query->get()->toArray();
+   
+        foreach($articles AS $key => $article)
         {
-            foreach($result AS $item)
+            if(!isset($articles[$key]['location'][0]))
             {
-                $article = $item->article->toArray();
-                $articles[] = $article;
+                unset($articles[$key]);
             }
-        } 
+            else
+            {
+                if(array_key_exists($article['event_id'], $shows))
+                {
+                    $articles[$key]['showTimes'] = $shows[$article['event_id']];
+                }
+
+                $eventShowTimes = [];
+
+                foreach($articles[$key]['showTimes'] AS $showTime)
+                {
+                    $eventShowTimes[] = [
+                        'id' => $showTime->showTime_Id,
+                        'event_id' => $showTime->showTime_EventId,
+                        'showtime' => $showTime->showTime_showTime,
+                        'showend' => $showTime->showTime_showEnd,
+                        'price' => $showTime->showTime_price,
+                        'venue_id' => $showTime->showTime_venueId,
+                        'venue' => [
+                            'id' => $showTime->venue_id,
+                            'name' => $showTime->venue_name,
+                            'sef_name' => $showTime->venue_sefName,
+                            'address_line_1' => $showTime->venue_addressLine1,
+                            'address_line_2' => $showTime->venue_addressLine2,
+                            'address_line_3' => $showTime->venue_addressLine3,
+                            'postcode' => $showTime->venue_postcode,
+                            'email' => $showTime->venue_email,
+                            'lat' => $showTime->venue_lat,
+                            'lon' => $showTime->venue_lon,
+                            'area' => $showTime->venue_area,
+                            'facebook' => $showTime->venue_facebook,
+                            'twitter' => $showTime->venue_twitter,
+                            'phone' => $showTime->venue_phone,
+                            'created_at' => $showTime->venue_createdAt,
+                            'updated_at' => $showTime->venue_updatedAt,
+                            'is_active' => $showTime->venue_isActive,
+                            'is_deleted' => $showTime->venue_isDeleted,
+                            'is_directory' => $showTime->venue_isDirectory,
+                            'website' => $showTime->venue_website,
+                        ]
+                    ];                
+                }
+
+                unset($articles[$key]['showTimes']);
+
+                $articles[$key]['event']['show_time'] = $eventShowTimes;
+            }          
+        }
 
         # ... finally, we want to apply a filter to promote some of these articles based on the user' district
         # preferences. 
