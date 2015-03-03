@@ -104,14 +104,14 @@ Class HomeResponseMaker {
 			# otherwise we need to force it into the middle of the feed
 			else
 			{
-				# grab the first bit of the array up to the point where whats on was originally positioned
+				# grab the first bit of the array up to the point where 'whats on' was originally positioned
 				$arr1 = array_slice($response['channelFeed'], 0, $whatsOnPosition);
 
 				# grab everything else in the array
 				$arr2 = array_slice($response['channelFeed'], $whatsOnPosition);
 				
 				# push whats on into the second half of the array at the first position
-				array_unshift($arr2, $whatsOn);
+				array_unshift($arr1, $whatsOn);
 
 				# go through all items in the second half of the array and push them onto the first half
 				foreach($arr2 AS $item)

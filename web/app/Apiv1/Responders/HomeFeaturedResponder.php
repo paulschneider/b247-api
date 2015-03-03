@@ -6,15 +6,9 @@ class HomeFeaturedResponder {
 
 	public function get()
 	{
-		# we don't want to show as many for the apps
-		if(isMobile()) {
+		# set a limit for how many articles we want to return
 			$limit = 5;
-		}
-		# else, for the web, we want to show a lot more
-		else {
-			$limit = 15;
-		}
-
+		
 		# type, limit, channel, isASubChannel, ignoreChannel, 
         $articles = App::make('ArticleRepository')->getArticles( 
         	'featured',  // type of articles to get
