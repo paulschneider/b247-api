@@ -7,10 +7,10 @@ class HomeFeaturedResponder {
 	public function get()
 	{
 		# set a limit for how many articles we want to return
-			$limit = 5;
+		$limit = 5;
 		
 		# type, limit, channel, isASubChannel, ignoreChannel, 
-        $articles = App::make('ArticleRepository')->getArticles( 
+            $articles = App::make('ArticleRepository')->getArticles( 
         	'featured',  // type of articles to get
         	$limit,  // the number to return
         	null, // channel identifier

@@ -13,14 +13,8 @@ class FeaturedResponder {
 	 */
 	public function get( $channel, $user )
 	{
-		# we don't want to show as many for the apps
-		if(isMobile()) {
-			$limit = 5;
-		}
-		# else, for the web, we want to show a lot more
-		else {
-			$limit = 15;
-		}
+		# set a limit for how many articles we want to return
+		$limit = 5;
 
         $articles = App::make('ArticleRepository')->getArticles( 
         	'featured', # the type of article we wan to retrieve
