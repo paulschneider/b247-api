@@ -17,7 +17,7 @@ class HomePickedResponder {
         # get is_picked = true articles from any channel or sub-channel
         $picks = App::make('ArticleRepository')->getArticles( 
             'picks', 
-            Config::get('constants.channelFeed_limit'), 
+            Config::get('constants.highlights'), 
             null, // channel
             false, //isASubChannel
             true // ignoreChannel
@@ -27,7 +27,7 @@ class HomePickedResponder {
         $ads = $sponsorResponder->setSponsorType(Config::get('global.sponsorMPU'))->getUnassignedSponsors();
 
         $articles = App::make('ArticleTransformer')->transformCollection( $picks );
-        $response = App::make('PatternMaker')->setPattern(1)->make( [ 'articles' => $articles, 'sponsors' => $ads ] );
+        $response = App::make('PatternMaker')->setPattern(3)->make( [ 'articles' => $articles, 'sponsors' => $ads ] );
 
         return [
             'articles' => $response->articles,

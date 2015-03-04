@@ -7,4 +7,6 @@ return [
     'displayType_promotion' => 4,
     'channelFeed_limit' => 13,
     'deviceBaseUrl' => "b247://",
+    'highlights' => 9,
+    'events' => 10,
 ];

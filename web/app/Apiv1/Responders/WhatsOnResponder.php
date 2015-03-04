@@ -26,7 +26,7 @@ class WhatsOnResponder {
 	 */
 	public function get(SponsorResponder $sponsorResponder, $channelList, $user)
 	{
-		$limit = Config::get('constants.channelFeed_limit');
+		$limit = Config::get('constants.events');
 
 		// get a list of articles for this channel
 		$articles = App::make('ArticleRepository')->getArticles('listing', $limit, $this->channel, false, false, $user);
