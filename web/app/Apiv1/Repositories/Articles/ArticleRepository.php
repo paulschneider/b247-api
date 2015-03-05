@@ -190,9 +190,9 @@ Class ArticleRepository extends BaseModel {
             'article.title', 'article_location.article_id'
         )->join('article', 'article.id', '=', 'article_location.article_id');
 
-        # Features and Picks should always be unique. This isn't the case when we are selecting LISTINGS
-        # as they may be showing on multiple days
-        if($type == 'featured' || $type == 'picks')
+        # Listings don't have to be unique as they might be playing on multiple days so we want to see them all. 
+        # everything else though should be unique. This ensure unique articles are returned.
+        if($type != 'listing')
         {
             $query->distinct('article.id');
         }
