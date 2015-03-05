@@ -180,11 +180,19 @@ Class ArticleRepository extends BaseModel {
         # (this can be done in a couple of places, hence the flag)
         $sorted = false;
 
-        $query = ArticleLocation::with('article.event.venue', 'article.venue', 'article.event.showTime', 'article.event.showTime.venue', 'article.event.cinema', 'article.asset', 'article.location')->select(
+        $query = ArticleLocation::with('article.event.venue'
+            , 'article.venue'
+            , 'article.event.showTime'
+            , 'article.event.showTime.venue'
+            , 'article.event.cinema'
+            , 'article.asset'
+            , 'article.location')->select(
             'article.title', 'article_location.article_id'
         )->join('article', 'article.id', '=', 'article_location.article_id');
 
-        if($type == 'featured')
+        # Features and Picks should always be unique. This isn't the case when we are selecting LISTINGS
+        # as they may be showing on multiple days
+        if($type == 'featured' || $type == 'picks')
         {
             $query->distinct('article.id');
         }
@@ -279,8 +287,11 @@ Class ArticleRepository extends BaseModel {
 
         # ... finally, we want to apply a filter to promote some of these articles based on the user' district
         # preferences. 
-        $articles = App::make('Apiv1\Tools\UserDistrictOrganiser')->promoteDistricts($user, $articles);
-  
+        if( ! is_null($user))
+        {
+            $articles = App::make('Apiv1\Tools\UserDistrictOrganiser')->promoteDistricts($user, $articles);    
+        }
+        
         return $articles;
     }
 
@@ -298,43 +309,6 @@ Class ArticleRepository extends BaseModel {
     {          
         # convert the passed in time stamp to a format we can use in the DB call
         $dateStamp = convertTimestamp( 'Y-m-d', $timestamp);
-
-        // # grab the event ID 
-        // $query = ShowTime::select('event_id');
-
-        // /** We only want a subset of the show times based on the ranges passed in **/
-        
-        // # grab a weeks worth of events from a specified point in time
-        // if( $range == "week" )
-        // { 
-        //     $dateArray = explode('-', $dateStamp);  
-
-        //     # if the show time (start) is greater than or equal to the provided period in time
-        //     $query->where('showtime', '>=', $dateStamp.' 00:00:01');
-
-        //     # and the end the show time (start) is less than or equal to the provided period in time plus 6 days
-        //     $query->where('showtime', '<=', Carbon::create($dateArray[0], $dateArray[1], $dateArray[2], '23', '59', '59')->addDays(6));
-        // }
-        // # or just grab a days worth
-        // elseif ( $range == "day" )
-        // {            
-        //     $query->where('showtime', '>=', $dateStamp.' 00:00:01');            
-        //     $query->where('showtime', '<=', $dateStamp.' 23:59:59');
-        // }
-
-        // # order them by the earliest show time and pull them out of the DB
-        // $eventIds = $query->distinct('event_id')->lists('event_id');
-
-        // $query = Article::select('*')->with('location', 'asset')
-        // ->join('article_location', 'article_location.article_id', '=', 'article.id')
-        // ->whereIn('event_id', $eventIds)
-        // ->where('article.is_approved', true)
-        // ->where('article_location.sub_channel_id', $channel)
-        // ->get();
-
-        // $articles = $query->toArray();
-
-        DB::disableQueryLog();
 
         $query = DB::table('event_showtimes AS es')->select(
                 'es.id AS showTime_Id',
@@ -388,10 +362,7 @@ Class ArticleRepository extends BaseModel {
             $query->where('es.showtime', '<=', $dateStamp.' 23:59:59');
         }
 
-
         $showTimes = $query->get();
-
-        DB::enableQueryLog();
 
         $shows = [];
         $eventIds = [];
@@ -409,9 +380,18 @@ Class ArticleRepository extends BaseModel {
         $query = Article::select('article.*', 'al.sub_channel_id')->with('location', 'asset', 'event.cinema')
         ->join('article_location AS al', 'al.article_id', '=', 'article.id')        
         ->where('article.is_approved', true)
-        ->where('al.sub_channel_id', $channel)
         ->whereIn('article.event_id', $eventIds)
+        ->limit($limit)
         ->active();
+
+        # if its not the top level Whats On channel then we need to refine by the sub-channel being requested
+        if($channel != Config::get('global.whatsOnChannelId'))
+        {
+            $query->where('al.sub_channel_id', $channel); 
+        }
+        else {
+            $query->distinct('article.id');
+        }
 
         # if we have a user object we only want to grab content that they want to see
         if( ! is_null($user))    

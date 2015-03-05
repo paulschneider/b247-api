@@ -64,7 +64,7 @@ Class ChannelFeed {
                 $sponsors = $sponsorResponder->setSponsorType(Config::get('global.sponsorMPU'))->getUnassignedSponsors( [$channel], $this->isASubChannel );
 
                 # create the pattern to repeat for this channel
-                $response = $this->patternMaker->setPattern(2)->make( [ 'articles' => $articles, 'sponsors' => $sponsors ], "home" );
+                $response = $this->patternMaker->setPattern(4)->make( [ 'articles' => $articles, 'sponsors' => $sponsors ], "home" );
 
                 # grab the channel details for this channel and transform it. We pass in a user so we can see what they have enabled (or disabled)
                 $channel = $this->channelTransformer->transform( getChannel($this->channels, $channel), $this->user );
