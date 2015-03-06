@@ -7,13 +7,11 @@ Class PageMaker {
 
 	public static function make($items = [], $page = 1, $limit = 20)
 	{
-		if( Input::get('page') )
-		{
+		if( Input::get('page') ) {
 			$page = Input::get('page');
 		} 
 
-		if( Input::get('size') )
-		{
+		if( Input::get('size') ) {
 			$limit = Input::get('size');
 		}
 
@@ -33,15 +31,13 @@ Class PageMaker {
 			{
 				if($page == 1)
 				{
-					if($counter+1*$page <= $pagination->meta->perPage*$page)
-					{
+					if($counter+1*$page <= $pagination->meta->perPage*$page) {
 						$pagination->items[$key] = $item;
 					}
 				}
 				else
 				{
-					if($counter >= $pagination->meta->perPage*$page-$pagination->meta->perPage && $counter <= $pagination->meta->perPage*$page-1)
-					{
+					if($counter >= $pagination->meta->perPage*$page-$pagination->meta->perPage && $counter <= $pagination->meta->perPage*$page-1) {
 						$pagination->items[$key] = $item;
 					}
 				}
@@ -49,8 +45,7 @@ Class PageMaker {
 			}
 		}
 
-        if($pagination->meta->totalItems > $limit)
-		{
+        if($pagination->meta->totalItems > $limit) {
 			$pagination->meta->hasMultiplePages	= true;
 		}
 

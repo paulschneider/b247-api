@@ -18,9 +18,8 @@ Class PasswordChangeResponseMaker {
 
 	public function __construct()
 	{
+		$this->userResponder = App::make('UserResponder');
 		$this->validator = App::make( 'PasswordValidator' );
-		$this->userResponder = App::make( 'UserResponder' );
-
 		$this->passwordNotifier = App::make('Apiv1\Mail\Notifications\AccountPasswordChangedEmail');
 	}
 
@@ -28,43 +27,40 @@ Class PasswordChangeResponseMaker {
 	{
 		$this->form = $form;
 
-		if( isApiResponse( $result = $this->userResponder->parameterCheck($this->requiredFields, $this->form) ) )
-		{
+		# check that we have everything needed to proceed including required params and auth creds. If all 
+		# successful then the response is a user object
+		
+		$validator = App::make('Apiv1\Validators\PasswordChangeValidator');
+
+		if( isApiResponse($result = $this->userResponder->validate($validator, $this->form)) ){
+			return $result;
+		}
+		
+		# auth the user against the provided credentials
+		if( isApiResponse($response = $this->userResponder->authenticate($form)) ) {
+			return $response;
+		}
+
+		$this->user = $response['user'];
+
+		# store the new password in the database
+		if( isApiResponse($result = $this->store()) ) {
 			return $result;
 		}
 
-		if( isApiResponse( $result = $this->userResponder->authenticate($this->form) ) )
-		{
-			return $result;
-		}
-
-		$this->user = $result['user']; // the previous call returns a transformed user object
-
-		if( isApiResponse( $result = $this->userResponder->validate($this->validator, $this->form) ) )
-		{
-			return $result;
-		}
-
-		if( isApiResponse( $result = $this->store() ) )
-		{
-			return $result;
-		}
-
-		// send out password updated email
+		# send out password updated email
 		$this->passwordNotifier->notify( ['user' => $this->user, 'password' => $this->form['newPassword']] );
 
-		return apiSuccessResponse( 'accepted', $this->user );
+		# send the response back
+		return apiSuccessResponse( 'accepted', ['user' => $this->user, 'public' => getMessage('public.userPasswordSuccessfullyUpdated'), 'debug' => getMessage('api.userPasswordSuccessfullyUpdated')] );
 	}
 
 	public function store()
 	{
-		$userRepository = App::make( 'UserRepository' );
+		$response = App::make( 'UserRepository' )->hashAndStore( $this->form['email'], $this->form['newPassword'] );
 
-		$response = $userRepository->hashAndStore( $this->form['email'], $this->form['newPassword'] );
-
-		if( ! $response )
-		{
-			return apiErrorResponse(  'serverError', [ 'errorReason' => Lang::get('api.recordCouldNotBeSaved') ] );
+		if( ! $response ) {
+			return apiErrorResponse( 'serverError', ['public' => getMessage('public.passwordCouldNotBeUpdated'), 'debug' => getMessage('api.passwordCouldNotBeUpdated')] );
 		}
 
 		$this->user['accessKey'] = $response->accessKey;

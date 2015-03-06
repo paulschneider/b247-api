@@ -135,6 +135,7 @@ return array(
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Apiv1\Mail\Newsletters\NewsletterListServiceProvider',
 		'Apiv1\Mail\Notifications\NotificationsServiceProvider',
+		'Apiv1\Events\EventServiceProvider',
 	),
 
 	/*

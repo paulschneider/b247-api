@@ -36,12 +36,10 @@ Class SessionsResponseMaker {
 
 	public function validate()
 	{
-		if( ! isset($this->form['email']) || ! isset($this->form['password']) ) {
-			return apiErrorResponse( 'insufficientArguments', [ 'errorReason' => \Lang::get('api.loginWithInsufficientParams') ] );
-		}
-
-		if( ! $this->validator->run($this->form)) {
-			return apiErrorResponse(  'unprocessable', $this->validator->errors() );
+		# run the validator to make sure the form meets the requirements
+		if( ! $this->validator->run($this->form)) 
+		{
+			return apiErrorResponse( 'unprocessable', ['errors' => $this->validator->errors(), 'public' => getMessage('public.errorsWithLoginAttempt'), 'debug' => getMessage('api.errorsWithLoginAttempt')] );
 		}
 	}
 
@@ -54,12 +52,12 @@ Class SessionsResponseMaker {
 	{
 		# grab the user account including password so we can check the details
 		if( ! $user = App::make( 'UserRepository' )->authenticate($this->form['email']) ) {
-			return apiErrorResponse( 'notFound' );
+			return apiErrorResponse( 'notFound', ['public' => getMessage('public.userAccountNotFound'), 'debug' => getMessage('api.userAccountNotFound')]);
 		}
 
 		# check the provided password with that stored
 		if (! Hash::check($this->form['password'], $user->password)) {	
-			return apiErrorResponse( 'unauthorised', [ 'errorReason' => Lang::get('api.userAccountPasswordMismatch') ]  );					
+			return apiErrorResponse( 'unauthorised', [ 'public' => getMessage('public.userAccountPasswordMismatch'), 'debug' => getMessage('api.userAccountPasswordMismatch') ]  );					
 		}
 
 		# we got here so everything was fine. Now transform the user and make it available to the class

@@ -40,7 +40,7 @@ Class SubChannelResponseMaker {
 			return apiErrorResponse('notFound');
 		}
 		elseif( ! aSubChannel($channel)) {
-			return apiErrorResponse('expectationFailed');
+			return apiErrorResponse('expectationFailed', ['errorReason' => 'Supplied channel is not a sub-channel.']);
 		}
 
 		$parentChannel = $channelRepository->getChannelBySubChannel( $channel );		

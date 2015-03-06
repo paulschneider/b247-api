@@ -12,7 +12,14 @@ Class Caller {
 
 	public function __construct()
 	{
-		$this->client = new Client( [ 'base_url' => Config::get('api.baseUrl') ] );
+		$this->client = new Client([ 
+			'base_url' => Config::get('api.baseUrl'),
+			'defaults' => [
+				# we had a password on the site at one point and these were the 
+				# credentials to get the API through
+				'auth' => ['b247', 'master'] 
+			]
+		]);
 	}
 
 	public function get($endpoint = "", $params = [], $headers = [])
@@ -36,7 +43,10 @@ Class Caller {
 	{
 		$this->endpoint = $endpoint;
 
-		$request = $this->client->createRequest('POST', $this->endpoint, ['body' => $data]);
+		$request = $this->client->createRequest('POST', $this->endpoint, [
+			'body' => $data,
+			'headers' => $headers
+		]);
 
 		return $this->send($request);
 	}

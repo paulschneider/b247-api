@@ -26,11 +26,12 @@ class WhatsOnResponder {
 	 */
 	public function get(SponsorResponder $sponsorResponder, $channelList, $user)
 	{
-		$limit = Config::get('constants.channelFeed_limit');
+		$limit = Config::get('constants.events');
 
 		// get a list of articles for this channel
-		$articles = App::make('ArticleRepository')->getArticles('listing', $limit, $this->channel, false, false, $user);
-
+		#$articles = App::make('ArticleRepository')->getArticles('listing', $limit, $this->channel, false, false, $user);
+		$articles = App::make('ArticleRepository')->getChannelListing(Config::get('global.whatsOnChannelId'), $limit, 'day', time(), $user);
+		
 		// turn the articles into something nice
 		$transformedArticles = App::make('ArticleTransformer')->transformCollection($articles);
 

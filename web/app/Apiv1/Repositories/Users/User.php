@@ -69,6 +69,11 @@ class User extends BaseModel implements UserInterface, RemindableInterface {
 		return $this->hasMany('Apiv1\Repositories\Users\UserDistrict', 'user_id');
 	}
 
+	public function broadcasts()
+	{
+		return $this->hasMany('Apiv1\Repositories\Users\UserBroadcast', 'user_id');
+	}
+
 	/**
 	* Get the unique identifier for the user.
 	*

@@ -18,10 +18,11 @@ Class HomeResponseMaker {
 	protected $user = null;
 
 	public function __construct()
-	{
-		$this->homeChannels = Config::get('global.homeChannels'); // channels to show on the homepage
+	{		
 		$this->channelRepository = App::make( 'ChannelRepository' );
 		$this->sponsorResponder = App::make('SponsorResponder');
+
+		$this->homeChannels = $this->channelRepository->getTopChannelIds(); // channels to show on the homepage
 
 		# see if we have an user accessKey present. If so we might want to show a different view of the homepage
         if( ! isApiResponse($user = App::make('UserResponder')->verify()) ) {
@@ -57,7 +58,7 @@ Class HomeResponseMaker {
 	 */
 	public function getPicked()
 	{
-		$response = App::make('HomePickedResponder')->get($this->sponsorResponder, $this->user);
+		$response = App::make('HomePickedResponder')->get($this->sponsorResponder);
 		$this->sponsorResponder->setAllocatedSponsors($response['sponsors']);
 
 		return $response['articles'];
@@ -69,7 +70,15 @@ Class HomeResponseMaker {
 	 * @return array
 	 */
 	public function getChannelFeed()
-	{
+	{	
+		# we handle the what's on part of the channel feed differently to everything else so
+		# see if its in the channel list and remove it if so
+		if(in_array(Config::get('global.whatsOnChannelId'), $this->homeChannels))
+		{
+			$whatsOnPosition = array_search(Config::get('global.whatsOnChannelId'), $this->homeChannels);
+			unset($this->homeChannels[$whatsOnPosition]);
+		}
+
         # create and initialise a channel feed
         $channelFeed = App::make('ChannelFeed');	
         $channelFeed->initialise($this->homeChannels, $this->user);
@@ -83,12 +92,39 @@ Class HomeResponseMaker {
 		# add the whats on content to the beginning of the channelFeed
 		$whatsOn = $this->getWhatsOn();
 
-		# whats on is handled slightly differently. Check the use hasn't disabled it then add it to
+		# whats on is handled slightly differently. Check the user hasn't disabled it then add it to
 		# the response array
-		if( is_null($this->user) || ! in_array($whatsOn['id'], $this->user->inactive_channels) ) {
-			array_unshift($response['channelFeed'], $whatsOn);
+		if( is_null($this->user) || ! in_array($whatsOn['id'], $this->user->inactive_channels) ) 
+		{
+			#if there isn't an item at the whats on array position then just add whats on into the list
+			if( ! array_key_exists($whatsOnPosition, $response['channelFeed']))
+			{
+				$response['channelFeed'][$whatsOnPosition] = $whatsOn;	
+			}
+			# otherwise we need to force it into the middle of the feed
+			else
+			{
+				# grab the first bit of the array up to the point where 'whats on' was originally positioned
+				$arr1 = array_slice($response['channelFeed'], 0, $whatsOnPosition);
+
+				# grab everything else in the array
+				$arr2 = array_slice($response['channelFeed'], $whatsOnPosition);
+				
+				# push whats on into the second half of the array at the first position
+				array_unshift($arr1, $whatsOn);
+
+				# go through all items in the second half of the array and push them onto the first half
+				foreach($arr2 AS $item)
+				{
+					array_push($arr1, $item);
+				}			
+
+				# set the newly ordered array to be the channel feed
+				$response['channelFeed'] = $arr1;
+			}			
 		}
 
+		# ... and send it back.
 		return $response['channelFeed'];
 	}
 

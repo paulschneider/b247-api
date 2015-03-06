@@ -1,0 +1,8 @@
+This is the production database backup on 88.208.234.147 (DB = apiadmin_b247_com) as at 01 August 2014.
+
+It has been superseded by an updated schema but wold be required in the event of rollback of the production API to the version as at 01 August 2014.
+
+There is a back up of the API as it was at this date on the above numbered server.
+
+- Paul Schneider <paul.schneider@yepyep.co.uk>
+- 01 September 2014

@@ -18,7 +18,7 @@ Class Client {
 	}
 
 	public function send($email)
-	{
+	{		
 		$request = [
 			'key' => $this->apiKey,
 			'message' => [
@@ -40,9 +40,15 @@ Class Client {
 			]
 		];
 
+		# if we have a blind courtesy copy address then include it in the request
+		if(isset($email->bcc) && !empty($email->bcc)) {
+			$request['message']['bcc_address'] = $email->bcc;
+		}
+
+		# make up the Mandrill API endpoint
 		$url = $this->baseUrl.$this->endpoints[$email->type];
 
+		# make the request
 		return $this->apiClient->post($url, json_encode($request));
 	}
-
 }

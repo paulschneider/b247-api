@@ -7,60 +7,92 @@ use Apiv1\Repositories\Users\User;
 
 Class UserResponder {
 
+	/**
+	 * ensure we have all required fields for the current process
+	 * 
+	 * @param  array $requiredFields
+	 * @param  array $form
+	 * @return boolean 
+	 */
 	public function parameterCheck($requiredFields, $form)
 	{
-		if( aRequiredParameterIsMissing($requiredFields, $form) )
-		{
-			return apiErrorResponse('insufficientArguments', ['errorReason' => Lang::get('api.insufficientParametersProvidedToContinue')]);
+		if( aRequiredParameterIsMissing($requiredFields, $form) ) {
+			return apiErrorResponse('insufficientArguments', ['public' => getMessage('public.insufficientParametersProvidedToContinue'), 'debug' => getMessage('api.insufficientParametersProvidedToContinue')]);
 		}
 
 		return true;
 	}
 
+	/** 
+	 * authenticate a user account against provided form data
+	 * @param  array $form
+	 * @return User
+	 */
 	public function authenticate($form)
 	{
-		if( isApiResponse($result = App::make( 'SessionsResponseMaker' )->make( $form )) )
-		{
+		if( isApiResponse($result = App::make( 'SessionsResponseMaker' )->make( $form )) ) {
 			return $result;
 		}
 
-		return $result;
+		# we get the user back if its not an API response object
+		$user = $result;
+
+		return $user;
 	}
 
+	/**
+	 * validate the form data supplied to ensure it meets our requirements
+	 * 
+	 * @param  Validator $validator [a validator instance against which to validate the supplied data]
+	 * @param  array $form      	[form data]
+	 * @return boolean            	[result]
+	 */
 	public function validate($validator, $form)
 	{
-		if( ! $validator->run( $form ) )
-		{
-			return apiErrorResponse(  'unprocessable', $validator->errors() );
+		if(! $validator->run($form)) {
+			return apiErrorResponse(  'unprocessable', [ 'errors' => $validator->errors(), 'debug' => getMessage('api.invalidFormData'), 'public' => getMessage('public.invalidFormData') ] );
 		}
 
 		return true;
 	}
 
+	/**
+	 * retrieve and validate a user via their email address
+	 * 
+	 * @param  string $email
+	 * @return User
+	 */
 	public function getUser($email)
 	{
+		# if we have an email address
 		if( !empty( $email ) )
 		{
 			$validator = App::make( 'EmailValidator' );
 
-			if( ! $validator->run( ['email' => $email] )) 
-			{
-				return apiErrorResponse(  'unprocessable', $validator->errors() ); 
+			# check to see that we have a valid email address
+			if( ! $validator->run( ['email' => $email] ))  {
+				return apiErrorResponse(  'unprocessable', [ 'errors' => $validator->errors(), 'public' => getMessage('public.invalidFormData'), 'debug' => getMessage('api.invalidFormData') ] ); 
 			}
 
-			if( ! $user = App::make( 'UserRepository' )->authenticate($email) )
-			{
-				return apiErrorResponse(  'notFound', [ 'errorReason' => "User email address not found." ] ); 	
+			# try and find the user' account via the supplied email address
+			if( ! $user = App::make( 'UserRepository' )->authenticate($email) ) {
+				return apiErrorResponse(  'notFound', ['public' => getMessage('public.accountWithEmailAddressNotFound'), 'debug' => getMessage('api.accountWithEmailAddressNotFound')] ); 	
 			}
 
 			return App::make( 'UserTransformer' )->transform($user);
 		}
 	}
 
+	/**
+	 * using the provided access key header param, retrieve the user account and their profile
+	 * 
+	 * @param  string $accessKey [unique identifier for the user account]
+	 * @return User
+	 */
 	public function getUserProfile($accessKey)
 	{
 		if( ! $user = App::make( 'UserRepository' )->getProfile($accessKey) ) {
-			return apiErrorResponse(  'notFound', [ 'errorReason' => Lang::get('api.noAccountWithThatAccessKey'), 'accessKey' => $accessKey ] ); 	
+			return apiErrorResponse(  'notFound', ['public' => getMessage('public.accessKeyNotProvided'), 'debug' => getMessage('api.noAccountWithThatAccessKey')] ); 	
 		}
 
 		return $user;
@@ -79,7 +111,7 @@ Class UserResponder {
 		# check to see if we have the accessKey header param. This is a helper function.
 		if( ! userAccessKeyPresent() )
 		{
-			return apiErrorResponse(  'unauthorised', ['errorReason' => Lang::get('api.accessKeyNotProvided')] );
+			return apiErrorResponse( 'unauthorised', ['public' => getMessage('api.accessKeyNotProvided'), 'debug' => getMessage('api.accessKeyNotProvided')] );
 		}
 
 		# check to make sure we have all the fields required to complete the process

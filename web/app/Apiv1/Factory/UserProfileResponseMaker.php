@@ -16,7 +16,7 @@ Class UserProfileResponseMaker {
 	{
 		# check to see if we have the accessKey header param. This is a helper function.
 		if( ! userIsAuthenticated() ) {
-			return apiErrorResponse(  'unauthorised', ['errorReason' => Lang::get('api.accessKeyNotProvided')] );
+			return apiErrorResponse( 'unauthorised', ['public' => getMessage('public.accessKeyNotProvided'), 'debug' => getMessage('api.accessKeyNotProvided')] );
 		}
 
 		$accessKey = getAccessKey();				
@@ -28,7 +28,7 @@ Class UserProfileResponseMaker {
 		# we now have an updated user record with profile
 		$user = $result;
 
-		return apiSuccessResponse( 'ok', [ 'user' => App::make('UserTransformer')->transform($user) ] );
+		return apiSuccessResponse( 'ok', [ 'user' => App::make('UserTransformer')->transform($user), 'public' => getMessage('public.userProfileSuccessfullyUpdated'), 'debug' => getMessage('api.userProfileSuccessfullyUpdated')] );
 	}
 
 	/**

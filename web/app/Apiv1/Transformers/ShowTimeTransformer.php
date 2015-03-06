@@ -1,5 +1,6 @@
 <?php namespace Apiv1\Transformers;
 
+use App;
 use Config;
 use stdClass;
 use Carbon\Carbon;
@@ -61,32 +62,25 @@ class ShowTimeTransformer extends Transformer {
         $this->article = $article;
 
         $this->times = [];       
-        
-        # which venue is this article event attached to
-        $articleVenue = $this->article['event']['venue_id'];
 
         // go through each of the show times and transform them into something usable
         foreach($article['event']['show_time'] AS $performance)
         {
-            # Only add performances for this articles venue
-            if($performance['venue_id'] == $articleVenue)
-            {
-                $this->times[] = [
-                    'start' => [
-                        'epoch' => strtotime($performance['showtime']),
-                        'readable' => $this->performanceDateFormatter($performance['showtime']),
-                        'day' => date('Y-m-d', strtotime($performance['showtime'])),
-                        'time' => date('H:i', strtotime($performance['showtime']))
-                    ],
-                    'end' => [
-                        'epoch' => strtotime($performance['showend']),
-                        'readable' => $this->performanceDateFormatter($performance['showend']),
-                        'day' => date('Y-m-d', strtotime($performance['showend'])),
-                        'time' => date('H:i', strtotime($performance['showend']))
-                    ],
-                    'price' => number_format( $performance['price'], 2 )
-                ];
-            }
+            $this->times[] = [
+                'start' => [
+                    'epoch' => strtotime($performance['showtime']),
+                    'readable' => $this->performanceDateFormatter($performance['showtime']),
+                    'day' => date('Y-m-d', strtotime($performance['showtime'])),
+                    'time' => date('H:i', strtotime($performance['showtime']))
+                ],
+                'end' => [
+                    'epoch' => strtotime($performance['showend']),
+                    'readable' => $this->performanceDateFormatter($performance['showend']),
+                    'day' => date('Y-m-d', strtotime($performance['showend'])),
+                    'time' => date('H:i', strtotime($performance['showend']))
+                ],
+                'price' => number_format( $performance['price'], 2 )
+            ];
         }
 
         $this->sort($this->times);
@@ -99,17 +93,111 @@ class ShowTimeTransformer extends Transformer {
         $response = [
             'summary' => [
                 'isMultiDate' => false,
-                'firstPerformance' => $this->getFirstPerformance()
+                'fromPrice' => $this->getLowestPerformancePrice(),
+                'firstPerformance' => $this->getFirstPerformance(),
+                'showingToday' => $this->getTodaysPerformances()
             ],
         ];
 
-        if(count($this->times) > 1) {
-            $response['summary']['isMultiDate'] = true;
+        if(count($this->times) > 1) {            
             $response['summary']['nextPerformance'] = $this->getNextPerformance();
-            $response['summary']['lastPerformance'] = $this->getLastPerformance();           
+            $response['summary']['lastPerformance'] = $this->getLastPerformance();                             
+            $response['summary']['isMultiDate'] = $this->isMultiDate($response['summary']['firstPerformance'], $response['summary']['lastPerformance']);
         }
 
+        # regardless of how many shows there are, add in the venue data
+        $response['summary']['venue'] = $this->getVenue();
+
+        # ... and return it all
         return $response;
+    }
+
+    /**
+     * check to see whether this show runs across multiple days
+     * 
+     * @param  array  $firstPerformance [details of the very first performance of this show]
+     * @param  array  $lastPerformance  [details of the very last performance of this show]
+     * @return boolean
+     */
+    public function isMultiDate($firstPerformance, $lastPerformance)
+    {
+        # convert the start day of the first performance and last performance
+        # if the first day is less than the last day then its a multi-date performance
+        if(strtotime($firstPerformance['start']['day']) < strtotime($lastPerformance['start']['day']))
+        {
+            return true;
+        }
+
+        // its on the same day
+        return false;
+    }
+
+    /**
+     * retrieve the venue for the event
+     * 
+     * @return array $venue
+     */
+    public function getVenue()
+    {
+        if(isset($this->article['event']['show_time'][0]['venue']))
+        {
+            $venue = $this->article['event']['show_time'][0]['venue'];
+
+            return App::make('VenueTransformer')->transform( $venue );    
+        }        
+    }
+
+    /**
+     * go through all of the performances for this event and get the ones that are happening "today"
+     * or if an eventDay has been provided then get the performances for that day.
+     * 
+     * @return array [extracted performance objects]
+     */
+    public function getTodaysPerformances()
+    {
+        # if we have some times then go ahead
+        if(count($this->times) > 0)
+        {
+            # work out what today is
+            $today = date('Y-m-d');
+
+            # if we find any performances we'll keep them in here
+            $kept = [];
+
+            # go through all of the times
+            foreach($this->times AS $show)
+            {
+                # if we don't have an event day then we assume we need to return performances
+                # happening "today"
+                if(is_null($this->eventDay))
+                {
+                    # if this performances start day is the same as today then we want to keep it
+                    if($show['start']['day'] == $today)
+                    {
+                        # so stick in the kept array
+                        $kept[$show['start']['epoch']] = $show;
+                    }    
+                }
+                # otherwise we are looking for performances on a specific day
+                else
+                {
+                    # if the performance start day is the same as the event day we want to keep it
+                    if($show['start']['day'] == $this->eventDay)
+                    {
+                        # so stick in the kept array
+                        $kept[$show['start']['epoch']] = $show;
+                    }   
+                }
+            }
+            
+            # sort the array so they are in ascending order
+            ksort($kept);
+
+            # reset the array keys and send it back
+            return array_values($kept);
+        }
+
+        return null;
     }
 
     public function getNextPerformance()
@@ -214,5 +302,26 @@ class ShowTimeTransformer extends Transformer {
         ksort($sortedTimes);
 
         $this->times = array_values($sortedTimes);
+    }
+
+    /**
+     * go through each of the performances and work out which the cheapest. This will be shown
+     * on the front end as the 'from £' price
+     * 
+     * @return string [the lowest priced performance in this performance run]
+     */
+    public function getLowestPerformancePrice()
+    {
+        $tmp = 10000;
+
+        foreach($this->times AS $performance)
+        {
+            if($performance['price'] < $tmp)
+            {
+                $tmp = $performance['price'];
+            }
+        }
+
+        return $tmp == 10000 ? '0.00' : $tmp;
     }
 }

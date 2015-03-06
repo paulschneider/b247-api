@@ -45,7 +45,7 @@ Class UserDistrictPreferenceResponseMaker {
 		# associate the incoming districts with the authenticated user account
 		if( ! $user = $this->repo->setUserDistrictPreferences($user, $form['districts']) )
 		{
-			return apiErrorResponse( 'notAcceptable', ['errorReason' => Lang::get('api.invalidDistrictPreferenceRequest')] );
+			return apiErrorResponse( 'notAcceptable', ['public' => getMessage('public.invalidDistrictPreferenceRequest'), 'debug' => getMessage('api.invalidDistrictPreferenceRequest')] );
 		}
 
 		# otherwise it all went well and we can say as much to the caller

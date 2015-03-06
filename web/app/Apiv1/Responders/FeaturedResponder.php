@@ -13,9 +13,12 @@ class FeaturedResponder {
 	 */
 	public function get( $channel, $user )
 	{
+		# set a limit for how many articles we want to return
+		$limit = 5;
+
         $articles = App::make('ArticleRepository')->getArticles( 
         	'featured', # the type of article we wan to retrieve
-        	5, # how many do we want
+        	$limit, # how many do we want
         	$channel['id'], # for which channel
         	false, # its not a sub-channel
         	false, # don't ignore the channel. Used to retrieve a random list of adverts from any channel

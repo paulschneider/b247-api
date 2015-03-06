@@ -96,6 +96,13 @@ class ApiController Extends BaseController {
             $response['error']['data'] = $data;
         }
 
+        # if we're in development mode and there is a debug parameter in the address bar
+        # we will show a debug page instead of the API response
+        if(Input::get('debug') && App::environment('development'))
+        {
+            return View::make('debug.show');
+        }
+
         return $this->respond($response);
     }
 
@@ -106,7 +113,7 @@ class ApiController Extends BaseController {
      */
     public function respondWithSuccess($message, $data = null)
     {
-        return $this->respond([
+        $response = $this->respond([
             'success' => [
                 'message' => $message
                 ,'statusCode' => $this->getStatusCode()
@@ -119,5 +126,14 @@ class ApiController Extends BaseController {
                 sourceClient()
             ]
         ]);
+
+        # if we're in development mode and there is a debug parameter in the address bar
+        # we will show a debug page instead of the API response
+        if(Input::get('debug') && App::environment('development'))
+        {
+            return View::make('debug.show');
+        }
+
+        return $response;
     }
 }

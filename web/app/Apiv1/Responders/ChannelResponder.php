@@ -29,7 +29,10 @@ Class ChannelResponder {
 		$subChannelId = getSubChannelId($channel);		
 
         # get some articles
-		$articles = App::make('ArticleRepository')->getArticles( $type, 25, $subChannelId, true, false, $user ); 
+		$articles = App::make('ArticleRepository')->getArticles( $type, 500, $subChannelId, true, false, $user ); 
+
+		# if we have a user we need to filter all articles and remove any they have opted out of
+        $articles = App::make('Apiv1\Tools\ContentFilter')->setUser($user)->filterArticlesByUserCategory($articles);
 
         # transform the response into the API required format
         return App::make('ArticleTransformer')->transformCollection($articles);

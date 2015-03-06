@@ -16,7 +16,7 @@ Class UserPreferenceResponseMaker {
 	 * list of fields that this process must have before it can be completed
 	 * @var array
 	 */
-	protected $requiredFields = ['districts', 'channels'];
+	protected $requiredFields = ['districts', 'channels', 'broadcasts'];
 
 	/**
 	 * instance of the user responder class
@@ -26,10 +26,15 @@ Class UserPreferenceResponseMaker {
 	private $userResponder;
 
 	public function __construct()
-	{
+	{		
 		$this->userResponder = App::make('UserResponder');		
 	}
 
+	/**
+	 * retrieve preferences for an authenticated user
+	 * 
+	 * @return apiResponse
+	 */
 	public function get()
 	{
 		# check that we have everything need to proceed including required params and auth creds. If all 
@@ -43,10 +48,23 @@ Class UserPreferenceResponseMaker {
 
 		$response = [
 			"channels" => $this->getChannels(),
-			"districts" => $this->getDistricts()
+			"districts" => $this->getDistricts(),
+			"broadcasts" => $this->getBroadcasts()
 		];
 
 		return apiSuccessResponse( 'ok', $response );
+	}
+
+	/**
+	 * get a list of communication broadcast preferences
+	 * 
+	 * @return array [transformed list of preferences]
+	 */
+	public function getBroadCasts()
+	{
+		$broadcasts = App::make('Apiv1\Repositories\Broadcasts\BroadcastRepository')->getBroadcasts();
+
+		return App::make('Apiv1\Transformers\BroadcastTransformer')->transformCollection($broadcasts, $this->user);
 	}
 
 	/**
@@ -76,8 +94,15 @@ Class UserPreferenceResponseMaker {
 		return App::make('Apiv1\Transformers\DistrictPreferenceTransformer')->transformCollection($districts->toArray(), $this->user);
 	}
 
+	/**
+	 * when the preferences are POST'ed to the API we need to sort them and save them to the DB
+	 * 
+	 * @param POST $data
+	 */
 	public function set($data)
 	{	
+		$repo = App::make( 'UserRepository' );
+
 		# check that we have everything need to proceed including required params and auth creds. If all 
 		# successful then the response is a user object
 		if( isApiResponse($response = $this->userResponder->verify($this->requiredFields, $data)) ) {
@@ -87,24 +112,51 @@ Class UserPreferenceResponseMaker {
 		# we get the user back if everything went okay
 		$this->user = $response;	
 
+		/*
+	    |--------------------------------------------------------------------------
+	    | Content preferences
+	    |--------------------------------------------------------------------------
+	    */
+
 		# sort the provided data into the channels and categories that we want to record as being deactivated
 		$response = App::make( 'UserPreferenceOrganiser' )->organise($this->user, $data);
 
 		# update the database with these new preferences
-		App::make( 'UserRepository' )->setContentPreferences($this->user, $response);	
+		$repo->setContentPreferences($this->user, $response);	
 
+		/*
+	    |--------------------------------------------------------------------------
+	    | District preferences
+	    |--------------------------------------------------------------------------
+	    */
 		$promotedDistricts = App::make('Apiv1\Tools\UserDistrictOrganiser')->organise($data);
 
 		# associate the incoming districts with the authenticated user account
-		if( ! $user = App::make('Apiv1\Repositories\Users\UserRepository')->setUserDistrictPreferences($this->user, $promotedDistricts) ) {
-			return apiErrorResponse( 'notAcceptable', ['errorReason' => Lang::get('api.invalidDistrictPreferenceRequest')] );
+		if( ! $user = $repo->setUserDistrictPreferences($this->user, $promotedDistricts) ) 
+		{
+			return apiErrorResponse( 'notAcceptable', ['errorReason' => Lang::get('api.invalidDistrictPreferenceRequest'), 'public' => getMessage('api.invalidDistrictPreferenceRequest')] );
 		}
+
+		/*
+	    |--------------------------------------------------------------------------
+	    | Communication preferences
+	    |--------------------------------------------------------------------------
+	    */
+	   
+	    # work out which of the received preferences has been opted in to (i.e activated) or out of (i.e deactivated)
+	   	$opts = App::make('Apiv1\Tools\UserBroadCastOrganiser')->organise($data, $this->user);
+
+	   	# update the database with these new preferences
+		$repo->setBroadcastPreferences($this->user, $opts->optIns);	
+
+		# update the third-party mail client (i.e MailChimp (at this time)) with the state of the new prefs
+		App::make('Apiv1\Responders\BroadCastResponder')->updateClient($this->user, $opts);
 
 		# ... and retrieve the updated user account, including these preference updates so the apps have 
 		# most up to date account info
 		$user =  $this->userResponder->getUserProfile($user->access_key);
 
 		# otherwise it all went well and we can say as much to the caller
-		return apiSuccessResponse( 'ok', [ 'furtherInfo' => Lang::get('api.userPreferencesUpdated') ] );
+		return apiSuccessResponse( 'ok', [ 'furtherInfo' => Lang::get('api.userPreferencesUpdated'), 'public' => getMessage('public.userPreferencesSuccessfullyUpdated') ] );
 	}
 }

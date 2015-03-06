@@ -1,5 +1,5 @@
 <?php
 
 return [
-	"baseUrl" => "http://app.wf-cycle.co.uk"
+	"baseUrl" => $_ENV['TEMPLATE_SOURCE']
 ];

@@ -9,7 +9,7 @@ class SponsorTransformer extends Transformer {
      * what type of device has called the API  ( web | mobile | tablet )
      * @var string
      */
-    private $platform;
+    private $platform = "web";
 
     /**
      * what view (i.e size) of the image do we want to provide. This is based on the directory

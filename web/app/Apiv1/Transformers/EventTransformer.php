@@ -30,13 +30,16 @@ class EventTransformer extends Transformer {
      */
     public function transform( $article, $options = [] )
     {      
-        $venue = $article['event']['venue'];
         $event = $article['event'];
-        unset($article['event']['venue']);        
 
         if( empty($article['event']['cinema']) ) 
         {
             $performances = App::make( 'Apiv1\Transformers\ShowTimeTransformer' )->transformCollection($article, $options);    
+
+            # if we don't have any performances to work with then just return out of this process
+            if(! $performances) {
+                return false;
+            }
 
             # work out which performance to use as the primary data source
             # if its multi-date use the next available performance
@@ -48,36 +51,54 @@ class EventTransformer extends Transformer {
                 $performance = $performances['summary']['firstPerformance'];   
             }
 
-            $showDate = $performance['start']['day'];
-            $showTime = $performance['start']['time'];
-            $epoch = strtotime($performance['start']['day'] .' ' . $performance['start']['time']);
-            $price = $performance['price'];
+            $response = [
+                'details' => [
+                    'id' => $event['id'],
+                    'title' => $event['title'],
+                    'sefName' => $event['sef_name'],
+                    'showDate' => $performance['start']['day'],
+                    'showTime' => $performance['start']['time'],
+                    'epoch' => strtotime($performance['start']['day'] .' ' . $performance['start']['time']),
+                    'price' => $performances['summary']['fromPrice'],
+                    'url' => $event['url'],
+                    'performances' => $performances
+                ]
+            ];
+
+            $response['venue'] = $performances['summary']['venue'];
+            unset($response['details']['performances']['summary']['venue']);
+
+            return $response;
         }
         else 
         {
             $performances = App::make('Apiv1\Transformers\CinemaListingTransformer')->transform($article, $options);
 
-            $showDate = $performances['summary']['show']['startTime']['day'];
-            $showTime = $performances['summary']['show']['startTime']['time'];
-            $epoch = $performances['summary']['show']['startTime']['epoch'];
-            $price = $performances['summary']['price'];
-        }        
+            $response = [
+                'details' => [
+                    'id' => $event['id'],
+                    'title' => $event['title'],
+                    'sefName' => $event['sef_name'],
+                    'showDate' => $performances['venues'][0]['startTime']['day'],
+                    'showTime' => $performances['venues'][0]['startTime']['time'],
+                    'epoch' => $performances['venues'][0]['startTime']['epoch'],
+                    # these two attributes (price and URL) should be removed for version two. They are not needed
+                    # but left in so to not break the mobile and tablet apps
+                    'price' => null,
+                    'url' => null,
+                ]
+            ];
 
-        $response = [
-            'details' => [
-                'id' => $event['id'],
-                'title' => $event['title'],
-                'sefName' => $event['sef_name'],
-                'showDate' => $showDate,
-                'showTime' => $showTime,
-                'epoch' => $epoch,
-                'price' => $price,
-                'url' => $event['url'],
-                'performances' => $performances
-            ]
-            ,'venue' => App::make( 'VenueTransformer' )->transform( $venue )
-        ];
+            $response['summary'] = $performances['summary'];
 
-        return $response;
+            # for cinema events we provide a list of venues where the film is showing. 
+            # these were previously attached to a single venue with alternatives listed out
+            $response['venues'] = $performances['venues'];
+
+            # thats why we keep this single venue item. It should be removed for version two
+            $response['venue'] = ['name' => ''];
+
+            return $response;
+        }    
     }
 }

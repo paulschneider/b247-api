@@ -1,5 +1,32 @@
 <?php
 
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+
+# show last query (slq)
+function slq()
+{
+    $queries = DB::getQueryLog();
+    $last_query = end($queries);
+
+    sd($last_query);
+}
+
+function getMessage($message)
+{
+    return Lang::get($message);
+}
+
+function clog($data)
+{
+    $logFile = 'console.log';
+
+    $view_log = new Logger('View Logs');
+    $view_log->pushHandler(new StreamHandler(storage_path().'/logs/'.$logFile, Logger::INFO));
+
+    $view_log->addInfo($data);  
+}
+
 function anExternalUrl($string)
 {
     $protocols = [ 'http://', 'https://' ];
@@ -80,7 +107,7 @@ function aRequiredParameterIsMissing($requiredFields, $form)
 {
     foreach($requiredFields AS $field)
     {
-        if( ! array_key_exists($field, $form))
+        if( ! array_key_exists($field, $form) || empty($form[$field]))
         {
             return true;
         }
@@ -206,12 +233,14 @@ function userAccessKeyPresent()
 
 function userIsAuthenticated()
 {
-    if( array_key_exists('accessKey', getallheaders()) || Input::get('accessKey'))
+    if( array_key_exists('accessKey', getallheaders()) || Input::get('accessKey') || Request::header("accessKey"))
     {
         return true;
     }
-
-    return false;
+    else
+    {
+        return false;    
+    }    
 }
 
 function getAccessKey()
@@ -237,7 +266,8 @@ function isApiResponse($data)
 
 function makePath( $paths = [] )
 {
-    $str = "/";
+    $str = "/channel/";
+
     foreach($paths AS $path)
     {
         $str .= trim($path).'/';
@@ -248,7 +278,12 @@ function makePath( $paths = [] )
 
 function isChannelUserEnabled($channelId, $inactiveUserChannels)
 {
-    return in_array($channelId, $inactiveUserChannels) ? false : true;
+    if(is_array($inactiveUserChannels))
+    {
+        return in_array($channelId, $inactiveUserChannels) ? false : true;    
+    }
+    
+    return true;
 }
 
 function getChannel( $channels, $channelId )
@@ -321,15 +356,25 @@ function getParentChannel($channels, $channel)
 function isMobile()
 {
     // check for the existence of the header param
-    if( Request::header('BristolAPIClient') )
+    if( Request::header('BristolAPIClient') == "iphone" || Request::header('BristolAPIClient') == "android" || Request::header('BristolAPIClient') == "ipad")
     {
         return true;
+    }
+    else {
+        return false;
     }
 }
 
 function isTablet()
 {
-    return Agent::isTablet();
+    if( Request::header('BristolAPIClient') == "ipad")
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 function isDesktop()

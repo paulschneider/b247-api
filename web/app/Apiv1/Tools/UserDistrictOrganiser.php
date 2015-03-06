@@ -68,7 +68,7 @@ Class UserDistrictOrganiser {
 				$promoted[] = $article;	
 			}
 			# if its not from a district the user wants to see then just add it into the standard article list
-			else{
+			else {
 				$standard[] = $article;
 			}
 		}

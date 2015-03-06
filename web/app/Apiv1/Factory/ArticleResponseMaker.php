@@ -9,6 +9,7 @@ Class ArticleResponseMaker {
 	var $category;
 	var $channel; // sub-channel
 	var $article;
+	var $eventDay;
 	var $articleTransformer;
 	var $articleRepository;
 
@@ -32,9 +33,14 @@ Class ArticleResponseMaker {
 
 	public function make($input)
 	{ 	
+		# grab the input data sent through with the request
 		$this->channel = $input['subchannel'];
 		$this->category = $input['category'];
 		$this->article = $input['article'];
+
+		# listings articles send through a time so we can grab specific data about
+		# the article as a certain point. These are the only article types to do this.
+		$this->eventDay = isset($input['time']) && !empty($input['time']) ? date('Y-m-d', $input['time']) : null;
 
 		# Get the details of the channel. Return an API response if not found
 		if( isApiResponse( $result = $this->getChannel()) ) {
@@ -52,15 +58,20 @@ Class ArticleResponseMaker {
 			'channel' => $this->channel,
 			'adverts' => $ads->sponsors,
 			'fullPage' => $ads->fullPage,
-			'article' => $this->articleTemplateTransformer->transform( $this->article->toArray() ),
+			'article' => $this->articleTemplateTransformer->transform( $this->article->toArray(), ['eventDay' => $this->eventDay] ),
 			'related' => $this->getRelatedArticles($this->article),
 			'navigation' => $this->nextPreviousArticles(),
 		];
 
-		// we return this differently to everywhere else because there is two ways of calling this class
+		# we return this differently to everywhere else because there are two ways of calling this class
 		return $response;
 	}
 
+	/**
+	 * retrieve the channel details. This is the parent channel of the article
+	 * 
+	 * @return array [details of the channel, sub-channel and categories]
+	 */
 	public function getChannel()
 	{
 		# see if we can grab the category by the provided identifier
@@ -104,7 +115,9 @@ Class ArticleResponseMaker {
 	public function getArticle()
 	{		
 		# grab the article from the ArticleResponder
-		if( ! $this->article = App::make('Apiv1\Responders\ArticleResponder')->getArticle($this->channel, $this->category, $this->article)) {
+		if( ! $this->article = App::make('Apiv1\Responders\ArticleResponder')->getArticle($this->channel, $this->category, $this->article)) 
+		{
+			# if we couldn't find it then report an error
 			return apiErrorResponse('notFound', [ 'errorReason' => Lang::get('api.articleCouldNotBeLocated') ]);
 		}
 
@@ -127,9 +140,15 @@ Class ArticleResponseMaker {
 		$sponsorResponder->channel = $this->channel;
 		$sponsorResponder->category = $this->category;
 
-		return $sponsorResponder->setSponsorType(Config::get('global.sponsorMPU'))->getCategorySponsors(3);
+		return $sponsorResponder->setSponsorType(Config::get('global.sponsorLETTERBOX'))->getCategorySponsors(3);
 	}
 
+	/**
+	 * when viewing an article there are next/previous controls to navigate through the categories
+	 * articles. This works out which should be applied to each control
+	 * 
+	 * @return array
+	 */
 	public function nextPreviousArticles()
 	{
 		$articles = App::make( 'ArticleRepository' )->getNextAndPreviousArticles($this->article);
@@ -145,5 +164,28 @@ Class ArticleResponseMaker {
 	public function getRequiredArticleData($article)
 	{
 		return $this->articleTemplateTransformer->extract($article);
+	}
+
+	/**
+	 * ignoring all article classification, retrieve an article just by an identifier
+	 * 
+	 * @param  int || string $identifier [unique identifier of the article. ID or sef_name from the article table]
+	 * @return ApiResponse
+	 */
+	public function getStaticArticle($identifier)
+	{	
+		# grab the article by its identifer
+		$article = $this->articleRepository->getArticleByIdentifier($identifier['article']);
+
+		# if we didn't get anything back then return an error
+		if( ! $article) {
+			return apiErrorResponse( 'notFound', ['public' => getMessage('public.staticArticleNotFound'), 'debug' => getMessage('api.staticArticleNotFound')] );
+		}
+
+		# if we found the article transform it into the required API response
+		$article = App::make('Apiv1\Transformers\StaticArticleTransformer')->transform($article->toArray());
+
+		# ... and return it!
+		return apiSuccessResponse('ok', [ 'article' => $article]);
 	}
 }

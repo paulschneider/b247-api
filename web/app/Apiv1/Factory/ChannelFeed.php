@@ -54,6 +54,9 @@ Class ChannelFeed {
                 # get the articles for this channel
                 $articles = $this->articleRepository->getArticles( null, Config::get('constants.channelFeed_limit'), $channel, $this->isASubChannel );
 
+                # if we have a user we need to filter all articles and remove any they have opted out of
+                $articles = App::make('Apiv1\Tools\ContentFilter')->setUser($this->user)->filterArticlesByUserCategory($articles);
+
                 # transform the articles and the sponsors into the API format 
                 $articles = $this->articleTransformer->transformCollection($articles);
 
@@ -61,7 +64,7 @@ Class ChannelFeed {
                 $sponsors = $sponsorResponder->setSponsorType(Config::get('global.sponsorMPU'))->getUnassignedSponsors( [$channel], $this->isASubChannel );
 
                 # create the pattern to repeat for this channel
-                $response = $this->patternMaker->setPattern(2)->make( [ 'articles' => $articles, 'sponsors' => $sponsors ], "home" );
+                $response = $this->patternMaker->setPattern(4)->make( [ 'articles' => $articles, 'sponsors' => $sponsors ], "home" );
 
                 # grab the channel details for this channel and transform it. We pass in a user so we can see what they have enabled (or disabled)
                 $channel = $this->channelTransformer->transform( getChannel($this->channels, $channel), $this->user );

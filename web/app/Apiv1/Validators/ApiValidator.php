@@ -44,6 +44,6 @@ Class ApiValidator {
 			];
 		}
 
-		return ['errors' => $errors ];
+		return $errors;
 	}	
 }
