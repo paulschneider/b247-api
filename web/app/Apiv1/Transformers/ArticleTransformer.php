@@ -42,6 +42,7 @@ Class ArticleTransformer extends Transformer {
                 ,'isAdvert' => false
                 ,'isPromoted' => isset($article['is_promoted']) ? $article['is_promoted'] : false
                 ,'published' => dateFormat($article['published'])
+                ,'created' => dateFormat($article['created_at'], true)
                 ,'displayType' => [
                     'id' => $articleLocation['displayTypeId']
                     ,'type' => $articleLocation['displayType']
