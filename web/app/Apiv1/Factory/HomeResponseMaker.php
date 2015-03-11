@@ -137,8 +137,48 @@ Class HomeResponseMaker {
 	{
 		$response = App::make('WhatsOnResponder')->get( $this->sponsorResponder, $this->channels, $this->user );
 
+		# we want to order the list of returned articles by the created date and time
+		# this is only done on the home page so we'll do that here
+		 
+		$articles = [];
+
+		foreach($response['channel']['articles'] AS $article)
+		{
+			if( ! $article['isAdvert'] )
+			{
+				# convert the date time
+				$dateTime = strtotime($article['created']);
+
+				# check to make we don't over-write an article that was created at exactly the same time (unlikely)
+				if( array_key_exists($dateTime, $articles) )
+				{
+					# we'll just try to increment the time by a fraction of a second to slip it into the array
+					# we'll try this 10 times as its very unlikely this scenario will happen
+					for($i=1; $i < 10; $i++)
+					{
+						# as soon as we find a place for the article in the array we break out of the loop
+						if( ! array_key_exists($dateTime+$i, $articles) )
+						{
+							break;
+						}					
+					}
+				}	
+
+				# ... and finally add the article into the array at the desired position
+				$articles[$dateTime] = $article;
+			}		
+		}
+
+		# sort the articles array by the array key which is the dateTime value, descending order
+		krsort($articles);
+
+		# over-write the original articles array with the newly sorted one
+		$response['channel']['articles'] = array_values($articles);
+
+		# set the sponsors allocated as part of this process so we don't use them again
 		$this->sponsorResponder->setAllocatedSponsors($response['sponsors']);
 
+		# ... and provide the response back to the source call
 		return $response['channel'];
 	}
 

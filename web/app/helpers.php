@@ -92,9 +92,16 @@ function insertInto($thisArray, $after, $withThisContent, $withThisArrayKey)
     return false;
 }
 
-function dateFormat($date)
+function dateFormat($date, $time=false)
 {
-    return date('Y-m-d', strtotime($date));
+    if($time)
+    {
+        return date('Y-m-d H:i:s', strtotime($date));
+    }
+    else
+    {
+        return date('Y-m-d', strtotime($date));
+    }
 }
 
 function getDateTime()
