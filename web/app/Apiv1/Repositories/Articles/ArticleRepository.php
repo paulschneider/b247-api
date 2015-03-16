@@ -424,7 +424,7 @@ Class ArticleRepository extends BaseModel {
             }            
         }
   
-        $articles = $query->get()->toArray();
+        $articles = $query->orderBy('article.created_at', 'desc')->get()->toArray();
    
         foreach($articles AS $key => $article)
         {
